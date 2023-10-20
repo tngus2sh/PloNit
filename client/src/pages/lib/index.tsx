@@ -27,7 +27,43 @@ import VolunteerRegisterPage from "pages/VolunteerRegisterPage";
 const RouteComponent = () => {
   return (
     <Routes>
-      <Route></Route>
+      <Route path="/" element={<HomePage />}></Route>
+      <Route path="/login" element={<LoginPage />}></Route>
+      <Route path="/profile" element={<ProfilePage />}></Route>
+      <Route path="/profile/edit" element={<ProfileEditPage />}></Route>
+      <Route path="/profile/crew" element={<MyCrewPage />}></Route>
+      <Route path="/profile/plogging" element={<MyPloggingPage />}></Route>
+      <Route path="/profile/rank" element={<MyRankPage />}></Route>
+      <Route path="/profile/badge" element={<MyBadgePage />}></Route>
+      <Route path="/plogging" element={<PloggingPage />}></Route>
+      <Route
+        path="/plogging/complete"
+        element={<PloggingCompletePage />}
+      ></Route>
+      <Route
+        path="/plogging/volunteer"
+        element={<VolunteerRegisterPage />}
+      ></Route>
+      <Route path="/ranking" element={<RankingPage />}></Route>
+      <Route path="/notification" element={<NotificationPage />}></Route>
+      <Route path="/crew/list" element={<CrewListPage />}></Route>
+      <Route path="/crew/create" element={<CrewCreatePage />}></Route>
+      {/* 아래 페이지는 수정할 수도 있음 */}
+      <Route path="/crew/member" element={<CrewMemberListPage />}></Route>
+      <Route path="/crew/community" element={<CrewCommunityPage />}></Route>
+      <Route path="/crew/community/detail" element={<CrewDetailPage />}></Route>
+      <Route
+        path="/crew/community/approval"
+        element={<CrewMemberApprovalPage />}
+      ></Route>
+      <Route
+        path="/crew/crewping/create"
+        element={<CrewpingCreatePage />}
+      ></Route>
+      <Route
+        path="/crew/crewping/detail"
+        element={<CrewpingDetailPage />}
+      ></Route>
       <Route path="/*" element={<PageNotFound404 />}></Route>
     </Routes>
   );
