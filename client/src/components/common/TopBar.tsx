@@ -11,7 +11,7 @@ export const LogoTopBar = () => {
   );
 };
 
-export const BasicTopbar = ({ text }: { text: string }) => {
+export const BasicTopBar = ({ text }: { text: string }) => {
   return (
     <div className={style.basicTopbar}>
       <div className={style.title_name}>{text}</div>
@@ -19,7 +19,7 @@ export const BasicTopbar = ({ text }: { text: string }) => {
   );
 };
 
-export const BackTopbar = ({ text }: { text: string }) => {
+export const BackTopBar = ({ text }: { text: string }) => {
   const navigate = useNavigate();
 
   const goBackHandler = () => {
