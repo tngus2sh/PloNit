@@ -4,9 +4,25 @@ import useGPS from "./functions/useGPS";
 
 const { naver } = window;
 
+// 대략적으로 필요한 기능들
+
+// default useEffect에서 필요한 기능
+// 유저 초기 위치 확인
+// 청소된 구역 표시
+// 플로깅 기록
+
+// [latitude, longitude] useEffect에서 필요한 기능
+// 유저 위치 표시
+// 주변 유저 위치 표시
+// 주변 쓰레기통 표시
+// 주변 화장실 위치 표시
+// 주변 유저 도움 요청 표시
+
 const TestComponent = () => {
   const { latitude, longitude, setOnSearch } = useGPS();
   const preventDup = useRef<boolean>(true);
+  const mapRef = useRef<naver.maps.Map | null>(null);
+  const markerRef = useRef<naver.maps.Marker | null>(null);
 
   useEffect(() => {
     let isFailed = false;
@@ -18,9 +34,20 @@ const TestComponent = () => {
       getGPS
         .then((response) => {
           const { latitude, longitude } = response.coords;
-          const map = new naver.maps.Map("map", {
+          mapRef.current = new naver.maps.Map("map", {
             center: new naver.maps.LatLng(latitude, longitude),
-            zoomControl: true,
+            zoom: 16,
+          });
+
+          markerRef.current = new naver.maps.Marker({
+            position: new naver.maps.LatLng(latitude, longitude),
+            map: mapRef.current,
+            icon: {
+              url: ``,
+              size: new naver.maps.Size(22, 35),
+              origin: new naver.maps.Point(0, 0),
+              anchor: new naver.maps.Point(11, 35),
+            },
           });
         })
         .catch((error) => {
@@ -44,20 +71,14 @@ const TestComponent = () => {
   useEffect(() => {
     if (!preventDup) {
       if (typeof latitude === "number" && typeof longitude === "number") {
-        const map = new naver.maps.Map("map", {
+        mapRef.current = new naver.maps.Map("map", {
           center: new naver.maps.LatLng(latitude, longitude),
-          zoomControl: true,
         });
-      } else {
-        alert(`이게 실패한다고!?`);
       }
     }
   }, [latitude, longitude]);
 
   return (
-    // 추후 크기는 타협해야할 듯
-    // https://velog.io/@kyungjune/naver-map-api-%EA%B8%B0%EC%96%B5%ED%95%98%EA%B8%B0react.ts
-    // https://velog.io/@silverbeen/Naver-Map-%EC%9E%90%EC%9C%A0%EB%A1%AD%EA%B2%8C-%ED%99%9C%EC%9A%A9%ED%95%98%EA%B8%B0
     <div style={{ height: "calc(100vh - 56px)", width: "100%" }}>
       <div id="map" style={{ height: "100%", width: "100%" }}></div>;
     </div>
