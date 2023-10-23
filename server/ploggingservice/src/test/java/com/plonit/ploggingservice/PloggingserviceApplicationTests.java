@@ -1,13 +1,13 @@
-package com.plonit.floggingservice;
+package com.plonit.ploggingservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class FloggingserviceApplicationTests {
+class PloggingserviceApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void contextLoads() {
+    }
 
 }
