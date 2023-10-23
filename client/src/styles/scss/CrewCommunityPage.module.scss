@@ -1,0 +1,26 @@
+@import "styles";
+
+.community_page {
+  position: relative;
+  .back_Icon {
+    position: absolute;
+    top: 0.8rem;
+    left: 0.5rem;
+  }
+  .divide {
+    height: 0.2rem;
+    background-color: $gray;
+  }
+  .plus {
+    position: fixed;
+    bottom: 4rem;
+    right: 0.8rem;
+    background-color: $green;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    @media (min-width: 501px) {
+      right: calc((100% - 500px) / 2 + 0.8rem);
+    }
+  }
+}
