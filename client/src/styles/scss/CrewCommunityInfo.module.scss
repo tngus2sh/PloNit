@@ -1,0 +1,25 @@
+@import "styles";
+
+.crew_info {
+  .crew_img {
+    height: 20vh;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  .crew_text {
+    padding: 0.8rem;
+    .crew_title {
+      display: flex;
+      font-size: 1.2rem;
+      margin-bottom: 0.2rem;
+    }
+    .crew_content {
+      display: flex;
+      .invite {
+        margin-left: 0.5rem;
+        color: $green;
+      }
+    }
+  }
+}
