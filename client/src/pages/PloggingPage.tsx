@@ -1,7 +1,12 @@
 import React from "react";
+import TestComponent from "components/plogging/TestComponent";
 
 const PloggingPage = () => {
-  return <div></div>;
+  return (
+    <div>
+      <TestComponent />
+    </div>
+  );
 };
 
 export default PloggingPage;
