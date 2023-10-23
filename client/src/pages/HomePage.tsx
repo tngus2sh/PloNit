@@ -1,7 +1,12 @@
 import React from "react";
+import { LogoTopBar } from "components/common/TopBar";
 
 const HomePage = () => {
-  return <div></div>;
+  return (
+    <div>
+      <LogoTopBar />
+    </div>
+  );
 };
 
 export default HomePage;
