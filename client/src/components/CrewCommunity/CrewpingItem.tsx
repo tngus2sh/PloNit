@@ -1,12 +1,19 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import style from "styles/css/CrewpingItem.module.css";
 import RoomIcon from "@mui/icons-material/Room";
 import PersonIcon from "@mui/icons-material/Person";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 const CrewpingItem = () => {
+  const navigate = useNavigate();
+
+  const goCrewpingDetailHandler = () => {
+    navigate("/crew/crewping/detail");
+  };
+
   return (
-    <div className={style.crewping_Item}>
+    <div className={style.crewping_Item} onClick={goCrewpingDetailHandler}>
       <div className={style.crewping_img}>
         <img src="/metamong.png" alt="몽" />
       </div>

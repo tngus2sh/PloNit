@@ -11,6 +11,32 @@
     height: 0.2rem;
     background-color: $gray;
   }
+  .modalbackground {
+    background-color: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    z-index: 5;
+  }  
+  .create {
+    position:fixed;
+    display: flex;
+    right: 0.8rem;
+    .title {
+      font-size: 1.2rem;
+      color: white;
+      margin: auto 0.3rem;
+    }
+    .open_button {
+      background-color: $gray;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    }
+  }
   .plus {
     position: fixed;
     bottom: 4rem;
@@ -19,6 +45,7 @@
     width: 3rem;
     height: 3rem;
     border-radius: 50%;
+    z-index: 10;
     @media (min-width: 501px) {
       right: calc((100% - 500px) / 2 + 0.8rem);
     }

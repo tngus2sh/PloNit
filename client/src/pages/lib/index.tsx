@@ -23,6 +23,7 @@ import ProfileEditPage from "pages/ProfileEditPage";
 import ProfilePage from "pages/ProfilePage";
 import RankingPage from "pages/RankingPage";
 import VolunteerRegisterPage from "pages/VolunteerRegisterPage";
+import FeedCreatePage from "pages/FeedCreatePage";
 
 const RouteComponent = () => {
   return (
@@ -64,6 +65,7 @@ const RouteComponent = () => {
         path="/crew/crewping/detail"
         element={<CrewpingDetailPage />}
       ></Route>
+      <Route path="/feed/create" element={<FeedCreatePage />}></Route>
       <Route path="/*" element={<PageNotFound404 />}></Route>
     </Routes>
   );

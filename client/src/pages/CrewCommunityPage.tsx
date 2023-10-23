@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import CrewCommunityInfo from "components/CrewCommunity/CrewCommunityInfo";
@@ -10,14 +10,25 @@ import style from "styles/css/CrewCommunityPage.module.css";
 
 const CrewCommunityPage = () => {
   const navigate = useNavigate();
+  const [isVisibleButton, setVisibleButton] = useState(false);
 
   const goBackHandler = () => {
     navigate(-1);
+  };
+  const goFeedHandler = () => {
+    navigate("/feed/create");
+  };
+  const goCrewpingCreateHandler = () => {
+    navigate("/crew/crewping/create");
   };
 
   const tabProps = {
     피드: <CrewFeed />,
     크루핑: <CrewpingList />,
+  };
+
+  const toggleButton = () => {
+    setVisibleButton(!isVisibleButton);
   };
 
   return (
@@ -37,7 +48,44 @@ const CrewCommunityPage = () => {
       <Notice />
       <div className={style.divide}></div>
       <CustomizedTabs tabProps={tabProps} />
-      <div className={style.plus}>
+
+      {isVisibleButton && (
+        <>
+          <div className={style.modalbackground}>
+            <div className={style.create} style={{ bottom: "7.5rem" }}>
+              <div className={style.title}>피드 작성</div>
+              <div className={style.open_button} onClick={goFeedHandler}>
+                <Icon
+                  icon="bi:pencil"
+                  style={{
+                    width: "2rem",
+                    height: "2rem",
+                    marginTop: "0.5rem",
+                  }}
+                />
+              </div>
+            </div>
+            <div className={style.create} style={{ bottom: "11rem" }}>
+              <div className={style.title}>크루핑 생성</div>
+              <div
+                className={style.open_button}
+                onClick={goCrewpingCreateHandler}
+              >
+                <Icon
+                  icon="bi:pencil"
+                  style={{
+                    width: "2rem",
+                    height: "2rem",
+                    marginTop: "0.5rem",
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
+      <div className={style.plus} onClick={toggleButton}>
         <Icon
           icon="bi:plus-lg"
           style={{
