@@ -42,6 +42,9 @@ dependencies {
 	
 	// test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	
+	// rabbitmq
+	implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp:4.0.1'
 }
 
 dependencyManagement {
