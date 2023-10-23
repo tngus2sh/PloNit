@@ -1,8 +1,13 @@
+@import "styles";
+
 .btn {
-  height: 3vh;
-  width: 3vh;
-  border-radius: 0.75vh;
-  background-size: contain;
+  height: 5vh;
+  width: 5vh;
+  margin: 1vh;
+  border-radius: 100%;
+  background-size: 70%;
   background-repeat: no-repeat;
   background-position: center;
+  background-color: $white;
+  cursor: pointer;
 }
