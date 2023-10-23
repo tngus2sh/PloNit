@@ -35,13 +35,13 @@ const StyledTabs = styled((props: StyledTabsProps) => (
 
 interface StyledTabProps {
   label: string;
-  tabCount: number;
+  tabcount: number;
 }
 
 const StyledTab = styled((props: StyledTabProps) => (
   <Tab disableRipple {...props} />
-))(({ theme, tabCount }) => ({
-  width: `${(100 / tabCount).toFixed(2)}%`,
+))(({ theme, tabcount }) => ({
+  width: `${(100 / tabcount).toFixed(2)}%`,
   textTransform: "none",
   fontWeight: theme.typography.fontWeightRegular,
   fontSize: theme.typography.pxToRem(15),
@@ -58,7 +58,7 @@ export default function CustomizedTabs(props: CustomizedTabsProps) {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-  const tabCount = Object.keys(tabProps).length;
+  const tabcount = Object.keys(tabProps).length;
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -69,7 +69,7 @@ export default function CustomizedTabs(props: CustomizedTabsProps) {
           aria-label="styled tabs example"
         >
           {Object.keys(tabProps).map((key, index) => (
-            <StyledTab key={index} label={key} tabCount={tabCount} />
+            <StyledTab key={index} label={key} tabcount={tabcount} />
           ))}
         </StyledTabs>
         <Box>{Object.values(tabProps)[value]}</Box>

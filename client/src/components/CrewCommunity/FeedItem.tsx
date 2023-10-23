@@ -18,7 +18,7 @@ const FeedItem = () => {
         <Icon icon="bi:heart" style={{ width: "1.8rem", height: "1.8rem" }} />
         <Icon
           icon="bi:chat-left"
-          style={{ width: "1.8rem", height: "1.8rem", marginLeft: "0.5rem" }}
+          style={{ width: "2rem", height: "1.8rem", marginLeft: "0.5rem" }}
         />
       </div>
       <div className={style.like_count}>좋아요 112개</div>

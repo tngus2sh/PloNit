@@ -37,6 +37,17 @@ const CrewCommunityPage = () => {
       <Notice />
       <div className={style.divide}></div>
       <CustomizedTabs tabProps={tabProps} />
+      <div className={style.plus}>
+        <Icon
+          icon="bi:plus-lg"
+          style={{
+            width: "2.5rem",
+            height: "2.5rem",
+            color: "white",
+            marginTop: "0.25rem",
+          }}
+        />
+      </div>
     </div>
   );
 };
