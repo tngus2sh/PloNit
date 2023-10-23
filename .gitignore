@@ -27,3 +27,23 @@ client/yarn-error.log*
 # prevent css conflict
 client/src/styles/css/*.css
 client/src/styles/**/*.css
+
+### server ###
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+migrate_working_dir/
+.svn/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.gradle
+.idea/
