@@ -1,10 +1,10 @@
 import React from "react";
-import TestComponent from "components/plogging/TestComponent";
+import DefaultMap from "components/plogging/DefaultMap";
 
 const PloggingPage = () => {
   return (
     <div>
-      <TestComponent />
+      <DefaultMap />
     </div>
   );
 };
