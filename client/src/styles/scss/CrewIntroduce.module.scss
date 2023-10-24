@@ -1,0 +1,16 @@
+@import "styles";
+
+.crew_introduce {
+    padding: 1rem;
+    text-align: left;
+    .title{
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+    .content {
+        border-radius: 0.5rem;
+        border: 1px solid $gray;
+        height: 10rem;
+        padding: 0.5rem;
+    }
+}
