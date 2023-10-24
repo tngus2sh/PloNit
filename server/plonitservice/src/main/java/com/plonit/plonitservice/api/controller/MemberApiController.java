@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
-@RequestMapping("/plonit-service/member")
+@RequestMapping("/plonit-service/api/member")
 @RestController
 @Slf4j
 @RequiredArgsConstructor

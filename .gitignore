@@ -42,6 +42,7 @@ migrate_working_dir/
 .svn/
 
 # IntelliJ related
+*.jks
 *.xml
 *.iml
 *.ipr

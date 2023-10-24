@@ -5,6 +5,8 @@
     <file type="web" url="file://$PROJECT_DIR$/apigatewayservice" />
     <file type="web" url="file://$PROJECT_DIR$/configservice" />
     <file type="web" url="file://$PROJECT_DIR$/discoveryservice" />
+    <file type="web" url="file://$PROJECT_DIR$/ploggingservice" />
+    <file type="web" url="file://$PROJECT_DIR$/plonitservice" />
   </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
