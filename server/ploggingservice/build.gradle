@@ -69,6 +69,12 @@ dependencies {
     
     // rabbitmq
     implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp:4.0.1'
+    
+    // circuitbreaker
+    implementation 'org.springframework.cloud:spring-cloud-circuitbreaker-resilience4j:3.0.2'
+
+    // feign
+    implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
 }
 
 dependencyManagement {
