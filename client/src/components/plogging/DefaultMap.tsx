@@ -3,6 +3,9 @@ import { GeolocationPosition } from "interface/ploggingInterface";
 import useGPS from "./functions/useGPS";
 import style from "styles/css/PloggingPage/DefaultMap.module.css";
 
+import { dummy_toilets } from "./dummyData";
+import { current } from "@reduxjs/toolkit";
+
 const { naver } = window;
 
 // 대략적으로 필요한 기능들
@@ -31,21 +34,27 @@ const DefaultMap = () => {
   const preventDup = useRef<boolean>(true);
   const mapRef = useRef<naver.maps.Map | null>(null);
   const userRef = useRef<naver.maps.Marker | null>(null);
-  const centerRef = useRef<naver.maps.CustomControl | null>(null);
-  const binRef = useRef<naver.maps.CustomControl | null>(null);
-  const toiletRef = useRef<naver.maps.CustomControl | null>(null);
+  const centerBtnRef = useRef<naver.maps.CustomControl | null>(null);
+  const binBtnRef = useRef<naver.maps.CustomControl | null>(null);
+  const toiletBtnRef = useRef<naver.maps.CustomControl | null>(null);
   const [isCentered, setIsCentered] = useState<boolean>(false);
-  const [showIcon, setShowIcon] = useState<boolean>(false);
-  const [binIcon, setBinIcon] = useState<boolean>(false);
-  const [toiletIcon, setToiletIcon] = useState<boolean>(false);
+  const [showIcon, setShowIcon] = useState<boolean>(true);
+  const [showBin, setShowBin] = useState<boolean>(false);
+  const [showToilet, setShowToilet] = useState<boolean>(false);
   const [bins, setBins] = useState<Coordinate[]>([]);
   const [toilets, setToilets] = useState<Coordinate[]>([]);
+  const binMarkers: naver.maps.Marker[] = [];
+  const toiletMarkers: naver.maps.Marker[] = [];
 
   const centerBtn = isCentered
     ? `<div class="${style.btn_white_margin_inc}" style="background-image:url('images/PloggingPage/location-cross-blue.svg')"></div>`
     : `<div class="${style.btn_white_margin_inc}" style="background-image:url('images/PloggingPage/location-cross-black.svg')"></div>`;
-  const binBtn = `<div class="${style.btn_green_margin_inc}" style="background-image:url('images/PloggingPage/trash-solid.svg')"></div>`;
-  const toiletBtn = `<div class="${style.btn_blue}" style="background-image:url('images/PloggingPage/toilet-solid.svg')"></div>`;
+  const binBtn = showBin
+    ? `<div class="${style.btn_green_margin_inc}" style="background-image:url('images/PloggingPage/trash-solid.svg')"></div>`
+    : `<div class="${style.btn_black_margin_inc}" style="background-image:url('images/PloggingPage/trash-solid.svg')"></div>`;
+  const toiletBtn = showToilet
+    ? `<div class="${style.btn_blue}" style="background-image:url('images/PloggingPage/toilet-solid.svg')"></div>`
+    : `<div class="${style.btn_black}" style="background-image:url('images/PloggingPage/toilet-solid.svg')"></div>`;
 
   useEffect(() => {
     let isFailed = false;
@@ -56,16 +65,19 @@ const DefaultMap = () => {
 
       getGPS
         .then((response) => {
-          setShowIcon(true);
+          setIsCentered(true);
+          setToilets(dummy_toilets);
+          console.log(dummy_toilets);
           const { latitude, longitude } = response.coords;
           console.log(latitude);
           console.log(longitude);
-          mapRef.current = new naver.maps.Map("map", {
+          const map = new naver.maps.Map("map", {
             center: new naver.maps.LatLng(latitude, longitude),
             zoom: 16,
           });
+          mapRef.current = map;
 
-          userRef.current = new naver.maps.Marker({
+          const user = new naver.maps.Marker({
             position: new naver.maps.LatLng(latitude, longitude),
             map: mapRef.current,
             icon: {
@@ -76,21 +88,44 @@ const DefaultMap = () => {
               anchor: new naver.maps.Point(17.5, 17.5),
             },
           });
+          userRef.current = user;
 
-          centerRef.current = new naver.maps.CustomControl(centerBtn, {
+          const centerBtnIndicator = new naver.maps.CustomControl(centerBtn, {
             position: naver.maps.Position.LEFT_BOTTOM,
           });
-          binRef.current = new naver.maps.CustomControl(binBtn, {
+          centerBtnRef.current = centerBtnIndicator;
+          const binBtnIndicator = new naver.maps.CustomControl(binBtn, {
             position: naver.maps.Position.RIGHT_BOTTOM,
           });
-          toiletRef.current = new naver.maps.CustomControl(toiletBtn, {
+          binBtnRef.current = binBtnIndicator;
+          const toiletBtnIndicator = new naver.maps.CustomControl(toiletBtn, {
             position: naver.maps.Position.RIGHT_BOTTOM,
           });
+          toiletBtnRef.current = toiletBtnIndicator;
 
           naver.maps.Event.once(mapRef.current, "init", () => {
-            centerRef.current?.setMap(mapRef.current);
-            binRef.current?.setMap(mapRef.current);
-            toiletRef.current?.setMap(mapRef.current);
+            centerBtnIndicator.setMap(mapRef.current);
+            binBtnIndicator.setMap(mapRef.current);
+            toiletBtnIndicator.setMap(mapRef.current);
+
+            naver.maps.Event.addDOMListener(
+              binBtnIndicator.getElement(),
+              "click",
+              () => {
+                setShowBin((current) => {
+                  return !current;
+                });
+              },
+            );
+            naver.maps.Event.addDOMListener(
+              toiletBtnIndicator.getElement(),
+              "click",
+              () => {
+                setShowToilet((current) => {
+                  return !current;
+                });
+              },
+            );
           });
         })
         .catch((error) => {
@@ -111,19 +146,65 @@ const DefaultMap = () => {
   }, []);
 
   useEffect(() => {
-    if (!preventDup) {
-      console.log(`준비 중`);
-      if (typeof latitude === "number" && typeof longitude === "number") {
-        mapRef.current = new naver.maps.Map("map", {
-          zoom: 16,
+    if (!preventDup.current) {
+      if (showBin) {
+        binMarkers.forEach((binMarker) => {
+          binMarker.setMap(mapRef.current);
+        });
+      } else {
+        binMarkers.length = 0;
+        bins.forEach((bin) => {
+          binMarkers.push(
+            new naver.maps.Marker({
+              position: new naver.maps.LatLng(bin.latitude, bin.longitude),
+              map: mapRef.current ?? undefined,
+              icon: {
+                url: `images/PloggingPage/bin-icon.png`,
+                size: new naver.maps.Size(35, 35),
+                scaledSize: new naver.maps.Size(35, 35),
+                origin: new naver.maps.Point(0, 0),
+                anchor: new naver.maps.Point(17.5, 17.5),
+              },
+            }),
+          );
+        });
+      }
+
+      if (showToilet) {
+        toilets.forEach((toilet) => {
+          toiletMarkers.push(
+            new naver.maps.Marker({
+              position: new naver.maps.LatLng(
+                toilet.latitude,
+                toilet.longitude,
+              ),
+              map: mapRef.current ?? undefined,
+              icon: {
+                url: `images/PloggingPage/toilet-icon.png`,
+                size: new naver.maps.Size(35, 35),
+                scaledSize: new naver.maps.Size(35, 35),
+                origin: new naver.maps.Point(0, 0),
+                anchor: new naver.maps.Point(17.5, 17.5),
+              },
+            }),
+          );
+        });
+      } else {
+        toiletMarkers.forEach((toiletMarker) => {
+          toiletMarker.setMap(null);
         });
       }
     }
-  }, [latitude, longitude]);
+  }, [bins, toilets, showBin, showToilet]);
+
+  // useEffect(() => {
+  //   if (!preventDup.current) {
+  //   }
+  // }, []);
 
   return (
     <div style={{ height: "calc(100vh - 56px)", width: "100%" }}>
-      <div id="map" style={{ height: "100%", width: "100%" }}></div>;
+      <div id="map" style={{ height: "100%", width: "100%" }}></div>
     </div>
   );
 };
