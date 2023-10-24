@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { GeolocationPosition } from "interface/ploggingInterface";
 import useGPS from "./functions/useGPS";
-import style from "styles/css/TestComponent.module.css";
+import style from "styles/css/PloggingPage/DefaultMap.module.css";
 
 const { naver } = window;
 
@@ -26,7 +26,7 @@ interface Coordinate {
   longitude: number;
 }
 
-const TestComponent = () => {
+const DefaultMap = () => {
   const { latitude, longitude, setOnSearch } = useGPS();
   const preventDup = useRef<boolean>(true);
   const mapRef = useRef<naver.maps.Map | null>(null);
@@ -41,8 +41,11 @@ const TestComponent = () => {
   const [bins, setBins] = useState<Coordinate[]>([]);
   const [toilets, setToilets] = useState<Coordinate[]>([]);
 
-  const centerBtnBlack = `<div class="${style.btn}" style="background-image:url('images/location-cross-black.svg')"></div>`;
-  const centerBtnBlue = `<div class="${style.btn}" style="background-image:url('images/location-cross-blue.svg')"></div>`;
+  const centerBtn = isCentered
+    ? `<div class="${style.btn_white_margin_inc}" style="background-image:url('images/PloggingPage/location-cross-blue.svg')"></div>`
+    : `<div class="${style.btn_white_margin_inc}" style="background-image:url('images/PloggingPage/location-cross-black.svg')"></div>`;
+  const binBtn = `<div class="${style.btn_green_margin_inc}" style="background-image:url('images/PloggingPage/trash-solid.svg')"></div>`;
+  const toiletBtn = `<div class="${style.btn_blue}" style="background-image:url('images/PloggingPage/toilet-solid.svg')"></div>`;
 
   useEffect(() => {
     let isFailed = false;
@@ -66,7 +69,7 @@ const TestComponent = () => {
             position: new naver.maps.LatLng(latitude, longitude),
             map: mapRef.current,
             icon: {
-              url: `images/myLocation.svg`,
+              url: `images/PloggingPage/myLocation.svg`,
               size: new naver.maps.Size(35, 35),
               scaledSize: new naver.maps.Size(35, 35),
               origin: new naver.maps.Point(0, 0),
@@ -74,16 +77,20 @@ const TestComponent = () => {
             },
           });
 
-          centerRef.current = new naver.maps.CustomControl(centerBtnBlack, {
+          centerRef.current = new naver.maps.CustomControl(centerBtn, {
             position: naver.maps.Position.LEFT_BOTTOM,
           });
-          binRef.current = new naver.maps.CustomControl(centerBtnBlue, {
-            position: naver.maps.Position.LEFT_BOTTOM,
+          binRef.current = new naver.maps.CustomControl(binBtn, {
+            position: naver.maps.Position.RIGHT_BOTTOM,
+          });
+          toiletRef.current = new naver.maps.CustomControl(toiletBtn, {
+            position: naver.maps.Position.RIGHT_BOTTOM,
           });
 
           naver.maps.Event.once(mapRef.current, "init", () => {
             centerRef.current?.setMap(mapRef.current);
             binRef.current?.setMap(mapRef.current);
+            toiletRef.current?.setMap(mapRef.current);
           });
         })
         .catch((error) => {
@@ -121,4 +128,4 @@ const TestComponent = () => {
   );
 };
 
-export default TestComponent;
+export default DefaultMap;
