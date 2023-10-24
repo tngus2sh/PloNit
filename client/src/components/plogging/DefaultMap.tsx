@@ -4,7 +4,6 @@ import useGPS from "./functions/useGPS";
 import style from "styles/css/PloggingPage/DefaultMap.module.css";
 
 import { dummy_toilets } from "./dummyData";
-import { current } from "@reduxjs/toolkit";
 
 const { naver } = window;
 
@@ -43,8 +42,8 @@ const DefaultMap = () => {
   const [showToilet, setShowToilet] = useState<boolean>(false);
   const [bins, setBins] = useState<Coordinate[]>([]);
   const [toilets, setToilets] = useState<Coordinate[]>([]);
-  const binMarkers: naver.maps.Marker[] = [];
-  const toiletMarkers: naver.maps.Marker[] = [];
+  const binMarkers = useRef<naver.maps.Marker[]>([]);
+  const toiletMarkers = useRef<naver.maps.Marker[]>([]);
 
   const centerBtn = isCentered
     ? `<div class="${style.btn_white_margin_inc}" style="background-image:url('images/PloggingPage/location-cross-blue.svg')"></div>`
@@ -56,6 +55,7 @@ const DefaultMap = () => {
     ? `<div class="${style.btn_blue}" style="background-image:url('images/PloggingPage/toilet-solid.svg')"></div>`
     : `<div class="${style.btn_black}" style="background-image:url('images/PloggingPage/toilet-solid.svg')"></div>`;
 
+  // 초기맵 생성 및 기초 구조 구성
   useEffect(() => {
     let isFailed = false;
     if (preventDup.current) {
@@ -67,10 +67,9 @@ const DefaultMap = () => {
         .then((response) => {
           setIsCentered(true);
           setToilets(dummy_toilets);
-          console.log(dummy_toilets);
           const { latitude, longitude } = response.coords;
-          console.log(latitude);
-          console.log(longitude);
+          // console.log(latitude);
+          // console.log(longitude);
           const map = new naver.maps.Map("map", {
             center: new naver.maps.LatLng(latitude, longitude),
             zoom: 16,
@@ -103,11 +102,18 @@ const DefaultMap = () => {
           });
           toiletBtnRef.current = toiletBtnIndicator;
 
-          naver.maps.Event.once(mapRef.current, "init", () => {
-            centerBtnIndicator.setMap(mapRef.current);
-            binBtnIndicator.setMap(mapRef.current);
-            toiletBtnIndicator.setMap(mapRef.current);
+          naver.maps.Event.once(map, "init", () => {
+            centerBtnIndicator.setMap(map);
+            binBtnIndicator.setMap(map);
+            toiletBtnIndicator.setMap(map);
 
+            naver.maps.Event.addDOMListener(
+              centerBtnIndicator.getElement(),
+              "click",
+              () => {
+                // console.log(toiletMarkers);
+              },
+            );
             naver.maps.Event.addDOMListener(
               binBtnIndicator.getElement(),
               "click",
@@ -145,62 +151,67 @@ const DefaultMap = () => {
     };
   }, []);
 
+  // 쓰레기통 및 화장실 데이터 로드
+  // 향후 도움 요청은 어떻게 넣을지에 대해서 고민할 것
+  useEffect(() => {
+    binMarkers.current = [];
+    bins.forEach((bin) => {
+      const marker = new naver.maps.Marker({
+        position: new naver.maps.LatLng(bin.latitude, bin.longitude),
+        map: mapRef.current ?? undefined,
+        icon: {
+          url: `images/PloggingPage/bin-icon.png`,
+          size: new naver.maps.Size(35, 35),
+          scaledSize: new naver.maps.Size(35, 35),
+          origin: new naver.maps.Point(0, 0),
+          anchor: new naver.maps.Point(17.5, 17.5),
+        },
+      });
+      binMarkers.current = [...binMarkers.current, marker];
+    });
+
+    toiletMarkers.current = [];
+    toilets.forEach((toilet) => {
+      const marker = new naver.maps.Marker({
+        position: new naver.maps.LatLng(toilet.latitude, toilet.longitude),
+        map: undefined,
+        icon: {
+          url: `images/PloggingPage/toilet-icon.png`,
+          size: new naver.maps.Size(35, 35),
+          scaledSize: new naver.maps.Size(35, 35),
+          origin: new naver.maps.Point(0, 0),
+          anchor: new naver.maps.Point(17.5, 17.5),
+        },
+      });
+
+      toiletMarkers.current = [...toiletMarkers.current, marker];
+    });
+  }, [bins, toilets]);
+
+  // 쓰레기통과 화장실 visibility를 toggle
   useEffect(() => {
     if (!preventDup.current) {
       if (showBin) {
-        binMarkers.forEach((binMarker) => {
+        binMarkers.current.forEach((binMarker) => {
           binMarker.setMap(mapRef.current);
         });
       } else {
-        binMarkers.length = 0;
-        bins.forEach((bin) => {
-          binMarkers.push(
-            new naver.maps.Marker({
-              position: new naver.maps.LatLng(bin.latitude, bin.longitude),
-              map: mapRef.current ?? undefined,
-              icon: {
-                url: `images/PloggingPage/bin-icon.png`,
-                size: new naver.maps.Size(35, 35),
-                scaledSize: new naver.maps.Size(35, 35),
-                origin: new naver.maps.Point(0, 0),
-                anchor: new naver.maps.Point(17.5, 17.5),
-              },
-            }),
-          );
+        binMarkers.current.forEach((binMarker) => {
+          binMarker.setMap(null);
         });
       }
 
       if (showToilet) {
-        toilets.forEach((toilet) => {
-          toiletMarkers.push(
-            new naver.maps.Marker({
-              position: new naver.maps.LatLng(
-                toilet.latitude,
-                toilet.longitude,
-              ),
-              map: mapRef.current ?? undefined,
-              icon: {
-                url: `images/PloggingPage/toilet-icon.png`,
-                size: new naver.maps.Size(35, 35),
-                scaledSize: new naver.maps.Size(35, 35),
-                origin: new naver.maps.Point(0, 0),
-                anchor: new naver.maps.Point(17.5, 17.5),
-              },
-            }),
-          );
+        toiletMarkers.current.forEach((toiletMarker) => {
+          toiletMarker.setMap(mapRef.current);
         });
       } else {
-        toiletMarkers.forEach((toiletMarker) => {
+        toiletMarkers.current.forEach((toiletMarker) => {
           toiletMarker.setMap(null);
         });
       }
     }
-  }, [bins, toilets, showBin, showToilet]);
-
-  // useEffect(() => {
-  //   if (!preventDup.current) {
-  //   }
-  // }, []);
+  }, [showBin, showToilet]);
 
   return (
     <div style={{ height: "calc(100vh - 56px)", width: "100%" }}>
