@@ -4,6 +4,11 @@ server:
 spring:
   application:
     name: config-service
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: '{cipher}AQCVPovqr4TjUipf1KSZfq6769wyxQHh1p0Lyrmuwgg5cMrpfcvYkfeHwGBN6S6OxuM+HERhJUWOW35iXodDwe8Ht+x5XIW/otHj9/z5UQVdzjBcIhsIKtAyxTdt/vu8xxEkQ8Kpgu0bTbhKbfnYmZBh0EkOE4I/Sx+t9BXE2Ser3pELRS4J3/y7xzUyXyC/coK+gIP0AZjjaj9S9tPNsnZGfKnuOCh7IBQ21PzmgH9q9+3dhtsr7MuMDfSe62HI/loF+nPq1DM6SySqqO1vtq4FUGk1pVFB9G0c45VrOZVopERJDiyFsBblXhCmCPUB1DgQeL1uuEzimWrFlH1nDRJr/2kuigeQVAlG4MB88iEii6tylgQXT3Y3NobEWBrq/sU='
+    password: '{cipher}AQCVPovqr4TjUipf1KSZfq6769wyxQHh1p0Lyrmuwgg5cMrpfcvYkfeHwGBN6S6OxuM+HERhJUWOW35iXodDwe8Ht+x5XIW/otHj9/z5UQVdzjBcIhsIKtAyxTdt/vu8xxEkQ8Kpgu0bTbhKbfnYmZBh0EkOE4I/Sx+t9BXE2Ser3pELRS4J3/y7xzUyXyC/coK+gIP0AZjjaj9S9tPNsnZGfKnuOCh7IBQ21PzmgH9q9+3dhtsr7MuMDfSe62HI/loF+nPq1DM6SySqqO1vtq4FUGk1pVFB9G0c45VrOZVopERJDiyFsBblXhCmCPUB1DgQeL1uuEzimWrFlH1nDRJr/2kuigeQVAlG4MB88iEii6tylgQXT3Y3NobEWBrq/sU='
   cloud:
     config:
       server:
@@ -17,7 +22,7 @@ spring:
             -----BEGIN RSA PRIVATE KEY-----
             Proc-Type: 4,ENCRYPTED
             DEK-Info: AES-128-CBC,D6EC41E7A604041CD489D4EE3137BD02
-            
+
             O1sn5e36ZEp2tnMqR8hFxjvGw6bI5umrdEcZMR1WYfT1MpQfKSm63sXdDQv4XnR5
             JvHDZb66y2WIDUvI8I1CPbycGqorvDI7KkCK1AsbpzfXiDKfOjwnMp/VGYfd7bDk
             pYvmlMJEnONXNK8aHsfkjFWPUr/WFMukFL8GRoJDlm/8cglilnuaPQgAeVe5R7VS
@@ -69,7 +74,7 @@ spring:
             YouK02rjpAbXArjwjvPt7bTSSwq0tT8FjDq8gLqrfMJJ8h2bUkx0WQvRsUKXTozJ
             -----END RSA PRIVATE KEY-----
           passphrase: '{cipher}AQCURyjgafTPRpbBDIXrj4ytoVL/3ye2Dy5AuU2LohqHoJ8tUXv3/oNis2VNc1KlWply3ftmHPReql+A9KitElwPPX9/f9lR3oiTbt37yHB2yUXdBLAFPNn8vH7M/q5df/bjLjo90ekULTMSeP39L4Ei+P0CtDFMkHWqN1y5J5pgs92gUF9F6MolIdJHaaysT1acatvXfY/OH3criSis/K501RvP+OEhlOi3D7S0GFhn1TEmZcR2dHz7+I6xN/kkT3fxTcp+OOFIcxih/OcWArzCGIJGkAllVJI2H13a01zlbxTnaCgfgAuvnNcevJqsk9z5p3vO11TaVizNrnN98/F4jsFAoh5spfnTEvvrKx08xeGnGZNAHvhFwBa8ywAt43s='
-          
+
 
 management:
   endpoint:
