@@ -1,4 +1,4 @@
-package com.plonit.plonitservice.api.controller;
+package com.plonit.plonitservice.api.auth.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
+@RequestMapping("/plonit-service/auth")
 @Tag(name = "Test", description = "설명")
-@RequestMapping("/plonit-service/api/member")
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-public class MemberApiController {
+public class AuthController {
     
     @Operation(summary = "get test", description = "test설정")
     @ApiResponses({
@@ -28,5 +28,4 @@ public class MemberApiController {
         log.info("server port = {}", request.getServerPort());
         return "Hi, there. This is a message from plonit-service";
     }
-    
 }
