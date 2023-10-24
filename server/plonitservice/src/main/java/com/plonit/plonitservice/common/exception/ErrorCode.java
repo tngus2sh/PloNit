@@ -32,7 +32,8 @@ public enum ErrorCode {
 
 
     /* 500 INTERNAL_SERVER_ERROR : 서버 내부 로직 에러 */
-    SSE_CONNECTED_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "SSE 연결이 실패하였습니다.");
+    SSE_CONNECTED_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "SSE 연결이 실패하였습니다."),
+    KAKAO_TOKEN_CONNECTED_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "카카오 토큰 발급에 실패하였습니다.");
 
     private final HttpStatus httpStatus;
     private final String description;
