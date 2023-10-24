@@ -1,10 +1,43 @@
 import React from "react";
+import style from "styles/css/Common/Input.module.css";
 
-const Input = () => {
+interface InputProps {
+  id?: string;
+  type: string;
+  value?: string;
+  onChange?: any;
+  styles?: { [key: string]: string };
+  labelTitle: string | "";
+  required?: boolean;
+  disabled?: boolean;
+}
+
+const Input = ({
+  value,
+  onChange,
+  id,
+  styles,
+  labelTitle,
+  type,
+  required,
+  disabled,
+}: InputProps) => {
   return (
-    <div>
-      <label>Username</label>
-      <input type="text" id="username" name="username" required />
+    <div className={style.input_area}>
+      <label className={style.label} htmlFor={id}>
+        {labelTitle}
+      </label>
+      <input
+        className={style.inputBox}
+        type={type}
+        value={value}
+        onChange={onChange}
+        id={id}
+        name={id}
+        placeholder=""
+        required={required}
+        disabled={disabled}
+      />
     </div>
   );
 };
