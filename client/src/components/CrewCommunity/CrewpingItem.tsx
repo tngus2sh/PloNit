@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import style from "styles/css/CrewpingItem.module.css";
+import style from "styles/css/CrewCommunityPage/CrewpingItem.module.css";
 import RoomIcon from "@mui/icons-material/Room";
 import PersonIcon from "@mui/icons-material/Person";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";

@@ -1,5 +1,5 @@
 import React from "react";
-import style from "styles/css/CrewInfo.module.css";
+import style from "styles/css/CrewDetailPage/CrewInfo.module.css";
 import { Icon } from "@iconify/react";
 
 const CrewInfo = () => {

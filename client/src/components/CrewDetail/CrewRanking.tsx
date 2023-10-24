@@ -1,5 +1,5 @@
 import React from "react";
-import style from "styles/css/CrewRanking.module.css";
+import style from "styles/css/CrewDetailPage/CrewRanking.module.css";
 
 const CrewRanking = () => {
   return (

@@ -1,0 +1,20 @@
+@import "../styles";
+
+.crew_info {
+  padding: 0.5rem 1rem 0.4rem;
+  text-align: left;
+  .title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: black;
+  }
+  div {
+    margin: 0.1rem 0;
+    color: $darkgray;
+    display: flex;
+    .icon {
+      margin: auto 0;
+      margin-right: 0.3rem;
+    }
+  }
+}

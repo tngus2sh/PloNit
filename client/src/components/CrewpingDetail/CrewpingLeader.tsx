@@ -1,5 +1,5 @@
 import React from "react";
-import style from "styles/css/CrewpingLeader.module.css";
+import style from "styles/css/CrewpingDetailPage/CrewpingLeader.module.css";
 
 const CrewpingLeader = () => {
   return (

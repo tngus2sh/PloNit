@@ -1,5 +1,5 @@
 import React from "react";
-import style from "styles/css/TopBar.module.css";
+import style from "styles/css/Common/TopBar.module.css";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 
