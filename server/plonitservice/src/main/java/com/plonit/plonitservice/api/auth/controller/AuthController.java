@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
-@RequestMapping("/plonit-service/member")
+@RequestMapping("/plonit-service/auth")
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-public class MemberApiController {
+public class AuthController {
     
     @GetMapping("/test")
     public String check(HttpServletRequest request) {
