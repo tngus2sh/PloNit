@@ -34,36 +34,14 @@ public class AuthController {
         return "Hi, there. This is a message from plonit-service";
     }
 
-    @GetMapping("/kakao") // kakao redirect_uri 생성
+    @GetMapping("/kakao") // kakao redirect url 생성
     public String login() {
         return authService.getKakaoLogin();
     }
 
     @GetMapping("/kakao/callback") // redirect url
-    public ApiResponse<Object> kakaoLogin(@RequestParam(required = false) String code) {
-        try {
-            // URL에 포함된 code를 이용하여 액세스 토큰 발급
-            String accessToken = authService.getKakaoAccessToken(code);
-            System.out.println(accessToken);
-
-            // 액세스 토큰을 이용하여 카카오 서버에서 유저 정보(닉네임, 이메일) 받아오기
-            HashMap<String, Object> userInfo = authService.getUserInfo(accessToken);
-            System.out.println("login Controller : " + userInfo);
-
-            LogInRes logInRes = null;
-
-            // 만일, DB에 해당 email을 가지는 유저가 없으면 회원가입 시키고 유저 식별자와 JWT 반환
-            if(!memberQueryRepository.exists(String.valueOf(userInfo.get("email")))) {
-                return ApiResponse.ok(logInRes);
-            } else {
-                // 아니면 기존 유저의 로그인으로 판단하고 유저 식별자와 JWT 반환
-                Member member = memberRepository.findByEmail(String.valueOf(userInfo.get("email")))
-                        .orElseThrow(() -> new CustomException(USER_BAD_REQUEST));
-                logInRes = LogInRes.of(member);
-                return ApiResponse.ok(logInRes);
-            }
-        } catch (Exception exception) {
-            throw new CustomException(KAKAO_TOKEN_CONNECTED_FAIL);
-        }
+    public ApiResponse<Object> kakaoLogin(@RequestParam(required = false) String code) throws Exception {
+        LogInRes logInRes = authService.getKakaoInfo(code);
+        return ApiResponse.ok(logInRes);
     }
 }

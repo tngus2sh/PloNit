@@ -14,10 +14,5 @@ public class LogInRes {
     private long id;
     private String email;
     private String nickname;
-
-    public static LogInRes of(Member member) {
-        return LogInRes.builder()
-                .email(member.getEmail())
-                .build();
-    }
+    private String profileImage;
 }

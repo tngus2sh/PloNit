@@ -1,11 +1,10 @@
 package com.plonit.plonitservice.api.auth.service;
 
 import com.plonit.plonitservice.api.auth.controller.response.LogInRes;
-import com.plonit.plonitservice.api.auth.service.dto.KakaoDTO;
-import com.plonit.plonitservice.api.auth.service.dto.TokenDTO;
 import com.plonit.plonitservice.common.exception.CustomException;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.json.JSONParser;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
@@ -16,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import org.json.simple.JSONObject;
+
 
 import static com.plonit.plonitservice.common.exception.ErrorCode.KAKAO_TOKEN_CONNECTED_FAIL;
 
@@ -44,11 +43,13 @@ public class AuthService {
                 + "&response_type=code";
     }
 
-    public LogInRes getKakaoAccessToken (String code) throws Exception {
+    public LogInRes getKakaoInfo (String code) throws Exception {
         if (code == null) throw new CustomException(KAKAO_TOKEN_CONNECTED_FAIL);
 
         String accessToken = "";
         String refreshToken = "";
+        int expiresIn = 0;
+        int refreshTokenExpiresIn = 0;
 
         try {
             HttpHeaders headers = new HttpHeaders();
@@ -64,15 +65,20 @@ public class AuthService {
             RestTemplate restTemplate = new RestTemplate();
             HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(params, headers);
 
-            ResponseEntity<TokenDTO> response = restTemplate.exchange(
+            ResponseEntity<String> response = restTemplate.exchange(
                     KAKAO_AUTH_URI + "/oauth/token",
                     HttpMethod.POST,
                     httpEntity,
-                    TokenDTO.class
+                    String.class
             );
 
-            accessToken = response.getBody().getAccess_token();
-            refreshToken = response.getBody().getRefresh_token();
+            JSONParser jsonParser = new JSONParser();
+            JSONObject jsonObj = (JSONObject) jsonParser.parse(response.getBody());
+
+            accessToken  = (String) jsonObj.get("access_token");
+            refreshToken = (String) jsonObj.get("refresh_token");
+            expiresIn = (int) jsonObj.get("expires_in");
+            refreshTokenExpiresIn = (int) jsonObj.get("refresh_token_expires_in");
 
         } catch (Exception e) {
             throw new CustomException(KAKAO_TOKEN_CONNECTED_FAIL);
@@ -89,22 +95,29 @@ public class AuthService {
         //HttpHeader 담기
         RestTemplate rt = new RestTemplate();
         HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(headers);
-        ResponseEntity<KakaoDTO> response = rt.exchange(
+        ResponseEntity<String> response = rt.exchange(
                 KAKAO_API_URI + "/v2/user/me",
                 HttpMethod.POST,
                 httpEntity,
-                KakaoDTO.class
+                String.class
         );
 
-        KakaoDTO kakaoDTO = response.getBody();
-        long id = kakaoDTO.getId();
-//        String email = kakaoDTO.getKakao_account().getEmail();
-//        String nickname = kakaoDTO.getKakao_account().getProfile().getNickname();
+        //Response 데이터 파싱
+        JSONParser jsonParser = new JSONParser();
+        JSONObject jsonObj    = (JSONObject) jsonParser.parse(response.getBody());
+        JSONObject account = (JSONObject) jsonObj.get("kakao_account");
+        JSONObject profile = (JSONObject) account.get("profile");
+
+        long id = (long) jsonObj.get("id");
+        String email = String.valueOf(account.get("email"));
+        String nickname = String.valueOf(profile.get("nickname"));
+        String profileImage = String.valueOf(profile.get("profile_image_url"));
 
         return LogInRes.builder()
-                .id(1)
-                .email("ssafy")
-                .nickname("ssafy").build();
+                .id(id)
+                .email(email)
+                .nickname(nickname)
+                .profileImage(profileImage).build();
     }
 
 }
