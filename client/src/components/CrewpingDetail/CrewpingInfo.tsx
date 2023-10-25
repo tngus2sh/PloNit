@@ -1,6 +1,6 @@
 import React from "react";
 import { Icon } from "@iconify/react";
-import style from "styles/css/CrewpingInfo.module.css";
+import style from "styles/css/CrewpingDetailPage/CrewpingInfo.module.css";
 
 const CrewpingInfo = () => {
   return (

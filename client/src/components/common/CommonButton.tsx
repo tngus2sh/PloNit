@@ -1,5 +1,5 @@
 import React from "react";
-import style from "styles/css/CommonButton.module.css";
+import style from "styles/css/Common/CommonButton.module.css";
 
 interface ButtonProps {
   text: string;

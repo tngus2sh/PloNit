@@ -1,0 +1,25 @@
+@import "../styles";
+
+.crew_ranking {
+  padding: 0.5rem 1rem;
+  text-align: left;
+  .title {
+    font-weight: 600;
+  }
+  .date {
+    font-size: 0.9rem;
+    color: $darkgray;
+    margin: 0.2rem 0;
+  }
+  .ranking {
+    display: flex;
+    justify-content: space-around;
+    margin: 1rem 0 0;
+    .dist {
+      margin: auto 0;
+    }
+    .rank {
+      font-size: 1.5rem;
+    }
+  }
+}
