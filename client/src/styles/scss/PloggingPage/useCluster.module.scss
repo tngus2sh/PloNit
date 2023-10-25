@@ -1,0 +1,46 @@
+@import "../styles";
+
+@mixin htmlMarker($url) {
+  cursor: pointer;
+  height: 50px;
+  width: 50px;
+  line-height: 50px;
+  font-size: 15px;
+  color: $white;
+  text-align: center;
+  font-weight: bold;
+  background: url("/public/images/PloggingPage/" + #{$url});
+  background-size: contain;
+}
+
+.htmlMarker_blue1 {
+  @include htmlMarker($url: "blues/blue1.svg");
+}
+.htmlMarker_blue2 {
+  @include htmlMarker($url: "blues/blue2.svg");
+}
+.htmlMarker_blue3 {
+  @include htmlMarker($url: "blues/blue3.svg");
+}
+.htmlMarker_blue4 {
+  @include htmlMarker($url: "blues/blue4.svg");
+}
+.htmlMarker_blue5 {
+  @include htmlMarker($url: "blues/blue5.svg");
+}
+
+.htmlMarker_green1 {
+  @include htmlMarker($url: "greens/green1.svg");
+}
+.htmlMarker_green2 {
+  @include htmlMarker($url: "greens/green2.svg");
+}
+.htmlMarker_green3 {
+  @include htmlMarker($url: "greens/green3.svg");
+}
+.htmlMarker_green4 {
+  @include htmlMarker($url: "greens/green4.svg");
+}
+.htmlMarker_green5 {
+  @include htmlMarker($url: "greens/green5.svg");
+}
