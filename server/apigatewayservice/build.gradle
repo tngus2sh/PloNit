@@ -45,8 +45,6 @@ dependencies {
 	
 	// rabbitmq
 	implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp:4.0.1'
-	
-	
 }
 
 dependencyManagement {
