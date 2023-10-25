@@ -23,7 +23,7 @@ const Input = ({
   disabled,
 }: InputProps) => {
   return (
-    <div className={style.input_area}>
+    <div className={style.input_area} style={styles}>
       <label className={style.label} htmlFor={id}>
         {labelTitle}
       </label>

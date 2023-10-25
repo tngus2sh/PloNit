@@ -1,11 +1,63 @@
 @import "styles";
 
+// CrewpingImg
+.crewping_img {
+  margin: 1rem;
+  position: relative;
+  img {
+    border-radius: 50%;
+    width: 10rem;
+    height: 10rem;
+  }
+  .img_edit_icon {
+    position: absolute;
+    background-color: rgb(77, 130, 177);
+    border-radius: 50%;
+    padding: 0.5rem 0.5rem 0.4rem;
+    bottom: 1rem;
+    left: calc(50% + 2.5rem);
+  }
+}
+
+// CrewpingDate.tsx
+.date_time {
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+  .label {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    margin-left: 0.2rem;
+    display: flex;
+  }
+  .inputBox {
+    border-radius: 0.5rem;
+    border: 1px solid $darkgray;
+    padding: 0.5rem 1rem;
+    font-size: 1.2em;
+    background-color: transparent;
+    height: 2rem;
+    width: calc(100% - 2rem);
+    margin-bottom: 0.5rem;
+  }
+  .inputBox2 {
+    border-radius: 0.5rem;
+    border: 1px solid $darkgray;
+    padding: 0.5rem 1rem;
+    font-size: 1.2em;
+    background-color: transparent;
+    height: 2rem;
+    width: calc(100% - 2rem);
+  }
+}
+
+// Crewping_Address.tsx
 .address_area {
   margin: 1rem;
   display: flex;
   flex-direction: column;
   .first_area .label {
-    font-size: 1.4rem;
+    font-size: 1.25rem;
     margin-bottom: 0.5rem;
     margin-left: 0.2rem;
     display: flex;
@@ -48,37 +100,18 @@
   }
 }
 
-.date_time {
+// CrewpingPeople.tsx
+.people_area {
   margin: 1rem;
   display: flex;
   flex-direction: column;
   .label {
-    font-size: 1.4rem;
+    font-size: 1.25rem;
     margin-bottom: 0.5rem;
     margin-left: 0.2rem;
     display: flex;
   }
-  .inputBox {
-    border-radius: 0.5rem;
-    border: 1px solid $darkgray;
-    padding: 0.5rem 1rem;
-    font-size: 1.2em;
-    background-color: transparent;
-    height: 2rem;
-    width: calc(100% - 2rem);
-  }
-}
-.person_area {
-  margin: 1rem;
-  display: flex;
-  flex-direction: column;
-  .label {
-    font-size: 1.4rem;
-    margin-bottom: 0.5rem;
-    margin-left: 0.2rem;
-    display: flex;
-  }
-  .person_content {
+  .people_content {
     display: flex;
     .inputBox {
       border-radius: 0.5rem;
@@ -90,12 +123,37 @@
       width: 40%;
     }
     .slash {
-      font-size: 2.5rem;
+      font-size: 2.8rem;
       margin-left: 0.5rem;
+      margin-top: -0.5rem;
     }
     .limit {
-      font-size: 2.5rem;
-      margin-left: 20%;
+      font-size: 2.8rem;
+      width: 45%;
+      margin-top: -0.5rem;
     }
+  }
+}
+
+.introduce {
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+  .label {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    margin-left: 0.2rem;
+    display: flex;
+  }
+  .inputBox {
+    border-radius: 0.5rem;
+    border: 1px solid $darkgray;
+    padding: 0.5rem 1rem;
+    background-color: transparent;
+    height: 5rem;
+    resize: none;
+  }
+  textarea {
+    font-size: 1.4em;
   }
 }

@@ -1,6 +1,8 @@
 import React from "react";
 import style from "styles/css/CrewpingCreatePage/AddressModal.module.css";
 import DaumPostcode from "react-daum-postcode";
+import { BasicTopBar } from "components/common/TopBar";
+import { Icon } from "@iconify/react";
 
 interface AddressModalProps {
   onClose: () => void;
@@ -18,7 +20,16 @@ const AddressModal: React.FC<AddressModalProps> = ({
 
   return (
     <div className={style.address_modal}>
-      <DaumPostcode onComplete={handleComplete} animation autoClose={false} />
+      <div className={style.top_section}>
+        <BasicTopBar text="주소 검색" />
+        <Icon
+          icon="bi:x"
+          onClick={onClose}
+          className={style.icon}
+          style={{ width: "3rem", height: "3rem" }}
+        />
+      </div>
+      <DaumPostcode onComplete={handleComplete} style={{ height: "100%" }} />
     </div>
   );
 };
