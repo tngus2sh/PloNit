@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { GeolocationPosition } from "interface/ploggingInterface";
 import useGPS from "./functions/useGPS";
+import useCluster from "./functions/useCluster";
 import style from "styles/css/PloggingPage/DefaultMap.module.css";
+
+import { dummy_toilets } from "./dummyData";
 
 const { naver } = window;
 
@@ -31,22 +34,31 @@ const DefaultMap = () => {
   const preventDup = useRef<boolean>(true);
   const mapRef = useRef<naver.maps.Map | null>(null);
   const userRef = useRef<naver.maps.Marker | null>(null);
-  const centerRef = useRef<naver.maps.CustomControl | null>(null);
-  const binRef = useRef<naver.maps.CustomControl | null>(null);
-  const toiletRef = useRef<naver.maps.CustomControl | null>(null);
+  const centerBtnRef = useRef<naver.maps.CustomControl | null>(null);
+  const binBtnRef = useRef<naver.maps.CustomControl | null>(null);
+  const toiletBtnRef = useRef<naver.maps.CustomControl | null>(null);
   const [isCentered, setIsCentered] = useState<boolean>(false);
-  const [showIcon, setShowIcon] = useState<boolean>(false);
-  const [binIcon, setBinIcon] = useState<boolean>(false);
-  const [toiletIcon, setToiletIcon] = useState<boolean>(false);
+  const [showIcon, setShowIcon] = useState<boolean>(true);
+  const [showBin, setShowBin] = useState<boolean>(false);
+  const [showToilet, setShowToilet] = useState<boolean>(false);
   const [bins, setBins] = useState<Coordinate[]>([]);
   const [toilets, setToilets] = useState<Coordinate[]>([]);
+  const binMarkers = useRef<naver.maps.Marker[]>([]);
+  const toiletMarkers = useRef<naver.maps.Marker[]>([]);
+  const binCluster = useRef<any>(null);
+  const toiletCluster = useRef<any>(null);
 
   const centerBtn = isCentered
     ? `<div class="${style.btn_white_margin_inc}" style="background-image:url('images/PloggingPage/location-cross-blue.svg')"></div>`
     : `<div class="${style.btn_white_margin_inc}" style="background-image:url('images/PloggingPage/location-cross-black.svg')"></div>`;
-  const binBtn = `<div class="${style.btn_green_margin_inc}" style="background-image:url('images/PloggingPage/trash-solid.svg')"></div>`;
-  const toiletBtn = `<div class="${style.btn_blue}" style="background-image:url('images/PloggingPage/toilet-solid.svg')"></div>`;
+  const binBtn = showBin
+    ? `<div class="${style.btn_green_margin_inc}" style="background-image:url('images/PloggingPage/trash-solid.svg')"></div>`
+    : `<div class="${style.btn_black_margin_inc}" style="background-image:url('images/PloggingPage/trash-solid.svg')"></div>`;
+  const toiletBtn = showToilet
+    ? `<div class="${style.btn_blue}" style="background-image:url('images/PloggingPage/toilet-solid.svg')"></div>`
+    : `<div class="${style.btn_black}" style="background-image:url('images/PloggingPage/toilet-solid.svg')"></div>`;
 
+  // 초기맵 생성 및 기초 구조 구성
   useEffect(() => {
     let isFailed = false;
     if (preventDup.current) {
@@ -56,16 +68,16 @@ const DefaultMap = () => {
 
       getGPS
         .then((response) => {
-          setShowIcon(true);
+          setIsCentered(true);
+          setToilets(dummy_toilets);
           const { latitude, longitude } = response.coords;
-          console.log(latitude);
-          console.log(longitude);
-          mapRef.current = new naver.maps.Map("map", {
+          const map = new naver.maps.Map("map", {
             center: new naver.maps.LatLng(latitude, longitude),
             zoom: 16,
           });
+          mapRef.current = map;
 
-          userRef.current = new naver.maps.Marker({
+          const user = new naver.maps.Marker({
             position: new naver.maps.LatLng(latitude, longitude),
             map: mapRef.current,
             icon: {
@@ -76,21 +88,51 @@ const DefaultMap = () => {
               anchor: new naver.maps.Point(17.5, 17.5),
             },
           });
+          userRef.current = user;
 
-          centerRef.current = new naver.maps.CustomControl(centerBtn, {
+          const centerBtnIndicator = new naver.maps.CustomControl(centerBtn, {
             position: naver.maps.Position.LEFT_BOTTOM,
           });
-          binRef.current = new naver.maps.CustomControl(binBtn, {
+          centerBtnRef.current = centerBtnIndicator;
+          const binBtnIndicator = new naver.maps.CustomControl(binBtn, {
             position: naver.maps.Position.RIGHT_BOTTOM,
           });
-          toiletRef.current = new naver.maps.CustomControl(toiletBtn, {
+          binBtnRef.current = binBtnIndicator;
+          const toiletBtnIndicator = new naver.maps.CustomControl(toiletBtn, {
             position: naver.maps.Position.RIGHT_BOTTOM,
           });
+          toiletBtnRef.current = toiletBtnIndicator;
 
-          naver.maps.Event.once(mapRef.current, "init", () => {
-            centerRef.current?.setMap(mapRef.current);
-            binRef.current?.setMap(mapRef.current);
-            toiletRef.current?.setMap(mapRef.current);
+          naver.maps.Event.once(map, "init", () => {
+            centerBtnIndicator.setMap(map);
+            binBtnIndicator.setMap(map);
+            toiletBtnIndicator.setMap(map);
+
+            naver.maps.Event.addDOMListener(
+              centerBtnIndicator.getElement(),
+              "click",
+              () => {
+                // console.log(toiletMarkers);
+              },
+            );
+            naver.maps.Event.addDOMListener(
+              binBtnIndicator.getElement(),
+              "click",
+              () => {
+                setShowBin((current) => {
+                  return !current;
+                });
+              },
+            );
+            naver.maps.Event.addDOMListener(
+              toiletBtnIndicator.getElement(),
+              "click",
+              () => {
+                setShowToilet((current) => {
+                  return !current;
+                });
+              },
+            );
           });
         })
         .catch((error) => {
@@ -110,20 +152,90 @@ const DefaultMap = () => {
     };
   }, []);
 
+  // 쓰레기통 및 화장실 데이터 로드
+  // 향후 도움 요청은 어떻게 넣을지에 대해서 고민할 것
   useEffect(() => {
-    if (!preventDup) {
-      console.log(`준비 중`);
-      if (typeof latitude === "number" && typeof longitude === "number") {
-        mapRef.current = new naver.maps.Map("map", {
-          zoom: 16,
+    if (!preventDup.current) {
+      const { makeMarkerClustering_blue, makeMarkerClustering_green } =
+        useCluster();
+
+      binMarkers.current = [];
+      bins.forEach((bin) => {
+        const marker = new naver.maps.Marker({
+          position: new naver.maps.LatLng(bin.latitude, bin.longitude),
+          map: undefined,
+          icon: {
+            url: `images/PloggingPage/bin-icon.png`,
+            size: new naver.maps.Size(35, 35),
+            scaledSize: new naver.maps.Size(35, 35),
+            origin: new naver.maps.Point(0, 0),
+            anchor: new naver.maps.Point(17.5, 17.5),
+          },
         });
+        binMarkers.current = [...binMarkers.current, marker];
+      });
+
+      binCluster.current = makeMarkerClustering_green({
+        map: undefined,
+        markers: binMarkers.current,
+      });
+
+      toiletMarkers.current = [];
+      toilets.forEach((toilet) => {
+        const marker = new naver.maps.Marker({
+          position: new naver.maps.LatLng(toilet.latitude, toilet.longitude),
+          map: undefined,
+          icon: {
+            url: `images/PloggingPage/toilet-icon.png`,
+            size: new naver.maps.Size(35, 35),
+            scaledSize: new naver.maps.Size(35, 35),
+            origin: new naver.maps.Point(0, 0),
+            anchor: new naver.maps.Point(17.5, 17.5),
+          },
+        });
+
+        toiletMarkers.current = [...toiletMarkers.current, marker];
+      });
+
+      toiletCluster.current = makeMarkerClustering_blue({
+        map: undefined,
+        markers: toiletMarkers.current,
+      });
+    }
+  }, [bins, toilets]);
+
+  // 쓰레기통과 화장실 visibility를 toggle
+  useEffect(() => {
+    if (!preventDup.current) {
+      if (showBin) {
+        binMarkers.current.forEach((binMarker) => {
+          binMarker.setMap(mapRef.current);
+        });
+        binCluster.current.setMap(mapRef.current);
+      } else {
+        binMarkers.current.forEach((binMarker) => {
+          binMarker.setMap(null);
+        });
+        binCluster.current.setMap(null);
+      }
+
+      if (showToilet) {
+        toiletMarkers.current.forEach((toiletMarker) => {
+          toiletMarker.setMap(mapRef.current);
+        });
+        toiletCluster.current.setMap(mapRef.current);
+      } else {
+        toiletMarkers.current.forEach((toiletMarker) => {
+          toiletMarker.setMap(null);
+        });
+        toiletCluster.current.setMap(null);
       }
     }
-  }, [latitude, longitude]);
+  }, [showBin, showToilet]);
 
   return (
     <div style={{ height: "calc(100vh - 56px)", width: "100%" }}>
-      <div id="map" style={{ height: "100%", width: "100%" }}></div>;
+      <div id="map" style={{ height: "100%", width: "100%" }}></div>
     </div>
   );
 };
