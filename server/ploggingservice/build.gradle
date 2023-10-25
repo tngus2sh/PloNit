@@ -35,8 +35,8 @@ ext {
 dependencies {
     // spring boot
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
     // spring cloud
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
@@ -46,6 +46,9 @@ dependencies {
     // mysql
     runtimeOnly 'com.mysql:mysql-connector-j'
 
+    // swagger
+    implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
+    
     // lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -66,6 +69,12 @@ dependencies {
     
     // rabbitmq
     implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp:4.0.1'
+    
+    // circuitbreaker
+    implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j'
+
+    // feign
+    implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
 }
 
 dependencyManagement {

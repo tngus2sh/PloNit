@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.plonit'
-version = '0.0.1-SNAPSHOT'
+version = '1.0'
 
 java {
 	sourceCompatibility = '11'
@@ -32,7 +32,7 @@ dependencies {
 	
 	// config
 	implementation 'org.springframework.cloud:spring-cloud-starter-config'
-	
+
 	// lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'

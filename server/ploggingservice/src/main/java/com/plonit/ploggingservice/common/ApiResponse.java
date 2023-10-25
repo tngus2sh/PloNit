@@ -1,4 +1,4 @@
-package com.plonit.plonitservice.common;
+package com.plonit.ploggingservice.common;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

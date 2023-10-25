@@ -1,6 +1,6 @@
-package com.plonit.plonitservice.common.exception;
+package com.plonit.ploggingservice.common.exception;
 
-import com.plonit.plonitservice.common.DataHeader;
+import com.plonit.ploggingservice.common.DataHeader;
 import lombok.Getter;
 import org.springframework.http.ResponseEntity;
 @Getter
