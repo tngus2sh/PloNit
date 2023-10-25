@@ -11,15 +11,15 @@ const { naver } = window;
 // 대략적으로 필요한 기능들
 
 // default useEffect에서 필요한 기능
-// 유저 초기 위치 확인
+// 유저 초기 위치 확인 x
 // 청소된 구역 표시
 // 플로깅 기록
 
 // [latitude, longitude] useEffect에서 필요한 기능
-// 유저 위치 표시
+// 유저 위치 표시 x
 // 주변 유저 위치 표시
-// 주변 쓰레기통 표시
-// 주변 화장실 위치 표시
+// 주변 쓰레기통 표시 x
+// 주변 화장실 위치 표시 x
 // 주변 유저 도움 요청 표시
 
 // 아이콘 사이즈를 35 35로 지정할 것
@@ -30,14 +30,13 @@ interface Coordinate {
 }
 
 const DefaultMap = () => {
-  const { latitude, longitude, setOnSearch } = useGPS();
+  const { latitude, longitude, onSearch, setOnSearch } = useGPS();
   const preventDup = useRef<boolean>(true);
   const mapRef = useRef<naver.maps.Map | null>(null);
   const userRef = useRef<naver.maps.Marker | null>(null);
   const centerBtnRef = useRef<naver.maps.CustomControl | null>(null);
   const binBtnRef = useRef<naver.maps.CustomControl | null>(null);
   const toiletBtnRef = useRef<naver.maps.CustomControl | null>(null);
-  const [isCentered, setIsCentered] = useState<boolean>(false);
   const [showIcon, setShowIcon] = useState<boolean>(true);
   const [showBin, setShowBin] = useState<boolean>(false);
   const [showToilet, setShowToilet] = useState<boolean>(false);
@@ -65,7 +64,6 @@ const DefaultMap = () => {
 
       getGPS
         .then((response) => {
-          setIsCentered(true);
           setToilets(dummy_toilets);
           const { latitude, longitude } = response.coords;
           const map = new naver.maps.Map("map", {
@@ -132,6 +130,16 @@ const DefaultMap = () => {
             binBtnRef.current = binBtnIndicator_inactive;
             toiletBtnRef.current = toiletBtnIndicator_inactive;
 
+            naver.maps.Event.addListener(map, "touchend", () => {
+              centerBtnIndicator_active.setMap(null);
+              centerBtnIndicator_inactive.setMap(map);
+              centerBtnRef.current = centerBtnIndicator_inactive;
+            });
+            naver.maps.Event.addListener(map, "zoom_changed", () => {
+              centerBtnIndicator_active.setMap(null);
+              centerBtnIndicator_inactive.setMap(map);
+              centerBtnRef.current = centerBtnIndicator_inactive;
+            });
             naver.maps.Event.addDOMListener(
               centerBtnIndicator_inactive.getElement(),
               "click",
@@ -139,8 +147,7 @@ const DefaultMap = () => {
                 centerBtnIndicator_inactive.setMap(null);
                 centerBtnIndicator_active.setMap(map);
                 centerBtnRef.current = centerBtnIndicator_active;
-                setIsCentered(true);
-                // 맵을 사용자 위치로 옮긴다.
+                setOnSearch(true);
               },
             );
             naver.maps.Event.addDOMListener(
@@ -205,6 +212,17 @@ const DefaultMap = () => {
       }
     };
   }, []);
+
+  useEffect(() => {
+    if (!preventDup.current && !onSearch) {
+      if (typeof latitude === "number" && typeof longitude === "number") {
+        mapRef.current?.setCenter(new naver.maps.LatLng(latitude, longitude));
+        userRef.current?.setPosition(
+          new naver.maps.LatLng(latitude, longitude),
+        );
+      }
+    }
+  }, [onSearch]);
 
   // 쓰레기통 및 화장실 데이터 로드
   // 향후 도움 요청은 어떻게 넣을지에 대해서 고민할 것
