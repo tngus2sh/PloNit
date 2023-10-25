@@ -48,15 +48,12 @@ const DefaultMap = () => {
   const binCluster = useRef<any>(null);
   const toiletCluster = useRef<any>(null);
 
-  const centerBtn = isCentered
-    ? `<div class="${style.btn_white_margin_inc}" style="background-image:url('images/PloggingPage/location-cross-blue.svg')"></div>`
-    : `<div class="${style.btn_white_margin_inc}" style="background-image:url('images/PloggingPage/location-cross-black.svg')"></div>`;
-  const binBtn = showBin
-    ? `<div class="${style.btn_green_margin_inc}" style="background-image:url('images/PloggingPage/trash-solid.svg')"></div>`
-    : `<div class="${style.btn_black_margin_inc}" style="background-image:url('images/PloggingPage/trash-solid.svg')"></div>`;
-  const toiletBtn = showToilet
-    ? `<div class="${style.btn_blue}" style="background-image:url('images/PloggingPage/toilet-solid.svg')"></div>`
-    : `<div class="${style.btn_black}" style="background-image:url('images/PloggingPage/toilet-solid.svg')"></div>`;
+  const centerBtn_inactive = `<div class="${style.btn_white_margin_inc}" style="background-image:url('images/PloggingPage/location-cross-black.svg')"></div>`;
+  const centerBtn_active = `<div class="${style.btn_white_margin_inc}" style="background-image:url('images/PloggingPage/location-cross-blue.svg')"></div>`;
+  const binBtn_inactive = `<div class="${style.btn_black_margin_inc}" style="background-image:url('images/PloggingPage/trash-solid.svg')"></div>`;
+  const binBtn_active = `<div class="${style.btn_green_margin_inc}" style="background-image:url('images/PloggingPage/trash-solid.svg')"></div>`;
+  const toiletBtn_inactive = `<div class="${style.btn_black}" style="background-image:url('images/PloggingPage/toilet-solid.svg')"></div>`;
+  const toiletBtn_active = `<div class="${style.btn_blue}" style="background-image:url('images/PloggingPage/toilet-solid.svg')"></div>`;
 
   // 초기맵 생성 및 기초 구조 구성
   useEffect(() => {
@@ -90,47 +87,104 @@ const DefaultMap = () => {
           });
           userRef.current = user;
 
-          const centerBtnIndicator = new naver.maps.CustomControl(centerBtn, {
-            position: naver.maps.Position.LEFT_BOTTOM,
-          });
-          centerBtnRef.current = centerBtnIndicator;
-          const binBtnIndicator = new naver.maps.CustomControl(binBtn, {
-            position: naver.maps.Position.RIGHT_BOTTOM,
-          });
-          binBtnRef.current = binBtnIndicator;
-          const toiletBtnIndicator = new naver.maps.CustomControl(toiletBtn, {
-            position: naver.maps.Position.RIGHT_BOTTOM,
-          });
-          toiletBtnRef.current = toiletBtnIndicator;
+          const centerBtnIndicator_inactive = new naver.maps.CustomControl(
+            centerBtn_inactive,
+            {
+              position: naver.maps.Position.LEFT_BOTTOM,
+            },
+          );
+          const centerBtnIndicator_active = new naver.maps.CustomControl(
+            centerBtn_active,
+            {
+              position: naver.maps.Position.LEFT_BOTTOM,
+            },
+          );
+          const binBtnIndicator_inactive = new naver.maps.CustomControl(
+            binBtn_inactive,
+            {
+              position: naver.maps.Position.RIGHT_BOTTOM,
+            },
+          );
+          const binBtnIndicator_active = new naver.maps.CustomControl(
+            binBtn_active,
+            {
+              position: naver.maps.Position.RIGHT_BOTTOM,
+            },
+          );
+          const toiletBtnIndicator_inactive = new naver.maps.CustomControl(
+            toiletBtn_inactive,
+            {
+              position: naver.maps.Position.RIGHT_BOTTOM,
+            },
+          );
+          const toiletBtnIndicator_active = new naver.maps.CustomControl(
+            toiletBtn_active,
+            {
+              position: naver.maps.Position.RIGHT_BOTTOM,
+            },
+          );
 
           naver.maps.Event.once(map, "init", () => {
-            centerBtnIndicator.setMap(map);
-            binBtnIndicator.setMap(map);
-            toiletBtnIndicator.setMap(map);
+            centerBtnIndicator_active.setMap(map);
+            binBtnIndicator_inactive.setMap(map);
+            toiletBtnIndicator_inactive.setMap(map);
+            centerBtnRef.current = centerBtnIndicator_active;
+            binBtnRef.current = binBtnIndicator_inactive;
+            toiletBtnRef.current = toiletBtnIndicator_inactive;
 
             naver.maps.Event.addDOMListener(
-              centerBtnIndicator.getElement(),
+              centerBtnIndicator_inactive.getElement(),
               "click",
               () => {
-                // console.log(toiletMarkers);
+                centerBtnIndicator_inactive.setMap(null);
+                centerBtnIndicator_active.setMap(map);
+                centerBtnRef.current = centerBtnIndicator_active;
+                setIsCentered(true);
+                // 맵을 사용자 위치로 옮긴다.
               },
             );
             naver.maps.Event.addDOMListener(
-              binBtnIndicator.getElement(),
+              binBtnIndicator_inactive.getElement(),
               "click",
               () => {
-                setShowBin((current) => {
-                  return !current;
-                });
+                toiletBtnRef.current?.setMap(null);
+                binBtnIndicator_inactive.setMap(null);
+                binBtnIndicator_active.setMap(map);
+                toiletBtnRef.current?.setMap(map);
+                binBtnRef.current = binBtnIndicator_active;
+                setShowBin(true);
               },
             );
             naver.maps.Event.addDOMListener(
-              toiletBtnIndicator.getElement(),
+              binBtnIndicator_active.getElement(),
               "click",
               () => {
-                setShowToilet((current) => {
-                  return !current;
-                });
+                toiletBtnRef.current?.setMap(null);
+                binBtnIndicator_active.setMap(null);
+                binBtnIndicator_inactive.setMap(map);
+                toiletBtnRef.current?.setMap(map);
+                binBtnRef.current = binBtnIndicator_inactive;
+                setShowBin(false);
+              },
+            );
+            naver.maps.Event.addDOMListener(
+              toiletBtnIndicator_inactive.getElement(),
+              "click",
+              () => {
+                toiletBtnIndicator_inactive.setMap(null);
+                toiletBtnIndicator_active.setMap(map);
+                toiletBtnRef.current = toiletBtnIndicator_active;
+                setShowToilet(true);
+              },
+            );
+            naver.maps.Event.addDOMListener(
+              toiletBtnIndicator_active.getElement(),
+              "click",
+              () => {
+                toiletBtnIndicator_active.setMap(null);
+                toiletBtnIndicator_inactive.setMap(map);
+                toiletBtnRef.current = toiletBtnIndicator_inactive;
+                setShowToilet(false);
               },
             );
           });
