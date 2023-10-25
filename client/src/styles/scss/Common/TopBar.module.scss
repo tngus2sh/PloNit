@@ -1,37 +1,41 @@
 .logoTopbar {
-    align-items: center;
+  align-items: center;
+  height: 7vh;
+  border-bottom: 1px solid #000000;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: #ffffff;
+  img {
     height: 7vh;
-    border-bottom: 1px solid #000000;
-    position: sticky;
-    top: 0;
-    img {
-        height: 7vh;  
-    }
   }
+}
 
 .basicTopbar {
-    display: flex;
-    height: 7vh;
-    align-items: center;
-    justify-content: center;
-    position: sticky;
-    top: 0;
-    border-bottom: 1px solid #000000;
-}  
+  display: flex;
+  height: 7vh;
+  align-items: center;
+  justify-content: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid #000000;
+  background-color: #fff;
+}
 
 .backTopbar {
-    position: relative;
-    height: 7vh;
-    border-bottom: 1px solid #000000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: sticky;
-    top: 0;
-  
+  position: relative;
+  height: 7vh;
+  border-bottom: 1px solid #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  z-index: 100;
   .back_icon {
     position: absolute;
     left: 0;
   }
-  
 }
