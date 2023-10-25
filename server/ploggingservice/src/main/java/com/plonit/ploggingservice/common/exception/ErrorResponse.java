@@ -1,10 +1,7 @@
 package com.plonit.ploggingservice.common.exception;
 
-import com.plonit.plonitservice.common.ApiResponse;
-import com.plonit.plonitservice.common.DataHeader;
-import lombok.Builder;
+import com.plonit.ploggingservice.common.DataHeader;
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 @Getter
 public class ErrorResponse {
