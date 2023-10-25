@@ -1,11 +1,13 @@
 package com.plonit.plonitservice.api.auth.service;
 
 import com.plonit.plonitservice.api.auth.controller.response.LogInRes;
+import com.plonit.plonitservice.api.auth.controller.response.LogInUrlRes;
 import com.plonit.plonitservice.common.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -20,47 +22,55 @@ import org.springframework.web.client.RestTemplate;
 import static com.plonit.plonitservice.common.exception.ErrorCode.KAKAO_TOKEN_CONNECTED_FAIL;
 
 @Service
-@RequiredArgsConstructor
 public class AuthService {
     private final RedisTemplate redisTemplate;
+    private final Environment env;
 
-    @Value("${kakao.client.id}")
     private String KAKAO_CLIENT_ID;
 
-    @Value("${kakao.client.secret}")
     private String KAKAO_CLIENT_SECRET;
 
-    @Value("${kakao.redirect.url}")
     private String KAKAO_REDIRECT_URL;
 
     private final static String KAKAO_AUTH_URI = "https://kauth.kakao.com";
     private final static String KAKAO_API_URI = "https://kapi.kakao.com";
 
-    public String getKakaoLogin() {
-        return KAKAO_AUTH_URI + "/oauth/authorize"
-                + "?client_id=" + KAKAO_CLIENT_ID
-                + "&redirect_uri=" + KAKAO_REDIRECT_URL
-                + "&response_type=code";
+    public AuthService(RedisTemplate redisTemplate, Environment env) {
+        this.redisTemplate = redisTemplate;
+        this.env = env;
+        this.KAKAO_CLIENT_ID = env.getProperty("kakao.client.id");
+        this.KAKAO_CLIENT_SECRET = env.getProperty("kakao.client.secret");
+        this.KAKAO_REDIRECT_URL = env.getProperty("kakao.redirect.url");
+    }
+
+    public LogInUrlRes getKakaoLogin() {
+        return LogInUrlRes.builder()
+                .url(KAKAO_AUTH_URI + "/oauth/authorize"
+                        + "?client_id=" + KAKAO_CLIENT_ID
+                        + "&redirect_uri=" + KAKAO_REDIRECT_URL
+                        + "&response_type=code").build();
     }
 
     public LogInRes getKakaoInfo (String code) throws Exception {
         if (code == null) throw new CustomException(KAKAO_TOKEN_CONNECTED_FAIL);
 
         String accessToken = "";
+        //todo : redis
         String refreshToken = "";
-        int expiresIn = 0;
-        int refreshTokenExpiresIn = 0;
+        long expiresIn = 0;
+        long refreshTokenExpiresIn = 0;
 
         try {
             HttpHeaders headers = new HttpHeaders();
-            headers.add("Content-type", "application/x-www-form-urlencoded");
+            headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
             MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
             params.add("grant_type"   , "authorization_code");
             params.add("client_id"    , KAKAO_CLIENT_ID);
-            params.add("client_secret", KAKAO_CLIENT_SECRET);
-            params.add("code"         , code);
             params.add("redirect_uri" , KAKAO_REDIRECT_URL);
+            params.add("code"         , code);
+            params.add("client_secret", KAKAO_CLIENT_SECRET);
+
 
             RestTemplate restTemplate = new RestTemplate();
             HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(params, headers);
@@ -77,8 +87,9 @@ public class AuthService {
 
             accessToken  = (String) jsonObj.get("access_token");
             refreshToken = (String) jsonObj.get("refresh_token");
-            expiresIn = (int) jsonObj.get("expires_in");
-            refreshTokenExpiresIn = (int) jsonObj.get("refresh_token_expires_in");
+            expiresIn = (long) jsonObj.get("expires_in");
+            refreshTokenExpiresIn = (long) jsonObj.get("refresh_token_expires_in");
+            System.out.println(accessToken);
 
         } catch (Exception e) {
             throw new CustomException(KAKAO_TOKEN_CONNECTED_FAIL);
@@ -101,7 +112,7 @@ public class AuthService {
                 httpEntity,
                 String.class
         );
-
+        System.out.println("getUserInfoWithToken : " + response);
         //Response 데이터 파싱
         JSONParser jsonParser = new JSONParser();
         JSONObject jsonObj    = (JSONObject) jsonParser.parse(response.getBody());
@@ -114,9 +125,7 @@ public class AuthService {
         String profileImage = String.valueOf(profile.get("profile_image_url"));
 
         return LogInRes.builder()
-                .id(id)
                 .email(email)
-                .nickname(nickname)
                 .profileImage(profileImage).build();
     }
 

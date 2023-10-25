@@ -3,6 +3,7 @@ package com.plonit.plonitservice.domain.member;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.plonit.plonitservice.domain.TimeBaseEntity;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -27,20 +28,17 @@ public class Member extends TimeBaseEntity {
     @NonNull
     private String email;
 
-//    @NonNull
-//    private String name;
-//
-//    @NonNull
-//    @Column(unique = true)
-//    private String nickname;
-//
-//    private String profileImage;
-//
-//    @ColumnDefault("false")
-//    private boolean gender;
-//
-//    @NonNull
-//    private String region;
+    private String name;
+
+    @Column(unique = true)
+    private String nickname;
+
+    private String profileImage;
+
+    @ColumnDefault("false")
+    private boolean gender; // 0 : 남자 / 1 : 여자
+
+    private String region;
 
     private float height;
 

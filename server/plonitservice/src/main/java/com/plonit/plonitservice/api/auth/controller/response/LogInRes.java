@@ -11,8 +11,6 @@ import java.util.List;
 @Builder
 @ToString
 public class LogInRes {
-    private long id;
     private String email;
-    private String nickname;
     private String profileImage;
 }
