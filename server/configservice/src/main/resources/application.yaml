@@ -15,7 +15,7 @@ spring:
         encrypt:
           enabled: false
         git:
-          uri: git@github.com:Plonit07/plonit-config.git
+          uri: '{cipher}AQCV900l4GBunsOUpUsD9QjHWo1TtuqGJNoZmPk412nnhykmqdP1f56LEJJzmha7MSZQBRQ209vxoJTQCOVkaCoHwTxztfFlaBXgd2lY9Wb29X1AuGY749gmVn0YVm4hYIns5HWrGUmzTiXdRgOIlbOAn6eVUQOp4ZA4wFfn/8GncEpcOncvEI697avdwaR3qP7K1Xr0R4cHgo8Co93nrd8H6o40/KTYPhXk2IaqUXGZXNRHjGaqS2aN1lAKRHt8Q3ii/Xjw5+Hwv6HT+jOVrg/fdZ1ybQLpV13QW/6CuQc0l0UXkl7v6tA0PyJVrcUWm5VJp+V1FOaZUw4G8ilkxpillgFXwzopUqKb4zmB2H/AfCvXLYeprbEhmokDQcUTMroffMC4E4nOPFF7z1iBM9Dry5PItkYhkA6by63mfQNG3w=='
           ignore-local-ssh-settings: true
           default-label: main
           private-key: |
@@ -74,7 +74,6 @@ spring:
             YouK02rjpAbXArjwjvPt7bTSSwq0tT8FjDq8gLqrfMJJ8h2bUkx0WQvRsUKXTozJ
             -----END RSA PRIVATE KEY-----
           passphrase: '{cipher}AQCURyjgafTPRpbBDIXrj4ytoVL/3ye2Dy5AuU2LohqHoJ8tUXv3/oNis2VNc1KlWply3ftmHPReql+A9KitElwPPX9/f9lR3oiTbt37yHB2yUXdBLAFPNn8vH7M/q5df/bjLjo90ekULTMSeP39L4Ei+P0CtDFMkHWqN1y5J5pgs92gUF9F6MolIdJHaaysT1acatvXfY/OH3criSis/K501RvP+OEhlOi3D7S0GFhn1TEmZcR2dHz7+I6xN/kkT3fxTcp+OOFIcxih/OcWArzCGIJGkAllVJI2H13a01zlbxTnaCgfgAuvnNcevJqsk9z5p3vO11TaVizNrnN98/F4jsFAoh5spfnTEvvrKx08xeGnGZNAHvhFwBa8ywAt43s='
-
 
 management:
   endpoint:
