@@ -35,10 +35,11 @@ ext {
 dependencies {
 	// spring boot
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 //	implementation 'org.springframework.boot:spring-boot-starter-security'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
 	// spring cloud
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 	implementation 'org.springframework.cloud:spring-cloud-starter-config'
@@ -49,7 +50,7 @@ dependencies {
 	
 	// swagger
 	implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
-	
+
 	// lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -70,12 +71,18 @@ dependencies {
 
 	// rabbitmq
 	implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp:4.0.1'
-	
+
 	// circuitbreaker
 	implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j'
-	
+
 	// feign
 	implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
+
+	// Json
+//	implementation 'com.google.code.gson:gson:2.8.7'
+//	implementation group: 'org.json', name: 'json', version: '20180813'
+	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+
 }
 
 dependencyManagement {
