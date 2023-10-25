@@ -1,6 +1,6 @@
 import React from "react";
 import { BasicTopBar } from "components/common/TopBar";
-import CustomizedTabs from "components/common/CustomTab";
+import CustomTab from "components/common/CustomTab";
 import MyCrewList from "components/CrewList/MyCrewList";
 import TotalCrewList from "components/CrewList/TotalCrewList";
 
@@ -13,7 +13,7 @@ const CrewListPage = () => {
   return (
     <div>
       <BasicTopBar text="크루 목록" />
-      <CustomizedTabs tabProps={tabProps} />
+      <CustomTab tabProps={tabProps} />
     </div>
   );
 };

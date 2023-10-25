@@ -1,5 +1,5 @@
 import React from "react";
-import style from "styles/css/CrewIntroduce.module.css";
+import style from "styles/css/CrewDetailPage/CrewIntroduce.module.css";
 
 const CrewIntroduce = () => {
   return (

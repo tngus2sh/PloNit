@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import CrewpingItem from "./CrewpingItem";
-import style from "styles/css/CrewpingList.module.css";
+import style from "styles/css/CrewCommunityPage/CrewpingList.module.css";
 
 const CrewpingList = () => {
   const [selectBox1Value, setSelectBox1Value] = useState("");

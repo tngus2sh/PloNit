@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
-import style from "styles/css/CrewCommunityInfo.module.css";
+import style from "styles/css/CrewCommunityPage/CrewCommunityInfo.module.css";
 
 const CrewCommunityInfo = () => {
   const navigate = useNavigate();

@@ -1,6 +1,6 @@
 import React from "react";
 import { Icon } from "@iconify/react";
-import style from "styles/css/FeedItem.module.css";
+import style from "styles/css/CrewCommunityPage/FeedItem.module.css";
 
 const FeedItem = () => {
   const feedImageStyle = {

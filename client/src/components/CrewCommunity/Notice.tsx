@@ -1,6 +1,6 @@
 import { statSync } from "fs";
 import React from "react";
-import style from "styles/css/Notice.module.css";
+import style from "styles/css/CrewCommunityPage/Notice.module.css";
 
 const Notice = () => {
   return (
