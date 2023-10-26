@@ -130,7 +130,7 @@ const DefaultMap = () => {
             binBtnRef.current = binBtnIndicator_inactive;
             toiletBtnRef.current = toiletBtnIndicator_inactive;
 
-            naver.maps.Event.addListener(map, "touchend", () => {
+            naver.maps.Event.addListener(map, "dragend", () => {
               centerBtnIndicator_active.setMap(null);
               centerBtnIndicator_inactive.setMap(map);
               centerBtnRef.current = centerBtnIndicator_inactive;
@@ -305,8 +305,10 @@ const DefaultMap = () => {
     }
   }, [showBin, showToilet]);
 
+  const innerHeight = window.innerHeight;
+
   return (
-    <div style={{ height: "calc(100vh - 56px)", width: "100%" }}>
+    <div style={{ height: `${innerHeight - 56}px`, width: "100%" }}>
       <div id="map" style={{ height: "100%", width: "100%" }}></div>
     </div>
   );
