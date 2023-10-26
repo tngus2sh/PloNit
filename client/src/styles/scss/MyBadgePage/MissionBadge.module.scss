@@ -1,0 +1,15 @@
+.missionBadge {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 1rem;
+  .imageContainer {
+    width: 33.33%;
+    box-sizing: border-box;
+    padding-bottom: 1rem;
+    img {
+      width: 6.5rem;
+      height: 6.5rem;
+      border-radius: 50%;
+    }
+  }
+}
