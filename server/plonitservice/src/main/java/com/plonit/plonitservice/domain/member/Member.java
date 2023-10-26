@@ -28,6 +28,9 @@ public class Member extends TimeBaseEntity {
     @NonNull
     private String email;
 
+    @NonNull
+    private long kakaoId;
+
     private String name;
 
     @Column(unique = true)
@@ -45,5 +48,7 @@ public class Member extends TimeBaseEntity {
     private float weight;
 
     private String id1365;
+
+
 
 }
