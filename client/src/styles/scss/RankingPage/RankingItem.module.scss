@@ -1,0 +1,39 @@
+.basic_item {
+  border: 1px solid black;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  padding: 0.7rem 1rem;
+
+  .rank {
+    margin-right: 1rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  .user {
+    display: flex;
+    align-items: center;
+
+    img {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+
+    .username {
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+  }
+
+  .dist {
+    flex-grow: 1;
+    text-align: right;
+    font-weight: bold;
+    .large {
+      font-size: 1.3rem;
+    }
+  }
+}
