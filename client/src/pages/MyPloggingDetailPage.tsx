@@ -42,7 +42,7 @@ const MyPloggingDetailPage = () => {
           <img src="/crewbg.png" alt="이미지" />
         </div>
       </div>
-      <div style={{ height: "56px" }}></div>
+      <div style={{ height: "4rem" }}></div>
     </div>
   );
 };
