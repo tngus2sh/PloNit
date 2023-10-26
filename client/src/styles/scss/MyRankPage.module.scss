@@ -1,0 +1,21 @@
+.myrank {
+  margin: 1rem;
+  text-align: left;
+
+  .season_date {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  .season {
+    font-weight: 600;
+  }
+  .ranking_list {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    .title {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+  }
+}

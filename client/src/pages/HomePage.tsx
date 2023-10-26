@@ -9,7 +9,7 @@ const HomePage = () => {
       <LogoTopBar />
       <HomeBanner />
       <div>나의 크루 플로깅</div>
-      <div style={{ margin: "auto" }}>
+      <div>
         <CrewPloggingCard />
       </div>
     </div>

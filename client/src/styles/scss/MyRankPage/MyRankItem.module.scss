@@ -1,0 +1,29 @@
+@import "../styles";
+
+.rank_item {
+  border: 1px solid black;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  margin: 0.5rem 0;
+  .myrank {
+    font-weight: bold;
+    margin: auto 0;
+    .large {
+      font-size: 2rem;
+    }
+  }
+  .rank_detail {
+    text-align: end;
+    .season {
+      font-size: 0.8rem;
+    }
+    .dist {
+      font-weight: bold;
+      .large {
+        font-size: 1.5rem;
+      }
+    }
+  }
+}
