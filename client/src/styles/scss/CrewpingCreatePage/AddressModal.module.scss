@@ -4,9 +4,17 @@
   left: 0;
   height: 100vh;
   width: 100%;
-  //   background-color: #c24040;
+  background-color: #ffffff;
   z-index: 15;
   @media (min-width: 501px) {
     width: 500px;
+  }
+  .top_section {
+    position: relative;
+    .icon {
+      position: absolute;
+      top: calc((7vh - 3rem) / 2);
+      right: 0.2rem;
+    }
   }
 }
