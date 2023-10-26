@@ -4,7 +4,7 @@ import DefaultMap from "components/plogging/DefaultMap";
 const PloggingPage = () => {
   return (
     <div>
-      <DefaultMap />
+      <DefaultMap subHeight={56} />
     </div>
   );
 };

@@ -1,9 +1,6 @@
-interface Coordinate {
-  latitude: number;
-  longitude: number;
-}
+import { Coordinate, Help } from "interface/ploggingInterface";
 
-const dummy_toilets: Coordinate[] = [
+const dummy_location: Coordinate[] = [
   { latitude: 35.147824, longitude: 126.920026 },
   { latitude: 35.2059392, longitude: 126.81216 },
   { latitude: 35.160173, longitude: 126.851935 },
@@ -13,4 +10,13 @@ const dummy_toilets: Coordinate[] = [
   { latitude: 35.150342, longitude: 126.867053 },
 ];
 
-export { dummy_toilets };
+const dummy_helps: Help[] = [
+  {
+    latitude: 35.17421,
+    longitude: 126.912198,
+    image: "./crewbg.png",
+    context: "북구청 더러워요.",
+  },
+];
+
+export { dummy_location, dummy_helps };

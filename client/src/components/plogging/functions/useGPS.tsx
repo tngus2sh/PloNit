@@ -36,7 +36,6 @@ function useGPS() {
 
   useEffect(() => {
     if (!preventDup.current && onSearch) {
-      console.log(`response to onSearch`);
       getGPS()
         .then((response) => {
           const { latitude, longitude } = response.coords;
@@ -54,6 +53,6 @@ function useGPS() {
     };
   }, [onSearch]);
 
-  return { latitude, longitude, setOnSearch };
+  return { latitude, longitude, onSearch, setOnSearch };
 }
 export default useGPS;
