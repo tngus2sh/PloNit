@@ -1,9 +1,11 @@
+// BasicRankingItem.tsx
 .basic_item {
   border: 1px solid black;
   border-radius: 0.5rem;
   display: flex;
   align-items: center;
   padding: 0.7rem 1rem;
+  margin: 0.5rem 0;
 
   .rank {
     margin-right: 1rem;
@@ -34,6 +36,62 @@
     font-weight: bold;
     .large {
       font-size: 1.3rem;
+    }
+  }
+}
+
+// FirstRankingItem.tsx
+.first_ranker {
+  position: relative;
+
+  .crown {
+    width: 5rem;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+  }
+
+  .user {
+    width: 6rem;
+    height: 6rem;
+    border-radius: 50%;
+    margin-top: 2.5rem;
+  }
+
+  .nickname {
+    font-size: 1.3rem;
+    font-weight: 600;
+  }
+
+  .dist {
+    .large {
+      font-size: 0.9rem;
+    }
+  }
+}
+
+// SecondRankingItem.tsx
+.second_ranker {
+  .rank {
+    font-weight: 600;
+    font-size: 1.2rem;
+  }
+  .user {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+  }
+
+  .nickname {
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+
+  .dist {
+    .large {
+      font-size: 0.9rem;
     }
   }
 }
