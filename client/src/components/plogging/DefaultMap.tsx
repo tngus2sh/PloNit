@@ -11,7 +11,7 @@ import style from "styles/css/PloggingPage/DefaultMap.module.css";
 
 import { dummy_location, dummy_helps } from "./dummyData";
 
-const { naver } = window;
+import { naver } from "components/common/useNaver";
 
 // 대략적으로 필요한 기능들
 
