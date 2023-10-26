@@ -1,0 +1,51 @@
+@import "styles";
+
+.myplogging_detail {
+  margin: 1rem;
+  text-align: left;
+  .date_area {
+    margin-top: 2rem;
+    font-weight: bold;
+    font-size: 1.3rem;
+  }
+  .profile {
+    display: flex;
+    margin: 1rem 0;
+    img {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+    .text {
+      font-size: 0.9rem;
+      color: $darkgray;
+      .nickname {
+        color: black;
+        .large {
+          font-size: 1.2rem;
+        }
+      }
+    }
+  }
+  .myrecord {
+    margin: 1rem 0;
+    display: flex;
+    justify-content: space-around;
+    color: $darkgray;
+    font-size: 0.9rem;
+    .record_large {
+      font-size: 1.4rem;
+      color: black;
+      font-weight: 700;
+    }
+  }
+  .content {
+    margin: 0.5rem 0;
+  }
+  .img_area {
+    img {
+      width: 100%;
+    }
+  }
+}
