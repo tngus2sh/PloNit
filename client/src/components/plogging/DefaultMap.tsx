@@ -22,14 +22,17 @@ const { naver } = window;
 // 주변 화장실 위치 표시 x
 // 주변 유저 도움 요청 표시
 
-// 아이콘 사이즈를 35 35로 지정할 것
-
 interface Coordinate {
   latitude: number;
   longitude: number;
 }
 
-const DefaultMap = () => {
+interface DefaultMap {
+  subHeight: number;
+}
+
+const DefaultMap = ({ subHeight }: DefaultMap) => {
+  const [windowHeight, setWindowHeight] = useState<number>(window.innerHeight);
   const { latitude, longitude, onSearch, setOnSearch } = useGPS();
   const preventDup = useRef<boolean>(true);
   const mapRef = useRef<naver.maps.Map | null>(null);
@@ -202,6 +205,11 @@ const DefaultMap = () => {
         });
     }
 
+    function handleResize() {
+      setWindowHeight(window.innerHeight);
+    }
+    window.addEventListener("resize", handleResize);
+
     return () => {
       if (preventDup.current) {
         if (isFailed) {
@@ -210,6 +218,8 @@ const DefaultMap = () => {
         }
         preventDup.current = false;
       }
+
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
@@ -308,7 +318,13 @@ const DefaultMap = () => {
   const innerHeight = window.innerHeight;
 
   return (
-    <div style={{ height: `${innerHeight - 56}px`, width: "100%" }}>
+    <div
+      style={{
+        height: `${innerHeight - subHeight}px`,
+        width: "100%",
+        transition: `all 200ms ease-in-out`,
+      }}
+    >
       <div id="map" style={{ height: "100%", width: "100%" }}></div>
     </div>
   );
