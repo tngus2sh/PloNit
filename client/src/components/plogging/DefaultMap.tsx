@@ -1,17 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
+import style from "styles/css/PloggingPage/DefaultMap.module.css";
 import Swal from "sweetalert2";
-import {
-  GeolocationPosition,
-  Coordinate,
-  Help,
-} from "interface/ploggingInterface";
+import { GeolocationPosition, Coordinate } from "interface/ploggingInterface";
 import useGPS from "./functions/useGPS";
 import useCluster from "./functions/useCluster";
-import style from "styles/css/PloggingPage/DefaultMap.module.css";
+import * as N from "./functions/useNaverMap";
+import { naver } from "components/common/useNaver";
 
+import { useSelector } from "react-redux";
+import { rootState } from "store/store";
 import { dummy_location, dummy_helps } from "./dummyData";
-
-const { naver } = window;
 
 // 대략적으로 필요한 기능들
 
@@ -31,9 +29,14 @@ interface DefaultMap {
   subHeight: number;
 }
 
+const defaultZoom = 16;
+const neighbor_help_maxZoom = 12;
+
 const DefaultMap = ({ subHeight }: DefaultMap) => {
+  const windowHeight = useSelector<rootState, number>((state) => {
+    return state.windowHeight.value;
+  });
   const [isDefault, setIsDefault] = useState<boolean>(true);
-  const [windowHeight, setWindowHeight] = useState<number>(window.innerHeight);
   const { latitude, longitude, onSearch, setOnSearch } = useGPS();
   const preventDup = useRef<boolean>(true);
   const mapRef = useRef<naver.maps.Map | null>(null);
@@ -41,13 +44,12 @@ const DefaultMap = ({ subHeight }: DefaultMap) => {
   const centerBtnRef = useRef<naver.maps.CustomControl | null>(null);
   const binBtnRef = useRef<naver.maps.CustomControl | null>(null);
   const toiletBtnRef = useRef<naver.maps.CustomControl | null>(null);
-  const [showIcon, setShowIcon] = useState<boolean>(true);
   const [showBin, setShowBin] = useState<boolean>(false);
   const [showToilet, setShowToilet] = useState<boolean>(false);
   const [bins, setBins] = useState<Coordinate[]>([]);
   const [toilets, setToilets] = useState<Coordinate[]>([]);
   const [neighbors, setNeighbors] = useState<Coordinate[]>([]);
-  const [helps, setHelps] = useState<Help[]>([]);
+  const [helps, setHelps] = useState<Coordinate[]>([]);
   const binMarkers = useRef<naver.maps.Marker[]>([]);
   const toiletMarkers = useRef<naver.maps.Marker[]>([]);
   const neighborMarkers = useRef<naver.maps.Marker[]>([]);
@@ -79,60 +81,43 @@ const DefaultMap = ({ subHeight }: DefaultMap) => {
           const { latitude, longitude } = response.coords;
           const map = new naver.maps.Map("map", {
             center: new naver.maps.LatLng(latitude, longitude),
-            zoom: 16,
+            zoom: defaultZoom,
           });
           mapRef.current = map;
 
-          const user = new naver.maps.Marker({
-            position: new naver.maps.LatLng(latitude, longitude),
-            map: mapRef.current,
-            icon: {
-              url: `images/PloggingPage/myLocation.svg`,
-              size: new naver.maps.Size(35, 35),
-              scaledSize: new naver.maps.Size(35, 35),
-              origin: new naver.maps.Point(0, 0),
-              anchor: new naver.maps.Point(17.5, 17.5),
-            },
+          const user = N.createMarker({
+            latitude: latitude,
+            longitude: longitude,
+            map: map,
+            url: `images/PloggingPage/myLocation.svg`,
             cursor: "default",
           });
           userRef.current = user;
 
-          const centerBtnIndicator_inactive = new naver.maps.CustomControl(
-            centerBtn_inactive,
-            {
-              position: naver.maps.Position.LEFT_BOTTOM,
-            },
-          );
-          const centerBtnIndicator_active = new naver.maps.CustomControl(
-            centerBtn_active,
-            {
-              position: naver.maps.Position.LEFT_BOTTOM,
-            },
-          );
-          const binBtnIndicator_inactive = new naver.maps.CustomControl(
-            binBtn_inactive,
-            {
-              position: naver.maps.Position.RIGHT_BOTTOM,
-            },
-          );
-          const binBtnIndicator_active = new naver.maps.CustomControl(
-            binBtn_active,
-            {
-              position: naver.maps.Position.RIGHT_BOTTOM,
-            },
-          );
-          const toiletBtnIndicator_inactive = new naver.maps.CustomControl(
-            toiletBtn_inactive,
-            {
-              position: naver.maps.Position.RIGHT_BOTTOM,
-            },
-          );
-          const toiletBtnIndicator_active = new naver.maps.CustomControl(
-            toiletBtn_active,
-            {
-              position: naver.maps.Position.RIGHT_BOTTOM,
-            },
-          );
+          const centerBtnIndicator_inactive = N.createCustomControl({
+            html: centerBtn_inactive,
+            pos: naver.maps.Position.LEFT_BOTTOM,
+          });
+          const centerBtnIndicator_active = N.createCustomControl({
+            html: centerBtn_active,
+            pos: naver.maps.Position.LEFT_BOTTOM,
+          });
+          const binBtnIndicator_inactive = N.createCustomControl({
+            html: binBtn_inactive,
+            pos: naver.maps.Position.RIGHT_BOTTOM,
+          });
+          const binBtnIndicator_active = N.createCustomControl({
+            html: binBtn_active,
+            pos: naver.maps.Position.RIGHT_BOTTOM,
+          });
+          const toiletBtnIndicator_inactive = N.createCustomControl({
+            html: toiletBtn_inactive,
+            pos: naver.maps.Position.RIGHT_BOTTOM,
+          });
+          const toiletBtnIndicator_active = N.createCustomControl({
+            html: toiletBtn_active,
+            pos: naver.maps.Position.RIGHT_BOTTOM,
+          });
 
           naver.maps.Event.once(map, "init", () => {
             centerBtnIndicator_active.setMap(map);
@@ -154,19 +139,23 @@ const DefaultMap = ({ subHeight }: DefaultMap) => {
 
               if (isDefault) {
                 const currentZoom = map.getZoom();
-                if (currentZoom <= 12) {
-                  neighborMarkers.current.forEach((neighborMarker) => {
-                    neighborMarker.setMap(null);
+                if (currentZoom <= neighbor_help_maxZoom) {
+                  N.controlMarkers({
+                    markers: neighborMarkers.current,
+                    map: null,
                   });
-                  helpMarkers.current.forEach((helpMarker) => {
-                    helpMarker.setMap(null);
+                  N.controlMarkers({
+                    markers: helpMarkers.current,
+                    map: null,
                   });
                 } else {
-                  neighborMarkers.current.forEach((neighborMarker) => {
-                    neighborMarker.setMap(mapRef.current);
+                  N.controlMarkers({
+                    markers: neighborMarkers.current,
+                    map: mapRef.current,
                   });
-                  helpMarkers.current.forEach((helpMarker) => {
-                    helpMarker.setMap(mapRef.current);
+                  N.controlMarkers({
+                    markers: helpMarkers.current,
+                    map: mapRef.current,
                   });
                 }
               }
@@ -233,11 +222,6 @@ const DefaultMap = ({ subHeight }: DefaultMap) => {
         });
     }
 
-    function handleResize() {
-      setWindowHeight(window.innerHeight);
-    }
-    window.addEventListener("resize", handleResize);
-
     return () => {
       if (preventDup.current) {
         if (isFailed) {
@@ -246,11 +230,10 @@ const DefaultMap = ({ subHeight }: DefaultMap) => {
         }
         preventDup.current = false;
       }
-
-      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
+  // 사용자의 위치 가운데로 갱신 시
   useEffect(() => {
     if (!preventDup.current && !onSearch) {
       if (typeof latitude === "number" && typeof longitude === "number") {
@@ -262,139 +245,117 @@ const DefaultMap = ({ subHeight }: DefaultMap) => {
     }
   }, [onSearch]);
 
-  // 쓰레기통 및 화장실 데이터 로드
-  // 향후 도움 요청은 어떻게 넣을지에 대해서 고민할 것
+  // 쓰레기통 데이터 로드
   useEffect(() => {
     if (!preventDup.current) {
-      const { makeMarkerClustering_blue, makeMarkerClustering_green } =
-        useCluster();
-
-      binMarkers.current = [];
-      bins.forEach((bin) => {
-        const marker = new naver.maps.Marker({
-          position: new naver.maps.LatLng(bin.latitude, bin.longitude),
-          map: undefined,
-          icon: {
-            url: `images/PloggingPage/bin-icon.png`,
-            size: new naver.maps.Size(35, 35),
-            scaledSize: new naver.maps.Size(35, 35),
-            origin: new naver.maps.Point(0, 0),
-            anchor: new naver.maps.Point(17.5, 17.5),
-          },
-        });
-        binMarkers.current = [...binMarkers.current, marker];
+      const { makeMarkerClustering_green } = useCluster();
+      N.controlMarkers({
+        markers: binMarkers.current,
+        map: null,
       });
 
+      binMarkers.current = binMarkers.current = N.createMarkers({
+        items: bins,
+        map: undefined,
+        url: `images/PloggingPage/bin-icon.png`,
+        cursor: "default",
+      });
       binCluster.current = makeMarkerClustering_green({
         map: undefined,
         markers: binMarkers.current,
       });
+    }
+  }, [bins]);
 
-      toiletMarkers.current = [];
-      toilets.forEach((toilet) => {
-        const marker = new naver.maps.Marker({
-          position: new naver.maps.LatLng(toilet.latitude, toilet.longitude),
-          map: undefined,
-          icon: {
-            url: `images/PloggingPage/toilet-icon.png`,
-            size: new naver.maps.Size(35, 35),
-            scaledSize: new naver.maps.Size(35, 35),
-            origin: new naver.maps.Point(0, 0),
-            anchor: new naver.maps.Point(17.5, 17.5),
-          },
-        });
-
-        toiletMarkers.current = [...toiletMarkers.current, marker];
+  // 화장실 데이터 로드
+  useEffect(() => {
+    if (!preventDup.current) {
+      const { makeMarkerClustering_blue } = useCluster();
+      N.controlMarkers({
+        markers: toiletMarkers.current,
+        map: null,
       });
 
+      toiletMarkers.current = N.createMarkers({
+        items: toilets,
+        map: undefined,
+        url: `images/PloggingPage/toilet-icon.png`,
+        cursor: "default",
+      });
       toiletCluster.current = makeMarkerClustering_blue({
         map: undefined,
         markers: toiletMarkers.current,
       });
     }
-  }, [bins, toilets]);
+  }, [toilets]);
 
-  // 쓰레기통과 화장실 visibility를 toggle
+  // 쓰레기통 visibility를 toggle
   useEffect(() => {
     if (!preventDup.current) {
       if (showBin) {
-        binMarkers.current.forEach((binMarker) => {
-          binMarker.setMap(mapRef.current);
+        N.controlMarkers({
+          markers: binMarkers.current,
+          map: mapRef.current,
         });
         binCluster.current.setMap(mapRef.current);
       } else {
-        binMarkers.current.forEach((binMarker) => {
-          binMarker.setMap(null);
+        N.controlMarkers({
+          markers: binMarkers.current,
+          map: null,
         });
         binCluster.current.setMap(null);
       }
+    }
+  }, [showBin]);
 
+  // 화장실 visibility를 toggle
+  useEffect(() => {
+    if (!preventDup.current) {
       if (showToilet) {
-        toiletMarkers.current.forEach((toiletMarker) => {
-          toiletMarker.setMap(mapRef.current);
+        N.controlMarkers({
+          markers: toiletMarkers.current,
+          map: mapRef.current,
         });
         toiletCluster.current.setMap(mapRef.current);
       } else {
-        toiletMarkers.current.forEach((toiletMarker) => {
-          toiletMarker.setMap(null);
+        N.controlMarkers({
+          markers: toiletMarkers.current,
+          map: null,
         });
         toiletCluster.current.setMap(null);
       }
     }
-  }, [showBin, showToilet]);
+  }, [showToilet]);
 
+  // 주변 유저 데이터 로드
   useEffect(() => {
     if (!preventDup.current) {
-      neighborMarkers.current = [];
-      neighbors.forEach((neighbor) => {
-        const marker = new naver.maps.Marker({
-          position: new naver.maps.LatLng(
-            neighbor.latitude,
-            neighbor.longitude,
-          ),
-          map: undefined,
-          icon: {
-            url: `images/PloggingPage/neighborLocation.svg`,
-            size: new naver.maps.Size(35, 35),
-            scaledSize: new naver.maps.Size(35, 35),
-            origin: new naver.maps.Point(0, 0),
-            anchor: new naver.maps.Point(17.5, 17.5),
-          },
-          cursor: "default",
-        });
-        neighborMarkers.current = [...neighborMarkers.current, marker];
+      N.controlMarkers({
+        markers: neighborMarkers.current,
+        map: null,
+      });
+
+      neighborMarkers.current = N.createMarkers({
+        items: neighbors,
+        map: mapRef.current ?? undefined,
+        url: `images/PloggingPage/neighborLocation.svg`,
+        cursor: "default",
       });
     }
   }, [neighbors]);
 
+  // 도움 요청 데이터 로드
   useEffect(() => {
     if (!preventDup.current) {
-      helpMarkers.current = [];
-      helps.forEach((help) => {
-        const marker = new naver.maps.Marker({
-          position: new naver.maps.LatLng(help.latitude, help.longitude),
-          map: undefined,
-          icon: {
-            url: `images/PloggingPage/help-icon.png`,
-            size: new naver.maps.Size(35, 35),
-            scaledSize: new naver.maps.Size(35, 35),
-            origin: new naver.maps.Point(0, 0),
-            anchor: new naver.maps.Point(17.5, 17.5),
-          },
-        });
+      N.controlMarkers({
+        markers: helpMarkers.current,
+        map: null,
+      });
 
-        naver.maps.Event.addListener(marker, "click", () => {
-          Swal.fire({
-            imageUrl: help.image,
-            imageWidth: `70vw`,
-            imageHeight: `auto`,
-            imageAlt: `helpImage`,
-            text: help.context,
-            showConfirmButton: false,
-            showCloseButton: true,
-          });
-        });
-        helpMarkers.current = [...helpMarkers.current, marker];
+      helpMarkers.current = N.createMarkers({
+        items: helps,
+        map: mapRef.current ?? undefined,
+        url: `images/PloggingPage/help-icon.png`,
       });
     }
   }, [helps]);

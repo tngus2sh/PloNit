@@ -15,6 +15,8 @@ interface makeMarkerClustering {
   markers: naver.maps.Marker[];
 }
 
+const maxZoom = 12;
+
 function useCluster() {
   function htmlMarker(className: string): htmlMarker {
     return {
@@ -38,7 +40,7 @@ function useCluster() {
   function makeMarkerClustering_blue({ map, markers }: makeMarkerClustering) {
     return new MarkerClustering({
       minClusterSize: 2,
-      maxZoom: 12,
+      maxZoom: maxZoom,
       map: map,
       markers: markers,
       disableClickZoom: false,
@@ -64,7 +66,7 @@ function useCluster() {
   function makeMarkerClustering_green({ map, markers }: makeMarkerClustering) {
     return new MarkerClustering({
       minClusterSize: 2,
-      maxZoom: 8,
+      maxZoom: maxZoom,
       map: map,
       markers: markers,
       disableClickZoom: false,
@@ -77,7 +79,9 @@ function useCluster() {
       ],
       indexGenerator: [10, 100, 200, 500, 1000],
       stylingFunction: function (clusterMarker: any, count: number) {
-        const firstChildDiv = clusterMarker.querySelector("div:first-child");
+        const firstChildDiv = clusterMarker
+          .getElement()
+          .querySelector("div:first-child");
         if (firstChildDiv) {
           firstChildDiv.textContent = count.toString();
         }

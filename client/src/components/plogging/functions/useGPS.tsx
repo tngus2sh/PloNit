@@ -15,7 +15,6 @@ function useGPS() {
 
   useEffect(() => {
     if (preventDup.current) {
-      console.log(`first search`);
       getGPS()
         .then((response) => {
           const { latitude, longitude } = response.coords;
