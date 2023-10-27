@@ -13,6 +13,7 @@ public enum ErrorCode {
     REFRESH_TOKEN_INVALID(HttpStatus.BAD_REQUEST, "Refresh Token 정보가 유효하지 않습니다."),
     ACCESS_TOKEN_INVALID(HttpStatus.BAD_REQUEST, "Access Token 유효하지 않은 토큰입니다."),
     USER_BAD_REQUEST(HttpStatus.BAD_REQUEST, "해당하는 유저가 존재하지 않습니다."),
+    INVALID_FIELDS_REQUEST(HttpStatus.BAD_REQUEST, "유효하지 않은 필드입니다."),
 
     /* 401 UNAUTHORIZED */
     UNKNOWN_ERROR(HttpStatus.UNAUTHORIZED, "인증 Token 이 존재하지 않습니다."),       // JWTFilterException
