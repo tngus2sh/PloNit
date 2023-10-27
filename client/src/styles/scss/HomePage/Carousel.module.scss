@@ -1,0 +1,13 @@
+.carousel {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  .card {
+    position: absolute;
+    border-radius: 0.5rem;
+    width: 80%;
+    transition:
+      transform 0.5s ease-in-out,
+      opacity 0.5s ease-in-out;
+  }
+}
