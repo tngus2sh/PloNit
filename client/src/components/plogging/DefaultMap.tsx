@@ -7,6 +7,8 @@ import useCluster from "./functions/useCluster";
 import * as N from "./functions/useNaverMap";
 import { naver } from "components/common/useNaver";
 
+import { useSelector } from "react-redux";
+import { rootState } from "store/store";
 import { dummy_location, dummy_helps } from "./dummyData";
 
 // 대략적으로 필요한 기능들
@@ -31,8 +33,10 @@ const defaultZoom = 16;
 const neighbor_help_maxZoom = 12;
 
 const DefaultMap = ({ subHeight }: DefaultMap) => {
+  const windowHeight = useSelector<rootState, number>((state) => {
+    return state.windowHeight.value;
+  });
   const [isDefault, setIsDefault] = useState<boolean>(true);
-  const [windowHeight, setWindowHeight] = useState<number>(window.innerHeight);
   const { latitude, longitude, onSearch, setOnSearch } = useGPS();
   const preventDup = useRef<boolean>(true);
   const mapRef = useRef<naver.maps.Map | null>(null);
@@ -218,11 +222,6 @@ const DefaultMap = ({ subHeight }: DefaultMap) => {
         });
     }
 
-    function handleResize() {
-      setWindowHeight(window.innerHeight);
-    }
-    window.addEventListener("resize", handleResize);
-
     return () => {
       if (preventDup.current) {
         if (isFailed) {
@@ -231,8 +230,6 @@ const DefaultMap = ({ subHeight }: DefaultMap) => {
         }
         preventDup.current = false;
       }
-
-      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
