@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/plogging-service/api/plogging")
+@RequestMapping("/plogging-service/v1/plogging")
 public class PloggingController {
 
     @Operation(summary = "get test", description = "test 설정")
