@@ -26,4 +26,13 @@ public class PloggingController {
         log.info("server port = {}", request.getServerPort());
         return "Hi, there. This is a message from plogging-service";
     }
+
+    @Operation(summary = "genkins test", description = "jenkins merge 테스트")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK")
+    })
+    @GetMapping("/jenkins")
+    public String jenkins(HttpServletRequest request) {
+        return "jenkins CI/CD finish!";
+    }
 }
