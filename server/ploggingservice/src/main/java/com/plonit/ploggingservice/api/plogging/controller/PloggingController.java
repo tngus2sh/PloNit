@@ -27,7 +27,7 @@ public class PloggingController {
         return "Hi, there. This is a message from plogging-service";
     }
 
-    @Operation(summary = "genkins test", description = "jenkins merge 테스트")
+    @Operation(summary = "jenkins test", description = "jenkins 테스트")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK")
     })
