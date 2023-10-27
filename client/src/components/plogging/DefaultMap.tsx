@@ -25,14 +25,10 @@ import { dummy_location, dummy_helps } from "./dummyData";
 // 주변 화장실 위치 표시 x
 // 주변 유저 도움 요청 표시 x
 
-interface DefaultMap {
-  subHeight: number;
-}
-
 const defaultZoom = 16;
 const neighbor_help_maxZoom = 12;
 
-const DefaultMap = ({ subHeight }: DefaultMap) => {
+const DefaultMap = ({ subHeight }: { subHeight: number }) => {
   const windowHeight = useSelector<rootState, number>((state) => {
     return state.windowHeight.value;
   });
@@ -86,8 +82,7 @@ const DefaultMap = ({ subHeight }: DefaultMap) => {
           mapRef.current = map;
 
           const user = N.createMarker({
-            latitude: latitude,
-            longitude: longitude,
+            latlng: new naver.maps.LatLng(latitude, longitude),
             map: map,
             url: `images/PloggingPage/myLocation.svg`,
             cursor: "default",
