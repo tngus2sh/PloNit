@@ -1,10 +1,11 @@
+import zIndex from "@mui/material/styles/zIndex";
 import { naver } from "components/common/useNaver";
 import { Coordinate } from "interface/ploggingInterface";
+import { NavigateProps } from "react-router-dom";
 import Swal from "sweetalert2";
 
 interface IcreateMarker {
-  latitude: number;
-  longitude: number;
+  latlng: naver.maps.Coord | naver.maps.CoordLiteral;
   map: naver.maps.Map | undefined;
   url: string;
   cursor?: string;
@@ -27,15 +28,27 @@ interface IcontrolMarkers {
   map: naver.maps.Map | null;
 }
 
+interface IcreatePolyline {
+  map: naver.maps.Map | undefined;
+  path: naver.maps.Coord[] | naver.maps.CoordLiteral[];
+  style?: {
+    strokeColor?: string;
+    strokeOpacity?: number;
+    strokeWeight?: number;
+    strokeStyle?: naver.maps.StrokeStyleType;
+    zIndex?: number;
+    clickable?: boolean;
+  };
+}
+
 function createMarker({
-  latitude,
-  longitude,
+  latlng,
   map,
   url,
   cursor = "pointer",
 }: IcreateMarker): naver.maps.Marker {
   const marker = new naver.maps.Marker({
-    position: new naver.maps.LatLng(latitude, longitude),
+    position: latlng,
     map: map,
     icon: {
       url: url,
@@ -43,6 +56,28 @@ function createMarker({
       scaledSize: new naver.maps.Size(35, 35),
       origin: new naver.maps.Point(0, 0),
       anchor: new naver.maps.Point(17.5, 17.5),
+    },
+    cursor: cursor,
+  });
+
+  return marker;
+}
+
+function createMarker_small({
+  latlng,
+  map,
+  url,
+  cursor = "pointer",
+}: IcreateMarker): naver.maps.Marker {
+  const marker = new naver.maps.Marker({
+    position: latlng,
+    map: map,
+    icon: {
+      url: url,
+      size: new naver.maps.Size(20, 20),
+      scaledSize: new naver.maps.Size(20, 20),
+      origin: new naver.maps.Point(0, 0),
+      anchor: new naver.maps.Point(10, 10),
     },
     cursor: cursor,
   });
@@ -110,4 +145,30 @@ function controlMarkers({ markers, map }: IcontrolMarkers): void {
   });
 }
 
-export { createMarker, createCustomControl, createMarkers, controlMarkers };
+function createPolyline({
+  map,
+  path,
+  style,
+}: IcreatePolyline): naver.maps.Polyline {
+  const polyline = new naver.maps.Polyline({
+    map: map,
+    path: path,
+    strokeColor: style?.strokeColor,
+    strokeOpacity: style?.strokeOpacity,
+    strokeWeight: style?.strokeWeight,
+    strokeStyle: style?.strokeStyle,
+    zIndex: style?.zIndex,
+    clickable: style?.clickable,
+  });
+
+  return polyline;
+}
+
+export {
+  createMarker,
+  createMarker_small,
+  createCustomControl,
+  createMarkers,
+  controlMarkers,
+  createPolyline,
+};
