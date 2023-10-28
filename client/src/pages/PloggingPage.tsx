@@ -25,15 +25,18 @@ function getComponent(ploggingType: ploggingType): JSX.Element {
 }
 
 const PloggingPage = () => {
-  const componentType: ploggingType = useSelector((state: rootState) => {
-    return state.plogging.ploggingType;
-  });
+  const componentType: ploggingType = useSelector<rootState, ploggingType>(
+    (state) => {
+      return state.plogging.ploggingType;
+    },
+  );
   const Component = getComponent(componentType);
 
   return (
     <div>
-      <DefaultMap subHeight={56} />
+      {/* <DefaultMap subHeight={56} isBefore={true} /> */}
       {/* <DefaultPathMap subHeight={56}></DefaultPathMap> */}
+      {Component}
     </div>
   );
 };

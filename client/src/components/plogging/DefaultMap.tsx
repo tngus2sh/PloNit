@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, ReactNode } from "react";
 import style from "styles/css/PloggingPage/DefaultMap.module.css";
 import Swal from "sweetalert2";
 import { GeolocationPosition, Coordinate } from "interface/ploggingInterface";
@@ -27,12 +27,22 @@ import { dummy_location, dummy_helps } from "./dummyData";
 
 const defaultZoom = 16;
 const neighbor_help_maxZoom = 12;
+const navbarHeight = 56;
 
-const DefaultMap = ({ subHeight }: { subHeight: number }) => {
+interface IDefaultMap {
+  subHeight: number;
+  isBefore: boolean;
+  children?: ReactNode;
+}
+
+const DefaultMap: React.FC<IDefaultMap> = ({
+  subHeight,
+  isBefore,
+  children,
+}) => {
   const windowHeight = useSelector<rootState, number>((state) => {
     return state.windowHeight.value;
   });
-  const [isDefault, setIsDefault] = useState<boolean>(true);
   const { latitude, longitude, onSearch, setOnSearch } = useGPS();
   const preventDup = useRef<boolean>(true);
   const mapRef = useRef<naver.maps.Map | null>(null);
@@ -131,7 +141,7 @@ const DefaultMap = ({ subHeight }: { subHeight: number }) => {
               centerBtnIndicator_inactive.setMap(map);
               centerBtnRef.current = centerBtnIndicator_inactive;
 
-              if (isDefault) {
+              if (isBefore) {
                 const currentZoom = map.getZoom();
                 if (currentZoom <= neighbor_help_maxZoom) {
                   N.controlMarkers({
@@ -354,12 +364,13 @@ const DefaultMap = ({ subHeight }: { subHeight: number }) => {
   return (
     <div
       style={{
-        height: `${windowHeight - subHeight}px`,
+        height: `${windowHeight - navbarHeight - subHeight}px`,
         width: "100%",
         transition: `all 200ms ease-in-out`,
       }}
     >
       <div id="map" style={{ height: "100%", width: "100%" }}></div>
+      {children}
     </div>
   );
 };
