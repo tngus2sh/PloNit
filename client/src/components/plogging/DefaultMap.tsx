@@ -62,7 +62,6 @@ const DefaultMap = ({ subHeight }: { subHeight: number }) => {
 
   // 초기맵 생성 및 기초 구조 구성
   useEffect(() => {
-    let isFailed = false;
     if (preventDup.current) {
       const getGPS = new Promise<GeolocationPosition>((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject);
@@ -212,17 +211,14 @@ const DefaultMap = ({ subHeight }: { subHeight: number }) => {
           });
         })
         .catch((error) => {
-          isFailed = true;
           console.error(error);
+          alert(`GPS를 불러올 수 없는 환경입니다.`);
+          // 페이지 이동 로직 등
         });
     }
 
     return () => {
       if (preventDup.current) {
-        if (isFailed) {
-          alert(`GPS 정보를 불러오는데 실패했습니다.`);
-          // 다른 페이지로 이동 등의 로직 설정
-        }
         preventDup.current = false;
       }
     };

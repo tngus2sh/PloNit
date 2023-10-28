@@ -1,0 +1,51 @@
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { Coordinate } from "interface/ploggingInterface";
+import getDistance from "components/plogging/functions/getDistance";
+import { ploggingType } from "types/ploggingTypes";
+
+const initialState = {
+  ploggingType: "none" as ploggingType,
+  paths: [] as Coordinate[],
+  pathlen: 0 as number,
+  second: 0 as number,
+  time: 0 as number,
+  distance: 0 as number,
+  calories: 0 as number,
+  images: [] as string[],
+};
+
+const ploggingSlice = createSlice({
+  name: "plogging",
+  initialState,
+  reducers: {
+    clear: (state) => {
+      state = initialState;
+    },
+    setPloggingType: (state, action: PayloadAction<ploggingType>) => {
+      state.ploggingType = action.payload;
+    },
+    addPath: (state, action: PayloadAction<Coordinate>) => {
+      state.paths.push(action.payload);
+
+      if (++state.pathlen > 1) {
+        state.distance += getDistance(
+          state.paths[state.pathlen - 2],
+          state.paths[state.pathlen - 1],
+        );
+      }
+    },
+    addImage: (state, action: PayloadAction<string>) => {
+      state.images.push(action.payload);
+    },
+    addTime: (state) => {
+      if (++state.second === 60) {
+        state.second = 0;
+        state.time++;
+      }
+    },
+  },
+});
+
+export const { clear, setPloggingType, addPath, addImage, addTime } =
+  ploggingSlice.actions;
+export default ploggingSlice.reducer;

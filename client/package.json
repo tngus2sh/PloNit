@@ -52,6 +52,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "warm_start": "sass --no-source-map src/styles/scss:src/styles/css && react-scripts start",
     "build": "sass --no-source-map src/styles/scss:src/styles/css && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
