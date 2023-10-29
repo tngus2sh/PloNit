@@ -8,7 +8,7 @@ const initialState = {
   paths: [] as Coordinate[],
   pathlen: 0 as number,
   second: 0 as number,
-  time: 0 as number,
+  minute: 0 as number,
   distance: 0 as number,
   calories: 0 as number,
   images: [] as string[],
@@ -40,7 +40,7 @@ const ploggingSlice = createSlice({
     addTime: (state) => {
       if (++state.second === 60) {
         state.second = 0;
-        state.time++;
+        state.minute++;
       }
     },
   },
