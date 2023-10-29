@@ -10,8 +10,6 @@ interface Card {
 interface CarouselProps {
   card_list: Card[];
 }
-const cardWidthPercentage = 21; // 카드 너비의 백분율
-const screenWidth = window.innerWidth;
 
 const Carousel = ({ card_list }: CarouselProps) => {
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
@@ -55,12 +53,11 @@ const Carousel = ({ card_list }: CarouselProps) => {
             index === currentCardIndex ? style.activeCard : ""
           }`}
           style={{
-            transform: `translateX(${
-              (index - currentCardIndex) *
-              cardWidthPercentage *
-              0.01 *
-              screenWidth
-            }px)`,
+            zIndex: card_list.length - Math.abs(index - currentCardIndex),
+            transform: `translateX(${index - currentCardIndex}px) scaleY(${
+              1 - 0.1 * Math.abs(index - currentCardIndex)
+            })`,
+
             transition: "transform 0.5s ease-in-out",
           }}
         >

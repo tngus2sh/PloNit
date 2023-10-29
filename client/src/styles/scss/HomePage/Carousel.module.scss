@@ -2,7 +2,10 @@
   display: flex;
   position: relative;
   justify-content: center;
+
   .card {
+    margin: 1rem;
+
     position: absolute;
     border-radius: 0.5rem;
     width: 80%;
