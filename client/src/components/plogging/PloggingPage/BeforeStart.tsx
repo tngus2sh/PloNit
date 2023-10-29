@@ -6,7 +6,7 @@ import { renderToString } from "react-dom/server";
 
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
-import { setPloggingType } from "store/plogging-slice";
+import { clear, setPloggingType } from "store/plogging-slice";
 
 interface IBtnDiv {
   height: number;
@@ -128,9 +128,11 @@ const BeforeStart = () => {
 
   const dispatch = useDispatch();
   function onClick1() {
+    dispatch(clear());
     dispatch(setPloggingType("solo-jog"));
   }
   function onClick2() {
+    dispatch(clear());
     dispatch(setPloggingType("solo-plocka"));
   }
 
@@ -145,7 +147,7 @@ const BeforeStart = () => {
             onClick2: onClick2,
           });
         }}
-      ></BtnDiv>
+      />
     </DefaultMap>
   );
 };

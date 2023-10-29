@@ -68,13 +68,13 @@ const DefaultMap: React.FC<IDefaultMap> = ({
   const centerBtn_inactive = `<div class="${style.btn_white_margin_inc}" style="background-image:url('images/PloggingPage/location-cross-black.svg')"></div>`;
   const centerBtn_active = `<div class="${style.btn_white_margin_inc}" style="background-image:url('images/PloggingPage/location-cross-blue.svg')"></div>`;
   const binBtn_inactive = isBefore
-    ? `<div class="${style.btn_black_margin_inc}" style="background-image:url('images/PloggingPage/trash-solid.svg')"></div>`
-    : `<div class="${style.btn_black}" style="background-image:url('images/PloggingPage/trash-solid.svg')"></div>`;
+    ? `<div class="${style.btn_black_margin_inc}" style="background-image:url('images/PloggingPage/bin.svg')"></div>`
+    : `<div class="${style.btn_black}" style="background-image:url('images/PloggingPage/bin.svg')"></div>`;
   const binBtn_active = isBefore
-    ? `<div class="${style.btn_green_margin_inc}" style="background-image:url('images/PloggingPage/trash-solid.svg')"></div>`
-    : `<div class="${style.btn_green}" style="background-image:url('images/PloggingPage/trash-solid.svg')"></div>`;
-  const toiletBtn_inactive = `<div class="${style.btn_black}" style="background-image:url('images/PloggingPage/toilet-solid.svg')"></div>`;
-  const toiletBtn_active = `<div class="${style.btn_blue}" style="background-image:url('images/PloggingPage/toilet-solid.svg')"></div>`;
+    ? `<div class="${style.btn_green_margin_inc}" style="background-image:url('images/PloggingPage/bin.svg')"></div>`
+    : `<div class="${style.btn_green}" style="background-image:url('images/PloggingPage/bin.svg')"></div>`;
+  const toiletBtn_inactive = `<div class="${style.btn_black}" style="background-image:url('images/PloggingPage/toilet.svg')"></div>`;
+  const toiletBtn_active = `<div class="${style.btn_blue}" style="background-image:url('images/PloggingPage/toilet.svg')"></div>`;
   const arrow_up = `<div class="${style.btn_black_margin_inc}" style="background-image:url('images/PloggingPage/arrow-up.svg')"></div>`;
   const arrow_down = `<div class="${style.btn_black_margin_inc}" style="background-image:url('images/PloggingPage/arrow-down.svg')"></div>`;
 
@@ -308,7 +308,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
       binMarkers.current = binMarkers.current = N.createMarkers({
         items: bins,
         map: undefined,
-        url: `images/PloggingPage/bin-icon.png`,
+        url: `images/PloggingPage/bin-pin.png`,
         cursor: "default",
       });
       binCluster.current = makeMarkerClustering_green({
@@ -330,7 +330,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
       toiletMarkers.current = N.createMarkers({
         items: toilets,
         map: undefined,
-        url: `images/PloggingPage/toilet-icon.png`,
+        url: `images/PloggingPage/toilet-pin.png`,
         cursor: "default",
       });
       toiletCluster.current = makeMarkerClustering_blue({
