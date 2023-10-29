@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isLogin: false as boolean,
+  nickname: "undefined" as string,
 };
 
 const userSlice = createSlice({

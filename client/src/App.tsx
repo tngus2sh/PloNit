@@ -2,9 +2,13 @@ import React, { useState, useEffect } from "react";
 import style from "styles/css/App.module.css";
 import NavBar from "components/common/NavBar";
 import RouteComponent from "pages/lib/index";
+
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
 import { setWindowHeight } from "store/windowHeight-slice";
+
+// 부드러운 애니메이션 (https://animate.style/)
+import "animate.css";
 
 function App() {
   const dispatch = useDispatch();
