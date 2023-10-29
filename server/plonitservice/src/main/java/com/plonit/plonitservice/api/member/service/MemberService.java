@@ -1,11 +1,12 @@
 package com.plonit.plonitservice.api.member.service;
 
 import com.plonit.plonitservice.api.member.controller.request.UpdateMemberReq;
+import com.plonit.plonitservice.api.member.controller.response.FindMemberRes;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 public interface MemberService {
-    boolean updateMember(Long userId, UpdateMemberReq updateMemberReq);
+    FindMemberRes updateMember(Long userId, UpdateMemberReq updateMemberReq);
     // findMember();
     // findCrew();
     // findFloggings();

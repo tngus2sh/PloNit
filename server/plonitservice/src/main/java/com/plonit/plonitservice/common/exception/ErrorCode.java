@@ -34,6 +34,7 @@ public enum ErrorCode {
 
     /* 500 INTERNAL_SERVER_ERROR : 서버 내부 로직 에러 */
     SSE_CONNECTED_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "SSE 연결이 실패하였습니다."),
+    S3_CONNECTED_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "S3 profile 업데이트에 실패하였습니다."),
     KAKAO_TOKEN_CONNECTED_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "카카오 토큰 발급에 실패하였습니다."),
     KAKAO_INFO_CONNECTED_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "카카오 정보 발급에 실패하였습니다."),
     KAKAO_LOGOUT_CONNECTED_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "카카오 로그아웃에 실패하였습니다.");

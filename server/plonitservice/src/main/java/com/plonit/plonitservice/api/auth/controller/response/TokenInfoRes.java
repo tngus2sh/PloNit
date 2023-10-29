@@ -14,4 +14,16 @@ public class TokenInfoRes {
     private String refreshToken;
     private Long accessTokenExpiresIn;
     private Long refreshTokenExpiresIn;
+
+
+    public static TokenInfoRes of (String accessToken, String refreshToken,
+                                       long accessTokenExpiresIn, long refreshTokenExpiresIn) {
+        return TokenInfoRes.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .accessTokenExpiresIn(accessTokenExpiresIn)
+                .refreshTokenExpiresIn(refreshTokenExpiresIn)
+                .build();
+    }
+
 }

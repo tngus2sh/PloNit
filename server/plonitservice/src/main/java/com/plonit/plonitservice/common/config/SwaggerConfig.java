@@ -3,16 +3,23 @@ package com.plonit.plonitservice.common.config;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import org.springdoc.core.GroupedOpenApi;
+import org.springframework.beans.BeansException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-//import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping;
 //import springfox.documentation.builders.ApiInfoBuilder;
 //import springfox.documentation.builders.PathSelectors;
 //import springfox.documentation.builders.RequestHandlerSelectors;
 //import springfox.documentation.service.ApiInfo;
 //import springfox.documentation.spi.DocumentationType;
 //import springfox.documentation.spring.web.plugins.Docket;
-
+//import springfox.documentation.spring.web.plugins.WebFluxRequestHandlerProvider;
+//import springfox.documentation.spring.web.plugins.WebMvcRequestHandlerProvider;
+//
+//import java.util.List;
+//import java.util.stream.Collectors;
+//
 //@Configuration
 //public class SwaggerConfig {
 //

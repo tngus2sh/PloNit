@@ -64,6 +64,13 @@ public class AuthController {
         return CustomApiResponse.ok(checkNicknameRes);
     }
 
+    @GetMapping("/regenerate") // todo : 토큰 재발급
+    public CustomApiResponse<Object> regenerate (HttpServletResponse response){
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+//        authService.regenerate(request);
+        return CustomApiResponse.ok("");
+    }
+
     @PostMapping("/kakao/logout") // 로그아웃
     public CustomApiResponse<Object> kakaoLogout(HttpServletRequest request){
         log.info(logCurrent(getClassName(), getMethodName(), START));
