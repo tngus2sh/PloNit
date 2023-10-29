@@ -50,6 +50,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
   const centerBtnRef = useRef<naver.maps.CustomControl | null>(null);
   const binBtnRef = useRef<naver.maps.CustomControl | null>(null);
   const toiletBtnRef = useRef<naver.maps.CustomControl | null>(null);
+  const arrowBtnRef = useRef<naver.maps.CustomControl | null>(null);
   const [showBin, setShowBin] = useState<boolean>(false);
   const [showToilet, setShowToilet] = useState<boolean>(false);
   const [bins, setBins] = useState<Coordinate[]>([]);
@@ -62,13 +63,20 @@ const DefaultMap: React.FC<IDefaultMap> = ({
   const helpMarkers = useRef<naver.maps.Marker[]>([]);
   const binCluster = useRef<any>(null);
   const toiletCluster = useRef<any>(null);
+  const [showBottom, setShowBottom] = useState<boolean>(isBefore);
 
   const centerBtn_inactive = `<div class="${style.btn_white_margin_inc}" style="background-image:url('images/PloggingPage/location-cross-black.svg')"></div>`;
   const centerBtn_active = `<div class="${style.btn_white_margin_inc}" style="background-image:url('images/PloggingPage/location-cross-blue.svg')"></div>`;
-  const binBtn_inactive = `<div class="${style.btn_black_margin_inc}" style="background-image:url('images/PloggingPage/trash-solid.svg')"></div>`;
-  const binBtn_active = `<div class="${style.btn_green_margin_inc}" style="background-image:url('images/PloggingPage/trash-solid.svg')"></div>`;
+  const binBtn_inactive = isBefore
+    ? `<div class="${style.btn_black_margin_inc}" style="background-image:url('images/PloggingPage/trash-solid.svg')"></div>`
+    : `<div class="${style.btn_black}" style="background-image:url('images/PloggingPage/trash-solid.svg')"></div>`;
+  const binBtn_active = isBefore
+    ? `<div class="${style.btn_green_margin_inc}" style="background-image:url('images/PloggingPage/trash-solid.svg')"></div>`
+    : `<div class="${style.btn_green}" style="background-image:url('images/PloggingPage/trash-solid.svg')"></div>`;
   const toiletBtn_inactive = `<div class="${style.btn_black}" style="background-image:url('images/PloggingPage/toilet-solid.svg')"></div>`;
   const toiletBtn_active = `<div class="${style.btn_blue}" style="background-image:url('images/PloggingPage/toilet-solid.svg')"></div>`;
+  const arrow_up = `<div class="${style.btn_black_margin_inc}" style="background-image:url('images/PloggingPage/arrow-up.svg')"></div>`;
+  const arrow_down = `<div class="${style.btn_black_margin_inc}" style="background-image:url('images/PloggingPage/arrow-down.svg')"></div>`;
 
   // 초기맵 생성 및 기초 구조 구성
   useEffect(() => {
@@ -122,9 +130,21 @@ const DefaultMap: React.FC<IDefaultMap> = ({
             html: toiletBtn_active,
             pos: naver.maps.Position.RIGHT_BOTTOM,
           });
+          const arrowBtnIndcator_up = N.createCustomControl({
+            html: arrow_up,
+            pos: naver.maps.Position.RIGHT_BOTTOM,
+          });
+          const arrowBtnIndcator_down = N.createCustomControl({
+            html: arrow_down,
+            pos: naver.maps.Position.RIGHT_BOTTOM,
+          });
 
           naver.maps.Event.once(map, "init", () => {
             centerBtnIndicator_active.setMap(map);
+            if (!isBefore) {
+              arrowBtnIndcator_up.setMap(map);
+              arrowBtnRef.current = arrowBtnIndcator_up;
+            }
             binBtnIndicator_inactive.setMap(map);
             toiletBtnIndicator_inactive.setMap(map);
             centerBtnRef.current = centerBtnIndicator_active;
@@ -218,6 +238,36 @@ const DefaultMap: React.FC<IDefaultMap> = ({
                 setShowToilet(false);
               },
             );
+            if (!isBefore) {
+              naver.maps.Event.addDOMListener(
+                arrowBtnIndcator_up.getElement(),
+                "click",
+                () => {
+                  setShowBottom(true);
+                  arrowBtnIndcator_up.setMap(null);
+                  toiletBtnRef.current?.setMap(null);
+                  binBtnRef.current?.setMap(null);
+                  arrowBtnIndcator_down.setMap(mapRef.current);
+                  binBtnRef.current?.setMap(mapRef.current);
+                  toiletBtnRef.current?.setMap(mapRef.current);
+                  arrowBtnRef.current = arrowBtnIndcator_down;
+                },
+              );
+              naver.maps.Event.addDOMListener(
+                arrowBtnIndcator_down.getElement(),
+                "click",
+                () => {
+                  setShowBottom(false);
+                  arrowBtnIndcator_down.setMap(null);
+                  toiletBtnRef.current?.setMap(null);
+                  binBtnRef.current?.setMap(null);
+                  arrowBtnIndcator_up.setMap(mapRef.current);
+                  binBtnRef.current?.setMap(mapRef.current);
+                  toiletBtnRef.current?.setMap(mapRef.current);
+                  arrowBtnRef.current = arrowBtnIndcator_up;
+                },
+              );
+            }
           });
         })
         .catch((error) => {
@@ -364,13 +414,17 @@ const DefaultMap: React.FC<IDefaultMap> = ({
   return (
     <div
       style={{
-        height: `${windowHeight - navbarHeight - subHeight}px`,
+        height: `${
+          showBottom
+            ? windowHeight - navbarHeight - subHeight
+            : windowHeight - navbarHeight
+        }px`,
         width: "100%",
         transition: `all 200ms ease-in-out`,
       }}
     >
       <div id="map" style={{ height: "100%", width: "100%" }}></div>
-      {children}
+      {showBottom ? children : null}
     </div>
   );
 };

@@ -31,6 +31,7 @@ const BtnDiv: React.FC<IBtnDiv> = ({ height, cbFunction }) => {
         width: `100%`,
         justifyContent: "center",
         alignItems: "center",
+        transition: `all 200ms ease-in-out`,
       }}
     >
       <CommonButton

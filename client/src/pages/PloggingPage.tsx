@@ -34,9 +34,9 @@ const PloggingPage = () => {
 
   return (
     <div>
-      {/* <DefaultMap subHeight={56} isBefore={true} /> */}
-      {/* <DefaultPathMap subHeight={56}></DefaultPathMap> */}
-      {Component}
+      <DefaultMap subHeight={200} isBefore={false} />
+      {/* <DefaultPathMap subHeight={0}></DefaultPathMap> */}
+      {/* {Component} */}
     </div>
   );
 };
