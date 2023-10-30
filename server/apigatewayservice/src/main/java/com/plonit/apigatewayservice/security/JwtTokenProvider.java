@@ -45,8 +45,7 @@ public class JwtTokenProvider {
     }
 
     // 토큰 정보를 검증하는 메서드
-    public boolean validateToken(String token) throws Exception{
-        Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+    public boolean validateToken(String token) throws Exception {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
@@ -81,7 +80,7 @@ public class JwtTokenProvider {
         return Long.parseLong(claims.getSubject());
     }
 
-    private Claims parseClaims(String accessToken) throws Exception{
+    private Claims parseClaims(String accessToken) throws Exception {
         try {
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
         } catch (ExpiredJwtException e) {

@@ -3,6 +3,9 @@ package com.plonit.ploggingservice.api.plogging.service.impl;
 import com.plonit.ploggingservice.api.plogging.controller.PlonitFeignClient;
 import com.plonit.ploggingservice.api.plogging.controller.request.StartPloggingRequest;
 import com.plonit.ploggingservice.api.plogging.service.PloggingService;
+import com.plonit.ploggingservice.api.plogging.service.dto.StartPloggingDto;
+import com.plonit.ploggingservice.domain.plogging.Plogging;
+import com.plonit.ploggingservice.domain.plogging.repository.PloggingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
@@ -22,6 +25,7 @@ public class PloggingServiceImpl implements PloggingService {
     private final Environment env;
     private final PlonitFeignClient plonitFeignClient;
     private final CircuitBreakerFactory circuitBreakerFactory;
+    private final PloggingRepository ploggingRepository;
 
     /***
      * CircuitBreaker(장애처리) 사용법
@@ -41,7 +45,20 @@ public class PloggingServiceImpl implements PloggingService {
     }
 
     @Override
-    public Long saveStartPlogging(StartPloggingRequest request) {
+    public Long saveStartPlogging(StartPloggingDto dto) {
+        
+        // 위도, 경도로 위치 구하기
+        
+        // 시작 시간 구하기
+        
+        // 오늘 날짜 구하기
+        
         return null;
     }
+    
+    private void getPlace() {
+        
+        // webClient 기본 설정
+        
+    } 
 }

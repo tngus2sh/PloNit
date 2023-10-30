@@ -1,5 +1,6 @@
 package com.plonit.ploggingservice.api.plogging.controller.request;
 
+import com.plonit.ploggingservice.api.plogging.service.dto.StartPloggingDto;
 import com.plonit.ploggingservice.common.enums.Type;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -10,12 +11,13 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 
 @Data
+@Builder
 @Schema(description = "플로깅 시작 request")
 public class StartPloggingRequest {
     
     @Schema(description = "플로깅 유형 / CREWPING, IND, VOL ")
     @NotBlank(message = "유형은 필수 입력값입니다.")
-    @Pattern(regexp = "^(CREWPING|IND|VOL)$\n")
+    @Pattern(regexp = "^(CREWPING|IND|VOL)$")
     private Type type;
     
     @Schema(description = "위도")
@@ -31,11 +33,12 @@ public class StartPloggingRequest {
     @Schema(description = "크루핑 id")
     private Long crewpingId;
 
-    @Builder
-    public StartPloggingRequest(Type type, Double latitude, Double longitude, Long crewpingId) {
-        this.type = type;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.crewpingId = crewpingId;
+    public static StartPloggingDto toDto(StartPloggingRequest request) {
+        return StartPloggingDto.builder()
+                .type(request.getType())
+                .latitude(request.getLatitude())
+                .longitude(request.getLongitude())
+                .crewpingId(request.getCrewpingId())
+                .build();
     }
 }

@@ -17,15 +17,16 @@ import static com.plonit.plonitservice.common.exception.ErrorCode.INVALID_FIELDS
 import static com.plonit.plonitservice.common.util.LogCurrent.*;
 
 
-@Tag(name = "Test", description = "설명")
+@Tag(name = "Members", description = "회원")
 @Slf4j
-@RequestMapping("/plonit-service/v1/members")
+@RequestMapping("/api/plonit-service/v1/members")
 @RestController
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
-    @PutMapping("/{userId}") // 사용자 정보 수정
-    public CustomApiResponse<Object> updateMemberInfo(@PathVariable("userId") Long userId, @ModelAttribute UpdateMemberReq memberUpdateReq, HttpServletRequest request, Errors errors) {
+
+    @PutMapping // 사용자 정보 수정
+    public CustomApiResponse<Object> updateMemberInfo(@ModelAttribute UpdateMemberReq memberUpdateReq, HttpServletRequest request, Errors errors) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
         if (errors.hasErrors()) {
             errors.getFieldErrors().forEach(e -> {
@@ -39,7 +40,7 @@ public class MemberController {
         log.info("memberKey : " + memberKey);
 
         log.info(logCurrent(getClassName(), getMethodName(), END));
-        return CustomApiResponse.ok(memberService.updateMember(userId, memberUpdateReq));
+        return CustomApiResponse.ok(memberService.updateMember(memberKey, memberUpdateReq));
     }
 }
 

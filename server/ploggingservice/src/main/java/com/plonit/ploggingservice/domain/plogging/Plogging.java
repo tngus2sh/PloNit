@@ -57,8 +57,7 @@ public class Plogging extends TimeBaseEntity{
     private LocalDate date;
 
     @Builder
-    public Plogging(Long id, String memberKey, Type type, String place, LocalDateTime startTime, LocalDateTime endTime, double totalTime, double distance, double calorie, String review, Finished finished, LocalDate date) {
-        this.id = id;
+    public Plogging(String memberKey, Type type, String place, LocalDateTime startTime, LocalDateTime endTime, double totalTime, double distance, double calorie, String review, Finished finished, LocalDate date) {
         this.memberKey = memberKey;
         this.type = type;
         this.place = place;
@@ -70,6 +69,17 @@ public class Plogging extends TimeBaseEntity{
         this.review = review;
         this.finished = finished;
         this.date = date;
+    }
+
+    public static Plogging toFirstEntity(String memberKey, Type type, String place, LocalDateTime startTime, Finished finished, LocalDate date) {
+        return Plogging.builder()
+                .memberKey(memberKey)
+                .type(type)
+                .place(place)
+                .startTime(startTime)
+                .finished(finished)
+                .date(date)
+                .build();
     }
     
     
