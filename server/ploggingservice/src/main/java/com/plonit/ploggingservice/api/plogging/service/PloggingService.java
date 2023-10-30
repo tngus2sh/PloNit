@@ -1,9 +1,10 @@
 package com.plonit.ploggingservice.api.plogging.service;
 
-import com.plonit.ploggingservice.api.plogging.controller.request.StartPloggingRequest;
+
+import com.plonit.ploggingservice.api.plogging.service.dto.StartPloggingDto;
 
 public interface PloggingService {
     
-    public Long saveStartPlogging(StartPloggingRequest request);
+    public Long saveStartPlogging(StartPloggingDto dto);
     
 }

@@ -9,6 +9,7 @@ import com.plonit.ploggingservice.api.plogging.controller.response.PloggingLogRe
 import com.plonit.ploggingservice.api.plogging.controller.response.PloggingPeriodResponse;
 import com.plonit.ploggingservice.api.plogging.controller.response.UsersResponse;
 import com.plonit.ploggingservice.api.plogging.service.PloggingService;
+import com.plonit.ploggingservice.api.plogging.service.dto.StartPloggingDto;
 import com.plonit.ploggingservice.common.CustomApiResponse;
 import com.plonit.ploggingservice.common.exception.CustomException;
 import com.plonit.ploggingservice.common.util.RequestUtils;
@@ -56,6 +57,7 @@ public class PloggingApiController {
         log.info("memberKey : " + memberKey);
 
         // TODO: 2023-10-27 플로깅 시작하기 
+        ploggingService.saveStartPlogging(StartPloggingRequest.toDto(request));
         
         return CustomApiResponse.ok(1l);
     }
