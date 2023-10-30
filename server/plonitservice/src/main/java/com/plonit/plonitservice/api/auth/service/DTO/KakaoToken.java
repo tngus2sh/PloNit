@@ -25,4 +25,12 @@ public class KakaoToken {
                 .build();
     }
 
+    public static KakaoToken ofAccess(String accessToken,
+                                      long accessTokenExpiresIn) {
+        return KakaoToken.builder()
+                .kakaoAccessToken(accessToken)
+                .kakaoAccessTokenExpiresIn(accessTokenExpiresIn)
+                .build();
+    }
+
 }
