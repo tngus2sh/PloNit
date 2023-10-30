@@ -30,7 +30,7 @@ import static com.plonit.ploggingservice.common.exception.ErrorCode.INVALID_FIEL
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/plogging-service/v1")
+@RequestMapping("/api/plogging-service/v1")
 public class PloggingApiController {
     
     private final PloggingService ploggingService;

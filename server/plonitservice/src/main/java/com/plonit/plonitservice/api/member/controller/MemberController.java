@@ -19,7 +19,7 @@ import static com.plonit.plonitservice.common.util.LogCurrent.*;
 
 @Tag(name = "Test", description = "설명")
 @Slf4j
-@RequestMapping("/plonit-service/v1/members")
+@RequestMapping("/api/plonit-service/v1/members")
 @RestController
 @RequiredArgsConstructor
 public class MemberController {

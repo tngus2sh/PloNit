@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import static com.plonit.plonitservice.common.util.LogCurrent.*;
 
-@RequestMapping("/plonit-service/auth")
+@RequestMapping("/api/plonit-service/auth")
 @Tag(name = "Test", description = "설명")
 @RestController
 @Slf4j
