@@ -2,7 +2,7 @@ import { AxiosResponse } from "axios";
 import { customApi } from "./index";
 import * as Interfaces from "interface/authInterface";
 
-export async function getLogin(
+export async function login(
   code: string,
   success: (
     res: AxiosResponse<any, any>,

@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 
-import { getLogin } from "api/lib/auth";
+import { login } from "api/lib/auth";
 
 const KakaoCallback = () => {
   const code = new URL(window.location.href).searchParams.get("code");
   console.log(code);
   useEffect(() => {
     if (code) {
-      getLogin(
+      login(
         code,
         (res) => {
           console.log("로그인 api 성공");
