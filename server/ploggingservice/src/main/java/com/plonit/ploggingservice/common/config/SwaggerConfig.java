@@ -1,4 +1,4 @@
-package com.plonit.plonitservice.config;
+package com.plonit.ploggingservice.common.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -12,14 +12,14 @@ public class SwaggerConfig {
     public GroupedOpenApi publicApi() {
         return GroupedOpenApi.builder()
                 .group("")
-                .pathsToMatch("/plonit-service/api/**")
+                .pathsToMatch("/plogging-service/v1/**")
                 .build();
     }
     @Bean
     public OpenAPI springShopOpenAPI() {
         return new OpenAPI()
-                .info(new Info().title("PloNit API")
-                        .description("PloNit 프로젝트 API 명세서입니다.")
+                .info(new Info().title("Plogging API")
+                        .description("PloNit 프로젝트 Plogging API 명세서입니다.")
                         .version("v0.0.1"));
     }
 }

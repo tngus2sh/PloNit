@@ -1,6 +1,7 @@
 package com.plonit.ploggingservice.api.plogging.service.impl;
 
 import com.plonit.ploggingservice.api.plogging.controller.PlonitFeignClient;
+import com.plonit.ploggingservice.api.plogging.controller.request.StartPloggingRequest;
 import com.plonit.ploggingservice.api.plogging.service.PloggingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,4 +40,8 @@ public class PloggingServiceImpl implements PloggingService {
         log.info(testList.toString());
     }
 
+    @Override
+    public Long saveStartPlogging(StartPloggingRequest request) {
+        return null;
+    }
 }

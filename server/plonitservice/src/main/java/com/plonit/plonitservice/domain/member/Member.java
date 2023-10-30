@@ -1,6 +1,7 @@
 package com.plonit.plonitservice.domain.member;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.plonit.plonitservice.api.member.controller.request.UpdateMemberReq;
 import com.plonit.plonitservice.domain.TimeBaseEntity;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -28,6 +29,9 @@ public class Member extends TimeBaseEntity {
     @NonNull
     private String email;
 
+    @NonNull
+    private long kakaoId;
+
     private String name;
 
     @Column(unique = true)
@@ -46,4 +50,16 @@ public class Member extends TimeBaseEntity {
 
     private String id1365;
 
+    private String birth;
+
+    public void changeInfo(UpdateMemberReq updateMemberReq) {
+        this.name = updateMemberReq.getName();
+        this.nickname = updateMemberReq.getNickname();
+        this.gender = Boolean.parseBoolean(updateMemberReq.getGender());
+        this.birth = updateMemberReq.getBirth();
+        this.region = updateMemberReq.getRegion();
+        if(updateMemberReq.getId1365() != null) this.id1365 = updateMemberReq.getId1365();
+        if(updateMemberReq.getHeight() != null) this.height = Float.parseFloat(updateMemberReq.getHeight());
+        if(updateMemberReq.getWeight() != null) this.weight = Float.parseFloat(updateMemberReq.getWeight());
+    }
 }
