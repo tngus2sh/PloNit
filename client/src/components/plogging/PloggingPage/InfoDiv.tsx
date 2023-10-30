@@ -2,6 +2,7 @@ import React from "react";
 import style from "styles/css/PloggingPage/SubComponent.module.css";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import useCamera from "../functions/useCamera";
 
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
@@ -57,6 +58,7 @@ const IconBottom: React.FC<IIconBottom> = ({
 const InfoDiv = ({ infoDivHeight }: { infoDivHeight: number }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { image, handleImageCapture, fileInputRef } = useCamera();
   const distance = useSelector<rootState, number>((state) => {
     const { distance } = state.plogging;
     return Math.round(distance * 100) / 100;
@@ -119,10 +121,18 @@ const InfoDiv = ({ infoDivHeight }: { infoDivHeight: number }) => {
           icon="images/PloggingPage/camera-solid.svg"
           backgroundSize="50%"
           onClick={() => {
-            alert(`카메라 기능!`);
+            handleImageCapture();
           }}
         />
       </div>
+      <input
+        type="file"
+        accept="image/*"
+        capture="environment"
+        id="cameraInput"
+        ref={fileInputRef}
+        style={{ display: "none" }}
+      />
     </div>
   );
 };
