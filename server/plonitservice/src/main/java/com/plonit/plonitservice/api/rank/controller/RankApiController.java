@@ -25,29 +25,31 @@ public class RankApiController {
     @Operation(summary = "회원 랭킹 조회", description = "전체 회원들의 랭킹을 조회합니다.")
     @GetMapping
     public CustomApiResponse<List<MembersRankResponse>> findAllMembersRank() {
-        // TODO: 2023-10-30 회원 랭킹 조회 
-        
+        // TODO: 2023-10-30 회원 랭킹 조회
+
+
         return null;
     }
-    
+
     @Operation(summary = "크루 전체 랭킹 조회", description = "크루 전체의 랭킹을 조회합니다.")
     @GetMapping("/crew-total")
+
     public CustomApiResponse<List<CrewTotalResponse>> findAllCrewRank() {
         // TODO: 2023-10-30 크루 전체 랭킹 조회 
-        
+
         return null;
     }
-    
+
     @Operation(summary = "크루 평균 랭킹 조회", description = "크루 평균 랭킹을 조회합니다.")
     @GetMapping("/crew-avg")
     public CustomApiResponse<List<CrewAvgResponse>> findAllCrewRankByAVG() {
-        
+
         // TODO: 2023-10-30 크루 평균 랭킹 조회 
-        
+
         return null;
     }
-    
-    
+
+
     @Operation(summary = "[관리자용] 개인 랭킹 설정", description = "개인 랭킹을 설정합니다.")
     @PostMapping("/member-reset")
     public CustomApiResponse<Void> saveIndividualRank(
@@ -55,20 +57,20 @@ public class RankApiController {
     ) {
 
         // TODO: 2023-10-30 개인 랭킹 설정 
-        
+
         return null;
     }
-    
+
     @Operation(summary = "[관리자용] 크루 랭킹 설정", description = "크루 랭킹을 설정합니다.")
     @PostMapping("/crew-reset")
     public CustomApiResponse<Void> saveCrewRank(
             @Validated @RequestBody CrewRankRequest request
     ) {
-        
+
         // TODO: 2023-10-30 크루 랭킹 설정 
-        
+
         return null;
     }
-    
-    
+
+
 }
