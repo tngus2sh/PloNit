@@ -17,6 +17,7 @@
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@types/react-redux": "^7.1.27",
+    "animate.css": "^4.1.1",
     "axios": "^1.5.1",
     "date-fns": "^2.30.0",
     "eslint": "^8.51.0",
@@ -52,6 +53,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "warm_start": "sass --no-source-map src/styles/scss:src/styles/css && react-scripts start",
     "build": "sass --no-source-map src/styles/scss:src/styles/css && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

@@ -43,7 +43,6 @@ function useGPS() {
         })
         .catch((error) => {
           console.error(error);
-          alert(`https 환경에서만 GPS를 불러올 수 있습니다.`);
         });
     }
 

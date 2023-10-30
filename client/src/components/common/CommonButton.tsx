@@ -5,11 +5,12 @@ interface ButtonProps {
   text: string;
   onClick?: () => void;
   styles?: { [key: string]: string };
+  id?: string;
 }
 
-const CommonButton = ({ text, onClick, styles }: ButtonProps) => {
+const CommonButton = ({ text, onClick, styles, id }: ButtonProps) => {
   return (
-    <div>
+    <div id={`${id}`}>
       <div className={style.common_btn} onClick={onClick} style={styles}>
         <div className={style.content}>{text}</div>
       </div>
