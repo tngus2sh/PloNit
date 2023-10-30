@@ -13,4 +13,5 @@ import java.util.List;
 public class LogInRes {
     private long id;
     private boolean registeredMember;
+    private TokenInfoRes tokenInfo;
 }

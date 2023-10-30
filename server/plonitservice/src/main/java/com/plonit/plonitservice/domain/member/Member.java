@@ -40,7 +40,7 @@ public class Member extends TimeBaseEntity {
     private String profileImage;
 
     @ColumnDefault("false")
-    private boolean gender; // 0 : 남자 / 1 : 여자
+    private Boolean gender; // 0 : 남자 / 1 : 여자
 
     private String region;
 
