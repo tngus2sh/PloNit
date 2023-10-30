@@ -88,6 +88,19 @@ const PopUp: React.FC<IPopUp> = ({ nickname }) => {
 };
 
 function cbFunction({ nickname, onClick1, onClick2 }: IcbFunction) {
+  function cbOnClick1() {
+    if (onClick1) {
+      onClick1();
+    }
+    Swal.close();
+  }
+  function cbOnClick2() {
+    if (onClick2) {
+      onClick2();
+    }
+    Swal.close();
+  }
+
   Swal.fire({
     position: "bottom",
     html: renderToString(<PopUp nickname={nickname} />),
@@ -102,16 +115,20 @@ function cbFunction({ nickname, onClick1, onClick2 }: IcbFunction) {
       const Btn1 = document.querySelector("#beforeStart-commonBtn1");
       const Btn2 = document.querySelector("#beforeStart-commonBtn2");
       if (Btn1 && onClick1) {
-        Btn1.addEventListener("click", () => {
-          onClick1();
-          Swal.close();
-        });
+        Btn1.addEventListener("click", cbOnClick1);
       }
       if (Btn2 && onClick2) {
-        Btn2.addEventListener("click", () => {
-          onClick2();
-          Swal.close();
-        });
+        Btn2.addEventListener("click", cbOnClick2);
+      }
+    },
+    didClose: () => {
+      const Btn1 = document.querySelector("#beforeStart-commonBtn1");
+      const Btn2 = document.querySelector("#beforeStart-commonBtn2");
+      if (Btn1 && onClick1) {
+        Btn1.removeEventListener("click", cbOnClick1);
+      }
+      if (Btn2 && onClick2) {
+        Btn2.removeEventListener("click", cbOnClick2);
       }
     },
   });
