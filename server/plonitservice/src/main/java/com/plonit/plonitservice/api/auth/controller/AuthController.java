@@ -25,8 +25,8 @@ import javax.servlet.http.HttpServletResponse;
 import static com.plonit.plonitservice.common.exception.ErrorCode.INVALID_FIELDS_REQUEST;
 import static com.plonit.plonitservice.common.util.LogCurrent.*;
 
-@RequestMapping("/plonit-service/auth")
-@Tag(name = "Auth", description = "인증/인가")
+@RequestMapping("/api/plonit-service/auth")
+@Tag(name = "Test", description = "설명")
 @RestController
 @Slf4j
 @RequiredArgsConstructor
