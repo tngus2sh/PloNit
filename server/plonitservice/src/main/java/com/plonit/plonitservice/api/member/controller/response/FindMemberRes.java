@@ -39,7 +39,7 @@ public class FindMemberRes {
                 .name(member.getName())
                 .nickname(member.getNickname())
                 .profileImage(member.getProfileImage())
-                .gender(member.isGender())
+                .gender(member.getGender())
                 .region(member.getRegion())
                 .height(member.getHeight())
                 .weight(member.getWeight())

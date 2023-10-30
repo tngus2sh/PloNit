@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/plonit-service/v1/rank")
+@RequestMapping("/api/plonit-service/v1/rank")
 public class RankApiController {
 
     @Operation(summary = "회원 랭킹 조회", description = "전체 회원들의 랭킹을 조회합니다.")

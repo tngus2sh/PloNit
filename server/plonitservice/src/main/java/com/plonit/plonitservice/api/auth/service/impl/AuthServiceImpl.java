@@ -169,6 +169,7 @@ public class AuthServiceImpl implements AuthService {
             return LogInRes.builder()
                     .id(member.get().getId())
                     .registeredMember(true)
+                    .tokenInfo(tokenInfoRes)
                     .build();
 
         } else { // 5.2 신규 유저
@@ -181,6 +182,7 @@ public class AuthServiceImpl implements AuthService {
             return LogInRes.builder()
                     .id(newMember.getId())
                     .registeredMember(false)
+                    .tokenInfo(tokenInfoRes)
                     .build();
         }
     }

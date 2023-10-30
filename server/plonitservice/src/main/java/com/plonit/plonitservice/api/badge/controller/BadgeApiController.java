@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/plonit-service/v1/badge")
+@RequestMapping("/api/plonit-service/v1/badge")
 public class BadgeApiController {
     
     @Operation(summary = "[관리자용] 배지 설정", description = "배지를 설정합니다.")
