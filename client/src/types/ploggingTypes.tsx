@@ -1,1 +1,1 @@
-export type ploggingType = "none" | "solo-jog" | "solo-plocka" | "crewping";
+export type ploggingType = "none" | "IND" | "VOL" | "CREWPING";

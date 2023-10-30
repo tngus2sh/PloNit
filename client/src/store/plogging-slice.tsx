@@ -5,12 +5,13 @@ import { ploggingType } from "types/ploggingTypes";
 
 const initialState = {
   ploggingType: "none" as ploggingType,
+  crewpingId: -1 as number,
   paths: [] as Coordinate[],
   pathlen: 0 as number,
   second: 0 as number,
   minute: 0 as number,
   distance: 0 as number,
-  calories: 0 as number,
+  calorie: 0 as number,
   images: [] as string[],
 };
 
@@ -23,6 +24,9 @@ const ploggingSlice = createSlice({
     },
     setPloggingType: (state, action: PayloadAction<ploggingType>) => {
       state.ploggingType = action.payload;
+    },
+    setCrewpingId: (state, action: PayloadAction<number>) => {
+      state.crewpingId = action.payload;
     },
     addPath: (state, action: PayloadAction<Coordinate>) => {
       state.paths.push(action.payload);
@@ -46,6 +50,12 @@ const ploggingSlice = createSlice({
   },
 });
 
-export const { clear, setPloggingType, addPath, addImage, addTime } =
-  ploggingSlice.actions;
+export const {
+  clear,
+  setPloggingType,
+  setCrewpingId,
+  addPath,
+  addImage,
+  addTime,
+} = ploggingSlice.actions;
 export default ploggingSlice.reducer;
