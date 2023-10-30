@@ -20,7 +20,17 @@ public class MemberQueryRepository {
     }
 
     @Transactional(readOnly = true)
-    public Boolean exists(String email) {
+    public Boolean existKakaoId(long kakoId) {
+        Integer fetchOne = queryFactory
+                .selectOne()
+                .from(member)
+                .where(member.kakaoId.eq(kakoId))
+                .fetchFirst();
+        return fetchOne != null;
+    }
+
+    @Transactional(readOnly = true)
+    public Boolean existEmail(String email) {
         Integer fetchOne = queryFactory
                 .selectOne()
                 .from(member)
@@ -29,5 +39,14 @@ public class MemberQueryRepository {
         return fetchOne != null;
     }
 
+    @Transactional(readOnly = true)
+    public Boolean existNickname(String nickname) {
+        Integer fetchOne = queryFactory
+                .selectOne()
+                .from(member)
+                .where(member.nickname.eq(nickname))
+                .fetchFirst();
+        return fetchOne != null;
+    }
 
 }
