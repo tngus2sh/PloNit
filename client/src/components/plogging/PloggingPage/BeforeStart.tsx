@@ -30,8 +30,6 @@ const BtnDiv: React.FC<IBtnDiv> = ({ height, cbFunction }) => {
       style={{
         height: `${height}px`,
         width: `100%`,
-        justifyContent: "center",
-        alignItems: "center",
         transition: `all 200ms ease-in-out`,
       }}
     >
@@ -143,7 +141,7 @@ const BeforeStart = () => {
   const nickname = useSelector<rootState, string>((state) => {
     return state.user.nickname;
   });
-  const { latitude, longitude } = useGPS();
+  const { latitude, longitude } = useGPS(); // 시작 시 GPS 정보 전달
 
   const dispatch = useDispatch();
   function onClick1() {

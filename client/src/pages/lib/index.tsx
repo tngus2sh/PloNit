@@ -26,6 +26,8 @@ import RankingPage from "pages/RankingPage";
 import VolunteerRegisterPage from "pages/VolunteerRegisterPage";
 import FeedCreatePage from "pages/FeedCreatePage";
 
+import PloggingImagePage from "pages/PloggingImagePage";
+
 const RouteComponent = () => {
   return (
     <Routes>
@@ -38,6 +40,7 @@ const RouteComponent = () => {
       <Route path="/profile/rank" element={<MyRankPage />}></Route>
       <Route path="/profile/badge" element={<MyBadgePage />}></Route>
       <Route path="/plogging" element={<PloggingPage />}></Route>
+      <Route path="/plogging/image" element={<PloggingImagePage />}></Route>
       <Route
         path="/plogging/complete"
         element={<PloggingCompletePage />}

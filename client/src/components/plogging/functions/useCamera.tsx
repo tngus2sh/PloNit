@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 
 function useCamera() {
   const [image, setImage] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageCapture = () => {
     if (fileInputRef.current) {
@@ -33,7 +33,7 @@ function useCamera() {
     };
   }, []);
 
-  return { image, handleImageCapture, fileInputRef };
+  return { image, setImage, handleImageCapture, fileInputRef };
 }
 
 export default useCamera;

@@ -1,6 +1,6 @@
 import React from "react";
 import DefaultMap from "../DefaultMap";
-import InfoDiv from "./InfoDiv";
+import InfoDiv from "../ploggingComps/InfoDiv";
 
 import { useSelector } from "react-redux";
 import { rootState } from "store/store";
