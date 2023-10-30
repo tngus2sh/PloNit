@@ -43,7 +43,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
   const windowHeight = useSelector<rootState, number>((state) => {
     return state.windowHeight.value;
   });
-  const { latitude, longitude, onSearch, setOnSearch } = useGPS();
+  const { latitude, longitude, onCenter, setOnCenter } = useGPS();
   const preventDup = useRef<boolean>(true);
   const mapRef = useRef<naver.maps.Map | null>(null);
   const userRef = useRef<naver.maps.Marker | null>(null);
@@ -191,7 +191,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
                 centerBtnIndicator_inactive.setMap(null);
                 centerBtnIndicator_active.setMap(map);
                 centerBtnRef.current = centerBtnIndicator_active;
-                setOnSearch(true);
+                setOnCenter(true);
               },
             );
             naver.maps.Event.addDOMListener(
@@ -286,7 +286,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
 
   // 사용자의 위치 가운데로 갱신 시
   useEffect(() => {
-    if (!preventDup.current && !onSearch) {
+    if (!preventDup.current && !onCenter) {
       if (typeof latitude === "number" && typeof longitude === "number") {
         mapRef.current?.setCenter(new naver.maps.LatLng(latitude, longitude));
         userRef.current?.setPosition(
@@ -294,7 +294,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
         );
       }
     }
-  }, [onSearch]);
+  }, [onCenter]);
 
   // 쓰레기통 데이터 로드
   useEffect(() => {

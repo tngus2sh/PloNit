@@ -1,13 +1,9 @@
 import React from "react";
 import DefaultMap from "../DefaultMap";
-import Swal from "sweetalert2";
+import InfoDiv from "./InfoDiv";
 
 import { useSelector } from "react-redux";
 import { rootState } from "store/store";
-
-const InfoDiv = () => {
-  return <div>ㅎㅇㅎㅇ</div>;
-};
 
 const SoloJog = () => {
   const infoDivHeight = useSelector<rootState, number>((state) => {
@@ -16,7 +12,7 @@ const SoloJog = () => {
   });
   return (
     <DefaultMap subHeight={infoDivHeight} isBefore={false}>
-      <InfoDiv />
+      <InfoDiv infoDivHeight={infoDivHeight} />
     </DefaultMap>
   );
 };

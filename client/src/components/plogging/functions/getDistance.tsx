@@ -5,7 +5,7 @@ function getDistance(
   start: GeolibInputCoordinates,
   end: GeolibInputCoordinates,
 ): number {
-  return getDist(start, end);
+  return getDist(start, end) / 1000;
 }
 
 export default getDistance;

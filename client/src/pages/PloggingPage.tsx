@@ -13,11 +13,11 @@ import { rootState } from "store/store";
 
 function getComponent(ploggingType: ploggingType): JSX.Element {
   switch (ploggingType) {
-    case "solo-jog":
+    case "IND":
       return <SoloJog />;
-    case "solo-plocka":
+    case "VOL":
       return <SoloPlocka />;
-    case "crewping":
+    case "CREWPING":
       return <Crewping />;
     default:
       return <BeforeStart />;

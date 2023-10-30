@@ -3,6 +3,7 @@ import DefaultMap from "../DefaultMap";
 import Swal from "sweetalert2";
 import CommonButton from "components/common/CommonButton";
 import { renderToString } from "react-dom/server";
+import useGPS from "../functions/useGPS";
 
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
@@ -142,15 +143,16 @@ const BeforeStart = () => {
   const nickname = useSelector<rootState, string>((state) => {
     return state.user.nickname;
   });
+  const { latitude, longitude } = useGPS();
 
   const dispatch = useDispatch();
   function onClick1() {
     dispatch(clear());
-    dispatch(setPloggingType("solo-jog"));
+    dispatch(setPloggingType("IND"));
   }
   function onClick2() {
     dispatch(clear());
-    dispatch(setPloggingType("solo-plocka"));
+    dispatch(setPloggingType("VOL"));
   }
 
   return (
