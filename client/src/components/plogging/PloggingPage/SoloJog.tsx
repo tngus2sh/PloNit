@@ -1,5 +1,4 @@
 import React from "react";
-import Swal from "sweetalert2";
 import DefaultMap from "../DefaultMap";
 import InfoDiv from "./InfoDiv";
 

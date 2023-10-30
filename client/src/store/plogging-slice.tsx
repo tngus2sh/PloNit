@@ -19,8 +19,8 @@ const ploggingSlice = createSlice({
   name: "plogging",
   initialState,
   reducers: {
-    clear: (state) => {
-      state = initialState;
+    clear: () => {
+      return initialState;
     },
     setPloggingType: (state, action: PayloadAction<ploggingType>) => {
       state.ploggingType = action.payload;

@@ -1,9 +1,11 @@
 import React from "react";
 import style from "styles/css/PloggingPage/SubComponent.module.css";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
+import * as P from "store/plogging-slice";
 
 interface IInfoTop {
   infoLabel: string;
@@ -53,6 +55,8 @@ const IconBottom: React.FC<IIconBottom> = ({
 };
 
 const InfoDiv = ({ infoDivHeight }: { infoDivHeight: number }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const distance = useSelector<rootState, number>((state) => {
     const { distance } = state.plogging;
     return Math.round(distance * 100) / 100;
@@ -85,14 +89,38 @@ const InfoDiv = ({ infoDivHeight }: { infoDivHeight: number }) => {
         <IconBottom
           icon="images/PloggingPage/help-solid.svg"
           backgroundSize="50%"
+          onClick={() => {
+            alert(`도움 요청!`);
+          }}
         />
         <IconBottom
           icon="images/PloggingPage/stop-green.svg"
           backgroundSize="contain"
+          onClick={() => {
+            Swal.fire({
+              icon: "question",
+              text: "플로깅을 종료하시겠습니까?",
+              showCancelButton: true,
+              confirmButtonText: "예",
+              cancelButtonText: "아니오",
+              confirmButtonColor: "#2CD261",
+              cancelButtonColor: "#FF2953",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                // axios 요청 성공 시
+                Swal.close();
+                dispatch(P.setPloggingType("none"));
+                navigate("/plogging/complete");
+              }
+            });
+          }}
         />
         <IconBottom
           icon="images/PloggingPage/camera-solid.svg"
           backgroundSize="50%"
+          onClick={() => {
+            alert(`카메라 기능!`);
+          }}
         />
       </div>
     </div>
