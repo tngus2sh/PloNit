@@ -7,11 +7,12 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-public class LogInUrlRes {
-    private String url;
-    public static LogInUrlRes of(String url) {
-        return LogInUrlRes.builder()
-                .url(url)
+public class CheckNicknameRes {
+    private boolean avl;
+
+    public static CheckNicknameRes of(boolean avl) {
+        return CheckNicknameRes.builder()
+                .avl(avl)
                 .build();
     }
 }
