@@ -5,7 +5,6 @@ export const customApi = (baseURL: string) => {
     baseURL: `${process.env.REACT_APP_API_URL}${baseURL}`,
     headers: {
       "Content-Type": "application/json",
-      "ngrok-skip-browser-warning": "69420",
     },
   });
   return Api;
