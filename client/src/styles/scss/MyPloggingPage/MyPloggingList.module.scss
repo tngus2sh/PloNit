@@ -1,0 +1,12 @@
+.myplogging_list {
+  margin: 0.5rem 1rem;
+  .top_section {
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem 0;
+    .date {
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+  }
+}

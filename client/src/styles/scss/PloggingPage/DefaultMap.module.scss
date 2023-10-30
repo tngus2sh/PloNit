@@ -10,11 +10,20 @@
   background-position: center;
   background-color: #{$bgc};
   cursor: pointer;
+  transition: all 200ms ease-in-out;
 }
 
 @mixin btn_margin_inc($bgc) {
   @include btn($bgc: #{$bgc});
   margin-bottom: 2.5vh;
+}
+
+.btn_black {
+  @include btn($bgc: $black);
+}
+
+.btn_black_margin_inc {
+  @include btn_margin_inc($bgc: $black);
 }
 
 .btn_white {

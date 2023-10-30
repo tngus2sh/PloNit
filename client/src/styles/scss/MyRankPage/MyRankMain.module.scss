@@ -1,0 +1,40 @@
+@import "../styles";
+
+.mymain {
+  border: 1px solid black;
+  border-radius: 0.5rem;
+  display: flex;
+  justify-content: space-around;
+  padding: 1rem;
+  text-align: center;
+  margin: 2rem 0;
+  .left {
+    font-size: 0.9rem;
+    margin: auto 0;
+    .title {
+      color: $darkgray;
+    }
+    .large {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+  }
+  .middle {
+    img {
+      width: 3.5rem;
+      height: 3.5rem;
+      border-radius: 50%;
+    }
+  }
+  .right {
+    font-size: 0.9rem;
+    margin: auto 0;
+    .title {
+      color: $darkgray;
+    }
+    .large {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+  }
+}

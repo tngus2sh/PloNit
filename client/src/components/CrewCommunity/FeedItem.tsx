@@ -1,8 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import style from "styles/css/CrewCommunityPage/FeedItem.module.css";
+import CommentModal from "components/CrewCommunity/CommentModal";
 
 const FeedItem = () => {
+  const [isCommentModalOpen, setCommentModalOpen] = useState(false);
+  const toggleCommentModal = () => {
+    setCommentModalOpen(!isCommentModalOpen);
+  };
   const feedImageStyle = {
     backgroundImage: `url("/feed_img.png")`,
   };
@@ -18,6 +23,7 @@ const FeedItem = () => {
         <Icon icon="bi:heart" style={{ width: "1.8rem", height: "1.8rem" }} />
         <Icon
           icon="bi:chat-left"
+          onClick={toggleCommentModal}
           style={{ width: "2rem", height: "1.8rem", marginLeft: "0.5rem" }}
         />
       </div>
@@ -34,6 +40,12 @@ const FeedItem = () => {
         </div>
       </div>
       <div className={style.date}>10월 15일</div>
+      {isCommentModalOpen && (
+        <>
+          <div className={style.modalbackground}></div>
+          <CommentModal />
+        </>
+      )}
     </div>
   );
 };

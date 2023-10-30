@@ -15,7 +15,6 @@ function useGPS() {
 
   useEffect(() => {
     if (preventDup.current) {
-      console.log(`first search`);
       getGPS()
         .then((response) => {
           const { latitude, longitude } = response.coords;
@@ -36,7 +35,6 @@ function useGPS() {
 
   useEffect(() => {
     if (!preventDup.current && onSearch) {
-      console.log(`response to onSearch`);
       getGPS()
         .then((response) => {
           const { latitude, longitude } = response.coords;
@@ -45,7 +43,6 @@ function useGPS() {
         })
         .catch((error) => {
           console.error(error);
-          alert(`https 환경에서만 GPS를 불러올 수 있습니다.`);
         });
     }
 
@@ -54,6 +51,6 @@ function useGPS() {
     };
   }, [onSearch]);
 
-  return { latitude, longitude, setOnSearch };
+  return { latitude, longitude, onSearch, setOnSearch };
 }
 export default useGPS;

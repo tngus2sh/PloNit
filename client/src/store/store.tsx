@@ -12,9 +12,13 @@ import storage from "redux-persist/lib/storage";
 import storageSession from "redux-persist/lib/storage/session";
 
 import userSlice from "./user-slice";
+import windowHeightSlice from "./windowHeight-slice";
+import ploggingSlice from "./plogging-slice";
 
 const rootReducer = combineReducers({
   user: userSlice,
+  windowHeight: windowHeightSlice,
+  plogging: ploggingSlice,
 });
 const persistConfig = {
   key: "PloNit",
@@ -34,4 +38,5 @@ const store = configureStore({
   },
 });
 
+export type rootState = ReturnType<typeof store.getState>;
 export default store;

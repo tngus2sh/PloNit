@@ -52,7 +52,7 @@ const StyledTab = styled((props: StyledTabProps) => (
   },
 }));
 
-export default function CustomizedTabs(props: CustomizedTabsProps) {
+export default function CustomTab(props: CustomizedTabsProps) {
   const [value, setValue] = React.useState(0);
   const { tabProps } = props;
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
