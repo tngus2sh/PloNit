@@ -12,14 +12,14 @@ public class SwaggerConfig {
     public GroupedOpenApi publicApi() {
         return GroupedOpenApi.builder()
                 .group("")
-                .pathsToMatch("/plogging-service/api/**")
+                .pathsToMatch("/plogging-service/v1/**")
                 .build();
     }
     @Bean
     public OpenAPI springShopOpenAPI() {
         return new OpenAPI()
                 .info(new Info().title("Plogging API")
-                        .description("PloNit 프로젝트 API 명세서입니다.")
+                        .description("PloNit 프로젝트 Plogging API 명세서입니다.")
                         .version("v0.0.1"));
     }
 }
