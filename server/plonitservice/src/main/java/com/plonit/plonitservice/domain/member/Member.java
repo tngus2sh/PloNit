@@ -17,10 +17,11 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 @DynamicInsert
 @DynamicUpdate
+@Table(name = "members")
 public class Member extends TimeBaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id")
+    @Column(name = "members_id")
     private Long id;
 
     @Column(nullable = false)

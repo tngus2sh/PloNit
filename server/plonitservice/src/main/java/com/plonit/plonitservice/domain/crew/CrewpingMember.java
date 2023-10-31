@@ -13,11 +13,11 @@ import static javax.persistence.FetchType.LAZY;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "crew_member")
-public class CrewMember {
+@Table(name = "crewping_member")
+public class CrewpingMember {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "crew_member_id")
+    @Column(name = "crewping_member_id")
     private Long id;
 
     @ManyToOne(fetch = LAZY)
@@ -25,9 +25,9 @@ public class CrewMember {
     private Member member;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "crew_id")
-    private Crew crew;
+    @JoinColumn(name = "crewping_id")
+    private Crewping crewping;
 
     @ColumnDefault("false")
-    private Boolean isCrewMaster;
+    private Boolean isCrewpingMaster;
 }
