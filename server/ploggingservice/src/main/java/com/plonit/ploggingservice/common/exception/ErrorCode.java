@@ -14,6 +14,8 @@ public enum ErrorCode {
     ACCESS_TOKEN_INVALID(HttpStatus.BAD_REQUEST, "Access Token 유효하지 않은 토큰입니다."),
     USER_BAD_REQUEST(HttpStatus.BAD_REQUEST, "해당하는 유저가 존재하지 않습니다."),
     INVALID_FIELDS_REQUEST(HttpStatus.BAD_REQUEST, "유효하지 않은 필드입니다."),
+    INVALID_PLACE_REQUEST(HttpStatus.BAD_REQUEST, "해당하는 위치가 존재하지 않습니다."),
+    PLOGGING_BAD_REQUEST(HttpStatus.BAD_REQUEST, "해당하는 플로깅이 존재하지 않습니다."),
 
     /* 401 UNAUTHORIZED */
 

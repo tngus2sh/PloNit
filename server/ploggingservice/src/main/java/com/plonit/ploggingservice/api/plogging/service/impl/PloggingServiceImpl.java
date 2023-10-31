@@ -4,10 +4,14 @@ import com.plonit.ploggingservice.api.plogging.controller.PlonitFeignClient;
 import com.plonit.ploggingservice.api.plogging.controller.request.StartPloggingRequest;
 import com.plonit.ploggingservice.api.plogging.controller.response.KakaoAddressResponse;
 import com.plonit.ploggingservice.api.plogging.service.PloggingService;
+import com.plonit.ploggingservice.api.plogging.service.dto.EndPloggingDto;
 import com.plonit.ploggingservice.api.plogging.service.dto.StartPloggingDto;
 import com.plonit.ploggingservice.common.enums.Finished;
+import com.plonit.ploggingservice.common.exception.CustomException;
 import com.plonit.ploggingservice.common.util.WebClientUtil;
+import com.plonit.ploggingservice.domain.plogging.LatLong;
 import com.plonit.ploggingservice.domain.plogging.Plogging;
+import com.plonit.ploggingservice.domain.plogging.repository.LatLongRepository;
 import com.plonit.ploggingservice.domain.plogging.repository.PloggingRepository;
 import com.querydsl.apt.jdo.JDOConfiguration;
 import lombok.NoArgsConstructor;
@@ -25,13 +29,18 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 import reactor.core.publisher.Mono;
 
 import javax.ws.rs.core.HttpHeaders;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import static com.plonit.ploggingservice.common.exception.ErrorCode.INVALID_PLACE_REQUEST;
+import static com.plonit.ploggingservice.common.exception.ErrorCode.PLOGGING_BAD_REQUEST;
 
 @Service
 @RequiredArgsConstructor
@@ -43,11 +52,13 @@ public class PloggingServiceImpl implements PloggingService {
     private final CircuitBreakerFactory circuitBreakerFactory;
     private final WebClientUtil webClientUtil;
     private final PloggingRepository ploggingRepository;
+    private final LatLongRepository latLongRepository;
     private String kakaoBaseUrl;
     private String kakaoKey;
     
     @Autowired
-    public PloggingServiceImpl(PloggingRepository ploggingRepository, WebClientUtil webClientUtil, CircuitBreakerFactory circuitBreakerFactory, PlonitFeignClient plonitFeignClient, Environment env, String kakaoKey) {
+    public PloggingServiceImpl(LatLongRepository latLongRepository, PloggingRepository ploggingRepository, WebClientUtil webClientUtil, CircuitBreakerFactory circuitBreakerFactory, PlonitFeignClient plonitFeignClient, Environment env, String kakaoKey) {
+        this.latLongRepository = latLongRepository;
         this.ploggingRepository = ploggingRepository;
         this.circuitBreakerFactory = circuitBreakerFactory;
         this.webClientUtil = webClientUtil;
@@ -74,12 +85,21 @@ public class PloggingServiceImpl implements PloggingService {
         log.info(testList.toString());
     }
 
+
+    /**
+     * 플로깅 시작시 기록 저장
+     * @param dto 플로깅 저장 데이터
+     * @return 플로깅 id
+     */
     @Transactional
     @Override
     public Long saveStartPlogging(StartPloggingDto dto) {
         
         // 위도, 경도로 위치 구하기
         String place = getPlace(dto.getLatitude(), dto.getLongitude());
+        if (place == null) {
+            throw new CustomException(INVALID_PLACE_REQUEST);
+        }
 
         // 시작 시간 구하기
         LocalDateTime startTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
@@ -90,10 +110,49 @@ public class PloggingServiceImpl implements PloggingService {
         return Plogging.toFirstEntity(dto.getMemberKey(), dto.getType(), place, startTime, Finished.ACTIVE, today)
                 .getId();
     }
-    
+
 
     /**
-     * 위도, 경도로 지번 주소 얻어오는 메소드
+     * 플로깅 종료시 나머지 데이터 저장
+     * @param dto 나머지 데이터
+     * @return 플로깅 id
+     */
+    @Transactional
+    @Override
+    public Long saveEndPlogging(EndPloggingDto dto) {
+        
+        // 끝난 시간 구하기
+        LocalDateTime endTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+        
+        // 플로깅 id로 플로깅 가져오기
+        Plogging plogging = ploggingRepository.findByPloggingId(dto.getPloggingId())
+                .orElseThrow(() -> new CustomException(PLOGGING_BAD_REQUEST));
+
+        // 걸린 시간 구하기
+        Duration duration = Duration.between(plogging.getStartTime(), endTime);
+        Long totalTime = duration.get(ChronoUnit.SECONDS);
+
+        // 플로깅 완료로 변경
+        plogging.saveEndPlogging(endTime, totalTime, dto.getDistance(), dto.getCalorie(), dto.getReview(), Finished.FINISHED);
+
+        List<LatLong> latLongs = new ArrayList<>();
+
+        // 위도 경도 값 넣기
+        for (EndPloggingDto.Coordinate coord : dto.getCoordinates()) {
+            latLongs.add(LatLong.builder()
+                            .latitude(coord.getLatitude())
+                            .longitude(coord.getLongitude())
+                    .build());
+        }
+        
+        latLongRepository.saveAll(latLongs);
+        
+        return plogging.getId();
+    }
+
+
+    /**
+     * 위도, 경도로 지번 주소 얻어옴
      * @param latitude 위도(y)
      * @param longitude 경도(x)
      * @return 지번 주소

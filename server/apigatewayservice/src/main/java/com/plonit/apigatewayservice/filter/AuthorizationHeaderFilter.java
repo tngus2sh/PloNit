@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
 
 @Component
 @Slf4j
-public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<AuthorizationHeaderFilter.Config> {
+public class  AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<AuthorizationHeaderFilter.Config> {
 
     private static final String AUTHORIZATION_HEADER = "AccessToken"; // Authorization -> AccessToken
     private final JwtTokenProvider jwtTokenProvider;
