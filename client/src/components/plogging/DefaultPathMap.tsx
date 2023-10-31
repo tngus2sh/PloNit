@@ -10,6 +10,7 @@ import { dummy_location } from "./dummyData";
 const defaultZoom = 16;
 
 const PathMap = ({ subHeight }: { subHeight: number }) => {
+  const isMapLoaded = useRef<boolean>(false);
   const windowHeight = useSelector<rootState, number>((state) => {
     return state.window.height;
   });
@@ -22,16 +23,24 @@ const PathMap = ({ subHeight }: { subHeight: number }) => {
   const polylineRef = useRef<naver.maps.Polyline | null>(null);
 
   useEffect(() => {
-    // setNaverPaths(
-    //   dummy_location.map((location) => {
-    //     return new naver.maps.LatLng(location.latitude, location.longitude);
-    //   }),
-    // );
+    if (!isMapLoaded.current) {
+      // setNaverPaths(
+      //   dummy_location.map((location) => {
+      //     return new naver.maps.LatLng(location.latitude, location.longitude);
+      //   }),
+      // );
 
-    const map = new naver.maps.Map("map", {
-      zoom: defaultZoom,
-    });
-    mapRef.current = map;
+      const map = new naver.maps.Map("map", {
+        zoom: defaultZoom,
+      });
+      mapRef.current = map;
+    }
+
+    return () => {
+      if (!isMapLoaded.current) {
+        isMapLoaded.current = true;
+      }
+    };
   }, []);
 
   useEffect(() => {

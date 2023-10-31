@@ -43,6 +43,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
   const windowHeight = useSelector<rootState, number>((state) => {
     return state.window.height;
   });
+  const isMapLoaded = useRef<boolean>(false);
   const { latitude, longitude, onCenter, setOnCenter } = useGPS();
   const mapRef = useRef<naver.maps.Map | null>(null);
   const userRef = useRef<naver.maps.Marker | null>(null);
@@ -79,200 +80,209 @@ const DefaultMap: React.FC<IDefaultMap> = ({
 
   // 초기맵 생성 및 기초 구조 구성
   useEffect(() => {
-    const getGPS = new Promise<GeolocationPosition>((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition(resolve, reject);
-    });
+    if (!isMapLoaded.current) {
+      const getGPS = new Promise<GeolocationPosition>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject);
+      });
 
-    getGPS
-      .then((response) => {
-        setBins(dummy_location);
-        // setToilets(dummy_location);
-        // setNeighbors(dummy_location);
-        setHelps(dummy_helps);
-        const { latitude, longitude } = response.coords;
-        const map = new naver.maps.Map("map", {
-          center: new naver.maps.LatLng(latitude, longitude),
-          zoom: defaultZoom,
-        });
-        mapRef.current = map;
-
-        const user = N.createMarker({
-          latlng: new naver.maps.LatLng(latitude, longitude),
-          map: map,
-          url: `images/PloggingPage/myLocation.svg`,
-          cursor: "default",
-        });
-        userRef.current = user;
-
-        const centerBtnIndicator_inactive = N.createCustomControl({
-          html: centerBtn_inactive,
-          pos: naver.maps.Position.LEFT_BOTTOM,
-        });
-        const centerBtnIndicator_active = N.createCustomControl({
-          html: centerBtn_active,
-          pos: naver.maps.Position.LEFT_BOTTOM,
-        });
-        const binBtnIndicator_inactive = N.createCustomControl({
-          html: binBtn_inactive,
-          pos: naver.maps.Position.RIGHT_BOTTOM,
-        });
-        const binBtnIndicator_active = N.createCustomControl({
-          html: binBtn_active,
-          pos: naver.maps.Position.RIGHT_BOTTOM,
-        });
-        const toiletBtnIndicator_inactive = N.createCustomControl({
-          html: toiletBtn_inactive,
-          pos: naver.maps.Position.RIGHT_BOTTOM,
-        });
-        const toiletBtnIndicator_active = N.createCustomControl({
-          html: toiletBtn_active,
-          pos: naver.maps.Position.RIGHT_BOTTOM,
-        });
-        const arrowBtnIndcator_up = N.createCustomControl({
-          html: arrow_up,
-          pos: naver.maps.Position.RIGHT_BOTTOM,
-        });
-        const arrowBtnIndcator_down = N.createCustomControl({
-          html: arrow_down,
-          pos: naver.maps.Position.RIGHT_BOTTOM,
-        });
-
-        naver.maps.Event.once(map, "init", () => {
-          centerBtnIndicator_active.setMap(map);
-          if (!isBefore) {
-            arrowBtnIndcator_up.setMap(map);
-            arrowBtnRef.current = arrowBtnIndcator_up;
-          }
-          binBtnIndicator_inactive.setMap(map);
-          toiletBtnIndicator_inactive.setMap(map);
-          centerBtnRef.current = centerBtnIndicator_active;
-          binBtnRef.current = binBtnIndicator_inactive;
-          toiletBtnRef.current = toiletBtnIndicator_inactive;
-
-          naver.maps.Event.addListener(map, "dragend", () => {
-            centerBtnIndicator_active.setMap(null);
-            centerBtnIndicator_inactive.setMap(map);
-            centerBtnRef.current = centerBtnIndicator_inactive;
+      getGPS
+        .then((response) => {
+          // setBins(dummy_location);
+          // setToilets(dummy_location);
+          // setNeighbors(dummy_location);
+          // setHelps(dummy_helps);
+          mapRef.current = null;
+          const { latitude, longitude } = response.coords;
+          const map = new naver.maps.Map("map", {
+            center: new naver.maps.LatLng(latitude, longitude),
+            zoom: defaultZoom,
           });
-          naver.maps.Event.addListener(map, "zoom_changed", () => {
-            centerBtnIndicator_active.setMap(null);
-            centerBtnIndicator_inactive.setMap(map);
-            centerBtnRef.current = centerBtnIndicator_inactive;
+          mapRef.current = map;
 
-            if (isBefore) {
-              const currentZoom = map.getZoom();
-              if (currentZoom <= neighbor_help_maxZoom) {
-                N.controlMarkers({
-                  markers: neighborMarkers.current,
-                  map: null,
-                });
-                N.controlMarkers({
-                  markers: helpMarkers.current,
-                  map: null,
-                });
-              } else {
-                N.controlMarkers({
-                  markers: neighborMarkers.current,
-                  map: mapRef.current,
-                });
-                N.controlMarkers({
-                  markers: helpMarkers.current,
-                  map: mapRef.current,
-                });
+          const user = N.createMarker({
+            latlng: new naver.maps.LatLng(latitude, longitude),
+            map: map,
+            url: `images/PloggingPage/myLocation.svg`,
+            cursor: "default",
+          });
+          userRef.current = user;
+
+          const centerBtnIndicator_inactive = N.createCustomControl({
+            html: centerBtn_inactive,
+            pos: naver.maps.Position.LEFT_BOTTOM,
+          });
+          const centerBtnIndicator_active = N.createCustomControl({
+            html: centerBtn_active,
+            pos: naver.maps.Position.LEFT_BOTTOM,
+          });
+          const binBtnIndicator_inactive = N.createCustomControl({
+            html: binBtn_inactive,
+            pos: naver.maps.Position.RIGHT_BOTTOM,
+          });
+          const binBtnIndicator_active = N.createCustomControl({
+            html: binBtn_active,
+            pos: naver.maps.Position.RIGHT_BOTTOM,
+          });
+          const toiletBtnIndicator_inactive = N.createCustomControl({
+            html: toiletBtn_inactive,
+            pos: naver.maps.Position.RIGHT_BOTTOM,
+          });
+          const toiletBtnIndicator_active = N.createCustomControl({
+            html: toiletBtn_active,
+            pos: naver.maps.Position.RIGHT_BOTTOM,
+          });
+          const arrowBtnIndcator_up = N.createCustomControl({
+            html: arrow_up,
+            pos: naver.maps.Position.RIGHT_BOTTOM,
+          });
+          const arrowBtnIndcator_down = N.createCustomControl({
+            html: arrow_down,
+            pos: naver.maps.Position.RIGHT_BOTTOM,
+          });
+
+          naver.maps.Event.once(map, "init", () => {
+            centerBtnIndicator_active.setMap(map);
+            if (!isBefore) {
+              arrowBtnIndcator_up.setMap(map);
+              arrowBtnRef.current = arrowBtnIndcator_up;
+            }
+            binBtnIndicator_inactive.setMap(map);
+            toiletBtnIndicator_inactive.setMap(map);
+            centerBtnRef.current = centerBtnIndicator_active;
+            binBtnRef.current = binBtnIndicator_inactive;
+            toiletBtnRef.current = toiletBtnIndicator_inactive;
+
+            naver.maps.Event.addListener(map, "dragend", () => {
+              centerBtnIndicator_active.setMap(null);
+              centerBtnIndicator_inactive.setMap(map);
+              centerBtnRef.current = centerBtnIndicator_inactive;
+            });
+            naver.maps.Event.addListener(map, "zoom_changed", () => {
+              centerBtnIndicator_active.setMap(null);
+              centerBtnIndicator_inactive.setMap(map);
+              centerBtnRef.current = centerBtnIndicator_inactive;
+
+              if (isBefore) {
+                const currentZoom = map.getZoom();
+                if (currentZoom <= neighbor_help_maxZoom) {
+                  N.controlMarkers({
+                    markers: neighborMarkers.current,
+                    map: null,
+                  });
+                  N.controlMarkers({
+                    markers: helpMarkers.current,
+                    map: null,
+                  });
+                } else {
+                  N.controlMarkers({
+                    markers: neighborMarkers.current,
+                    map: mapRef.current,
+                  });
+                  N.controlMarkers({
+                    markers: helpMarkers.current,
+                    map: mapRef.current,
+                  });
+                }
               }
+            });
+            naver.maps.Event.addDOMListener(
+              centerBtnIndicator_inactive.getElement(),
+              "click",
+              () => {
+                centerBtnIndicator_inactive.setMap(null);
+                centerBtnIndicator_active.setMap(map);
+                centerBtnRef.current = centerBtnIndicator_active;
+                setOnCenter(true);
+              },
+            );
+            naver.maps.Event.addDOMListener(
+              binBtnIndicator_inactive.getElement(),
+              "click",
+              () => {
+                toiletBtnRef.current?.setMap(null);
+                binBtnIndicator_inactive.setMap(null);
+                binBtnIndicator_active.setMap(map);
+                toiletBtnRef.current?.setMap(map);
+                binBtnRef.current = binBtnIndicator_active;
+                setShowBin(true);
+              },
+            );
+            naver.maps.Event.addDOMListener(
+              binBtnIndicator_active.getElement(),
+              "click",
+              () => {
+                toiletBtnRef.current?.setMap(null);
+                binBtnIndicator_active.setMap(null);
+                binBtnIndicator_inactive.setMap(map);
+                toiletBtnRef.current?.setMap(map);
+                binBtnRef.current = binBtnIndicator_inactive;
+                setShowBin(false);
+              },
+            );
+            naver.maps.Event.addDOMListener(
+              toiletBtnIndicator_inactive.getElement(),
+              "click",
+              () => {
+                toiletBtnIndicator_inactive.setMap(null);
+                toiletBtnIndicator_active.setMap(map);
+                toiletBtnRef.current = toiletBtnIndicator_active;
+                setShowToilet(true);
+              },
+            );
+            naver.maps.Event.addDOMListener(
+              toiletBtnIndicator_active.getElement(),
+              "click",
+              () => {
+                toiletBtnIndicator_active.setMap(null);
+                toiletBtnIndicator_inactive.setMap(map);
+                toiletBtnRef.current = toiletBtnIndicator_inactive;
+                setShowToilet(false);
+              },
+            );
+            if (!isBefore) {
+              naver.maps.Event.addDOMListener(
+                arrowBtnIndcator_up.getElement(),
+                "click",
+                () => {
+                  setShowBottom(true);
+                  arrowBtnIndcator_up.setMap(null);
+                  toiletBtnRef.current?.setMap(null);
+                  binBtnRef.current?.setMap(null);
+                  arrowBtnIndcator_down.setMap(mapRef.current);
+                  binBtnRef.current?.setMap(mapRef.current);
+                  toiletBtnRef.current?.setMap(mapRef.current);
+                  arrowBtnRef.current = arrowBtnIndcator_down;
+                },
+              );
+              naver.maps.Event.addDOMListener(
+                arrowBtnIndcator_down.getElement(),
+                "click",
+                () => {
+                  setShowBottom(false);
+                  arrowBtnIndcator_down.setMap(null);
+                  toiletBtnRef.current?.setMap(null);
+                  binBtnRef.current?.setMap(null);
+                  arrowBtnIndcator_up.setMap(mapRef.current);
+                  binBtnRef.current?.setMap(mapRef.current);
+                  toiletBtnRef.current?.setMap(mapRef.current);
+                  arrowBtnRef.current = arrowBtnIndcator_up;
+                },
+              );
             }
           });
-          naver.maps.Event.addDOMListener(
-            centerBtnIndicator_inactive.getElement(),
-            "click",
-            () => {
-              centerBtnIndicator_inactive.setMap(null);
-              centerBtnIndicator_active.setMap(map);
-              centerBtnRef.current = centerBtnIndicator_active;
-              setOnCenter(true);
-            },
-          );
-          naver.maps.Event.addDOMListener(
-            binBtnIndicator_inactive.getElement(),
-            "click",
-            () => {
-              toiletBtnRef.current?.setMap(null);
-              binBtnIndicator_inactive.setMap(null);
-              binBtnIndicator_active.setMap(map);
-              toiletBtnRef.current?.setMap(map);
-              binBtnRef.current = binBtnIndicator_active;
-              setShowBin(true);
-            },
-          );
-          naver.maps.Event.addDOMListener(
-            binBtnIndicator_active.getElement(),
-            "click",
-            () => {
-              toiletBtnRef.current?.setMap(null);
-              binBtnIndicator_active.setMap(null);
-              binBtnIndicator_inactive.setMap(map);
-              toiletBtnRef.current?.setMap(map);
-              binBtnRef.current = binBtnIndicator_inactive;
-              setShowBin(false);
-            },
-          );
-          naver.maps.Event.addDOMListener(
-            toiletBtnIndicator_inactive.getElement(),
-            "click",
-            () => {
-              toiletBtnIndicator_inactive.setMap(null);
-              toiletBtnIndicator_active.setMap(map);
-              toiletBtnRef.current = toiletBtnIndicator_active;
-              setShowToilet(true);
-            },
-          );
-          naver.maps.Event.addDOMListener(
-            toiletBtnIndicator_active.getElement(),
-            "click",
-            () => {
-              toiletBtnIndicator_active.setMap(null);
-              toiletBtnIndicator_inactive.setMap(map);
-              toiletBtnRef.current = toiletBtnIndicator_inactive;
-              setShowToilet(false);
-            },
-          );
-          if (!isBefore) {
-            naver.maps.Event.addDOMListener(
-              arrowBtnIndcator_up.getElement(),
-              "click",
-              () => {
-                setShowBottom(true);
-                arrowBtnIndcator_up.setMap(null);
-                toiletBtnRef.current?.setMap(null);
-                binBtnRef.current?.setMap(null);
-                arrowBtnIndcator_down.setMap(mapRef.current);
-                binBtnRef.current?.setMap(mapRef.current);
-                toiletBtnRef.current?.setMap(mapRef.current);
-                arrowBtnRef.current = arrowBtnIndcator_down;
-              },
-            );
-            naver.maps.Event.addDOMListener(
-              arrowBtnIndcator_down.getElement(),
-              "click",
-              () => {
-                setShowBottom(false);
-                arrowBtnIndcator_down.setMap(null);
-                toiletBtnRef.current?.setMap(null);
-                binBtnRef.current?.setMap(null);
-                arrowBtnIndcator_up.setMap(mapRef.current);
-                binBtnRef.current?.setMap(mapRef.current);
-                toiletBtnRef.current?.setMap(mapRef.current);
-                arrowBtnRef.current = arrowBtnIndcator_up;
-              },
-            );
-          }
+        })
+        .catch((error) => {
+          console.error(error);
+          alert(`GPS를 불러올 수 없는 환경입니다.`);
+          // 페이지 이동 로직 등
         });
-      })
-      .catch((error) => {
-        console.error(error);
-        alert(`GPS를 불러올 수 없는 환경입니다.`);
-        // 페이지 이동 로직 등
-      });
+    }
+
+    return () => {
+      if (!isMapLoaded.current) {
+        isMapLoaded.current = true;
+      }
+    };
   }, []);
 
   // 사용자의 위치 가운데로 갱신 시
