@@ -35,13 +35,12 @@ interface IDefaultMap {
   children?: ReactNode;
 }
 
-// let preventDup.current = true;
 const DefaultMap: React.FC<IDefaultMap> = ({
   subHeight,
   isBefore,
   children,
 }) => {
-  const preventDup = useRef<boolean>(true);
+  let isChecked = true;
   const windowHeight = useSelector<rootState, number>((state) => {
     return state.window.height;
   });
@@ -81,7 +80,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
 
   // 초기맵 생성 및 기초 구조 구성
   useEffect(() => {
-    if (preventDup.current) {
+    if (!isChecked) {
       const getGPS = new Promise<GeolocationPosition>((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject);
       });
@@ -276,18 +275,18 @@ const DefaultMap: React.FC<IDefaultMap> = ({
           alert(`GPS를 불러올 수 없는 환경입니다.`);
           // 페이지 이동 로직 등
         });
-    }
 
-    return () => {
-      if (preventDup.current) {
-        preventDup.current = false;
-      }
-    };
+      return () => {
+        if (!isChecked) {
+          isChecked = false;
+        }
+      };
+    }
   }, []);
 
   // 사용자의 위치 가운데로 갱신 시
   useEffect(() => {
-    if (!preventDup.current && !onCenter) {
+    if (isChecked && !onCenter) {
       if (typeof latitude === "number" && typeof longitude === "number") {
         mapRef.current?.setCenter(new naver.maps.LatLng(latitude, longitude));
         userRef.current?.setPosition(
@@ -299,7 +298,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
 
   // 쓰레기통 데이터 로드
   useEffect(() => {
-    if (!preventDup.current) {
+    if (isChecked) {
       const { makeMarkerClustering_green } = useCluster();
       N.controlMarkers({
         markers: binMarkers.current,
@@ -321,7 +320,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
 
   // 화장실 데이터 로드
   useEffect(() => {
-    if (!preventDup.current) {
+    if (isChecked) {
       const { makeMarkerClustering_blue } = useCluster();
       N.controlMarkers({
         markers: toiletMarkers.current,
@@ -343,7 +342,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
 
   // 쓰레기통 visibility를 toggle
   useEffect(() => {
-    if (!preventDup.current) {
+    if (isChecked) {
       if (showBin) {
         N.controlMarkers({
           markers: binMarkers.current,
@@ -362,7 +361,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
 
   // 화장실 visibility를 toggle
   useEffect(() => {
-    if (!preventDup.current) {
+    if (isChecked) {
       if (showToilet) {
         N.controlMarkers({
           markers: toiletMarkers.current,
@@ -381,7 +380,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
 
   // 주변 유저 데이터 로드
   useEffect(() => {
-    if (!preventDup) {
+    if (isChecked) {
       N.controlMarkers({
         markers: neighborMarkers.current,
         map: null,
@@ -398,7 +397,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
 
   // 도움 요청 데이터 로드
   useEffect(() => {
-    if (!preventDup.current) {
+    if (isChecked) {
       N.controlMarkers({
         markers: helpMarkers.current,
         map: null,

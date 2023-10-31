@@ -2,11 +2,11 @@ import React, { useState, useEffect, useRef } from "react";
 import { GeolocationPosition } from "interface/ploggingInterface";
 
 function useGPS() {
+  let isChecked = false;
   const [latitude, setLatitude] = useState<number>(0);
   const [longitude, setLongitude] = useState<number>(0);
   const [onSearch, setOnSearch] = useState<boolean>(false);
   const [onCenter, setOnCenter] = useState<boolean>(false);
-  const preventDup = useRef<boolean>(true);
 
   function getGPS(): Promise<GeolocationPosition> {
     return new Promise((resolve, reject) => {
@@ -15,7 +15,7 @@ function useGPS() {
   }
 
   useEffect(() => {
-    if (preventDup.current) {
+    if (!isChecked) {
       getGPS()
         .then((response) => {
           const { latitude, longitude } = response.coords;
@@ -28,14 +28,14 @@ function useGPS() {
     }
 
     return () => {
-      if (preventDup.current) {
-        preventDup.current = false;
+      if (!isChecked) {
+        isChecked = false;
       }
     };
   }, []);
 
   useEffect(() => {
-    if (!preventDup.current && (onSearch || onCenter)) {
+    if (isChecked && (onSearch || onCenter)) {
       getGPS()
         .then((response) => {
           const { latitude, longitude } = response.coords;

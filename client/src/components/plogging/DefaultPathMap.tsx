@@ -10,7 +10,7 @@ import { dummy_location } from "./dummyData";
 const defaultZoom = 16;
 
 const PathMap = ({ subHeight }: { subHeight: number }) => {
-  const preventDup = useRef<boolean>(true);
+  let isChecked = true;
   const windowHeight = useSelector<rootState, number>((state) => {
     return state.window.height;
   });
@@ -23,7 +23,7 @@ const PathMap = ({ subHeight }: { subHeight: number }) => {
   const polylineRef = useRef<naver.maps.Polyline | null>(null);
 
   useEffect(() => {
-    if (preventDup.current) {
+    if (!isChecked) {
       // setNaverPaths(
       //   dummy_location.map((location) => {
       //     return new naver.maps.LatLng(location.latitude, location.longitude);
@@ -37,12 +37,14 @@ const PathMap = ({ subHeight }: { subHeight: number }) => {
     }
 
     return () => {
-      preventDup.current = false;
+      if (!isChecked) {
+        isChecked = false;
+      }
     };
   }, []);
 
   useEffect(() => {
-    if (!preventDup.current && naverPaths[0]) {
+    if (isChecked && naverPaths[0]) {
       const len = naverPaths.length;
       mapRef.current?.setCenter(naverPaths[0]);
       const start = N.createMarker_small({

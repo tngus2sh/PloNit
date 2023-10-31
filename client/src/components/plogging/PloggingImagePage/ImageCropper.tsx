@@ -16,7 +16,7 @@ interface PropsType {
 }
 
 const ImageCropper: React.FC<PropsType> = ({ onCrop, aespectRatio }) => {
-  const preventDup = useRef<boolean>(true);
+  let isChecked = true;
   const navigate = useNavigate();
   const { image, setImage, handleImageCapture, fileInputRef } = useCamera();
   const cropperRef = useRef<ReactCropperElement>(null);
@@ -31,12 +31,14 @@ const ImageCropper: React.FC<PropsType> = ({ onCrop, aespectRatio }) => {
   const bottomBtnPercent = 12;
 
   useEffect(() => {
-    if (preventDup.current) {
+    if (!isChecked) {
       handleImageCapture();
     }
 
     return () => {
-      preventDup.current = false;
+      if (!isChecked) {
+        isChecked = false;
+      }
     };
   }, []);
 
