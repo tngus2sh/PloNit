@@ -5,6 +5,7 @@ import com.plonit.ploggingservice.common.enums.Type;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -12,6 +13,7 @@ import javax.validation.constraints.Positive;
 
 @Data
 @Builder
+@RequiredArgsConstructor
 @Schema(description = "플로깅 시작 request")
 public class StartPloggingRequest {
     
@@ -32,13 +34,5 @@ public class StartPloggingRequest {
     
     @Schema(description = "크루핑 id")
     private Long crewpingId;
-
-    public static StartPloggingDto toDto(StartPloggingRequest request) {
-        return StartPloggingDto.builder()
-                .type(request.getType())
-                .latitude(request.getLatitude())
-                .longitude(request.getLongitude())
-                .crewpingId(request.getCrewpingId())
-                .build();
-    }
+    
 }

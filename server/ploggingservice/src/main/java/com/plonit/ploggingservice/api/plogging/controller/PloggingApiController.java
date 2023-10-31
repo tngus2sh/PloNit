@@ -9,6 +9,7 @@ import com.plonit.ploggingservice.api.plogging.controller.response.PloggingLogRe
 import com.plonit.ploggingservice.api.plogging.controller.response.PloggingPeriodResponse;
 import com.plonit.ploggingservice.api.plogging.controller.response.UsersResponse;
 import com.plonit.ploggingservice.api.plogging.service.PloggingService;
+import com.plonit.ploggingservice.api.plogging.service.dto.EndPloggingDto;
 import com.plonit.ploggingservice.api.plogging.service.dto.StartPloggingDto;
 import com.plonit.ploggingservice.common.CustomApiResponse;
 import com.plonit.ploggingservice.common.exception.CustomException;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+import static com.plonit.ploggingservice.common.exception.ErrorCode.ACCESS_TOKEN_INVALID;
 import static com.plonit.ploggingservice.common.exception.ErrorCode.INVALID_FIELDS_REQUEST;
 
 
@@ -56,16 +58,17 @@ public class PloggingApiController {
         Long memberKey = RequestUtils.getMemberKey(servletRequest);
         log.info("memberKey : " + memberKey);
 
-        // TODO: 2023-10-27 플로깅 시작하기 
-        ploggingService.saveStartPlogging(StartPloggingRequest.toDto(request));
+        // 플로깅 시작하기
+        Long ploggingId = ploggingService.saveStartPlogging(StartPloggingDto.of(request, memberKey));
         
-        return CustomApiResponse.ok(1l);
+        return CustomApiResponse.ok(ploggingId);
     }
     
     @Operation(summary = "플로깅 종료시 기록 저장", description = "플로깅 종료시에 해당하는 플로깅 id에 추가 정보들을 넣는다.")
     @PostMapping
     public CustomApiResponse<Long> saveEndPlogging(
             @Validated @RequestBody EndPloggingRequest request,
+            HttpServletRequest servletRequest,
             Errors errors
             ) {
         
@@ -77,10 +80,14 @@ public class PloggingApiController {
             });
             throw new CustomException(INVALID_FIELDS_REQUEST);
         }
+        
+        Long memberKey = RequestUtils.getMemberKey(servletRequest);
+        log.info("memberKey : " + memberKey);
 
-        // TODO: 2023-10-27 플로깅 기록 저장 
+        // 플로깅 기록 저장
+        Long ploggingId = ploggingService.saveEndPlogging(EndPloggingDto.of(request, memberKey));
 
-        return CustomApiResponse.ok(1l);
+        return CustomApiResponse.ok(ploggingId);
     }
     
     @Operation(summary = "플로깅 기록 일별 조회", description = "처음 날짜와 마지막 날짜를 지정해 해당 기간에 포함되어 있는 플로깅들을 조회한다.")
