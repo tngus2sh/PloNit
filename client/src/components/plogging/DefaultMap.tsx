@@ -1,17 +1,15 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, ReactNode } from "react";
+import style from "styles/css/PloggingPage/DefaultMap.module.css";
 import Swal from "sweetalert2";
-import {
-  GeolocationPosition,
-  Coordinate,
-  Help,
-} from "interface/ploggingInterface";
+import { GeolocationPosition, Coordinate } from "interface/ploggingInterface";
 import useGPS from "./functions/useGPS";
 import useCluster from "./functions/useCluster";
-import style from "styles/css/PloggingPage/DefaultMap.module.css";
+import * as N from "./functions/useNaverMap";
+import { naver } from "components/common/useNaver";
 
+import { useSelector } from "react-redux";
+import { rootState } from "store/store";
 import { dummy_location, dummy_helps } from "./dummyData";
-
-const { naver } = window;
 
 // 대략적으로 필요한 기능들
 
@@ -27,44 +25,61 @@ const { naver } = window;
 // 주변 화장실 위치 표시 x
 // 주변 유저 도움 요청 표시 x
 
-interface DefaultMap {
+const defaultZoom = 16;
+const neighbor_help_maxZoom = 12;
+const navbarHeight = 56;
+
+interface IDefaultMap {
   subHeight: number;
+  isBefore: boolean;
+  children?: ReactNode;
 }
 
-const DefaultMap = ({ subHeight }: DefaultMap) => {
-  const [isDefault, setIsDefault] = useState<boolean>(true);
-  const [windowHeight, setWindowHeight] = useState<number>(window.innerHeight);
-  const { latitude, longitude, onSearch, setOnSearch } = useGPS();
+const DefaultMap: React.FC<IDefaultMap> = ({
+  subHeight,
+  isBefore,
+  children,
+}) => {
+  const windowHeight = useSelector<rootState, number>((state) => {
+    return state.windowHeight.value;
+  });
+  const { latitude, longitude, onCenter, setOnCenter } = useGPS();
   const preventDup = useRef<boolean>(true);
   const mapRef = useRef<naver.maps.Map | null>(null);
   const userRef = useRef<naver.maps.Marker | null>(null);
   const centerBtnRef = useRef<naver.maps.CustomControl | null>(null);
   const binBtnRef = useRef<naver.maps.CustomControl | null>(null);
   const toiletBtnRef = useRef<naver.maps.CustomControl | null>(null);
-  const [showIcon, setShowIcon] = useState<boolean>(true);
+  const arrowBtnRef = useRef<naver.maps.CustomControl | null>(null);
   const [showBin, setShowBin] = useState<boolean>(false);
   const [showToilet, setShowToilet] = useState<boolean>(false);
   const [bins, setBins] = useState<Coordinate[]>([]);
   const [toilets, setToilets] = useState<Coordinate[]>([]);
   const [neighbors, setNeighbors] = useState<Coordinate[]>([]);
-  const [helps, setHelps] = useState<Help[]>([]);
+  const [helps, setHelps] = useState<Coordinate[]>([]);
   const binMarkers = useRef<naver.maps.Marker[]>([]);
   const toiletMarkers = useRef<naver.maps.Marker[]>([]);
   const neighborMarkers = useRef<naver.maps.Marker[]>([]);
   const helpMarkers = useRef<naver.maps.Marker[]>([]);
   const binCluster = useRef<any>(null);
   const toiletCluster = useRef<any>(null);
+  const [showBottom, setShowBottom] = useState<boolean>(isBefore);
 
   const centerBtn_inactive = `<div class="${style.btn_white_margin_inc}" style="background-image:url('images/PloggingPage/location-cross-black.svg')"></div>`;
   const centerBtn_active = `<div class="${style.btn_white_margin_inc}" style="background-image:url('images/PloggingPage/location-cross-blue.svg')"></div>`;
-  const binBtn_inactive = `<div class="${style.btn_black_margin_inc}" style="background-image:url('images/PloggingPage/trash-solid.svg')"></div>`;
-  const binBtn_active = `<div class="${style.btn_green_margin_inc}" style="background-image:url('images/PloggingPage/trash-solid.svg')"></div>`;
-  const toiletBtn_inactive = `<div class="${style.btn_black}" style="background-image:url('images/PloggingPage/toilet-solid.svg')"></div>`;
-  const toiletBtn_active = `<div class="${style.btn_blue}" style="background-image:url('images/PloggingPage/toilet-solid.svg')"></div>`;
+  const binBtn_inactive = isBefore
+    ? `<div class="${style.btn_black_margin_inc}" style="background-image:url('images/PloggingPage/bin.svg')"></div>`
+    : `<div class="${style.btn_black}" style="background-image:url('images/PloggingPage/bin.svg')"></div>`;
+  const binBtn_active = isBefore
+    ? `<div class="${style.btn_green_margin_inc}" style="background-image:url('images/PloggingPage/bin.svg')"></div>`
+    : `<div class="${style.btn_green}" style="background-image:url('images/PloggingPage/bin.svg')"></div>`;
+  const toiletBtn_inactive = `<div class="${style.btn_black}" style="background-image:url('images/PloggingPage/toilet.svg')"></div>`;
+  const toiletBtn_active = `<div class="${style.btn_blue}" style="background-image:url('images/PloggingPage/toilet.svg')"></div>`;
+  const arrow_up = `<div class="${style.btn_black_margin_inc}" style="background-image:url('images/PloggingPage/arrow-up.svg')"></div>`;
+  const arrow_down = `<div class="${style.btn_black_margin_inc}" style="background-image:url('images/PloggingPage/arrow-down.svg')"></div>`;
 
   // 초기맵 생성 및 기초 구조 구성
   useEffect(() => {
-    let isFailed = false;
     if (preventDup.current) {
       const getGPS = new Promise<GeolocationPosition>((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject);
@@ -79,63 +94,57 @@ const DefaultMap = ({ subHeight }: DefaultMap) => {
           const { latitude, longitude } = response.coords;
           const map = new naver.maps.Map("map", {
             center: new naver.maps.LatLng(latitude, longitude),
-            zoom: 16,
+            zoom: defaultZoom,
           });
           mapRef.current = map;
 
-          const user = new naver.maps.Marker({
-            position: new naver.maps.LatLng(latitude, longitude),
-            map: mapRef.current,
-            icon: {
-              url: `images/PloggingPage/myLocation.svg`,
-              size: new naver.maps.Size(35, 35),
-              scaledSize: new naver.maps.Size(35, 35),
-              origin: new naver.maps.Point(0, 0),
-              anchor: new naver.maps.Point(17.5, 17.5),
-            },
+          const user = N.createMarker({
+            latlng: new naver.maps.LatLng(latitude, longitude),
+            map: map,
+            url: `images/PloggingPage/myLocation.svg`,
             cursor: "default",
           });
           userRef.current = user;
 
-          const centerBtnIndicator_inactive = new naver.maps.CustomControl(
-            centerBtn_inactive,
-            {
-              position: naver.maps.Position.LEFT_BOTTOM,
-            },
-          );
-          const centerBtnIndicator_active = new naver.maps.CustomControl(
-            centerBtn_active,
-            {
-              position: naver.maps.Position.LEFT_BOTTOM,
-            },
-          );
-          const binBtnIndicator_inactive = new naver.maps.CustomControl(
-            binBtn_inactive,
-            {
-              position: naver.maps.Position.RIGHT_BOTTOM,
-            },
-          );
-          const binBtnIndicator_active = new naver.maps.CustomControl(
-            binBtn_active,
-            {
-              position: naver.maps.Position.RIGHT_BOTTOM,
-            },
-          );
-          const toiletBtnIndicator_inactive = new naver.maps.CustomControl(
-            toiletBtn_inactive,
-            {
-              position: naver.maps.Position.RIGHT_BOTTOM,
-            },
-          );
-          const toiletBtnIndicator_active = new naver.maps.CustomControl(
-            toiletBtn_active,
-            {
-              position: naver.maps.Position.RIGHT_BOTTOM,
-            },
-          );
+          const centerBtnIndicator_inactive = N.createCustomControl({
+            html: centerBtn_inactive,
+            pos: naver.maps.Position.LEFT_BOTTOM,
+          });
+          const centerBtnIndicator_active = N.createCustomControl({
+            html: centerBtn_active,
+            pos: naver.maps.Position.LEFT_BOTTOM,
+          });
+          const binBtnIndicator_inactive = N.createCustomControl({
+            html: binBtn_inactive,
+            pos: naver.maps.Position.RIGHT_BOTTOM,
+          });
+          const binBtnIndicator_active = N.createCustomControl({
+            html: binBtn_active,
+            pos: naver.maps.Position.RIGHT_BOTTOM,
+          });
+          const toiletBtnIndicator_inactive = N.createCustomControl({
+            html: toiletBtn_inactive,
+            pos: naver.maps.Position.RIGHT_BOTTOM,
+          });
+          const toiletBtnIndicator_active = N.createCustomControl({
+            html: toiletBtn_active,
+            pos: naver.maps.Position.RIGHT_BOTTOM,
+          });
+          const arrowBtnIndcator_up = N.createCustomControl({
+            html: arrow_up,
+            pos: naver.maps.Position.RIGHT_BOTTOM,
+          });
+          const arrowBtnIndcator_down = N.createCustomControl({
+            html: arrow_down,
+            pos: naver.maps.Position.RIGHT_BOTTOM,
+          });
 
           naver.maps.Event.once(map, "init", () => {
             centerBtnIndicator_active.setMap(map);
+            if (!isBefore) {
+              arrowBtnIndcator_up.setMap(map);
+              arrowBtnRef.current = arrowBtnIndcator_up;
+            }
             binBtnIndicator_inactive.setMap(map);
             toiletBtnIndicator_inactive.setMap(map);
             centerBtnRef.current = centerBtnIndicator_active;
@@ -152,21 +161,25 @@ const DefaultMap = ({ subHeight }: DefaultMap) => {
               centerBtnIndicator_inactive.setMap(map);
               centerBtnRef.current = centerBtnIndicator_inactive;
 
-              if (isDefault) {
+              if (isBefore) {
                 const currentZoom = map.getZoom();
-                if (currentZoom <= 12) {
-                  neighborMarkers.current.forEach((neighborMarker) => {
-                    neighborMarker.setMap(null);
+                if (currentZoom <= neighbor_help_maxZoom) {
+                  N.controlMarkers({
+                    markers: neighborMarkers.current,
+                    map: null,
                   });
-                  helpMarkers.current.forEach((helpMarker) => {
-                    helpMarker.setMap(null);
+                  N.controlMarkers({
+                    markers: helpMarkers.current,
+                    map: null,
                   });
                 } else {
-                  neighborMarkers.current.forEach((neighborMarker) => {
-                    neighborMarker.setMap(mapRef.current);
+                  N.controlMarkers({
+                    markers: neighborMarkers.current,
+                    map: mapRef.current,
                   });
-                  helpMarkers.current.forEach((helpMarker) => {
-                    helpMarker.setMap(mapRef.current);
+                  N.controlMarkers({
+                    markers: helpMarkers.current,
+                    map: mapRef.current,
                   });
                 }
               }
@@ -178,7 +191,7 @@ const DefaultMap = ({ subHeight }: DefaultMap) => {
                 centerBtnIndicator_inactive.setMap(null);
                 centerBtnIndicator_active.setMap(map);
                 centerBtnRef.current = centerBtnIndicator_active;
-                setOnSearch(true);
+                setOnCenter(true);
               },
             );
             naver.maps.Event.addDOMListener(
@@ -225,34 +238,55 @@ const DefaultMap = ({ subHeight }: DefaultMap) => {
                 setShowToilet(false);
               },
             );
+            if (!isBefore) {
+              naver.maps.Event.addDOMListener(
+                arrowBtnIndcator_up.getElement(),
+                "click",
+                () => {
+                  setShowBottom(true);
+                  arrowBtnIndcator_up.setMap(null);
+                  toiletBtnRef.current?.setMap(null);
+                  binBtnRef.current?.setMap(null);
+                  arrowBtnIndcator_down.setMap(mapRef.current);
+                  binBtnRef.current?.setMap(mapRef.current);
+                  toiletBtnRef.current?.setMap(mapRef.current);
+                  arrowBtnRef.current = arrowBtnIndcator_down;
+                },
+              );
+              naver.maps.Event.addDOMListener(
+                arrowBtnIndcator_down.getElement(),
+                "click",
+                () => {
+                  setShowBottom(false);
+                  arrowBtnIndcator_down.setMap(null);
+                  toiletBtnRef.current?.setMap(null);
+                  binBtnRef.current?.setMap(null);
+                  arrowBtnIndcator_up.setMap(mapRef.current);
+                  binBtnRef.current?.setMap(mapRef.current);
+                  toiletBtnRef.current?.setMap(mapRef.current);
+                  arrowBtnRef.current = arrowBtnIndcator_up;
+                },
+              );
+            }
           });
         })
         .catch((error) => {
-          isFailed = true;
           console.error(error);
+          alert(`GPS를 불러올 수 없는 환경입니다.`);
+          // 페이지 이동 로직 등
         });
     }
 
-    function handleResize() {
-      setWindowHeight(window.innerHeight);
-    }
-    window.addEventListener("resize", handleResize);
-
     return () => {
       if (preventDup.current) {
-        if (isFailed) {
-          alert(`GPS 정보를 불러오는데 실패했습니다.`);
-          // 다른 페이지로 이동 등의 로직 설정
-        }
         preventDup.current = false;
       }
-
-      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
+  // 사용자의 위치 가운데로 갱신 시
   useEffect(() => {
-    if (!preventDup.current && !onSearch) {
+    if (!preventDup.current && !onCenter) {
       if (typeof latitude === "number" && typeof longitude === "number") {
         mapRef.current?.setCenter(new naver.maps.LatLng(latitude, longitude));
         userRef.current?.setPosition(
@@ -260,141 +294,119 @@ const DefaultMap = ({ subHeight }: DefaultMap) => {
         );
       }
     }
-  }, [onSearch]);
+  }, [onCenter]);
 
-  // 쓰레기통 및 화장실 데이터 로드
-  // 향후 도움 요청은 어떻게 넣을지에 대해서 고민할 것
+  // 쓰레기통 데이터 로드
   useEffect(() => {
     if (!preventDup.current) {
-      const { makeMarkerClustering_blue, makeMarkerClustering_green } =
-        useCluster();
-
-      binMarkers.current = [];
-      bins.forEach((bin) => {
-        const marker = new naver.maps.Marker({
-          position: new naver.maps.LatLng(bin.latitude, bin.longitude),
-          map: undefined,
-          icon: {
-            url: `images/PloggingPage/bin-icon.png`,
-            size: new naver.maps.Size(35, 35),
-            scaledSize: new naver.maps.Size(35, 35),
-            origin: new naver.maps.Point(0, 0),
-            anchor: new naver.maps.Point(17.5, 17.5),
-          },
-        });
-        binMarkers.current = [...binMarkers.current, marker];
+      const { makeMarkerClustering_green } = useCluster();
+      N.controlMarkers({
+        markers: binMarkers.current,
+        map: null,
       });
 
+      binMarkers.current = binMarkers.current = N.createMarkers({
+        items: bins,
+        map: undefined,
+        url: `images/PloggingPage/bin-pin.png`,
+        cursor: "default",
+      });
       binCluster.current = makeMarkerClustering_green({
         map: undefined,
         markers: binMarkers.current,
       });
+    }
+  }, [bins]);
 
-      toiletMarkers.current = [];
-      toilets.forEach((toilet) => {
-        const marker = new naver.maps.Marker({
-          position: new naver.maps.LatLng(toilet.latitude, toilet.longitude),
-          map: undefined,
-          icon: {
-            url: `images/PloggingPage/toilet-icon.png`,
-            size: new naver.maps.Size(35, 35),
-            scaledSize: new naver.maps.Size(35, 35),
-            origin: new naver.maps.Point(0, 0),
-            anchor: new naver.maps.Point(17.5, 17.5),
-          },
-        });
-
-        toiletMarkers.current = [...toiletMarkers.current, marker];
+  // 화장실 데이터 로드
+  useEffect(() => {
+    if (!preventDup.current) {
+      const { makeMarkerClustering_blue } = useCluster();
+      N.controlMarkers({
+        markers: toiletMarkers.current,
+        map: null,
       });
 
+      toiletMarkers.current = N.createMarkers({
+        items: toilets,
+        map: undefined,
+        url: `images/PloggingPage/toilet-pin.png`,
+        cursor: "default",
+      });
       toiletCluster.current = makeMarkerClustering_blue({
         map: undefined,
         markers: toiletMarkers.current,
       });
     }
-  }, [bins, toilets]);
+  }, [toilets]);
 
-  // 쓰레기통과 화장실 visibility를 toggle
+  // 쓰레기통 visibility를 toggle
   useEffect(() => {
     if (!preventDup.current) {
       if (showBin) {
-        binMarkers.current.forEach((binMarker) => {
-          binMarker.setMap(mapRef.current);
+        N.controlMarkers({
+          markers: binMarkers.current,
+          map: mapRef.current,
         });
         binCluster.current.setMap(mapRef.current);
       } else {
-        binMarkers.current.forEach((binMarker) => {
-          binMarker.setMap(null);
+        N.controlMarkers({
+          markers: binMarkers.current,
+          map: null,
         });
         binCluster.current.setMap(null);
       }
+    }
+  }, [showBin]);
 
+  // 화장실 visibility를 toggle
+  useEffect(() => {
+    if (!preventDup.current) {
       if (showToilet) {
-        toiletMarkers.current.forEach((toiletMarker) => {
-          toiletMarker.setMap(mapRef.current);
+        N.controlMarkers({
+          markers: toiletMarkers.current,
+          map: mapRef.current,
         });
         toiletCluster.current.setMap(mapRef.current);
       } else {
-        toiletMarkers.current.forEach((toiletMarker) => {
-          toiletMarker.setMap(null);
+        N.controlMarkers({
+          markers: toiletMarkers.current,
+          map: null,
         });
         toiletCluster.current.setMap(null);
       }
     }
-  }, [showBin, showToilet]);
+  }, [showToilet]);
 
+  // 주변 유저 데이터 로드
   useEffect(() => {
     if (!preventDup.current) {
-      neighborMarkers.current = [];
-      neighbors.forEach((neighbor) => {
-        const marker = new naver.maps.Marker({
-          position: new naver.maps.LatLng(
-            neighbor.latitude,
-            neighbor.longitude,
-          ),
-          map: undefined,
-          icon: {
-            url: `images/PloggingPage/neighborLocation.svg`,
-            size: new naver.maps.Size(35, 35),
-            scaledSize: new naver.maps.Size(35, 35),
-            origin: new naver.maps.Point(0, 0),
-            anchor: new naver.maps.Point(17.5, 17.5),
-          },
-          cursor: "default",
-        });
-        neighborMarkers.current = [...neighborMarkers.current, marker];
+      N.controlMarkers({
+        markers: neighborMarkers.current,
+        map: null,
+      });
+
+      neighborMarkers.current = N.createMarkers({
+        items: neighbors,
+        map: mapRef.current ?? undefined,
+        url: `images/PloggingPage/neighborLocation.svg`,
+        cursor: "default",
       });
     }
   }, [neighbors]);
 
+  // 도움 요청 데이터 로드
   useEffect(() => {
     if (!preventDup.current) {
-      helpMarkers.current = [];
-      helps.forEach((help) => {
-        const marker = new naver.maps.Marker({
-          position: new naver.maps.LatLng(help.latitude, help.longitude),
-          map: undefined,
-          icon: {
-            url: `images/PloggingPage/help-icon.png`,
-            size: new naver.maps.Size(35, 35),
-            scaledSize: new naver.maps.Size(35, 35),
-            origin: new naver.maps.Point(0, 0),
-            anchor: new naver.maps.Point(17.5, 17.5),
-          },
-        });
+      N.controlMarkers({
+        markers: helpMarkers.current,
+        map: null,
+      });
 
-        naver.maps.Event.addListener(marker, "click", () => {
-          Swal.fire({
-            imageUrl: help.image,
-            imageWidth: `70vw`,
-            imageHeight: `auto`,
-            imageAlt: `helpImage`,
-            text: help.context,
-            showConfirmButton: false,
-            showCloseButton: true,
-          });
-        });
-        helpMarkers.current = [...helpMarkers.current, marker];
+      helpMarkers.current = N.createMarkers({
+        items: helps,
+        map: mapRef.current ?? undefined,
+        url: `images/PloggingPage/help-icon.png`,
       });
     }
   }, [helps]);
@@ -402,12 +414,17 @@ const DefaultMap = ({ subHeight }: DefaultMap) => {
   return (
     <div
       style={{
-        height: `${windowHeight - subHeight}px`,
+        height: `${
+          showBottom
+            ? windowHeight - navbarHeight - subHeight
+            : windowHeight - navbarHeight
+        }px`,
         width: "100%",
         transition: `all 200ms ease-in-out`,
       }}
     >
       <div id="map" style={{ height: "100%", width: "100%" }}></div>
+      {showBottom ? children : null}
     </div>
   );
 };

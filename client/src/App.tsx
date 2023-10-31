@@ -1,14 +1,36 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import style from "styles/css/App.module.css";
 import NavBar from "components/common/NavBar";
 import RouteComponent from "pages/lib/index";
+import useGPS from "components/plogging/functions/useGPS";
+
+import { useDispatch, useSelector } from "react-redux";
+import { rootState } from "store/store";
+import { setWindowHeight } from "store/windowHeight-slice";
+import * as P from "store/plogging-slice";
+
+// 부드러운 애니메이션 (https://animate.style/)
+import "animate.css";
+
+const intervalTime = 10;
 
 function App() {
-  const [windowHeight, setWindowHeight] = useState<number>(window.innerHeight);
+  const dispatch = useDispatch();
+  const interval = useRef<NodeJS.Timeout | null>(null);
+  const windowHeight = useSelector<rootState, number>((state) => {
+    return state.windowHeight.value;
+  });
+  const isBefore = useSelector<rootState, boolean>((state) => {
+    return state.plogging.ploggingType === "none";
+  });
+  const second = useSelector<rootState, number>((state) => {
+    return state.plogging.second;
+  });
+  const { latitude, longitude, onSearch, setOnSearch } = useGPS();
 
   useEffect(() => {
     function handleResize() {
-      setWindowHeight(window.innerHeight);
+      dispatch(setWindowHeight(window.innerHeight));
     }
     window.addEventListener("resize", handleResize);
 
@@ -16,6 +38,30 @@ function App() {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  useEffect(() => {
+    if (!isBefore) {
+      interval.current = setInterval(() => {
+        dispatch(P.addTime());
+      }, 1000);
+    } else {
+      if (interval.current) {
+        clearInterval(interval.current);
+      }
+    }
+  }, [isBefore]);
+
+  useEffect(() => {
+    if (!isBefore && second % intervalTime === 0) {
+      setOnSearch(true);
+    }
+  }, [second]);
+
+  useEffect(() => {
+    if (!isBefore && !onSearch) {
+      dispatch(P.addPath({ latitude: latitude, longitude: longitude }));
+    }
+  }, [onSearch]);
 
   return (
     <div className={style.App} style={{ height: `${windowHeight}px` }}>

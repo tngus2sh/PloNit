@@ -2,9 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import { GeolocationPosition } from "interface/ploggingInterface";
 
 function useGPS() {
-  const [latitude, setLatitude] = useState<number | null>(null);
-  const [longitude, setLongitude] = useState<number | null>(null);
+  const [latitude, setLatitude] = useState<number>(0);
+  const [longitude, setLongitude] = useState<number>(0);
   const [onSearch, setOnSearch] = useState<boolean>(false);
+  const [onCenter, setOnCenter] = useState<boolean>(false);
   const preventDup = useRef<boolean>(true);
 
   function getGPS(): Promise<GeolocationPosition> {
@@ -15,7 +16,6 @@ function useGPS() {
 
   useEffect(() => {
     if (preventDup.current) {
-      console.log(`first search`);
       getGPS()
         .then((response) => {
           const { latitude, longitude } = response.coords;
@@ -35,7 +35,7 @@ function useGPS() {
   }, []);
 
   useEffect(() => {
-    if (!preventDup.current && onSearch) {
+    if (!preventDup.current && (onSearch || onCenter)) {
       getGPS()
         .then((response) => {
           const { latitude, longitude } = response.coords;
@@ -44,15 +44,15 @@ function useGPS() {
         })
         .catch((error) => {
           console.error(error);
-          alert(`https 환경에서만 GPS를 불러올 수 있습니다.`);
         });
     }
 
     return () => {
       setOnSearch(false);
+      setOnCenter(false);
     };
-  }, [onSearch]);
+  }, [onSearch, onCenter]);
 
-  return { latitude, longitude, onSearch, setOnSearch };
+  return { latitude, longitude, onSearch, setOnSearch, onCenter, setOnCenter };
 }
 export default useGPS;

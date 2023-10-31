@@ -1,4 +1,4 @@
-import { Coordinate, Help } from "interface/ploggingInterface";
+import { Coordinate } from "interface/ploggingInterface";
 
 const dummy_location: Coordinate[] = [
   { latitude: 35.147824, longitude: 126.920026 },
@@ -10,7 +10,7 @@ const dummy_location: Coordinate[] = [
   { latitude: 35.150342, longitude: 126.867053 },
 ];
 
-const dummy_helps: Help[] = [
+const dummy_helps: Coordinate[] = [
   {
     latitude: 35.17421,
     longitude: 126.912198,
