@@ -40,7 +40,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
   isBefore,
   children,
 }) => {
-  let isChecked = true;
+  let isChecked = false;
   const windowHeight = useSelector<rootState, number>((state) => {
     return state.window.height;
   });

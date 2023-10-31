@@ -16,7 +16,7 @@ interface PropsType {
 }
 
 const ImageCropper: React.FC<PropsType> = ({ onCrop, aespectRatio }) => {
-  let isChecked = true;
+  let isChecked = false;
   const navigate = useNavigate();
   const { image, setImage, handleImageCapture, fileInputRef } = useCamera();
   const cropperRef = useRef<ReactCropperElement>(null);

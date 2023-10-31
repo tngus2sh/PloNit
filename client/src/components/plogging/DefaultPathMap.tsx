@@ -10,7 +10,7 @@ import { dummy_location } from "./dummyData";
 const defaultZoom = 16;
 
 const PathMap = ({ subHeight }: { subHeight: number }) => {
-  let isChecked = true;
+  let isChecked = false;
   const windowHeight = useSelector<rootState, number>((state) => {
     return state.window.height;
   });
