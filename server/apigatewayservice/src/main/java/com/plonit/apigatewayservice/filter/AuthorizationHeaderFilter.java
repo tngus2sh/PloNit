@@ -17,15 +17,16 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 
     private static final String AUTHORIZATION_HEADER = "AccessToken"; // Authorization -> AccessToken
     private final JwtTokenProvider jwtTokenProvider;
+
     public AuthorizationHeaderFilter(JwtTokenProvider jwtTokenProvider) {
         super(Config.class);
         this.jwtTokenProvider = jwtTokenProvider;
     }
-    
-    public static class Config{
-        
+
+    public static class Config {
+
     }
-    
+
     @Override
     public GatewayFilter apply(Config config) {
         return ((exchange, chain) -> {
@@ -34,20 +35,20 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
             log.info("request path - {}", request.getPath());
             log.info("request uri - {}", request.getURI());
 
-            // token 유무
+            // 1. AccessToken 유무
             if (!request.getHeaders().containsKey(AUTHORIZATION_HEADER)) {
                 return onError(exchange, "No authorization header", HttpStatus.UNAUTHORIZED);
             }
 
-            // BEARER_TYPE 확인
+            // 2. BEARER_TYPE 확인
             String token = jwtTokenProvider.resolveToken(request);
             if (token == null) {
                 return onError(exchange, "No authorization header", HttpStatus.UNAUTHORIZED);
             }
 
-            // token 유효성 확인
+            // 3. AccessToken 유효성 확인
             try {
-                if(!jwtTokenProvider.validateToken(token)) {
+                if (!jwtTokenProvider.validateToken(token)) {
                     return onError(exchange, "validateToken", HttpStatus.UNAUTHORIZED);
                 }
             } catch (Exception e) {
@@ -56,32 +57,19 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
 
             long memberKey;
 
-            // token 정보 확인
+            // 4. AccessToken 정보 확인
             try {
-                memberKey= jwtTokenProvider.getAuthentication(token);
+                memberKey = jwtTokenProvider.getAuthentication(token);
             } catch (Exception e) {
                 return onError(exchange, e.getMessage(), HttpStatus.UNAUTHORIZED);
             }
 
-            // Refresh token 유효성 확인
-            if(!jwtTokenProvider.validateRefreshToken(memberKey)) {
+            // 5. Refresh token - memberKey 유효성 확인
+            if (!jwtTokenProvider.validateRefreshToken(memberKey)) {
                 return onError(exchange, "validateRefreshToken", HttpStatus.UNAUTHORIZED);
             }
 
-            // path 확인
-//            String path = request.getURI().getPath();
-//            String[] segments = path.split("/");
-//
-//            // redis token 검사
-//            if(segments.length > 4) {
-//                String memberKey = segments[4];
-//                log.info("member Key: " + memberKey);
-//                if(!isValidMemberKey(memberKey, token)) {
-//                    return onError(exchange, "isValidMemberKey", HttpStatus.UNAUTHORIZED);
-//                }
-//            }
-
-
+            // 6. header memberKey update
             exchange.getRequest().mutate().header("memberKey", String.valueOf(memberKey)).build();
             log.info("request path - {}", request.getPath());
             log.info("request uri - {}", request.getURI());

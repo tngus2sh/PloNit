@@ -75,6 +75,9 @@ dependencies {
 
     // feign
     implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
+    
+    // webflux
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
 }
 
 dependencyManagement {
