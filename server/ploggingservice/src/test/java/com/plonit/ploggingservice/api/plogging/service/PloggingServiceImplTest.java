@@ -4,6 +4,8 @@ import com.plonit.ploggingservice.api.plogging.controller.response.KakaoAddressR
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.ws.rs.core.HttpHeaders;
@@ -12,6 +14,7 @@ import java.util.Map;
 
 // 서비스
 @DisplayName("플로깅 서비스 테스트")
+@SpringBootTest
 public class PloggingServiceImplTest {
 
     @Test
@@ -48,6 +51,7 @@ public class PloggingServiceImplTest {
         @Test
         @DisplayName("#성공")
         public void success() {
+            
             
         }
         

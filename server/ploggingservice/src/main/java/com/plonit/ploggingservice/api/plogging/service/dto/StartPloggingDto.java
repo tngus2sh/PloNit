@@ -6,6 +6,7 @@ import com.plonit.ploggingservice.common.enums.Type;
 import com.plonit.ploggingservice.domain.plogging.Plogging;
 import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
+@RequiredArgsConstructor
 public class StartPloggingDto {
     
     private Long memberKey;
