@@ -57,7 +57,7 @@ public class PloggingServiceImpl implements PloggingService {
     private String kakaoKey;
     
     @Autowired
-    public PloggingServiceImpl(LatLongRepository latLongRepository, PloggingRepository ploggingRepository, WebClientUtil webClientUtil, CircuitBreakerFactory circuitBreakerFactory, PlonitFeignClient plonitFeignClient, Environment env, String kakaoKey) {
+    public PloggingServiceImpl(LatLongRepository latLongRepository, PloggingRepository ploggingRepository, WebClientUtil webClientUtil, CircuitBreakerFactory circuitBreakerFactory, PlonitFeignClient plonitFeignClient, Environment env) {
         this.latLongRepository = latLongRepository;
         this.ploggingRepository = ploggingRepository;
         this.circuitBreakerFactory = circuitBreakerFactory;
