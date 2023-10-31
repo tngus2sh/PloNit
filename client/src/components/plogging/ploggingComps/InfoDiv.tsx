@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import style from "styles/css/PloggingPage/SubComponent.module.css";
 import Swal from "sweetalert2";
+import useCamera from "../functions/useCamera";
 import { useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -55,6 +56,7 @@ const IconBottom: React.FC<IIconBottom> = ({
 };
 
 const InfoDiv = ({ infoDivHeight }: { infoDivHeight: number }) => {
+  const { image, handleImageCapture, fileInputRef } = useCamera();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const distance = useSelector<rootState, number>((state) => {
@@ -73,6 +75,13 @@ const InfoDiv = ({ infoDivHeight }: { infoDivHeight: number }) => {
     const { calorie } = state.plogging;
     return calorie;
   });
+
+  // 이미지가 로드되었을 때, 이미지를 넘겨준다.
+  useEffect(() => {
+    if (image) {
+      navigate("/plogging/image", { state: { value: image } });
+    }
+  }, [image]);
 
   return (
     <div style={{ height: `${infoDivHeight}px`, width: "100%" }}>
@@ -120,10 +129,18 @@ const InfoDiv = ({ infoDivHeight }: { infoDivHeight: number }) => {
           backgroundSize="50%"
           onClick={() => {
             dispatch(P.setCbURL("/plogging"));
-            navigate("/plogging/image");
+            handleImageCapture();
           }}
         />
       </div>
+      <input
+        type="file"
+        accept="image/*"
+        capture="environment"
+        id="cameraInput"
+        ref={fileInputRef}
+        style={{ display: "none" }}
+      />
     </div>
   );
 };

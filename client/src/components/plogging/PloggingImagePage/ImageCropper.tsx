@@ -6,7 +6,7 @@ import { BasicTopBar } from "components/common/TopBar";
 import Swal from "sweetalert2";
 import "cropperjs/dist/cropper.css";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { rootState } from "store/store";
 
@@ -16,9 +16,9 @@ interface PropsType {
 }
 
 const ImageCropper: React.FC<PropsType> = ({ onCrop, aespectRatio }) => {
-  let isChecked = false;
   const navigate = useNavigate();
-  const { image, setImage, handleImageCapture, fileInputRef } = useCamera();
+  const location = useLocation();
+  const { image, setImage } = useCamera();
   const cropperRef = useRef<ReactCropperElement>(null);
   const windowHeight = useSelector<rootState, number>((state) => {
     return state.window.height;
@@ -31,16 +31,15 @@ const ImageCropper: React.FC<PropsType> = ({ onCrop, aespectRatio }) => {
   const bottomBtnPercent = 12;
 
   useEffect(() => {
-    if (!isChecked) {
-      console.log(123);
-      handleImageCapture();
-    }
-
-    return () => {
-      if (!isChecked) {
-        isChecked = true;
+    console.log(123);
+    if (location.state) {
+      const { value } = location.state;
+      if (value) {
+        setImage(value);
       }
-    };
+    } else {
+      navigate(cbURL);
+    }
   }, []);
 
   function rejectCrop() {
@@ -108,14 +107,6 @@ const ImageCropper: React.FC<PropsType> = ({ onCrop, aespectRatio }) => {
 
   return (
     <div style={{ height: "100%", width: "100%" }}>
-      <input
-        type="file"
-        accept="image/*"
-        capture="environment"
-        id="cameraInput"
-        ref={fileInputRef}
-        style={{ display: "none" }}
-      />
       {image && (
         <div>
           <BasicTopBar text="이미지 크기 설정" />
