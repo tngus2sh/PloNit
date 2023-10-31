@@ -1,9 +1,14 @@
 import React, { useEffect } from "react";
 import { useRef } from "react";
 import { login } from "api/lib/auth";
-import { tr } from "date-fns/locale";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { userActions } from "store/user-slice";
 
 const KakaoCallback = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const code = new URL(window.location.href).searchParams.get("code");
   const Ref = useRef(false);
   console.log(code);
@@ -14,10 +19,19 @@ const KakaoCallback = () => {
           code,
           (res) => {
             console.log("로그인 api 성공");
+            const tokens = {
+              accessToken: res.headers.accesstoken,
+              refreshToken: res.headers.refreshtoken,
+            };
+            console.log(tokens);
+            dispatch(userActions.loginHandler(tokens));
             console.log(res);
             console.log(res.data);
-            const accessToken = res.data.accessToken;
-            console.log(accessToken);
+            if (res.data.resultBody.registeredMember) {
+              navigate("/");
+            } else {
+              navigate("/login/addinfo");
+            }
           },
           (err) => {
             console.error("로그인 api 실패:", err);
@@ -30,7 +44,7 @@ const KakaoCallback = () => {
     };
   }, []);
 
-  return <div>카카카캌</div>;
+  return <div>로그인 로딩 중....</div>;
 };
 
 export default KakaoCallback;
