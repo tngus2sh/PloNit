@@ -7,7 +7,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 
 @Data
-@Builder
 @RequiredArgsConstructor
 @Schema(description = "플로깅 종료 후 저장 request")
 public class EndPloggingRequest {
@@ -34,7 +33,6 @@ public class EndPloggingRequest {
     private String review;
     
     @Data
-    @Builder
     @RequiredArgsConstructor
     public static class Coordinate {
         

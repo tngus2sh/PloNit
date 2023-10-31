@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 
 
 @Data
-@Builder
 @RequiredArgsConstructor
 public class StartPloggingDto {
     
@@ -26,7 +25,16 @@ public class StartPloggingDto {
     private Double longitude;
 
     private Long crewpingId;
-    
+
+    @Builder
+    public StartPloggingDto(Long memberKey, Type type, Double latitude, Double longitude, Long crewpingId) {
+        this.memberKey = memberKey;
+        this.type = type;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.crewpingId = crewpingId;
+    }
+
     public static StartPloggingDto of (StartPloggingRequest request, Long memberKey) {
         return StartPloggingDto.builder()
                 .memberKey(memberKey)

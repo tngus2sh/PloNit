@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import java.util.Arrays;
 
 @Data
-@Builder 
 @RequiredArgsConstructor
 public class EndPloggingDto {
     
@@ -24,12 +23,27 @@ public class EndPloggingDto {
     
     private String review;
 
-    @Data
     @Builder
+    public EndPloggingDto(Long memberKey, Long ploggingId, Coordinate[] coordinates, Double distance, Double calorie, String review) {
+        this.memberKey = memberKey;
+        this.ploggingId = ploggingId;
+        this.coordinates = coordinates;
+        this.distance = distance;
+        this.calorie = calorie;
+        this.review = review;
+    }
+
+    @Data
     @RequiredArgsConstructor
     public static class Coordinate {
         private Double latitude;
         private Double longitude;
+
+        @Builder
+        public Coordinate(Double latitude, Double longitude) {
+            this.latitude = latitude;
+            this.longitude = longitude;
+        }
     }
     
     public static EndPloggingDto of(EndPloggingRequest request, Long memberKey) {

@@ -12,7 +12,6 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 
 @Data
-@Builder
 @RequiredArgsConstructor
 @Schema(description = "플로깅 시작 request")
 public class StartPloggingRequest {
