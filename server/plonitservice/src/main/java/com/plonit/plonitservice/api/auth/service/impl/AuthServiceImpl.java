@@ -75,6 +75,7 @@ public class AuthServiceImpl implements AuthService {
                 + "&response_type=code");
     }
 
+    @Transactional
     public LogInRes getKakaoToken(HttpServletResponse httpServletResponse, String code) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
         String accessToken = "";
@@ -129,6 +130,7 @@ public class AuthServiceImpl implements AuthService {
         return logInRes;
     }
 
+    @Transactional
     private LogInRes getUserInfoWithToken(HttpServletResponse httpServletResponse, KakaoToken kakaoToken) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
         // 1. HttpHeader 생성
@@ -169,7 +171,6 @@ public class AuthServiceImpl implements AuthService {
             return LogInRes.builder()
                     .id(member.get().getId())
                     .registeredMember(true)
-                    .tokenInfo(tokenInfoRes)
                     .build();
 
         } else { // 5.2 신규 유저
@@ -182,11 +183,11 @@ public class AuthServiceImpl implements AuthService {
             return LogInRes.builder()
                     .id(newMember.getId())
                     .registeredMember(false)
-                    .tokenInfo(tokenInfoRes)
                     .build();
         }
     }
 
+    @Transactional
     private TokenInfoRes generateToken(long id, KakaoToken kakaoToken, boolean regenerate) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
         // 1. token 재발급
@@ -323,6 +324,7 @@ public class AuthServiceImpl implements AuthService {
         response.addHeader("refreshToken", tokenInfo.getRefreshToken());
     }
 
+    @Transactional
     public CheckNicknameRes checkNickname(String nickname) {
         if (memberQueryRepository.existNickname(nickname))
             return CheckNicknameRes.of(false);

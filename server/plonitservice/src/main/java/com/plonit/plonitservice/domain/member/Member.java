@@ -12,8 +12,6 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Setter
-@ToString
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
@@ -21,15 +19,14 @@ import javax.persistence.*;
 @DynamicUpdate
 public class Member extends TimeBaseEntity {
     @Id
-    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id;
 
-    @NonNull
+    @Column(nullable = false)
     private String email;
 
-    @NonNull
+    @Column(nullable = false)
     private long kakaoId;
 
     private String name;
@@ -37,6 +34,7 @@ public class Member extends TimeBaseEntity {
     @Column(unique = true)
     private String nickname;
 
+    @Setter
     private String profileImage;
 
     @ColumnDefault("false")
