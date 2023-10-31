@@ -1,13 +1,43 @@
 package com.plonit.ploggingservice.api.plogging.service;
 
+import com.plonit.ploggingservice.api.plogging.controller.response.KakaoAddressResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import javax.ws.rs.core.HttpHeaders;
+import java.util.Map;
 
 
 // 서비스
 @DisplayName("플로깅 서비스 테스트")
 public class PloggingServiceImplTest {
+
+    @Test
+    @DisplayName("카카오 연결 test")
+    public void kakaoTest() {
+
+        // webClient 기본 설정
+        WebClient webClient = WebClient.builder()
+                .baseUrl("https://dapi.kakao.com/v2/local/geo/coord2address.json")
+                .defaultHeader(HttpHeaders.AUTHORIZATION, "KakaoAK 0dfc0762e8bf4854c806dbee4b1808d5")
+                .build();
+
+        KakaoAddressResponse response = webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .queryParam("x", 127.423084873712)
+                        .queryParam("y", 37.0789561558879)
+                        .queryParam("input_cord", "WGS84")
+                        .build())
+                .retrieve()
+                .bodyToMono(KakaoAddressResponse.class)
+                .block();
+
+        // 결과 확인
+        System.out.println(response.toString());
+        System.out.println(response.getDocuments()[0].getAddress().getAddress_name());
+    }
     
     // 메소드 : 등록, 조회, 삭제
     @Nested
