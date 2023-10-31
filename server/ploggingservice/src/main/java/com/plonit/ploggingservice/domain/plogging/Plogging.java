@@ -22,7 +22,7 @@ public class Plogging extends TimeBaseEntity{
     private Long id;
     
     @Column(name = "member_key")
-    private String memberKey;
+    private Long memberKey;
     
     @Column
     @Enumerated(EnumType.STRING)
@@ -38,13 +38,13 @@ public class Plogging extends TimeBaseEntity{
     private LocalDateTime endTime;
     
     @Column
-    private double totalTime;
+    private Long totalTime; // 초 단위
     
     @Column
-    private double distance;
+    private Double distance;
     
     @Column
-    private double calorie;
+    private Double calorie;
     
     @Column
     private String review;
@@ -57,7 +57,7 @@ public class Plogging extends TimeBaseEntity{
     private LocalDate date;
 
     @Builder
-    public Plogging(String memberKey, Type type, String place, LocalDateTime startTime, LocalDateTime endTime, double totalTime, double distance, double calorie, String review, Finished finished, LocalDate date) {
+    public Plogging(Long memberKey, Type type, String place, LocalDateTime startTime, LocalDateTime endTime, Long totalTime, Double distance, Double calorie, String review, Finished finished, LocalDate date) {
         this.memberKey = memberKey;
         this.type = type;
         this.place = place;
@@ -70,17 +70,15 @@ public class Plogging extends TimeBaseEntity{
         this.finished = finished;
         this.date = date;
     }
-
-    public static Plogging toFirstEntity(String memberKey, Type type, String place, LocalDateTime startTime, Finished finished, LocalDate date) {
-        return Plogging.builder()
-                .memberKey(memberKey)
-                .type(type)
-                .place(place)
-                .startTime(startTime)
-                .finished(finished)
-                .date(date)
-                .build();
-    }
     
+
+    public void saveEndPlogging(LocalDateTime endTime, Long totalTime, Double distance, Double calorie, String review, Finished finished) {
+        this.endTime = endTime;
+        this.totalTime = totalTime;
+        this.distance = distance;
+        this.calorie = calorie;
+        this.review = review;
+        this.finished = finished;
+    }
     
 }
