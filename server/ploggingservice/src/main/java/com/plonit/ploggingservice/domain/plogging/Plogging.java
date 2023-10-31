@@ -70,17 +70,7 @@ public class Plogging extends TimeBaseEntity{
         this.finished = finished;
         this.date = date;
     }
-
-    public static Plogging toFirstEntity(Long memberKey, Type type, String place, LocalDateTime startTime, Finished finished, LocalDate date) {
-        return Plogging.builder()
-                .memberKey(memberKey)
-                .type(type)
-                .place(place)
-                .startTime(startTime)
-                .finished(finished)
-                .date(date)
-                .build();
-    }
+    
 
     public void saveEndPlogging(LocalDateTime endTime, Long totalTime, Double distance, Double calorie, String review, Finished finished) {
         this.endTime = endTime;

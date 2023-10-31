@@ -107,7 +107,7 @@ public class PloggingServiceImpl implements PloggingService {
         // 오늘 날짜 구하기
         LocalDate today = startTime.toLocalDate();
 
-        return Plogging.toFirstEntity(dto.getMemberKey(), dto.getType(), place, startTime, Finished.ACTIVE, today)
+        return StartPloggingDto.toEntity(dto.getMemberKey(), dto.getType(), place, startTime, Finished.ACTIVE, today)
                 .getId();
     }
 
