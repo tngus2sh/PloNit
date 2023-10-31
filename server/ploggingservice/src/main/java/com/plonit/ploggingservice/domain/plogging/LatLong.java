@@ -1,16 +1,14 @@
 package com.plonit.ploggingservice.domain.plogging;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
-@Builder
 @Table(name = "latlong", indexes = @Index(name = "idx_lat_long", columnList = "latitude, longitude", unique = true))
 @RequiredArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LatLong extends TimeBaseEntity{
     
     @Id
@@ -29,9 +27,10 @@ public class LatLong extends TimeBaseEntity{
     private Double longitude;
 
     @Builder
-    public LatLong(Long id, Plogging plogging) {
-        this.id = id;
+    public LatLong(Plogging plogging, Double latitude, Double longitude) {
         this.plogging = plogging;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public static LatLong toEntity(Plogging plogging, Double latitude, Double longitude) {

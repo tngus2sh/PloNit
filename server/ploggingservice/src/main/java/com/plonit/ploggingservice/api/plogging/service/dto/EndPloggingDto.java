@@ -3,11 +3,13 @@ package com.plonit.ploggingservice.api.plogging.service.dto;
 import com.plonit.ploggingservice.api.plogging.controller.request.EndPloggingRequest;
 import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 
 @Data
 @Builder 
+@RequiredArgsConstructor
 public class EndPloggingDto {
     
     private Long memberKey;
@@ -24,6 +26,7 @@ public class EndPloggingDto {
 
     @Data
     @Builder
+    @RequiredArgsConstructor
     public static class Coordinate {
         private Double latitude;
         private Double longitude;
