@@ -3,7 +3,7 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { BackTopBar } from "components/common/TopBar";
 import MyPloggingList from "components/MyPlogging/MyPloggingList";
-import "styles/MyPloggingCalendar.css";
+import "../custom_css/MyPloggingCalendar.css";
 
 const dayList = [
   "2023-10-10",
@@ -69,12 +69,7 @@ const MyPloggingPage = () => {
         tileContent={tileContent}
         calendarType="US"
       />
-      <div>
-        {dateRange.map((date, index) => (
-          <div key={index}>{date.toLocaleDateString()}</div>
-        ))}
-        의 기록
-      </div>
+
       <MyPloggingList dateRange={dateRange} />
     </div>
   );
