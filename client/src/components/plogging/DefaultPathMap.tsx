@@ -10,13 +10,13 @@ import { dummy_location } from "./dummyData";
 const defaultZoom = 16;
 
 const PathMap = ({ subHeight }: { subHeight: number }) => {
+  const preventDup = useRef<boolean>(true);
   const windowHeight = useSelector<rootState, number>((state) => {
-    return state.windowHeight.value;
+    return state.window.height;
   });
   const [naverPaths, setNaverPaths] = useState<
     naver.maps.Coord[] | naver.maps.CoordLiteral[]
   >([]);
-  const preventDup = useRef<boolean>(true);
   const mapRef = useRef<naver.maps.Map | null>(null);
   const startRef = useRef<naver.maps.Marker | null>(null);
   const endRef = useRef<naver.maps.Marker | null>(null);

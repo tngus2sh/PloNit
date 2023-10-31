@@ -13,6 +13,7 @@ const initialState = {
   distance: 0 as number,
   calorie: 0 as number,
   images: [] as string[],
+  cbURL: "/" as string,
 };
 
 const ploggingSlice = createSlice({
@@ -47,6 +48,9 @@ const ploggingSlice = createSlice({
         state.minute++;
       }
     },
+    setCbURL: (state, action: PayloadAction<string>) => {
+      state.cbURL = action.payload;
+    },
   },
 });
 
@@ -57,5 +61,6 @@ export const {
   addPath,
   addImage,
   addTime,
+  setCbURL,
 } = ploggingSlice.actions;
 export default ploggingSlice.reducer;

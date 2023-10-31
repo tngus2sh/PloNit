@@ -135,7 +135,7 @@ function cbFunction({ nickname, onClick1, onClick2 }: IcbFunction) {
 
 const BeforeStart = () => {
   const btnDivHeight = useSelector<rootState, number>((state) => {
-    const windowHeight = state.windowHeight.value;
+    const windowHeight = state.window.height;
     return windowHeight * 0.1;
   });
   const nickname = useSelector<rootState, string>((state) => {

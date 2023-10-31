@@ -35,16 +35,17 @@ interface IDefaultMap {
   children?: ReactNode;
 }
 
+// let preventDup.current = true;
 const DefaultMap: React.FC<IDefaultMap> = ({
   subHeight,
   isBefore,
   children,
 }) => {
+  const preventDup = useRef<boolean>(true);
   const windowHeight = useSelector<rootState, number>((state) => {
-    return state.windowHeight.value;
+    return state.window.height;
   });
   const { latitude, longitude, onCenter, setOnCenter } = useGPS();
-  const preventDup = useRef<boolean>(true);
   const mapRef = useRef<naver.maps.Map | null>(null);
   const userRef = useRef<naver.maps.Marker | null>(null);
   const centerBtnRef = useRef<naver.maps.CustomControl | null>(null);
@@ -90,7 +91,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
           // setBins(dummy_location);
           // setToilets(dummy_location);
           // setNeighbors(dummy_location);
-          // setHelps(dummy_helps);
+          setHelps(dummy_helps);
           const { latitude, longitude } = response.coords;
           const map = new naver.maps.Map("map", {
             center: new naver.maps.LatLng(latitude, longitude),
@@ -380,7 +381,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
 
   // 주변 유저 데이터 로드
   useEffect(() => {
-    if (!preventDup.current) {
+    if (!preventDup) {
       N.controlMarkers({
         markers: neighborMarkers.current,
         map: null,

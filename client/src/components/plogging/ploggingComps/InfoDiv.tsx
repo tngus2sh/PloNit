@@ -119,6 +119,7 @@ const InfoDiv = ({ infoDivHeight }: { infoDivHeight: number }) => {
           icon="images/PloggingPage/camera-solid.svg"
           backgroundSize="50%"
           onClick={() => {
+            dispatch(P.setCbURL("/plogging"));
             navigate("/plogging/image");
           }}
         />

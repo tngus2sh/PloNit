@@ -7,7 +7,7 @@ import { rootState } from "store/store";
 
 const SoloJog = () => {
   const infoDivHeight = useSelector<rootState, number>((state) => {
-    const windowHeight = state.windowHeight.value;
+    const windowHeight = state.window.height;
     return windowHeight * 0.25;
   });
   return (
