@@ -32,12 +32,13 @@ const ImageCropper: React.FC<PropsType> = ({ onCrop, aespectRatio }) => {
 
   useEffect(() => {
     if (!isChecked) {
+      console.log(123);
       handleImageCapture();
     }
 
     return () => {
       if (!isChecked) {
-        isChecked = false;
+        isChecked = true;
       }
     };
   }, []);

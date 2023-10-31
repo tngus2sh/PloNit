@@ -38,7 +38,7 @@ const PathMap = ({ subHeight }: { subHeight: number }) => {
 
     return () => {
       if (!isChecked) {
-        isChecked = false;
+        isChecked = true;
       }
     };
   }, []);

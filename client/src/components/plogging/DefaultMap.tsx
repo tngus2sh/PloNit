@@ -278,7 +278,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
 
       return () => {
         if (!isChecked) {
-          isChecked = false;
+          isChecked = true;
         }
       };
     }

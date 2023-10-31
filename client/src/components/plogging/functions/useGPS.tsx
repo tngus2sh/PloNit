@@ -29,7 +29,7 @@ function useGPS() {
 
     return () => {
       if (!isChecked) {
-        isChecked = false;
+        isChecked = true;
       }
     };
   }, []);
