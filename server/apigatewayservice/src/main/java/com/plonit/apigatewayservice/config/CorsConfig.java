@@ -36,7 +36,7 @@ public class CorsConfig implements WebFluxConfigurer {
         corsConfiguration.addAllowedOriginPattern("*");
         corsConfiguration.addExposedHeader(HttpHeaders.SET_COOKIE);
         UrlBasedCorsConfigurationSource corsConfigurationSource = new UrlBasedCorsConfigurationSource();
-        corsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
+        corsConfigurationSource.registerCorsConfiguration("/api/**", corsConfiguration);
         return new CorsWebFilter(corsConfigurationSource);
     }
 }
