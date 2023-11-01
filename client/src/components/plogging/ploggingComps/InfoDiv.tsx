@@ -5,7 +5,6 @@ import useCamera from "../functions/useCamera";
 import { useNavigate } from "react-router-dom";
 import CommonButton from "components/common/CommonButton";
 import { renderToString } from "react-dom/server";
-import useGPS from "../functions/useGPS";
 
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
@@ -28,7 +27,7 @@ interface IPopUP {
   ContextId?: string;
 }
 
-const maxContextLen = 500;
+const maxContextLen = 10;
 
 function formatNumber(n: number): string {
   if (n < 10) {
@@ -167,13 +166,22 @@ const InfoDiv = ({ infoDivHeight }: { infoDivHeight: number }) => {
   });
 
   const [helpImage, setHelpImage] = useState<string | null>(null);
-  const [helpContext, setHelpContext] = useState<string | null>(null);
+  const [helpContext, setHelpContext] = useState<string>("");
   const latitude = useSelector<rootState, number>((state) => {
     return state.plogging.paths[state.plogging.pathlen - 1].latitude;
   });
   const longitude = useSelector<rootState, number>((state) => {
     return state.plogging.paths[state.plogging.pathlen - 1].longitude;
   });
+
+  function temp1() {
+    console.log(helpContext);
+    if (helpContext) {
+      console.log("ok");
+    } else {
+      console.log("not available");
+    }
+  }
 
   function willOpenFunctions() {
     const CameraDiv = document.querySelector("#InfoDiv-CameraDivId");
@@ -184,21 +192,16 @@ const InfoDiv = ({ infoDivHeight }: { infoDivHeight: number }) => {
       console.log(123);
     });
     ContextDiv?.addEventListener("input", () => {
-      let { value } = ContextDiv;
-      // console.log(value);
-      if (value.length > maxContextLen && helpContext !== null) {
-        value = helpContext;
+      const { value } = ContextDiv;
+      if (value.length > maxContextLen) {
+        console.log("?", helpContext);
+        ContextDiv.value = helpContext;
       } else {
         setHelpContext(value);
       }
     });
     CommonBtn?.addEventListener("click", () => {
-      console.log(helpContext);
-      if (helpContext) {
-        console.log("ok");
-      } else {
-        console.log("not available");
-      }
+      temp1();
     });
   }
 
@@ -260,6 +263,12 @@ const InfoDiv = ({ infoDivHeight }: { infoDivHeight: number }) => {
       navigate("/plogging/image", { state: { value: image } });
     }
   }, [image]);
+
+  useEffect(() => {
+    if (helpContext) {
+      console.log("helpContext", helpContext);
+    }
+  }, [helpContext]);
 
   return (
     <div style={{ height: `${infoDivHeight}px`, width: "100%" }}>
