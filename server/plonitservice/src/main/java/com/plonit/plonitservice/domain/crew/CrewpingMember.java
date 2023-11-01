@@ -8,26 +8,26 @@ import javax.persistence.*;
 
 import static javax.persistence.FetchType.LAZY;
 
-@Entity
-@Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "crewping_member")
-public class CrewpingMember {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "crewping_member_id")
-    private Long id;
-
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "members_id")
-    private Member member;
-
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "crewping_id")
-    private Crewping crewping;
-
-    @ColumnDefault("false")
-    private Boolean isCrewpingMaster;
-}
+//@Entity
+//@Getter
+//@Builder
+//@AllArgsConstructor
+//@NoArgsConstructor(access = AccessLevel.PROTECTED)
+//@Table(name = "crewping_member")
+//public class CrewpingMember {
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "crewping_member_id")
+//    private Long id;
+//
+//    @ManyToOne(fetch = LAZY)
+//    @JoinColumn(name = "members_id")
+//    private Member member;
+//
+//    @ManyToOne(fetch = LAZY)
+//    @JoinColumn(name = "crewping_id")
+//    private Crewping crewping;
+//
+//    @ColumnDefault("false")
+//    private Boolean isCrewpingMaster;
+//}

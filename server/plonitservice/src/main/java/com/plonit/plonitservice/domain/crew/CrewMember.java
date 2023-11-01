@@ -28,6 +28,12 @@ public class CrewMember {
     @JoinColumn(name = "crew_id")
     private Crew crew;
 
-    @ColumnDefault("false")
     private Boolean isCrewMaster;
+
+    private Boolean isCrewMember;
+    @PrePersist
+    public void prePersist() {
+        this.isCrewMaster = this.isCrewMaster != null;
+        this.isCrewMember = this.isCrewMember != null;
+    }
 }

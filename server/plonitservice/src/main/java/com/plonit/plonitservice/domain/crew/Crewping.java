@@ -13,49 +13,49 @@ import java.time.LocalDateTime;
 
 import static javax.persistence.FetchType.LAZY;
 
-@Entity
-@Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Crewping extends TimeBaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "crewping_id")
-    private Long id;
-
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "crew_id")
-    private Crew crew;
-
-    private String crewName;
-
-    private String name;
-
-    @Column(length = 500)
-    private String crewpingImage;
-
-    private String startDate;
-
-    private String endDate;
-
-    private int cntPeople;
-
-    private int maxPeople;
-
-    @Column(columnDefinition = "TEXT")
-    private String place;
-
-    @Column(columnDefinition = "TEXT")
-    private String introduce;
-
-    @Column(columnDefinition = "TEXT")
-    private String notice;
-
-    private long active_time;
-
-    @ColumnDefault("'ACTIVE'")
-    @Enumerated(EnumType.STRING)
-    private Status status;
-
-}
+//@Entity
+//@Getter
+//@Builder
+//@AllArgsConstructor
+//@NoArgsConstructor(access = AccessLevel.PROTECTED)
+//public class Crewping extends TimeBaseEntity {
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "crewping_id")
+//    private Long id;
+//
+//    @ManyToOne(fetch = LAZY)
+//    @JoinColumn(name = "crew_id")
+//    private Crew crew;
+//
+//    private String crewName;
+//
+//    private String name;
+//
+//    @Column(length = 500)
+//    private String crewpingImage;
+//
+//    private String startDate;
+//
+//    private String endDate;
+//
+//    private int cntPeople;
+//
+//    private int maxPeople;
+//
+//    @Column(length = 500)
+//    private String place;
+//
+//    @Column(length = 500)
+//    private String introduce;
+//
+//    @Column(length = 500)
+//    private String notice;
+//
+//    private long active_time;
+//
+//    @ColumnDefault("'ACTIVE'")
+//    @Enumerated(EnumType.STRING)
+//    private Status status;
+//
+//}

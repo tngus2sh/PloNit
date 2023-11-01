@@ -35,7 +35,7 @@ public class CrewServiceImpl implements CrewService{
     private final MemberRepository memberRepository;
     private final AwsS3Uploader awsS3Uploader;
 
-    @Transactional
+    @Transactional // 크루 생성
     public void saveCrew(SaveCrewDTO saveCrewDTO) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
         Member member = memberRepository.findById(saveCrewDTO.getMemberKey())
@@ -54,6 +54,7 @@ public class CrewServiceImpl implements CrewService{
         CrewMember crewMember = CrewMember.builder()
                 .member(member)
                 .isCrewMaster(true)
+                .isCrewMember(true)
                 .crew(crew)
                 .build();
 

@@ -33,4 +33,5 @@ public class Crew extends TimeBaseEntity {
     private String notice;
 
     private String region;
+
 }

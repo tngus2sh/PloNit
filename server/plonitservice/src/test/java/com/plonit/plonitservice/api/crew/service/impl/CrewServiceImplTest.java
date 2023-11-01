@@ -35,6 +35,7 @@ class CrewServiceImplTest{
         public void success () throws IOException {
             // given
             Long memberId = 1L;
+
             String fileName = "plonit"; // 파일명
             String contentType = "jpg"; // 파일타입
             String filePath = "src/test/resources/testImage/"+fileName+"."+contentType; // 파일 경로
@@ -50,7 +51,6 @@ class CrewServiceImplTest{
             SaveCrewDTO saveCrewDTO = saveCrewDTO(memberId, "test","test", "test", image);
             // when, then
             Assertions.assertDoesNotThrow(() -> crewService.saveCrew(saveCrewDTO));
-
         }
 
         @Nested

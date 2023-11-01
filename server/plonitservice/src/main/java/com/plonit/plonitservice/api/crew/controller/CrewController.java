@@ -41,4 +41,13 @@ public class CrewController {
         log.info(logCurrent(getClassName(), getMethodName(), END));
         return CustomApiResponse.ok("", "크루 생성에 성공했습니다.");
     }
+
+    @GetMapping // 크루 목록 주회
+    public CustomApiResponse<Object> findCrews (HttpServletRequest request) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+        Long memberKey = RequestUtils.getMemberKey(request);
+//        crewService.findCrew(memberKey);
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+        return CustomApiResponse.ok("", "크루 생성에 성공했습니다.");
+    }
 }
