@@ -32,13 +32,13 @@ public class CorsConfig implements WebFluxConfigurer {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
         corsConfiguration.addAllowedHeader("*");
-        corsConfiguration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "PATCH", "DELETE"));
+        corsConfiguration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         corsConfiguration.addAllowedOrigin("http://127.0.0.1:3000");
         corsConfiguration.addAllowedOrigin("https://k9c207.p.ssafy.io");
         corsConfiguration.addAllowedOriginPattern("*");
         corsConfiguration.addExposedHeader(HttpHeaders.SET_COOKIE);
         UrlBasedCorsConfigurationSource corsConfigurationSource = new UrlBasedCorsConfigurationSource();
-        corsConfigurationSource.registerCorsConfiguration("/api/**", corsConfiguration);
+        corsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
         return new CorsWebFilter(corsConfigurationSource);
     }
 }
