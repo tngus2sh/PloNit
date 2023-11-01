@@ -181,7 +181,7 @@ public class PloggingServiceImpl implements PloggingService {
 
     @Transactional
     @Override
-    public void savePloggingHelp(HelpPloggingDto dto) {
+    public Long savePloggingHelp(HelpPloggingDto dto) {
 
         String imageUrl = null;
         if (dto.getImage() != null) {
@@ -197,7 +197,9 @@ public class PloggingServiceImpl implements PloggingService {
             throw new CustomException(INVALID_PLACE_REQUEST);
         }
 
-        HelpPloggingDto.toEntity(dto, place, imageUrl);
+        PloggingHelp ploggingHelp = HelpPloggingDto.toEntity(dto, place, imageUrl);
+        
+        return ploggingHelp.getId();
     }
 
 

@@ -10,6 +10,7 @@ import com.plonit.ploggingservice.api.plogging.controller.response.PloggingPerio
 import com.plonit.ploggingservice.api.plogging.controller.response.UsersRes;
 import com.plonit.ploggingservice.api.plogging.service.PloggingService;
 import com.plonit.ploggingservice.api.plogging.service.dto.EndPloggingDto;
+import com.plonit.ploggingservice.api.plogging.service.dto.HelpPloggingDto;
 import com.plonit.ploggingservice.api.plogging.service.dto.StartPloggingDto;
 import com.plonit.ploggingservice.common.CustomApiResponse;
 import com.plonit.ploggingservice.common.exception.CustomException;
@@ -124,6 +125,7 @@ public class PloggingApiController {
     @PostMapping("/help")
     public CustomApiResponse<Long> savePloggingHelp(
             @Validated @RequestBody HelpPloggingReq request,
+            HttpServletRequest servletRequest,
             Errors errors
             ) {
 
@@ -135,10 +137,14 @@ public class PloggingApiController {
             });
             throw new CustomException(INVALID_FIELDS_REQUEST);
         }
+        
+        Long memberKey = RequestUtils.getMemberKey(servletRequest);
+        log.info("memberKey : " + memberKey);
 
-        // TODO: 2023-10-27 플로깅 도움 요청 저장
+        // 플로깅 도움 요청 저장
+        Long ploggingHelpId = ploggingService.savePloggingHelp(HelpPloggingDto.of(request, memberKey));
 
-        return CustomApiResponse.ok(1l);
+        return CustomApiResponse.ok(ploggingHelpId);
         
     }
     

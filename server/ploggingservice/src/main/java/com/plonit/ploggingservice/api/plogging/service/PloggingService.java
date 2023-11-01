@@ -19,5 +19,5 @@ public interface PloggingService {
 
     public PloggingLogRes findPloggingLogDetail(Long ploggingId, Long memberKey);
 
-    public void savePloggingHelp(HelpPloggingDto dto);
+    public Long savePloggingHelp(HelpPloggingDto dto);
 }
