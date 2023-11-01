@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import style from "styles/css/PloggingPage/BottomUpModal.module.css";
 
 import { useSelector } from "react-redux";
 import { rootState } from "store/store";
 
 interface IBottomUpModal {
+  show: boolean;
+  setShow: (value: boolean) => void;
   children?: React.ReactNode;
 }
 
@@ -32,14 +34,17 @@ const fontSize = parseFloat(
   window.getComputedStyle(root).getPropertyValue("font-size"),
 );
 
-const BottomUpModal: React.FC<IBottomUpModal> = ({ children }) => {
+const BottomUpModal: React.FC<IBottomUpModal> = ({
+  show,
+  setShow,
+  children,
+}) => {
   const height = useSelector<rootState, number>((state) => {
     return state.window.height;
   });
   const width = useSelector<rootState, number>((state) => {
     return state.window.width;
   });
-  const [show, setShow] = useState<boolean>(false);
   const className = show
     ? "animate__animated animate__slideInUp"
     : "animate__animated animate__slideOutDown";
@@ -47,7 +52,7 @@ const BottomUpModal: React.FC<IBottomUpModal> = ({ children }) => {
   const handleModalClick = (e: React.MouseEvent<HTMLDivElement>) => {
     // 자식 태그를 클릭한 경우, 모달을 닫지 않음
     if (e.target === e.currentTarget) {
-      setShow((current) => !current);
+      setShow(false);
     }
   };
 
@@ -84,12 +89,12 @@ const BottomUpModal: React.FC<IBottomUpModal> = ({ children }) => {
             position: "fixed",
             boxSizing: "border-box",
             zIndex: 3000,
-            width: `${Math.min(width, 500) - 0.5 * fontSize}px`,
+            width: `${Math.min(width, 500) - fontSize}px`,
             backgroundColor: "white",
             borderRadius: "3px",
-            bottom: `0.25rem`,
+            bottom: `0.5em`,
             padding: `1rem 1.25rem`,
-            margin: `0 0.25rem`,
+            margin: `0 0.5rem`,
           }}
         >
           {children}

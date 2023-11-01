@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import DefaultMap from "../DefaultMap";
 import Swal from "sweetalert2";
+import BottomUpModal from "../ploggingComps/BottomUpModal";
 import CommonButton from "components/common/CommonButton";
 import { renderToString } from "react-dom/server";
 import useGPS from "../functions/useGPS";
@@ -142,6 +143,7 @@ const BeforeStart = () => {
     return state.user.nickname;
   });
   const { latitude, longitude } = useGPS(); // 시작 시 GPS 정보 전달
+  const [show, setShow] = useState<boolean>(false);
 
   const dispatch = useDispatch();
   function onClick1() {
@@ -156,18 +158,21 @@ const BeforeStart = () => {
   }
 
   return (
-    <DefaultMap subHeight={btnDivHeight} isBefore={true}>
-      <BtnDiv
-        height={btnDivHeight}
-        cbFunction={() => {
-          cbFunction({
-            nickname: nickname,
-            onClick1: onClick1,
-            onClick2: onClick2,
-          });
-        }}
-      />
-    </DefaultMap>
+    <>
+      <DefaultMap subHeight={btnDivHeight} isBefore={true}>
+        <BtnDiv
+          height={btnDivHeight}
+          cbFunction={() => {
+            cbFunction({
+              nickname: nickname,
+              onClick1: onClick1,
+              onClick2: onClick2,
+            });
+          }}
+        />
+      </DefaultMap>
+      <BottomUpModal show={show} setShow={setShow}></BottomUpModal>
+    </>
   );
 };
 
