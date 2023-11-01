@@ -36,7 +36,7 @@ const CrewCommunityInfo = () => {
             멤버 25
           </div>
           <div className={style.invite}>
-            초대
+            초대a
             <Icon icon="bi:paperclip" />
           </div>
         </div>
