@@ -30,8 +30,6 @@ const BtnDiv: React.FC<IBtnDiv> = ({ height, cbFunction }) => {
       style={{
         height: `${height}px`,
         width: `100%`,
-        justifyContent: "center",
-        alignItems: "center",
         transition: `all 200ms ease-in-out`,
       }}
     >
@@ -137,13 +135,13 @@ function cbFunction({ nickname, onClick1, onClick2 }: IcbFunction) {
 
 const BeforeStart = () => {
   const btnDivHeight = useSelector<rootState, number>((state) => {
-    const windowHeight = state.windowHeight.value;
+    const windowHeight = state.window.height;
     return windowHeight * 0.1;
   });
   const nickname = useSelector<rootState, string>((state) => {
     return state.user.nickname;
   });
-  const { latitude, longitude } = useGPS();
+  const { latitude, longitude } = useGPS(); // 시작 시 GPS 정보 전달
 
   const dispatch = useDispatch();
   function onClick1() {

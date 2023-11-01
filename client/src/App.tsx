@@ -6,7 +6,7 @@ import useGPS from "components/plogging/functions/useGPS";
 
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
-import { setWindowHeight } from "store/windowHeight-slice";
+import { setWindowHeight, setWindowWidth } from "store/window-slice";
 import * as P from "store/plogging-slice";
 
 // 부드러운 애니메이션 (https://animate.style/)
@@ -18,7 +18,10 @@ function App() {
   const dispatch = useDispatch();
   const interval = useRef<NodeJS.Timeout | null>(null);
   const windowHeight = useSelector<rootState, number>((state) => {
-    return state.windowHeight.value;
+    return state.window.height;
+  });
+  const windowWidth = useSelector<rootState, number>((state) => {
+    return state.window.width;
   });
   const isBefore = useSelector<rootState, boolean>((state) => {
     return state.plogging.ploggingType === "none";
@@ -31,6 +34,7 @@ function App() {
   useEffect(() => {
     function handleResize() {
       dispatch(setWindowHeight(window.innerHeight));
+      dispatch(setWindowWidth(window.innerWidth));
     }
     window.addEventListener("resize", handleResize);
 
@@ -64,7 +68,10 @@ function App() {
   }, [onSearch]);
 
   return (
-    <div className={style.App} style={{ height: `${windowHeight}px` }}>
+    <div
+      className={style.App}
+      style={{ height: `${windowHeight}px`, width: `${windowWidth}px` }}
+    >
       <RouteComponent />
       <div className={style.navBar}>
         <NavBar />

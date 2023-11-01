@@ -12,12 +12,12 @@ import storage from "redux-persist/lib/storage";
 import storageSession from "redux-persist/lib/storage/session";
 
 import userSlice from "./user-slice";
-import windowHeightSlice from "./windowHeight-slice";
+import windowSlice from "./window-slice";
 import ploggingSlice from "./plogging-slice";
 
 const rootReducer = combineReducers({
   user: userSlice,
-  windowHeight: windowHeightSlice,
+  window: windowSlice,
   plogging: ploggingSlice,
 });
 const persistConfig = {

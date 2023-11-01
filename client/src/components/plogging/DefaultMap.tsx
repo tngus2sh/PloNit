@@ -41,10 +41,10 @@ const DefaultMap: React.FC<IDefaultMap> = ({
   children,
 }) => {
   const windowHeight = useSelector<rootState, number>((state) => {
-    return state.windowHeight.value;
+    return state.window.height;
   });
+  const isMapLoaded = useRef<boolean>(false);
   const { latitude, longitude, onCenter, setOnCenter } = useGPS();
-  const preventDup = useRef<boolean>(true);
   const mapRef = useRef<naver.maps.Map | null>(null);
   const userRef = useRef<naver.maps.Marker | null>(null);
   const centerBtnRef = useRef<naver.maps.CustomControl | null>(null);
@@ -80,7 +80,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
 
   // 초기맵 생성 및 기초 구조 구성
   useEffect(() => {
-    if (preventDup.current) {
+    if (!isMapLoaded.current) {
       const getGPS = new Promise<GeolocationPosition>((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject);
       });
@@ -91,6 +91,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
           // setToilets(dummy_location);
           // setNeighbors(dummy_location);
           // setHelps(dummy_helps);
+          mapRef.current = null;
           const { latitude, longitude } = response.coords;
           const map = new naver.maps.Map("map", {
             center: new naver.maps.LatLng(latitude, longitude),
@@ -278,15 +279,15 @@ const DefaultMap: React.FC<IDefaultMap> = ({
     }
 
     return () => {
-      if (preventDup.current) {
-        preventDup.current = false;
+      if (!isMapLoaded.current) {
+        isMapLoaded.current = true;
       }
     };
   }, []);
 
   // 사용자의 위치 가운데로 갱신 시
   useEffect(() => {
-    if (!preventDup.current && !onCenter) {
+    if (!onCenter) {
       if (typeof latitude === "number" && typeof longitude === "number") {
         mapRef.current?.setCenter(new naver.maps.LatLng(latitude, longitude));
         userRef.current?.setPosition(
@@ -298,117 +299,105 @@ const DefaultMap: React.FC<IDefaultMap> = ({
 
   // 쓰레기통 데이터 로드
   useEffect(() => {
-    if (!preventDup.current) {
-      const { makeMarkerClustering_green } = useCluster();
-      N.controlMarkers({
-        markers: binMarkers.current,
-        map: null,
-      });
+    const { makeMarkerClustering_green } = useCluster();
+    N.controlMarkers({
+      markers: binMarkers.current,
+      map: null,
+    });
 
-      binMarkers.current = binMarkers.current = N.createMarkers({
-        items: bins,
-        map: undefined,
-        url: `images/PloggingPage/bin-pin.png`,
-        cursor: "default",
-      });
-      binCluster.current = makeMarkerClustering_green({
-        map: undefined,
-        markers: binMarkers.current,
-      });
-    }
+    binMarkers.current = binMarkers.current = N.createMarkers({
+      items: bins,
+      map: undefined,
+      url: `images/PloggingPage/bin-pin.png`,
+      cursor: "default",
+    });
+    binCluster.current = makeMarkerClustering_green({
+      map: undefined,
+      markers: binMarkers.current,
+    });
   }, [bins]);
 
   // 화장실 데이터 로드
   useEffect(() => {
-    if (!preventDup.current) {
-      const { makeMarkerClustering_blue } = useCluster();
-      N.controlMarkers({
-        markers: toiletMarkers.current,
-        map: null,
-      });
+    const { makeMarkerClustering_blue } = useCluster();
+    N.controlMarkers({
+      markers: toiletMarkers.current,
+      map: null,
+    });
 
-      toiletMarkers.current = N.createMarkers({
-        items: toilets,
-        map: undefined,
-        url: `images/PloggingPage/toilet-pin.png`,
-        cursor: "default",
-      });
-      toiletCluster.current = makeMarkerClustering_blue({
-        map: undefined,
-        markers: toiletMarkers.current,
-      });
-    }
+    toiletMarkers.current = N.createMarkers({
+      items: toilets,
+      map: undefined,
+      url: `images/PloggingPage/toilet-pin.png`,
+      cursor: "default",
+    });
+    toiletCluster.current = makeMarkerClustering_blue({
+      map: undefined,
+      markers: toiletMarkers.current,
+    });
   }, [toilets]);
 
   // 쓰레기통 visibility를 toggle
   useEffect(() => {
-    if (!preventDup.current) {
-      if (showBin) {
-        N.controlMarkers({
-          markers: binMarkers.current,
-          map: mapRef.current,
-        });
-        binCluster.current.setMap(mapRef.current);
-      } else {
-        N.controlMarkers({
-          markers: binMarkers.current,
-          map: null,
-        });
-        binCluster.current.setMap(null);
-      }
+    if (showBin) {
+      N.controlMarkers({
+        markers: binMarkers.current,
+        map: mapRef.current,
+      });
+      binCluster.current.setMap(mapRef.current);
+    } else {
+      N.controlMarkers({
+        markers: binMarkers.current,
+        map: null,
+      });
+      binCluster.current.setMap(null);
     }
   }, [showBin]);
 
   // 화장실 visibility를 toggle
   useEffect(() => {
-    if (!preventDup.current) {
-      if (showToilet) {
-        N.controlMarkers({
-          markers: toiletMarkers.current,
-          map: mapRef.current,
-        });
-        toiletCluster.current.setMap(mapRef.current);
-      } else {
-        N.controlMarkers({
-          markers: toiletMarkers.current,
-          map: null,
-        });
-        toiletCluster.current.setMap(null);
-      }
+    if (showToilet) {
+      N.controlMarkers({
+        markers: toiletMarkers.current,
+        map: mapRef.current,
+      });
+      toiletCluster.current.setMap(mapRef.current);
+    } else {
+      N.controlMarkers({
+        markers: toiletMarkers.current,
+        map: null,
+      });
+      toiletCluster.current.setMap(null);
     }
   }, [showToilet]);
 
   // 주변 유저 데이터 로드
   useEffect(() => {
-    if (!preventDup.current) {
-      N.controlMarkers({
-        markers: neighborMarkers.current,
-        map: null,
-      });
+    N.controlMarkers({
+      markers: neighborMarkers.current,
+      map: null,
+    });
 
-      neighborMarkers.current = N.createMarkers({
-        items: neighbors,
-        map: mapRef.current ?? undefined,
-        url: `images/PloggingPage/neighborLocation.svg`,
-        cursor: "default",
-      });
-    }
+    neighborMarkers.current = N.createMarkers({
+      items: neighbors,
+      map: mapRef.current ?? undefined,
+      url: `images/PloggingPage/neighborLocation.svg`,
+      cursor: "default",
+    });
   }, [neighbors]);
 
   // 도움 요청 데이터 로드
   useEffect(() => {
-    if (!preventDup.current) {
-      N.controlMarkers({
-        markers: helpMarkers.current,
-        map: null,
-      });
+    N.controlMarkers({
+      markers: helpMarkers.current,
+      map: null,
+    });
 
-      helpMarkers.current = N.createMarkers({
-        items: helps,
-        map: mapRef.current ?? undefined,
-        url: `images/PloggingPage/help-icon.png`,
-      });
-    }
+    helpMarkers.current = N.createMarkers({
+      items: helps,
+      map: mapRef.current ?? undefined,
+      url: `images/PloggingPage/help-icon.png`,
+    });
   }, [helps]);
 
   return (

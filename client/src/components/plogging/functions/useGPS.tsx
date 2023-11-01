@@ -6,7 +6,6 @@ function useGPS() {
   const [longitude, setLongitude] = useState<number>(0);
   const [onSearch, setOnSearch] = useState<boolean>(false);
   const [onCenter, setOnCenter] = useState<boolean>(false);
-  const preventDup = useRef<boolean>(true);
 
   function getGPS(): Promise<GeolocationPosition> {
     return new Promise((resolve, reject) => {
@@ -15,27 +14,19 @@ function useGPS() {
   }
 
   useEffect(() => {
-    if (preventDup.current) {
-      getGPS()
-        .then((response) => {
-          const { latitude, longitude } = response.coords;
-          setLatitude(latitude);
-          setLongitude(longitude);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
-
-    return () => {
-      if (preventDup.current) {
-        preventDup.current = false;
-      }
-    };
+    getGPS()
+      .then((response) => {
+        const { latitude, longitude } = response.coords;
+        setLatitude(latitude);
+        setLongitude(longitude);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }, []);
 
   useEffect(() => {
-    if (!preventDup.current && (onSearch || onCenter)) {
+    if (onSearch || onCenter) {
       getGPS()
         .then((response) => {
           const { latitude, longitude } = response.coords;
