@@ -1,5 +1,4 @@
 import React from "react";
-// import { KAKAO_AUTH_URL } from "OAuth";
 
 const LoginPage = () => {
   const client_id = process.env.REACT_APP_CLIENT_ID;

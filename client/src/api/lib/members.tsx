@@ -15,8 +15,7 @@ export async function addInfo(
     | void,
   fail: (err: any) => PromiseLike<never> | null | undefined | void,
 ) {
-  await customApi("/plonit-service/v1/members")
-    .put("", data)
-    .then(success)
-    .catch(fail);
+  const api = customApi("/plonit-service/v1/members");
+  api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
+  await api.put("", data).then(success).catch(fail);
 }

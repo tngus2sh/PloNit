@@ -22,9 +22,10 @@ const AddInfo = () => {
       [id]: value,
     }));
   };
-  const onSubmit = (event: any) => {
-    event.preventDefault();
+  const SendInfo = () => {
     const data = signupInput;
+    console.log(data);
+    console.log(accessToken);
     addInfo(
       accessToken,
       data,
@@ -33,6 +34,7 @@ const AddInfo = () => {
         navigate("/");
       },
       (err) => {
+        console.log(accessToken, "토큰");
         console.log("추가정보 에러...");
       },
     );
@@ -41,49 +43,48 @@ const AddInfo = () => {
   return (
     <div>
       <div> 서비스 사용을 위해 추가 정보를 등록해 주세요!</div>
-      <form onSubmit={onSubmit}>
-        <Input
-          id="name"
-          labelTitle="이름"
-          type="text"
-          value={signupInput.name}
-          onChange={onChange}
-        />
-        <Input
-          id="nickname"
-          labelTitle="닉네임"
-          type="text"
-          value={signupInput.nickname}
-          onChange={onChange}
-        />
-        <Input
-          id="gender"
-          labelTitle="성별"
-          type="text"
-          value={signupInput.gender}
-          onChange={onChange}
-        />
-        <Input
-          id="birth"
-          labelTitle="생년월일"
-          type="text"
-          value={signupInput.birth}
-          onChange={onChange}
-        />
-        <Input
-          id="region"
-          labelTitle="활동 지역"
-          type="text"
-          value={signupInput.region}
-          onChange={onChange}
-        />
-        <CommonButton
-          text="시작하기"
-          styles={{
-            backgroundColor: "#2cd261",
-          }}
-        />
-      </form>
+      <Input
+        id="name"
+        labelTitle="이름"
+        type="text"
+        value={signupInput.name}
+        onChange={onChange}
+      />
+      <Input
+        id="nickname"
+        labelTitle="닉네임"
+        type="text"
+        value={signupInput.nickname}
+        onChange={onChange}
+      />
+      <Input
+        id="gender"
+        labelTitle="성별"
+        type="text"
+        value={signupInput.gender}
+        onChange={onChange}
+      />
+      <Input
+        id="birth"
+        labelTitle="생년월일"
+        type="text"
+        value={signupInput.birth}
+        onChange={onChange}
+      />
+      <Input
+        id="region"
+        labelTitle="활동 지역"
+        type="text"
+        value={signupInput.region}
+        onChange={onChange}
+      />
+      <CommonButton
+        text="시작하기"
+        styles={{
+          backgroundColor: "#2cd261",
+        }}
+        onClick={SendInfo}
+      />
     </div>
   );
 };
