@@ -1,8 +1,8 @@
 package com.plonit.ploggingservice.api.plogging.service.impl;
 
 import com.plonit.ploggingservice.api.plogging.controller.PlonitFeignClient;
-import com.plonit.ploggingservice.api.plogging.controller.request.StartPloggingRequest;
-import com.plonit.ploggingservice.api.plogging.controller.response.KakaoAddressResponse;
+import com.plonit.ploggingservice.api.plogging.controller.response.KakaoAddressRes;
+import com.plonit.ploggingservice.api.plogging.controller.response.PloggingPeriodRes;
 import com.plonit.ploggingservice.api.plogging.service.PloggingService;
 import com.plonit.ploggingservice.api.plogging.service.dto.EndPloggingDto;
 import com.plonit.ploggingservice.api.plogging.service.dto.StartPloggingDto;
@@ -12,32 +12,27 @@ import com.plonit.ploggingservice.common.util.WebClientUtil;
 import com.plonit.ploggingservice.domain.plogging.LatLong;
 import com.plonit.ploggingservice.domain.plogging.Plogging;
 import com.plonit.ploggingservice.domain.plogging.repository.LatLongRepository;
+import com.plonit.ploggingservice.domain.plogging.repository.PloggingQueryRepository;
 import com.plonit.ploggingservice.domain.plogging.repository.PloggingRepository;
-import com.querydsl.apt.jdo.JDOConfiguration;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.util.DefaultUriBuilderFactory;
-import reactor.core.publisher.Mono;
 
 import javax.ws.rs.core.HttpHeaders;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 import static com.plonit.ploggingservice.common.exception.ErrorCode.INVALID_PLACE_REQUEST;
 import static com.plonit.ploggingservice.common.exception.ErrorCode.PLOGGING_BAD_REQUEST;
@@ -52,12 +47,14 @@ public class PloggingServiceImpl implements PloggingService {
     private final CircuitBreakerFactory circuitBreakerFactory;
     private final WebClientUtil webClientUtil;
     private final PloggingRepository ploggingRepository;
+    private final PloggingQueryRepository ploggingQueryRepository;
     private final LatLongRepository latLongRepository;
     private String kakaoBaseUrl;
     private String kakaoKey;
     
     @Autowired
-    public PloggingServiceImpl(LatLongRepository latLongRepository, PloggingRepository ploggingRepository, WebClientUtil webClientUtil, CircuitBreakerFactory circuitBreakerFactory, PlonitFeignClient plonitFeignClient, Environment env) {
+    public PloggingServiceImpl(PloggingQueryRepository ploggingQueryRepository, LatLongRepository latLongRepository, PloggingRepository ploggingRepository, WebClientUtil webClientUtil, CircuitBreakerFactory circuitBreakerFactory, PlonitFeignClient plonitFeignClient, Environment env) {
+        this.ploggingQueryRepository = ploggingQueryRepository;
         this.latLongRepository = latLongRepository;
         this.ploggingRepository = ploggingRepository;
         this.circuitBreakerFactory = circuitBreakerFactory;
@@ -125,7 +122,7 @@ public class PloggingServiceImpl implements PloggingService {
         LocalDateTime endTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
         
         // 플로깅 id로 플로깅 가져오기
-        Plogging plogging = ploggingRepository.findByPloggingId(dto.getPloggingId())
+        Plogging plogging = ploggingRepository.findById(dto.getPloggingId())
                 .orElseThrow(() -> new CustomException(PLOGGING_BAD_REQUEST));
 
         // 걸린 시간 구하기
@@ -150,6 +147,25 @@ public class PloggingServiceImpl implements PloggingService {
         return plogging.getId();
     }
 
+    /**
+     * 플로깅 기록 일별 조회
+     * @param startDay 조회 시작 날짜
+     * @param endDay 조회 마지막 날짜
+     * @param memberKey 사용자 식별키
+     * @return 플로깅 기록 일별 조회
+     */
+    @Override
+    public List<PloggingPeriodRes> findPloggingLogByDay(String startDay, String endDay, Long memberKey) {
+        
+        // 조회 시작 날짜 -> LocalDate
+        LocalDate startDate = LocalDate.parse(startDay, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        
+        // 조회 마지막 날짜 -> LocalDate
+        LocalDate endDate = LocalDate.parse(endDay, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+        return ploggingQueryRepository.findPloggingLogByDay(startDate, endDate, memberKey);
+    }
+
 
     /**
      * 위도, 경도로 지번 주소 얻어옴
@@ -165,14 +181,14 @@ public class PloggingServiceImpl implements PloggingService {
                 .defaultHeader(HttpHeaders.AUTHORIZATION, kakaoKey)
                 .build();
 
-        KakaoAddressResponse response = webClient.get()
+        KakaoAddressRes response = webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .queryParam("x", longitude)
                         .queryParam("y", latitude)
                         .queryParam("input_cord", "WGS84")
                         .build())
                 .retrieve()
-                .bodyToMono(KakaoAddressResponse.class)
+                .bodyToMono(KakaoAddressRes.class)
                 .block();
         
         // 결과 확인

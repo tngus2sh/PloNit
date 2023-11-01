@@ -1,13 +1,13 @@
 package com.plonit.ploggingservice.api.plogging.controller;
 
-import com.plonit.ploggingservice.api.plogging.controller.request.EndPloggingRequest;
-import com.plonit.ploggingservice.api.plogging.controller.request.HelpPloggingRequest;
-import com.plonit.ploggingservice.api.plogging.controller.request.ImagePloggingRequest;
-import com.plonit.ploggingservice.api.plogging.controller.request.StartPloggingRequest;
-import com.plonit.ploggingservice.api.plogging.controller.response.PloggingHelpResponse;
-import com.plonit.ploggingservice.api.plogging.controller.response.PloggingLogResponse;
-import com.plonit.ploggingservice.api.plogging.controller.response.PloggingPeriodResponse;
-import com.plonit.ploggingservice.api.plogging.controller.response.UsersResponse;
+import com.plonit.ploggingservice.api.plogging.controller.request.EndPloggingReq;
+import com.plonit.ploggingservice.api.plogging.controller.request.HelpPloggingReq;
+import com.plonit.ploggingservice.api.plogging.controller.request.ImagePloggingReq;
+import com.plonit.ploggingservice.api.plogging.controller.request.StartPloggingReq;
+import com.plonit.ploggingservice.api.plogging.controller.response.PloggingHelpRes;
+import com.plonit.ploggingservice.api.plogging.controller.response.PloggingLogRes;
+import com.plonit.ploggingservice.api.plogging.controller.response.PloggingPeriodRes;
+import com.plonit.ploggingservice.api.plogging.controller.response.UsersRes;
 import com.plonit.ploggingservice.api.plogging.service.PloggingService;
 import com.plonit.ploggingservice.api.plogging.service.dto.EndPloggingDto;
 import com.plonit.ploggingservice.api.plogging.service.dto.StartPloggingDto;
@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-import static com.plonit.ploggingservice.common.exception.ErrorCode.ACCESS_TOKEN_INVALID;
 import static com.plonit.ploggingservice.common.exception.ErrorCode.INVALID_FIELDS_REQUEST;
 
 
@@ -41,7 +40,7 @@ public class PloggingApiController {
     @Operation(summary = "플로깅 시작하기", description = "플로깅을 시작할 때 초기 플로깅 정보들을 저장합니다.")
     @PostMapping("/start")
     public CustomApiResponse<Long> saveStartPlogging(
-            @Validated @RequestBody StartPloggingRequest request,
+            @Validated @RequestBody StartPloggingReq request,
             HttpServletRequest servletRequest,
             Errors errors
             ) {
@@ -67,7 +66,7 @@ public class PloggingApiController {
     @Operation(summary = "플로깅 종료시 기록 저장", description = "플로깅 종료시에 해당하는 플로깅 id에 추가 정보들을 넣는다.")
     @PostMapping
     public CustomApiResponse<Long> saveEndPlogging(
-            @Validated @RequestBody EndPloggingRequest request,
+            @Validated @RequestBody EndPloggingReq request,
             HttpServletRequest servletRequest,
             Errors errors
             ) {
@@ -92,7 +91,7 @@ public class PloggingApiController {
     
     @Operation(summary = "플로깅 기록 일별 조회", description = "처음 날짜와 마지막 날짜를 지정해 해당 기간에 포함되어 있는 플로깅들을 조회한다.")
     @GetMapping("/period/{start-day}-{end-day}")
-    public CustomApiResponse<List<PloggingPeriodResponse>> findPloggingLogbyDay(
+    public CustomApiResponse<List<PloggingPeriodRes>> findPloggingLogbyDay(
             @PathVariable(value = "start-day") String startDay,
             @PathVariable(value = "end-day") String endDay
     ) {
@@ -103,7 +102,7 @@ public class PloggingApiController {
     
     @Operation(summary = "플로깅 기록 상세 조회", description = "플로깅 id에 해당하는 플로깅에 대한 상세 정보를 불러온다.")
     @GetMapping("/{plogging-id}")
-    public CustomApiResponse<PloggingLogResponse> findPloggingLogDetail(
+    public CustomApiResponse<PloggingLogRes> findPloggingLogDetail(
             @PathVariable(value = "plogging-id") Long ploggingId
     ) {
         // TODO: 2023-10-27 플로깅 기록 상세 조회 
@@ -113,7 +112,7 @@ public class PloggingApiController {
     @Operation(summary = "플로깅 도움 요청 저장", description = "플로깅 도움 요청을 보낼 때 해당 정보들을 저장한다.")
     @PostMapping("/help")
     public CustomApiResponse<Long> savePloggingHelp(
-            @Validated @RequestBody HelpPloggingRequest request,
+            @Validated @RequestBody HelpPloggingReq request,
             Errors errors
             ) {
 
@@ -134,7 +133,7 @@ public class PloggingApiController {
     
     @Operation(summary = "플로깅 도움 요청 지역별 조회", description = "위도와 경도를 보내서 해당 위치 구에 있는 도움 요청들을 보낸다.")
     @GetMapping("/help/{latitude}-{longitude}")
-    public CustomApiResponse<PloggingHelpResponse> findPloggingHelp (
+    public CustomApiResponse<PloggingHelpRes> findPloggingHelp (
             @PathVariable(value = "latitude") Double latitude,
             @PathVariable(value = "longitude") Double longitude
     ) {
@@ -147,7 +146,7 @@ public class PloggingApiController {
     @Operation(summary = "플로깅 중간에 이미지 전송", description = "플로깅 중간에 이미지를 전송하고자 할때 이미지 정보를 넣는다.")
     @PostMapping("/image")
     public CustomApiResponse<Long> savePloggingImage(
-            @Validated @ModelAttribute ImagePloggingRequest request,
+            @Validated @ModelAttribute ImagePloggingReq request,
             Errors errors
             ) {
 
@@ -168,7 +167,7 @@ public class PloggingApiController {
     
     @Operation(summary = "플로깅 주변의 유저 조회", description = "위도, 경도에 맞는 '구'를 가져와 해당 구에 있는 유저를 조회한다.")
     @GetMapping("/users/{latitude}-{longitude}")
-    public CustomApiResponse<UsersResponse> findPloggingUsers(
+    public CustomApiResponse<UsersRes> findPloggingUsers(
             @PathVariable(value = "latitude") Double latitude,
             @PathVariable(value = "longitude") Double longitude
     ) {
