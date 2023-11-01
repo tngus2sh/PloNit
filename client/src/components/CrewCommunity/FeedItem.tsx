@@ -7,6 +7,11 @@ const FeedItem = () => {
   const [isCommentModalOpen, setCommentModalOpen] = useState(false);
   const toggleCommentModal = () => {
     setCommentModalOpen(!isCommentModalOpen);
+    if (isCommentModalOpen) {
+      document.body.style.overflow = "scroll";
+    } else {
+      document.body.style.overflow = "hidden";
+    }
   };
   const feedImageStyle = {
     backgroundImage: `url("/feed_img.png")`,
@@ -43,7 +48,7 @@ const FeedItem = () => {
       {isCommentModalOpen && (
         <>
           <div className={style.modalbackground}></div>
-          <CommentModal />
+          <CommentModal setCommentModalOpen={setCommentModalOpen} />
         </>
       )}
     </div>

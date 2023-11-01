@@ -1,0 +1,44 @@
+@import "styles";
+
+.crewping_Item {
+  margin: 0.8rem;
+  padding: 0.5rem;
+  border: 1px solid black;
+  display: flex;
+
+  .crewping_img {
+    flex: 3;
+    position: relative;
+    img {
+      width: 4rem;
+      height: 4rem;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+  .crewping_content {
+    flex: 8;
+    text-align: left;
+    .crewping_title {
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+
+    .plus {
+      position: fixed;
+      bottom: 4rem;
+      right: 0.8rem;
+      background-color: $green;
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+      z-index: 10;
+      @media (min-width: 501px) {
+        right: calc((100% - 500px) / 2 + 0.8rem);
+      }
+    }
+  }
+}

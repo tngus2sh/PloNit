@@ -7,9 +7,10 @@ interface InputProps {
   value?: string;
   onChange?: any;
   styles?: { [key: string]: string };
-  labelTitle: string | "";
+  labelTitle?: string | "";
   required?: boolean;
   disabled?: boolean;
+  placeholder?: string; // 이 부분을 추가
 }
 
 const Input = ({
@@ -21,6 +22,7 @@ const Input = ({
   type,
   required,
   disabled,
+  placeholder,
 }: InputProps) => {
   return (
     <div className={style.input_area} style={styles}>
@@ -34,7 +36,7 @@ const Input = ({
         onChange={onChange}
         id={id}
         name={id}
-        placeholder=""
+        placeholder={placeholder || ""}
         required={required}
         disabled={disabled}
       />

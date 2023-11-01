@@ -16,9 +16,11 @@ const CrewCommunityPage = () => {
     navigate(-1);
   };
   const goFeedHandler = () => {
+    document.body.style.overflow = "scroll";
     navigate("/feed/create");
   };
   const goCrewpingCreateHandler = () => {
+    document.body.style.overflow = "scroll";
     navigate("/crew/crewping/create");
   };
 
@@ -29,6 +31,11 @@ const CrewCommunityPage = () => {
 
   const toggleButton = () => {
     setVisibleButton(!isVisibleButton);
+    if (isVisibleButton) {
+      document.body.style.overflow = "scroll";
+    } else {
+      document.body.style.overflow = "hidden";
+    }
   };
 
   return (
