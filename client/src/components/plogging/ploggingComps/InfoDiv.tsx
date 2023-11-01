@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import style from "styles/css/PloggingPage/InfoDiv.module.css";
 import Swal from "sweetalert2";
 import useCamera from "../functions/useCamera";
 import { useNavigate } from "react-router-dom";
 import CommonButton from "components/common/CommonButton";
 import { renderToString } from "react-dom/server";
+import useGPS from "../functions/useGPS";
 
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
@@ -20,6 +21,14 @@ interface IIconBottom {
   backgroundSize: string;
   onClick?: () => void;
 }
+
+interface IPopUP {
+  CameraDivHeight: number;
+  CameraDivId?: string;
+  ContextId?: string;
+}
+
+const maxContextLen = 500;
 
 function formatNumber(n: number): string {
   if (n < 10) {
@@ -57,28 +66,78 @@ const IconBottom: React.FC<IIconBottom> = ({
   );
 };
 
-const PopUp: React.FC = ({}) => {
-  const CameraDiv = ({ id }: { id?: string }) => {
-    return <div className={style.CamerDiv}></div>;
-  };
-  const MediumDiv = ({ id }: { id?: string }) => {
+const PopUp: React.FC<IPopUP> = ({
+  CameraDivHeight,
+  CameraDivId,
+  ContextId,
+}) => {
+  const CameraDiv = () => {
     return (
-      <div className={style.MediumDiv}>
-        반경<span></span> 이내 플로퍼들에게 도움 요청하기
+      <div
+        className={style.CameraDiv}
+        id={CameraDivId}
+        style={{ height: `${CameraDivHeight}px`, width: "100%" }}
+      >
+        <div
+          style={{
+            height: "40%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "flex-end",
+          }}
+        >
+          <div
+            className={style.camera_image}
+            style={{
+              backgroundImage: `url("images/PloggingPage/camera-solid.svg")`,
+              height: "40%",
+              aspectRatio: "1/1",
+            }}
+          ></div>
+        </div>
+        <div style={{ height: "60%", fontSize: "1rem" }}>
+          <div>{`쓰레기가 많은 구간을 찍어 등록하면`}</div>
+          <div>{`주변의 유저들에게 도움을 요청할 수`}</div>
+          <div>{` 있습니다.`}</div>
+        </div>
       </div>
     );
   };
-  const ContextDiv = ({ id }: { id?: string }) => {
-    return <div className={style.ContextDiv}></div>;
+
+  const ContextDiv = () => {
+    return (
+      <div
+        className={style.ContextDiv}
+        style={{
+          height: `${CameraDivHeight}px`,
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <textarea
+          id={ContextId}
+          style={{ height: "90%", width: "95%" }}
+          placeholder="다른 유저들이 도와주러 올 수 있도록 간단한 설명을 기록해주세요."
+        />
+      </div>
+    );
   };
 
   return (
     <div>
       <h2 style={{ margin: `0 0` }}>도움 요청하기</h2>
       <CameraDiv />
-      <MediumDiv />
+      <br />
       <ContextDiv />
-      <CommonButton text="등록하기" id="help-popup-commonBtn" />
+      <CommonButton
+        text="등록하기"
+        id="InfoDiv-CommonBtn"
+        styles={{
+          backgroundColor: "#2cd261",
+        }}
+      />
     </div>
   );
 };
@@ -87,6 +146,9 @@ const InfoDiv = ({ infoDivHeight }: { infoDivHeight: number }) => {
   const { image, handleImageCapture, fileInputRef } = useCamera();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const windowHeight = useSelector<rootState, number>((state) => {
+    return state.window.height;
+  });
   const distance = useSelector<rootState, number>((state) => {
     const { distance } = state.plogging;
     return Math.round(distance * 100) / 100;
@@ -104,10 +166,56 @@ const InfoDiv = ({ infoDivHeight }: { infoDivHeight: number }) => {
     return calorie;
   });
 
-  function helpBtnEvent() {
+  const [helpImage, setHelpImage] = useState<string | null>(null);
+  const [helpContext, setHelpContext] = useState<string | null>(null);
+  const latitude = useSelector<rootState, number>((state) => {
+    return state.plogging.paths[state.plogging.pathlen - 1].latitude;
+  });
+  const longitude = useSelector<rootState, number>((state) => {
+    return state.plogging.paths[state.plogging.pathlen - 1].longitude;
+  });
+
+  function willOpenFunctions() {
+    const CameraDiv = document.querySelector("#InfoDiv-CameraDivId");
+    const ContextDiv: HTMLTextAreaElement | null =
+      document.querySelector("#InfoDiv-ContextId");
+    const CommonBtn = document.querySelector("#InfoDiv-CommonBtn");
+    CameraDiv?.addEventListener("click", () => {
+      console.log(123);
+    });
+    ContextDiv?.addEventListener("input", () => {
+      let { value } = ContextDiv;
+      // console.log(value);
+      if (value.length > maxContextLen && helpContext !== null) {
+        value = helpContext;
+      } else {
+        setHelpContext(value);
+      }
+    });
+    CommonBtn?.addEventListener("click", () => {
+      console.log(helpContext);
+      if (helpContext) {
+        console.log("ok");
+      } else {
+        console.log("not available");
+      }
+    });
+  }
+
+  function didCloseFunctions() {
+    console.log(`end`);
+  }
+
+  function helpBtnEvent({ CameraDivHeight }: { CameraDivHeight: number }) {
     Swal.fire({
       position: "bottom",
-      html: renderToString(<PopUp />),
+      html: renderToString(
+        <PopUp
+          CameraDivHeight={CameraDivHeight}
+          CameraDivId="InfoDiv-CameraDivId"
+          ContextId="InfoDiv-ContextId"
+        />,
+      ),
       showConfirmButton: false,
       showClass: {
         popup: "animate__animated animate__slideInUp",
@@ -116,7 +224,10 @@ const InfoDiv = ({ infoDivHeight }: { infoDivHeight: number }) => {
         popup: "animate__animated animate__slideOutDown",
       },
       willOpen: () => {
-        console.log("옵흔");
+        willOpenFunctions();
+      },
+      didClose: () => {
+        didCloseFunctions();
       },
     });
   }
@@ -165,7 +276,9 @@ const InfoDiv = ({ infoDivHeight }: { infoDivHeight: number }) => {
         <IconBottom
           icon="images/PloggingPage/help-solid.svg"
           backgroundSize="50%"
-          onClick={helpBtnEvent}
+          onClick={() => {
+            helpBtnEvent({ CameraDivHeight: windowHeight * 0.25 });
+          }}
         />
         <IconBottom
           icon="images/PloggingPage/stop-green.svg"

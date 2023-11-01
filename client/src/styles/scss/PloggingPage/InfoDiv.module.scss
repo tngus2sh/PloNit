@@ -45,13 +45,24 @@
 }
 
 .CameraDiv {
-}
-.MediumDiv {
-  font-size: 4vw;
-}
-.ContextDiv {
+  background-color: $gray;
+  border-radius: 5%;
+  cursor: pointer;
+
+  .camera_image {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
 }
 
-textarea::placeholder {
-  color: $darkgray;
+.ContextDiv {
+  textarea {
+    font-size: 1rem;
+    border-radius: 2.5%;
+    resize: none;
+    &::placeholder {
+      color: $darkgray;
+    }
+  }
 }
