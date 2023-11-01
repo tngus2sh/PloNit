@@ -8,7 +8,9 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
+import static com.plonit.ploggingservice.domain.plogging.QLatLong.latLong;
 import static com.plonit.ploggingservice.domain.plogging.QPlogging.plogging;
 import static com.querydsl.core.types.Projections.constructor;
 
@@ -33,6 +35,15 @@ public class PloggingQueryRepository {
                 .from(plogging)
                 .where(plogging.id.eq(memberKey).and(plogging.date.between(startDate, endDate)))
                 .fetch();
+    }
+    
+    public Optional<PloggingLogRes> findPloggingLogDetail(Long ploggingId, Long memberKey) {
+        return Optional.ofNullable(queryFactory.select(constructor(PloggingLogRes.class,
+                        plogging.id))
+                .from(plogging)
+                .leftJoin(latLong).on(latLong.plogging.id.eq(ploggingId))
+                .where(plogging.id.eq(ploggingId).and(plogging.memberKey.eq(memberKey)))
+                .fetchOne());
     }
     
 }

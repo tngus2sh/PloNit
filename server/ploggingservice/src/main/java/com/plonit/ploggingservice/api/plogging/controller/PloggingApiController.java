@@ -93,20 +93,31 @@ public class PloggingApiController {
     @GetMapping("/period/{start-day}-{end-day}")
     public CustomApiResponse<List<PloggingPeriodRes>> findPloggingLogbyDay(
             @PathVariable(value = "start-day") String startDay,
-            @PathVariable(value = "end-day") String endDay
+            @PathVariable(value = "end-day") String endDay,
+            HttpServletRequest servletRequest
     ) {
-        // TODO: 2023-10-27 플로깅 기록 일별 조회 
+        // 플로깅 기록 일별 조회 
+        Long memberKey = RequestUtils.getMemberKey(servletRequest);
+        log.info("memberKey : " + memberKey);
 
-        return null;
+        List<PloggingPeriodRes> ploggingLogByDay = ploggingService.findPloggingLogByDay(startDay, endDay, memberKey);
+
+        return CustomApiResponse.ok(ploggingLogByDay);
     }
     
     @Operation(summary = "플로깅 기록 상세 조회", description = "플로깅 id에 해당하는 플로깅에 대한 상세 정보를 불러온다.")
     @GetMapping("/{plogging-id}")
     public CustomApiResponse<PloggingLogRes> findPloggingLogDetail(
-            @PathVariable(value = "plogging-id") Long ploggingId
+            @PathVariable(value = "plogging-id") Long ploggingId,
+            HttpServletRequest servletRequest
     ) {
-        // TODO: 2023-10-27 플로깅 기록 상세 조회 
-        return null;
+        // 플로깅 기록 상세 조회 
+        Long memberKey = RequestUtils.getMemberKey(servletRequest);
+        log.info("memberKey : " + memberKey);
+
+        PloggingLogRes ploggingLogDetail = ploggingService.findPloggingLogDetail(ploggingId, memberKey);
+
+        return CustomApiResponse.ok(ploggingLogDetail);
     }
     
     @Operation(summary = "플로깅 도움 요청 저장", description = "플로깅 도움 요청을 보낼 때 해당 정보들을 저장한다.")

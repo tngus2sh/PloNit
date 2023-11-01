@@ -2,6 +2,7 @@ package com.plonit.ploggingservice.api.plogging.service.impl;
 
 import com.plonit.ploggingservice.api.plogging.controller.PlonitFeignClient;
 import com.plonit.ploggingservice.api.plogging.controller.response.KakaoAddressRes;
+import com.plonit.ploggingservice.api.plogging.controller.response.PloggingLogRes;
 import com.plonit.ploggingservice.api.plogging.controller.response.PloggingPeriodRes;
 import com.plonit.ploggingservice.api.plogging.service.PloggingService;
 import com.plonit.ploggingservice.api.plogging.service.dto.EndPloggingDto;
@@ -164,6 +165,13 @@ public class PloggingServiceImpl implements PloggingService {
         LocalDate endDate = LocalDate.parse(endDay, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         return ploggingQueryRepository.findPloggingLogByDay(startDate, endDate, memberKey);
+    }
+
+    @Override
+    public PloggingLogRes findPloggingLogDetail(Long ploggingId, Long memberKey) {
+        // ploggingId와 memberKey로 플로깅 정보 가져오기
+        return ploggingQueryRepository.findPloggingLogDetail(ploggingId, memberKey)
+                .orElseThrow(() -> new CustomException(PLOGGING_BAD_REQUEST));
     }
 
 
