@@ -1,6 +1,6 @@
 package com.plonit.ploggingservice.api.plogging.service.dto;
 
-import com.plonit.ploggingservice.api.plogging.controller.request.EndPloggingRequest;
+import com.plonit.ploggingservice.api.plogging.controller.request.EndPloggingReq;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +46,7 @@ public class EndPloggingDto {
         }
     }
     
-    public static EndPloggingDto of(EndPloggingRequest request, Long memberKey) {
+    public static EndPloggingDto of(EndPloggingReq request, Long memberKey) {
         EndPloggingDto.Coordinate[] coordinates = Arrays.stream(request.getCoordinates())
                 .map(coord -> EndPloggingDto.Coordinate.builder()
                         .latitude(coord.getLatitude())

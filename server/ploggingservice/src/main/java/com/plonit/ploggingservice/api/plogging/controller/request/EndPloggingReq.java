@@ -9,7 +9,7 @@ import javax.validation.constraints.Positive;
 @Data
 @RequiredArgsConstructor
 @Schema(description = "플로깅 종료 후 저장 request")
-public class EndPloggingRequest {
+public class EndPloggingReq {
     
     @Schema(description = "플로깅 id")
     @NotBlank(message = "플로깅 id는 필수 입력값입니다.")

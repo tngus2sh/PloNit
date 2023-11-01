@@ -4,7 +4,7 @@ import lombok.*;
 
 @Data
 @RequiredArgsConstructor
-public class KakaoAddressResponse {
+public class KakaoAddressRes {
     private Meta meta;
     private Document[] documents;
 
