@@ -9,6 +9,8 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import org.springframework.web.reactive.config.CorsRegistry;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 
+import java.util.Arrays;
+
 @Configuration
 public class CorsConfig implements WebFluxConfigurer {
     @Override
@@ -19,9 +21,7 @@ public class CorsConfig implements WebFluxConfigurer {
                         "https://k9c207.p.ssafy.io", "http://k9c207.p.ssafy.io",
                         "http://172.26.5.30", "http://172.17.0.1", "http://172.18.0.1")
                 .allowedHeaders("*")
-                .allowedMethods("GET")
-                .allowedMethods("PUT")
-                .allowedMethods("POST")
+                .allowedMethods("*")
                 .exposedHeaders("*")
                 .allowedOriginPatterns("*")
                 .exposedHeaders(HttpHeaders.SET_COOKIE);
@@ -32,9 +32,7 @@ public class CorsConfig implements WebFluxConfigurer {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
         corsConfiguration.addAllowedHeader("*");
-        corsConfiguration.addAllowedMethod("GET");
-        corsConfiguration.addAllowedMethod("POST");
-        corsConfiguration.addAllowedMethod("PUT");
+        corsConfiguration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "PATCH", "DELETE"));
         corsConfiguration.addAllowedOrigin("http://127.0.0.1:3000");
         corsConfiguration.addAllowedOrigin("http://k9c207.p.ssafy.io");
         corsConfiguration.addAllowedOriginPattern("*");
