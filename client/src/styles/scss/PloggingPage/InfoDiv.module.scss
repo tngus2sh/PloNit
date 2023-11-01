@@ -43,3 +43,15 @@
     cursor: pointer;
   }
 }
+
+.CameraDiv {
+}
+.MediumDiv {
+  font-size: 4vw;
+}
+.ContextDiv {
+}
+
+textarea::placeholder {
+  color: $darkgray;
+}
