@@ -31,7 +31,6 @@ const ImageCropper: React.FC<PropsType> = ({ onCrop, aespectRatio }) => {
   const bottomBtnPercent = 12;
 
   useEffect(() => {
-    console.log(123);
     if (location.state) {
       const { value } = location.state;
       if (value) {
