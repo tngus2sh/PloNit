@@ -6,12 +6,15 @@ import com.plonit.ploggingservice.api.plogging.controller.response.PloggingLogRe
 import com.plonit.ploggingservice.api.plogging.controller.response.PloggingPeriodRes;
 import com.plonit.ploggingservice.api.plogging.service.PloggingService;
 import com.plonit.ploggingservice.api.plogging.service.dto.EndPloggingDto;
+import com.plonit.ploggingservice.api.plogging.service.dto.HelpPloggingDto;
 import com.plonit.ploggingservice.api.plogging.service.dto.StartPloggingDto;
+import com.plonit.ploggingservice.common.AwsS3Uploader;
 import com.plonit.ploggingservice.common.enums.Finished;
 import com.plonit.ploggingservice.common.exception.CustomException;
 import com.plonit.ploggingservice.common.util.WebClientUtil;
 import com.plonit.ploggingservice.domain.plogging.LatLong;
 import com.plonit.ploggingservice.domain.plogging.Plogging;
+import com.plonit.ploggingservice.domain.plogging.PloggingHelp;
 import com.plonit.ploggingservice.domain.plogging.repository.LatLongRepository;
 import com.plonit.ploggingservice.domain.plogging.repository.PloggingQueryRepository;
 import com.plonit.ploggingservice.domain.plogging.repository.PloggingRepository;
@@ -26,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.ws.rs.core.HttpHeaders;
+import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -35,8 +39,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.plonit.ploggingservice.common.exception.ErrorCode.INVALID_PLACE_REQUEST;
-import static com.plonit.ploggingservice.common.exception.ErrorCode.PLOGGING_BAD_REQUEST;
+import static com.plonit.ploggingservice.common.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -47,6 +50,7 @@ public class PloggingServiceImpl implements PloggingService {
     private final PlonitFeignClient plonitFeignClient;
     private final CircuitBreakerFactory circuitBreakerFactory;
     private final WebClientUtil webClientUtil;
+    private final AwsS3Uploader awsS3Uploader;
     private final PloggingRepository ploggingRepository;
     private final PloggingQueryRepository ploggingQueryRepository;
     private final LatLongRepository latLongRepository;
@@ -54,7 +58,8 @@ public class PloggingServiceImpl implements PloggingService {
     private String kakaoKey;
     
     @Autowired
-    public PloggingServiceImpl(PloggingQueryRepository ploggingQueryRepository, LatLongRepository latLongRepository, PloggingRepository ploggingRepository, WebClientUtil webClientUtil, CircuitBreakerFactory circuitBreakerFactory, PlonitFeignClient plonitFeignClient, Environment env) {
+    public PloggingServiceImpl(AwsS3Uploader awsS3Uploader, PloggingQueryRepository ploggingQueryRepository, LatLongRepository latLongRepository, PloggingRepository ploggingRepository, WebClientUtil webClientUtil, CircuitBreakerFactory circuitBreakerFactory, PlonitFeignClient plonitFeignClient, Environment env) {
+        this.awsS3Uploader = awsS3Uploader;
         this.ploggingQueryRepository = ploggingQueryRepository;
         this.latLongRepository = latLongRepository;
         this.ploggingRepository = ploggingRepository;
@@ -172,6 +177,27 @@ public class PloggingServiceImpl implements PloggingService {
         // ploggingId와 memberKey로 플로깅 정보 가져오기
         return ploggingQueryRepository.findPloggingLogDetail(ploggingId, memberKey)
                 .orElseThrow(() -> new CustomException(PLOGGING_BAD_REQUEST));
+    }
+
+    @Transactional
+    @Override
+    public void savePloggingHelp(HelpPloggingDto dto) {
+
+        String imageUrl = null;
+        if (dto.getImage() != null) {
+            try {
+                imageUrl = awsS3Uploader.uploadFile(dto.getImage(), "help/image");
+            } catch (IOException e) {
+                throw new CustomException(INVALID_FIELDS_REQUEST);
+            }
+        }
+
+        String place = getPlace(dto.getLatitude(), dto.getLongitude());
+        if (place == null) {
+            throw new CustomException(INVALID_PLACE_REQUEST);
+        }
+
+        HelpPloggingDto.toEntity(dto, place, imageUrl);
     }
 
 
