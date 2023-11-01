@@ -23,31 +23,6 @@ public class PloggingServiceImplTest {
     @Autowired
     private PloggingService ploggingService;
     
-    @Test
-    @DisplayName("카카오 연결 test")
-    public void kakaoTest() {
-
-        // webClient 기본 설정
-        WebClient webClient = WebClient.builder()
-                .baseUrl("https://dapi.kakao.com/v2/local/geo/coord2address.json")
-                .defaultHeader(HttpHeaders.AUTHORIZATION, "KakaoAK 0dfc0762e8bf4854c806dbee4b1808d5")
-                .build();
-
-        KakaoAddressRes response = webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .queryParam("x", 127.423084873712)
-                        .queryParam("y", 37.0789561558879)
-                        .queryParam("input_cord", "WGS84")
-                        .build())
-                .retrieve()
-                .bodyToMono(KakaoAddressRes.class)
-                .block();
-
-        // 결과 확인
-        System.out.println(response.toString());
-        System.out.println(response.getDocuments()[0].getAddress().getAddress_name());
-    }
-    
     // 메소드 : 등록, 조회, 삭제
     @Nested
     @DisplayName("플로깅 시작시 초기 설정 저장")
