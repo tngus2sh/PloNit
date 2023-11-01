@@ -1,7 +1,11 @@
 package com.plonit.apigatewayservice.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.CorsWebFilter;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import org.springframework.web.reactive.config.CorsRegistry;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 
@@ -19,6 +23,21 @@ public class CorsConfig implements WebFluxConfigurer {
                 .exposedHeaders("*")
                 .allowedOriginPatterns("*")
                 .exposedHeaders(HttpHeaders.SET_COOKIE);
+    }
+
+    @Bean
+    public CorsWebFilter corsWebFilter() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.addAllowedMethod("*");
+        corsConfiguration.addAllowedOrigin("http://127.0.0.1:3000");
+        corsConfiguration.addAllowedOrigin("http://k9c207.p.ssafy.io");
+        corsConfiguration.addAllowedOriginPattern("*");
+        corsConfiguration.addExposedHeader(HttpHeaders.SET_COOKIE);
+        UrlBasedCorsConfigurationSource corsConfigurationSource = new UrlBasedCorsConfigurationSource();
+        corsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
+        return new CorsWebFilter(corsConfigurationSource);
     }
 }
 
