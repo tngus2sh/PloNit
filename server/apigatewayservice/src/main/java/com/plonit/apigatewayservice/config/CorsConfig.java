@@ -20,14 +20,16 @@ public class CorsConfig implements WebFluxConfigurer {
                 .allowCredentials(true)
                 .allowedOrigins("http://localhost:3000", "http://localhost",
                         "https://k9c207.p.ssafy.io", "http://k9c207.p.ssafy.io",
-                        "http://172.26.5.30", "http://172.17.0.1", "http://172.18.0.1")
+                        "http://172.26.5.30", "http://172.17.0.1", "http://172.18.0.1"
+                ,"http://54.180.135.78:80")
                 .allowedHeaders("*")
                 .allowedMethods(
                         HttpMethod.GET.name(),
                         HttpMethod.HEAD.name(),
                         HttpMethod.POST.name(),
                         HttpMethod.PUT.name(),
-                        HttpMethod.DELETE.name()
+                        HttpMethod.DELETE.name(),
+                        HttpMethod.OPTIONS.name()
                 )
                 .exposedHeaders("*")
                 .allowedOriginPatterns("*")
@@ -42,6 +44,7 @@ public class CorsConfig implements WebFluxConfigurer {
         corsConfiguration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         corsConfiguration.addAllowedOrigin("https://k9c207.p.ssafy.io");
         corsConfiguration.addAllowedOrigin("http://127.0.0.1:3000");
+        corsConfiguration.addAllowedOrigin("http://54.180.135.78:80");
         corsConfiguration.addAllowedOriginPattern("*");
         corsConfiguration.addExposedHeader(HttpHeaders.SET_COOKIE);
         UrlBasedCorsConfigurationSource corsConfigurationSource = new UrlBasedCorsConfigurationSource();
