@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
-import style from "styles/css/PloggingPage/SubComponent.module.css";
+import style from "styles/css/PloggingPage/InfoDiv.module.css";
 import Swal from "sweetalert2";
 import useCamera from "../functions/useCamera";
 import { useNavigate } from "react-router-dom";
+import CommonButton from "components/common/CommonButton";
+import { renderToString } from "react-dom/server";
 
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
@@ -55,6 +57,32 @@ const IconBottom: React.FC<IIconBottom> = ({
   );
 };
 
+const PopUp: React.FC = ({}) => {
+  const CameraDiv = ({ id }: { id?: string }) => {
+    return <div className={style.CamerDiv}></div>;
+  };
+  const MediumDiv = ({ id }: { id?: string }) => {
+    return (
+      <div className={style.MediumDiv}>
+        반경<span></span> 이내 플로퍼들에게 도움 요청하기
+      </div>
+    );
+  };
+  const ContextDiv = ({ id }: { id?: string }) => {
+    return <div className={style.ContextDiv}></div>;
+  };
+
+  return (
+    <div>
+      <h2 style={{ margin: `0 0` }}>도움 요청하기</h2>
+      <CameraDiv />
+      <MediumDiv />
+      <ContextDiv />
+      <CommonButton text="등록하기" id="help-popup-commonBtn" />
+    </div>
+  );
+};
+
 const InfoDiv = ({ infoDivHeight }: { infoDivHeight: number }) => {
   const { image, handleImageCapture, fileInputRef } = useCamera();
   const navigate = useNavigate();
@@ -75,6 +103,45 @@ const InfoDiv = ({ infoDivHeight }: { infoDivHeight: number }) => {
     const { calorie } = state.plogging;
     return calorie;
   });
+
+  function helpBtnEvent() {
+    Swal.fire({
+      position: "bottom",
+      html: renderToString(<PopUp />),
+      showConfirmButton: false,
+      showClass: {
+        popup: "animate__animated animate__slideInUp",
+      },
+      hideClass: {
+        popup: "animate__animated animate__slideOutDown",
+      },
+      willOpen: () => {
+        console.log("옵흔");
+      },
+    });
+  }
+  function stopBtnEvent() {
+    Swal.fire({
+      icon: "question",
+      text: "플로깅을 종료하시겠습니까?",
+      showCancelButton: true,
+      confirmButtonText: "예",
+      cancelButtonText: "아니오",
+      confirmButtonColor: "#2CD261",
+      cancelButtonColor: "#FF2953",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // axios 요청 성공 시
+        Swal.close();
+        dispatch(P.setPloggingType("none"));
+        dispatch(P.setCbURL("/"));
+        navigate("/plogging/complete");
+      }
+    });
+  }
+  function CameraBtnEvent() {
+    handleImageCapture();
+  }
 
   // 이미지가 로드되었을 때, 이미지를 넘겨준다.
   useEffect(() => {
@@ -98,39 +165,17 @@ const InfoDiv = ({ infoDivHeight }: { infoDivHeight: number }) => {
         <IconBottom
           icon="images/PloggingPage/help-solid.svg"
           backgroundSize="50%"
-          onClick={() => {
-            alert(`도움 요청!`);
-          }}
+          onClick={helpBtnEvent}
         />
         <IconBottom
           icon="images/PloggingPage/stop-green.svg"
           backgroundSize="contain"
-          onClick={() => {
-            Swal.fire({
-              icon: "question",
-              text: "플로깅을 종료하시겠습니까?",
-              showCancelButton: true,
-              confirmButtonText: "예",
-              cancelButtonText: "아니오",
-              confirmButtonColor: "#2CD261",
-              cancelButtonColor: "#FF2953",
-            }).then((result) => {
-              if (result.isConfirmed) {
-                // axios 요청 성공 시
-                Swal.close();
-                dispatch(P.setPloggingType("none"));
-                navigate("/plogging/complete");
-              }
-            });
-          }}
+          onClick={stopBtnEvent}
         />
         <IconBottom
           icon="images/PloggingPage/camera-solid.svg"
           backgroundSize="50%"
-          onClick={() => {
-            dispatch(P.setCbURL("/plogging"));
-            handleImageCapture();
-          }}
+          onClick={CameraBtnEvent}
         />
       </div>
       <input

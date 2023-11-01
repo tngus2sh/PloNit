@@ -45,6 +45,7 @@ function App() {
 
   useEffect(() => {
     if (!isBefore) {
+      dispatch(P.addPath({ latitude: latitude, longitude: longitude }));
       interval.current = setInterval(() => {
         dispatch(P.addTime());
       }, 1000);
