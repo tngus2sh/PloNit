@@ -1,13 +1,18 @@
 package com.plonit.ploggingservice.api.plogging.service;
 
 import com.plonit.ploggingservice.api.plogging.controller.response.KakaoAddressRes;
+import com.plonit.ploggingservice.api.plogging.service.dto.StartPloggingDto;
+import com.plonit.ploggingservice.common.enums.Type;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.ws.rs.core.HttpHeaders;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
 // 서비스
@@ -15,6 +20,9 @@ import javax.ws.rs.core.HttpHeaders;
 @SpringBootTest
 public class PloggingServiceImplTest {
 
+    @Autowired
+    private PloggingService ploggingService;
+    
     @Test
     @DisplayName("카카오 연결 test")
     public void kakaoTest() {
@@ -50,6 +58,19 @@ public class PloggingServiceImplTest {
         @DisplayName("#성공")
         public void success() {
             
+            // given
+            StartPloggingDto dto = StartPloggingDto.builder()
+                    .memberKey(12312312123L)
+                    .type(Type.IND)
+                    .latitude(37.0789561558879)
+                    .longitude(127.423084873712)
+                    .build();
+            
+            // when
+            Long ploggingId = ploggingService.saveStartPlogging(dto);
+
+            // then
+            assertThat(ploggingId).isEqualTo(12312312123L);
             
         }
         
