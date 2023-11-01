@@ -150,7 +150,7 @@ public class PloggingApiController {
     
     @Operation(summary = "플로깅 도움 요청 지역별 조회", description = "위도와 경도를 보내서 해당 위치 구에 있는 도움 요청들을 보낸다.")
     @GetMapping("/help/{latitude}-{longitude}")
-    public CustomApiResponse<PloggingHelpRes> findPloggingHelp (
+    public CustomApiResponse<List<PloggingHelpRes>> findPloggingHelp (
             @PathVariable(value = "latitude") Double latitude,
             @PathVariable(value = "longitude") Double longitude
     ) {

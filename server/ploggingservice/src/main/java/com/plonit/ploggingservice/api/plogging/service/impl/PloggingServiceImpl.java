@@ -2,6 +2,7 @@ package com.plonit.ploggingservice.api.plogging.service.impl;
 
 import com.plonit.ploggingservice.api.plogging.controller.PlonitFeignClient;
 import com.plonit.ploggingservice.api.plogging.controller.response.KakaoAddressRes;
+import com.plonit.ploggingservice.api.plogging.controller.response.PloggingHelpRes;
 import com.plonit.ploggingservice.api.plogging.controller.response.PloggingLogRes;
 import com.plonit.ploggingservice.api.plogging.controller.response.PloggingPeriodRes;
 import com.plonit.ploggingservice.api.plogging.service.PloggingService;
@@ -179,6 +180,11 @@ public class PloggingServiceImpl implements PloggingService {
                 .orElseThrow(() -> new CustomException(PLOGGING_BAD_REQUEST));
     }
 
+    /**
+     * 플로깅 도움 요청 저장
+     * @param dto 플로깅 도움 요청 데이터
+     * @return 플로깅 도움 식별키
+     */
     @Transactional
     @Override
     public Long savePloggingHelp(HelpPloggingDto dto) {
@@ -202,6 +208,21 @@ public class PloggingServiceImpl implements PloggingService {
         return ploggingHelp.getId();
     }
 
+    @Override
+    public List<PloggingHelpRes> findPloggingHelp(Double latitude, Double longitude) {
+
+        String place = getPlace(latitude, longitude);
+        if (place == null) {
+            throw new CustomException(INVALID_PLACE_REQUEST);
+        }
+        
+        // 구군 코드 얻어오기
+        String[] sidoGugun = getSidoGugun(latitude, longitude);
+        // TODO: 2023-11-01 feignClient 
+
+        return null;
+    }
+
 
     /**
      * 위도, 경도로 지번 주소 얻어옴
@@ -209,7 +230,7 @@ public class PloggingServiceImpl implements PloggingService {
      * @param longitude 경도(x)
      * @return 지번 주소
      */
-    private String getPlace(double latitude, double longitude) {
+    private String getPlace(Double latitude, Double longitude) {
 
         // webClient 기본 설정
         WebClient webClient = WebClient.builder()
@@ -231,5 +252,29 @@ public class PloggingServiceImpl implements PloggingService {
         log.info(response.toString());
         
         return response.getDocuments().length >=1 ? response.getDocuments()[0].getRoad_address().getAddress_name() : null;
-    } 
+    }
+
+    private String[] getSidoGugun(Double latitude, Double longitude) {
+
+        // webClient 기본 설정
+        WebClient webClient = WebClient.builder()
+                .baseUrl(kakaoBaseUrl)
+                .defaultHeader(HttpHeaders.AUTHORIZATION, kakaoKey)
+                .build();
+
+        KakaoAddressRes response = webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .queryParam("x", longitude)
+                        .queryParam("y", latitude)
+                        .queryParam("input_cord", "WGS84")
+                        .build())
+                .retrieve()
+                .bodyToMono(KakaoAddressRes.class)
+                .block();
+        
+        return response.getDocuments().length >=1 ? 
+                new String[] {response.getDocuments()[0].getRoad_address().getRegion_1depth_name(),
+                        response.getDocuments()[0].getRoad_address().getRegion_2depth_name()}
+                : null;
+    }
 }

@@ -1,6 +1,7 @@
 package com.plonit.ploggingservice.api.plogging.service;
 
 
+import com.plonit.ploggingservice.api.plogging.controller.response.PloggingHelpRes;
 import com.plonit.ploggingservice.api.plogging.controller.response.PloggingLogRes;
 import com.plonit.ploggingservice.api.plogging.controller.response.PloggingPeriodRes;
 import com.plonit.ploggingservice.api.plogging.service.dto.EndPloggingDto;
@@ -20,4 +21,6 @@ public interface PloggingService {
     public PloggingLogRes findPloggingLogDetail(Long ploggingId, Long memberKey);
 
     public Long savePloggingHelp(HelpPloggingDto dto);
+    
+    public List<PloggingHelpRes> findPloggingHelp(Double latitude, Double longitude);
 }
