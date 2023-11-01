@@ -5,8 +5,6 @@ import com.plonit.plonitservice.api.crew.service.DTO.SaveCrewDTO;
 public interface CrewService {
     void saveCrew(SaveCrewDTO saveCrewDTO);
 
-    // findCrewMembers();
-
     // findCrewMember();
 
     // findCrewMembers();

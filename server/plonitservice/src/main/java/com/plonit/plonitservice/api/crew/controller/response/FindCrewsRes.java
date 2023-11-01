@@ -5,10 +5,10 @@ import lombok.Data;
 
 @Data
 @Builder
-public class findCrewRes {
+public class FindCrewsRes {
     private long id;
     private String name;
     private String crewImage;
     private String region;
-
+    private int cntPeople;
 }

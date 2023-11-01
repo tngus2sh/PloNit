@@ -1,12 +1,14 @@
 package com.plonit.plonitservice.domain.crew.repository;
 
+import com.plonit.plonitservice.api.crew.controller.response.FindCrewsRes;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 
-
+import static com.plonit.plonitservice.domain.crew.QCrew.crew;
 @Repository
 public class CrewQueryRepository {
 
@@ -14,6 +16,20 @@ public class CrewQueryRepository {
 
     public CrewQueryRepository(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
+    }
+
+    public List<FindCrewsRes> findCrews(){
+        return queryFactory
+                .select(Projections.constructor(FindCrewsRes.class,
+                        crew.id,
+                        crew.name,
+                        crew.crewImage,
+                        crew.region,
+                        crew.cntPeople
+                ))
+                .from(crew)
+                .orderBy(crew.createdDate.asc())
+                .fetch();
     }
 
 }
