@@ -1,21 +1,22 @@
 package com.plonit.plonitservice.domain.crew;
 
+import com.plonit.plonitservice.common.enums.Status;
 import com.plonit.plonitservice.domain.TimeBaseEntity;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static javax.persistence.FetchType.LAZY;
 
 //@Entity
 //@Getter
-//@RequiredArgsConstructor
+//@Builder
+//@AllArgsConstructor
 //@NoArgsConstructor(access = AccessLevel.PROTECTED)
 //public class Crewping extends TimeBaseEntity {
 //    @Id
@@ -34,7 +35,27 @@ import static javax.persistence.FetchType.LAZY;
 //    @Column(length = 500)
 //    private String crewpingImage;
 //
-//    @CreatedDate
-//    @Column(nullable = false, updatable = false)
-//    private String start_date;
+//    private String startDate;
+//
+//    private String endDate;
+//
+//    private int cntPeople;
+//
+//    private int maxPeople;
+//
+//    @Column(length = 500)
+//    private String place;
+//
+//    @Column(length = 500)
+//    private String introduce;
+//
+//    @Column(length = 500)
+//    private String notice;
+//
+//    private long active_time;
+//
+//    @ColumnDefault("'ACTIVE'")
+//    @Enumerated(EnumType.STRING)
+//    private Status status;
+//
 //}

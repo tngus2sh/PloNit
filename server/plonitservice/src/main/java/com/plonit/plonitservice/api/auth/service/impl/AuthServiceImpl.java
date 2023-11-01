@@ -131,7 +131,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Transactional
-    private LogInRes getUserInfoWithToken(HttpServletResponse httpServletResponse, KakaoToken kakaoToken) {
+    public LogInRes getUserInfoWithToken(HttpServletResponse httpServletResponse, KakaoToken kakaoToken) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
         // 1. HttpHeader 생성
         HttpHeaders headers = new HttpHeaders();
@@ -188,7 +188,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Transactional
-    private TokenInfoRes generateToken(long id, KakaoToken kakaoToken, boolean regenerate) {
+    public TokenInfoRes generateToken(long id, KakaoToken kakaoToken, boolean regenerate) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
         // 1. token 재발급
         TokenInfoRes tokenInfoRes = jwtTokenProvider.generateToken(id);
@@ -206,6 +206,7 @@ public class AuthServiceImpl implements AuthService {
         return tokenInfoRes;
     }
 
+    @Transactional
     public boolean kakaoLogout(HttpServletRequest request) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
 
