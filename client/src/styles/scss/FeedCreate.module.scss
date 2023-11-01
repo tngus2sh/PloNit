@@ -1,0 +1,27 @@
+@import "styles";
+.photo {
+  background-color: $gray;
+  color: $darkgray;
+  height: 20rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.introduce {
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+  .inputBox {
+    border-radius: 0.5rem;
+    border: 1px solid $darkgray;
+    padding: 0.5rem 1rem;
+    background-color: transparent;
+    height: 10rem;
+    resize: none;
+  }
+  textarea {
+    font-size: 1.4em;
+  }
+}
