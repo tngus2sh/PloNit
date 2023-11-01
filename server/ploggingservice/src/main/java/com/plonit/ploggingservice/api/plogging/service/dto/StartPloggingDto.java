@@ -1,6 +1,6 @@
 package com.plonit.ploggingservice.api.plogging.service.dto;
 
-import com.plonit.ploggingservice.api.plogging.controller.request.StartPloggingRequest;
+import com.plonit.ploggingservice.api.plogging.controller.request.StartPloggingReq;
 import com.plonit.ploggingservice.common.enums.Finished;
 import com.plonit.ploggingservice.common.enums.Type;
 import com.plonit.ploggingservice.domain.plogging.Plogging;
@@ -35,7 +35,7 @@ public class StartPloggingDto {
         this.crewpingId = crewpingId;
     }
 
-    public static StartPloggingDto of (StartPloggingRequest request, Long memberKey) {
+    public static StartPloggingDto of (StartPloggingReq request, Long memberKey) {
         return StartPloggingDto.builder()
                 .memberKey(memberKey)
                 .type(request.getType())

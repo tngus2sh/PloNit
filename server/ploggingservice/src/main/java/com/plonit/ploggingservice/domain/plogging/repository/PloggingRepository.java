@@ -7,6 +7,6 @@ import java.util.Optional;
 
 public interface PloggingRepository extends JpaRepository<Plogging, Long> {
     
-    Optional<Plogging> findByPloggingId(Long ploggingId);
+    Optional<Plogging> findById(Long id);
     
 }

@@ -1,15 +1,13 @@
 package com.plonit.ploggingservice.api.plogging.service;
 
-import com.plonit.ploggingservice.api.plogging.controller.response.KakaoAddressResponse;
+import com.plonit.ploggingservice.api.plogging.controller.response.KakaoAddressRes;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import javax.ws.rs.core.HttpHeaders;
-import java.util.Map;
 
 
 // 서비스
@@ -27,14 +25,14 @@ public class PloggingServiceImplTest {
                 .defaultHeader(HttpHeaders.AUTHORIZATION, "KakaoAK 0dfc0762e8bf4854c806dbee4b1808d5")
                 .build();
 
-        KakaoAddressResponse response = webClient.get()
+        KakaoAddressRes response = webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .queryParam("x", 127.423084873712)
                         .queryParam("y", 37.0789561558879)
                         .queryParam("input_cord", "WGS84")
                         .build())
                 .retrieve()
-                .bodyToMono(KakaoAddressResponse.class)
+                .bodyToMono(KakaoAddressRes.class)
                 .block();
 
         // 결과 확인
