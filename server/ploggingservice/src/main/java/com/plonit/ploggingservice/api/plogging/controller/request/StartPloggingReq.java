@@ -1,9 +1,7 @@
 package com.plonit.ploggingservice.api.plogging.controller.request;
 
-import com.plonit.ploggingservice.api.plogging.service.dto.StartPloggingDto;
 import com.plonit.ploggingservice.common.enums.Type;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -12,10 +10,9 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 
 @Data
-@Builder
 @RequiredArgsConstructor
 @Schema(description = "플로깅 시작 request")
-public class StartPloggingRequest {
+public class StartPloggingReq {
     
     @Schema(description = "플로깅 유형 / CREWPING, IND, VOL ")
     @NotBlank(message = "유형은 필수 입력값입니다.")

@@ -7,7 +7,6 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Table(name = "latlong", indexes = @Index(name = "idx_lat_long", columnList = "latitude, longitude", unique = true))
-@RequiredArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LatLong extends TimeBaseEntity{
     

@@ -1,6 +1,6 @@
 package com.plonit.ploggingservice.api.plogging.service.dto;
 
-import com.plonit.ploggingservice.api.plogging.controller.request.StartPloggingRequest;
+import com.plonit.ploggingservice.api.plogging.controller.request.StartPloggingReq;
 import com.plonit.ploggingservice.common.enums.Finished;
 import com.plonit.ploggingservice.common.enums.Type;
 import com.plonit.ploggingservice.domain.plogging.Plogging;
@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 
 
 @Data
-@Builder
 @RequiredArgsConstructor
 public class StartPloggingDto {
     
@@ -26,8 +25,17 @@ public class StartPloggingDto {
     private Double longitude;
 
     private Long crewpingId;
-    
-    public static StartPloggingDto of (StartPloggingRequest request, Long memberKey) {
+
+    @Builder
+    public StartPloggingDto(Long memberKey, Type type, Double latitude, Double longitude, Long crewpingId) {
+        this.memberKey = memberKey;
+        this.type = type;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.crewpingId = crewpingId;
+    }
+
+    public static StartPloggingDto of (StartPloggingReq request, Long memberKey) {
         return StartPloggingDto.builder()
                 .memberKey(memberKey)
                 .type(request.getType())
