@@ -1,18 +1,14 @@
-package com.plonit.plonitservice.api.crew.service.DTO;
+package com.plonit.plonitservice.api.crew.service.dto;
 
 import com.plonit.plonitservice.api.crew.controller.request.SaveCrewReq;
 import com.plonit.plonitservice.domain.crew.Crew;
-import com.plonit.plonitservice.domain.member.Member;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
-
 @Data
 @Builder
-public class SaveCrewDTO {
+public class SaveCrewDto {
 
     private long memberKey;
 
@@ -24,8 +20,8 @@ public class SaveCrewDTO {
 
     private String region;
 
-    public static SaveCrewDTO of (Long memberKey, SaveCrewReq saveCrewReq) {
-        return SaveCrewDTO.builder()
+    public static SaveCrewDto of (Long memberKey, SaveCrewReq saveCrewReq) {
+        return SaveCrewDto.builder()
                 .memberKey(memberKey)
                 .name(saveCrewReq.getName())
                 .crewImage(saveCrewReq.getCrewImage())
@@ -34,7 +30,7 @@ public class SaveCrewDTO {
                 .build();
     }
 
-    public static Crew toEntity (SaveCrewDTO saveCrewDTO, String imageUrl) {
+    public static Crew toEntity (SaveCrewDto saveCrewDTO, String imageUrl) {
         return Crew.builder()
                 .name(saveCrewDTO.getName())
                 .crewImage(imageUrl)

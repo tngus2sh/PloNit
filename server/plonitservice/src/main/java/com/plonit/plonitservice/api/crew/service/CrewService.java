@@ -1,15 +1,9 @@
 package com.plonit.plonitservice.api.crew.service;
 
-import com.plonit.plonitservice.api.crew.service.DTO.SaveCrewDTO;
+import com.plonit.plonitservice.api.crew.service.dto.SaveCrewDto;
 
 public interface CrewService {
-    void saveCrew(SaveCrewDTO saveCrewDTO);
-
-    // findCrewMember();
-
-    // findCrewMembers();
-
-    // findCrewMemberByLeader();
+    void saveCrew(SaveCrewDto saveCrewDTO);
 
     // requestCrewMembership();
 
