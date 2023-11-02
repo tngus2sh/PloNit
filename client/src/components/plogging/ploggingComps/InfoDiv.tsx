@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 import useCamera from "../functions/useCamera";
 import { useNavigate } from "react-router-dom";
 import CommonButton from "components/common/CommonButton";
-import { renderToString } from "react-dom/server";
+import BottomUpModal from "./BottomUpModal";
 
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
@@ -23,11 +23,13 @@ interface IIconBottom {
 
 interface IPopUP {
   CameraDivHeight: number;
-  CameraDivId?: string;
-  ContextId?: string;
+  helpImage: string;
+  setHelpImage: (value: string) => void;
+  helpContext: string;
+  setHelpContext: (value: string) => void;
 }
 
-const maxContextLen = 10;
+const maxContextLen = 500;
 
 function formatNumber(n: number): string {
   if (n < 10) {
@@ -67,14 +69,15 @@ const IconBottom: React.FC<IIconBottom> = ({
 
 const PopUp: React.FC<IPopUP> = ({
   CameraDivHeight,
-  CameraDivId,
-  ContextId,
+  helpImage,
+  setHelpImage,
+  helpContext,
+  setHelpContext,
 }) => {
   const CameraDiv = () => {
     return (
       <div
         className={style.CameraDiv}
-        id={CameraDivId}
         style={{ height: `${CameraDivHeight}px`, width: "100%" }}
       >
         <div
@@ -103,8 +106,11 @@ const PopUp: React.FC<IPopUP> = ({
     );
   };
 
-  const ContextDiv = () => {
-    return (
+  return (
+    <div>
+      <h2 style={{ margin: `0 0` }}>도움 요청하기</h2>
+      <CameraDiv />
+      <br />
       <div
         className={style.ContextDiv}
         style={{
@@ -116,20 +122,18 @@ const PopUp: React.FC<IPopUP> = ({
         }}
       >
         <textarea
-          id={ContextId}
           style={{ height: "90%", width: "95%" }}
           placeholder="다른 유저들이 도와주러 올 수 있도록 간단한 설명을 기록해주세요."
+          value={helpContext}
+          id="helpContext"
+          onChange={(event) => {
+            const { value } = event.target;
+            if (value.length <= maxContextLen) {
+              setHelpContext(value);
+            }
+          }}
         />
       </div>
-    );
-  };
-
-  return (
-    <div>
-      <h2 style={{ margin: `0 0` }}>도움 요청하기</h2>
-      <CameraDiv />
-      <br />
-      <ContextDiv />
       <CommonButton
         text="등록하기"
         id="InfoDiv-CommonBtn"
@@ -165,74 +169,14 @@ const InfoDiv = ({ infoDivHeight }: { infoDivHeight: number }) => {
     return calorie;
   });
 
-  const [helpImage, setHelpImage] = useState<string | null>(null);
+  const [helpImage, setHelpImage] = useState<string>("");
   const [helpContext, setHelpContext] = useState<string>("");
-  const latitude = useSelector<rootState, number>((state) => {
-    return state.plogging.paths[state.plogging.pathlen - 1].latitude;
-  });
-  const longitude = useSelector<rootState, number>((state) => {
-    return state.plogging.paths[state.plogging.pathlen - 1].longitude;
-  });
+  const [show, setShow] = useState<boolean>(false);
+  const [preventShow, setPreventShow] = useState<boolean>(false);
 
-  function temp1() {
-    console.log(helpContext);
-    if (helpContext) {
-      console.log("ok");
-    } else {
-      console.log("not available");
-    }
-  }
-
-  function willOpenFunctions() {
-    const CameraDiv = document.querySelector("#InfoDiv-CameraDivId");
-    const ContextDiv: HTMLTextAreaElement | null =
-      document.querySelector("#InfoDiv-ContextId");
-    const CommonBtn = document.querySelector("#InfoDiv-CommonBtn");
-    CameraDiv?.addEventListener("click", () => {
-      console.log(123);
-    });
-    ContextDiv?.addEventListener("input", () => {
-      const { value } = ContextDiv;
-      if (value.length > maxContextLen) {
-        console.log("?", helpContext);
-        ContextDiv.value = helpContext;
-      } else {
-        setHelpContext(value);
-      }
-    });
-    CommonBtn?.addEventListener("click", () => {
-      temp1();
-    });
-  }
-
-  function didCloseFunctions() {
-    console.log(`end`);
-  }
-
-  function helpBtnEvent({ CameraDivHeight }: { CameraDivHeight: number }) {
-    Swal.fire({
-      position: "bottom",
-      html: renderToString(
-        <PopUp
-          CameraDivHeight={CameraDivHeight}
-          CameraDivId="InfoDiv-CameraDivId"
-          ContextId="InfoDiv-ContextId"
-        />,
-      ),
-      showConfirmButton: false,
-      showClass: {
-        popup: "animate__animated animate__slideInUp",
-      },
-      hideClass: {
-        popup: "animate__animated animate__slideOutDown",
-      },
-      willOpen: () => {
-        willOpenFunctions();
-      },
-      didClose: () => {
-        didCloseFunctions();
-      },
-    });
+  function helpBtnEvent() {
+    setPreventShow(true);
+    setShow(true);
   }
   function stopBtnEvent() {
     Swal.fire({
@@ -264,12 +208,6 @@ const InfoDiv = ({ infoDivHeight }: { infoDivHeight: number }) => {
     }
   }, [image]);
 
-  useEffect(() => {
-    if (helpContext) {
-      console.log("helpContext", helpContext);
-    }
-  }, [helpContext]);
-
   return (
     <div style={{ height: `${infoDivHeight}px`, width: "100%" }}>
       <div style={{ height: "10%", width: "100%" }}></div>
@@ -286,7 +224,7 @@ const InfoDiv = ({ infoDivHeight }: { infoDivHeight: number }) => {
           icon="images/PloggingPage/help-solid.svg"
           backgroundSize="50%"
           onClick={() => {
-            helpBtnEvent({ CameraDivHeight: windowHeight * 0.25 });
+            helpBtnEvent();
           }}
         />
         <IconBottom
@@ -308,6 +246,17 @@ const InfoDiv = ({ infoDivHeight }: { infoDivHeight: number }) => {
         ref={fileInputRef}
         style={{ display: "none" }}
       />
+      {preventShow && (
+        <BottomUpModal show={show} setShow={setShow}>
+          <PopUp
+            CameraDivHeight={windowHeight * 0.25}
+            helpImage={helpImage}
+            setHelpImage={setHelpImage}
+            helpContext={helpContext}
+            setHelpContext={setHelpContext}
+          />
+        </BottomUpModal>
+      )}
     </div>
   );
 };

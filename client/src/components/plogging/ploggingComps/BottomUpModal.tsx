@@ -78,27 +78,20 @@ const BottomUpModal: React.FC<IBottomUpModal> = ({
       )}
 
       <div
+        className={className}
         style={{
-          height: height,
-          width: Math.min(width, 500),
+          position: "fixed",
+          boxSizing: "border-box",
+          zIndex: 3000,
+          width: `${Math.min(width, 500) - fontSize}px`,
+          backgroundColor: "white",
+          borderRadius: "3px",
+          bottom: `0.5em`,
+          padding: `1rem 1.25rem`,
+          margin: `0 0.5rem`,
         }}
       >
-        <div
-          className={className}
-          style={{
-            position: "fixed",
-            boxSizing: "border-box",
-            zIndex: 3000,
-            width: `${Math.min(width, 500) - fontSize}px`,
-            backgroundColor: "white",
-            borderRadius: "3px",
-            bottom: `0.5em`,
-            padding: `1rem 1.25rem`,
-            margin: `0 0.5rem`,
-          }}
-        >
-          {children}
-        </div>
+        {children}
       </div>
     </>
   );

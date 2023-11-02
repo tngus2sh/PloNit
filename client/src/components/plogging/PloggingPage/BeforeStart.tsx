@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import DefaultMap from "../DefaultMap";
-import Swal from "sweetalert2";
 import BottomUpModal from "../ploggingComps/BottomUpModal";
 import CommonButton from "components/common/CommonButton";
-import { renderToString } from "react-dom/server";
 import useGPS from "../functions/useGPS";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -12,20 +10,16 @@ import { clear, setPloggingType, setCbURL } from "store/plogging-slice";
 
 interface IBtnDiv {
   height: number;
-  cbFunction?: () => void;
+  onClick?: () => void;
 }
 
 interface IPopUp {
   nickname?: string;
-}
-
-interface IcbFunction {
-  nickname: string;
   onClick1?: () => void;
   onClick2?: () => void;
 }
 
-const BtnDiv: React.FC<IBtnDiv> = ({ height, cbFunction }) => {
+const BtnDiv: React.FC<IBtnDiv> = ({ height, onClick }) => {
   return (
     <div
       style={{
@@ -37,13 +31,13 @@ const BtnDiv: React.FC<IBtnDiv> = ({ height, cbFunction }) => {
       <CommonButton
         text="시작하기"
         styles={{ backgroundColor: "#2cd261" }}
-        onClick={cbFunction}
+        onClick={onClick}
       />
     </div>
   );
 };
 
-const PopUp: React.FC<IPopUp> = ({ nickname }) => {
+const PopUp: React.FC<IPopUp> = ({ nickname, onClick1, onClick2 }) => {
   const styles = {
     backgroundColor: "#999999",
     fontWeight: "bolder",
@@ -76,63 +70,18 @@ const PopUp: React.FC<IPopUp> = ({ nickname }) => {
       <CommonButton
         text="자유 플로깅"
         styles={styles}
-        id="beforeStart-commonBtn1"
+        // id="beforeStart-commonBtn1"
+        onClick={onClick1}
       />
       <CommonButton
         text="봉사 플로깅"
         styles={styles}
-        id="beforeStart-commonBtn2"
+        // id="beforeStart-commonBtn2"
+        onClick={onClick2}
       />
     </div>
   );
 };
-
-function cbFunction({ nickname, onClick1, onClick2 }: IcbFunction) {
-  function cbOnClick1() {
-    if (onClick1) {
-      onClick1();
-    }
-    Swal.close();
-  }
-  function cbOnClick2() {
-    if (onClick2) {
-      onClick2();
-    }
-    Swal.close();
-  }
-
-  Swal.fire({
-    position: "bottom",
-    html: renderToString(<PopUp nickname={nickname} />),
-    showConfirmButton: false,
-    showClass: {
-      popup: "animate__animated animate__slideInUp",
-    },
-    hideClass: {
-      popup: "animate__animated animate__slideOutDown",
-    },
-    willOpen: () => {
-      const Btn1 = document.querySelector("#beforeStart-commonBtn1");
-      const Btn2 = document.querySelector("#beforeStart-commonBtn2");
-      if (Btn1 && onClick1) {
-        Btn1.addEventListener("click", cbOnClick1);
-      }
-      if (Btn2 && onClick2) {
-        Btn2.addEventListener("click", cbOnClick2);
-      }
-    },
-    didClose: () => {
-      const Btn1 = document.querySelector("#beforeStart-commonBtn1");
-      const Btn2 = document.querySelector("#beforeStart-commonBtn2");
-      if (Btn1 && onClick1) {
-        Btn1.removeEventListener("click", cbOnClick1);
-      }
-      if (Btn2 && onClick2) {
-        Btn2.removeEventListener("click", cbOnClick2);
-      }
-    },
-  });
-}
 
 const BeforeStart = () => {
   const btnDivHeight = useSelector<rootState, number>((state) => {
@@ -144,6 +93,7 @@ const BeforeStart = () => {
   });
   const { latitude, longitude } = useGPS(); // 시작 시 GPS 정보 전달
   const [show, setShow] = useState<boolean>(false);
+  const [preventShow, setPreventShow] = useState<boolean>(false);
 
   const dispatch = useDispatch();
   function onClick1() {
@@ -162,16 +112,17 @@ const BeforeStart = () => {
       <DefaultMap subHeight={btnDivHeight} isBefore={true}>
         <BtnDiv
           height={btnDivHeight}
-          cbFunction={() => {
-            cbFunction({
-              nickname: nickname,
-              onClick1: onClick1,
-              onClick2: onClick2,
-            });
+          onClick={() => {
+            setPreventShow(true);
+            setShow(true);
           }}
         />
       </DefaultMap>
-      <BottomUpModal show={show} setShow={setShow}></BottomUpModal>
+      {preventShow && (
+        <BottomUpModal show={show} setShow={setShow}>
+          <PopUp nickname={nickname} onClick1={onClick1} onClick2={onClick2} />
+        </BottomUpModal>
+      )}
     </>
   );
 };
