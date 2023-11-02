@@ -12,7 +12,7 @@ import CrewpingDetailPage from "pages/CrewpingDetailPage";
 import HomePage from "pages/HomePage";
 import LoginPage from "pages/LoginPage";
 import KakaoCallback from "pages/KakaoCallback";
-import AddInfo from "pages/AddInfo";
+import AddInfoPage from "pages/AddInfoPage";
 import MyBadgePage from "pages/MyBadgePage";
 import MyCrewPage from "pages/MyCrewPage";
 import MyPloggingPage from "pages/MyPloggingPage";
@@ -36,7 +36,7 @@ const RouteComponent = () => {
       <Route path="/" element={<HomePage />}></Route>
       <Route path="/login" element={<LoginPage />}></Route>
       <Route path="/plonit/auth/kakao" element={<KakaoCallback />}></Route>
-      <Route path="/login/addinfo" element={<AddInfo />}></Route>
+      <Route path="/login/addinfo" element={<AddInfoPage />}></Route>
       <Route path="/profile" element={<ProfilePage />}></Route>
       <Route path="/profile/edit" element={<ProfileEditPage />}></Route>
       <Route path="/profile/crew" element={<MyCrewPage />}></Route>
