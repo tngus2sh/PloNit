@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import style from "styles/css/CrewList/CrewListItem.module.css";
 import { Icon } from "@iconify/react";
 import Input from "components/common/Input";
+import { useNavigate } from "react-router-dom";
 
 // CrewItem 컴포넌트의 props 타입
 type CrewItemProps = {
@@ -17,8 +18,13 @@ const CrewItem: React.FC<CrewItemProps> = ({
   memberCount,
   imageUrl,
 }) => {
+  const navigate = useNavigate();
+  const goCommunity = () => {
+    navigate("/crew/community");
+  };
+
   return (
-    <div className={style.crewping_Item}>
+    <div className={style.crewping_Item} onClick={goCommunity}>
       <div className={style.crewping_img}>
         <img src={imageUrl} alt="Crew Image" />
       </div>
