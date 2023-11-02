@@ -1,0 +1,39 @@
+@import "styles";
+
+.add_info {
+  .guide {
+    margin: 2rem 1rem;
+    font-size: 1.5rem;
+  }
+  .gender {
+    margin: 1rem;
+    display: flex;
+    font-size: 1.1rem;
+    .choice1 {
+      height: 2rem;
+      border-radius: 0.5rem;
+      background-color: $gray;
+      padding: 0.5rem 1rem;
+      width: 50%;
+      margin-right: 0.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .choice2 {
+      height: 2rem;
+      border-radius: 0.5rem;
+      background-color: $gray;
+      padding: 0.5rem 1rem;
+      width: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
+
+.selected {
+  background-color: $green !important;
+  color: white;
+}

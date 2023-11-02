@@ -4,6 +4,7 @@ import DatePicker from "react-datepicker";
 import style from "styles/css/CrewpingCreatePage.module.css";
 import getYear from "date-fns/getYear";
 import getMonth from "date-fns/getMonth";
+import "custom_css/CrewCreateDatePicker.css";
 
 const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 

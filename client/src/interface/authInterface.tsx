@@ -5,7 +5,7 @@ export interface UserInterface {
   email?: string;
   nickname: string;
   name: string;
-  gender: string;
+  gender: boolean;
   birth: string;
   region: string;
   height?: number;
