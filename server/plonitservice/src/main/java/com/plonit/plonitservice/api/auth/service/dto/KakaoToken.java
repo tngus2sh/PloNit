@@ -1,4 +1,4 @@
-package com.plonit.plonitservice.api.auth.service.DTO;
+package com.plonit.plonitservice.api.auth.service.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

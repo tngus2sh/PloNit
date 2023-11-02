@@ -1,7 +1,7 @@
 package com.plonit.plonitservice.api.crew.service.impl;
 
 import com.plonit.plonitservice.api.crew.service.CrewService;
-import com.plonit.plonitservice.api.crew.service.DTO.SaveCrewDTO;
+import com.plonit.plonitservice.api.crew.service.dto.SaveCrewDto;
 import com.plonit.plonitservice.common.AwsS3Uploader;
 import com.plonit.plonitservice.common.exception.CustomException;
 import com.plonit.plonitservice.common.exception.ErrorCode;
@@ -36,7 +36,7 @@ public class CrewServiceImpl implements CrewService{
     private final AwsS3Uploader awsS3Uploader;
 
     @Transactional // 크루 생성
-    public void saveCrew(SaveCrewDTO saveCrewDTO) {
+    public void saveCrew(SaveCrewDto saveCrewDTO) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
         Member member = memberRepository.findById(saveCrewDTO.getMemberKey())
                         .orElseThrow(() -> new CustomException(ErrorCode.USER_BAD_REQUEST));
@@ -49,7 +49,7 @@ public class CrewServiceImpl implements CrewService{
                 throw new CustomException(INVALID_FIELDS_REQUEST);
             }
         }
-        Crew crew = crewRepository.save(SaveCrewDTO.toEntity(saveCrewDTO, crewImageUrl));
+        Crew crew = crewRepository.save(SaveCrewDto.toEntity(saveCrewDTO, crewImageUrl));
 
         CrewMember crewMember = CrewMember.builder()
                 .member(member)
