@@ -1,6 +1,4 @@
 import React from "react";
-import DefaultMap from "components/plogging/DefaultMap";
-import DefaultPathMap from "components/plogging/DefaultPathMap";
 
 import { ploggingType } from "types/ploggingTypes";
 import BeforeStart from "components/plogging/PloggingPage/BeforeStart";
@@ -32,13 +30,7 @@ const PloggingPage = () => {
   );
   const Component = getComponent(componentType);
 
-  return (
-    <div>
-      {/* <DefaultMap subHeight={200} isBefore={false} /> */}
-      {/* <DefaultPathMap subHeight={0}></DefaultPathMap> */}
-      {Component}
-    </div>
-  );
+  return <div>{Component}</div>;
 };
 
 export default PloggingPage;

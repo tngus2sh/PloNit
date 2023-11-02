@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import style from "styles/css/PloggingPage/InfoDiv.module.css";
 import Swal from "sweetalert2";
 import useCamera from "../functions/useCamera";
+import useGPS from "../functions/useGPS";
 import { useNavigate } from "react-router-dom";
 import CommonButton from "components/common/CommonButton";
 import BottomUpModal from "./BottomUpModal";
@@ -9,7 +10,7 @@ import BottomUpModal from "./BottomUpModal";
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
 import * as P from "store/plogging-slice";
-import { setImage } from "store/camera-slice";
+import * as camera from "store/camera-slice";
 
 interface IInfoTop {
   infoLabel: string;
@@ -24,10 +25,8 @@ interface IIconBottom {
 
 interface IPopUP {
   CameraDivHeight: number;
-  helpImage: string;
-  setHelpImage: (value: string) => void;
-  helpContext: string;
-  setHelpContext: (value: string) => void;
+  handleImageCapture: () => void;
+  setShow: (value: boolean) => void;
 }
 
 const maxContextLen = 500;
@@ -70,19 +69,31 @@ const IconBottom: React.FC<IIconBottom> = ({
 
 const PopUp: React.FC<IPopUP> = ({
   CameraDivHeight,
-  helpImage,
-  setHelpImage,
-  helpContext,
-  setHelpContext,
+  handleImageCapture,
+  setShow,
 }) => {
-  const CameraDiv = () => {
-    return (
+  const dispatch = useDispatch();
+  const value = useSelector<rootState, string>((state) => {
+    return state.camera.value;
+  });
+  const context = useSelector<rootState, string>((state) => {
+    return state.camera.helpContext;
+  });
+  const { longitude, latitude } = useGPS();
+
+  return (
+    <div>
       <div
         className={style.CameraDiv}
         style={{ height: `${CameraDivHeight}px`, width: "100%" }}
       >
-        {!helpImage ? (
-          <div style={{ height: "100%", width: "100%" }}>
+        {!value ? (
+          <div
+            style={{ height: "100%", width: "100%", cursor: "pointer" }}
+            onClick={() => {
+              handleImageCapture();
+            }}
+          >
             <div
               style={{
                 height: "40%",
@@ -107,16 +118,42 @@ const PopUp: React.FC<IPopUP> = ({
             </div>
           </div>
         ) : (
-          <img src={helpImage} alt="helpImage" />
+          <div
+            style={{
+              height: "100%",
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <img
+              src={value}
+              alt="helpImage"
+              style={{ maxHeight: "100%", maxWidth: "100%" }}
+              onClick={() => {
+                handleImageCapture();
+              }}
+            />
+            <img
+              src="images/PloggingPage/delete-button.svg"
+              alt="delete-button"
+              style={{
+                maxWidth: "10%",
+                aspectRatio: "1/1",
+                position: "fixed",
+                cursor: "pointer",
+                top: "0.5rem",
+                right: "0.5rem",
+              }}
+              onClick={() => {
+                dispatch(camera.setImage(""));
+              }}
+            />
+          </div>
         )}
       </div>
-    );
-  };
-
-  return (
-    <div>
       <h2 style={{ margin: `0 0` }}>도움 요청하기</h2>
-      <CameraDiv />
       <br />
       <div
         className={style.ContextDiv}
@@ -131,12 +168,12 @@ const PopUp: React.FC<IPopUP> = ({
         <textarea
           style={{ height: "90%", width: "95%" }}
           placeholder="다른 유저들이 도와주러 올 수 있도록 간단한 설명을 기록해주세요."
-          value={helpContext}
+          value={context}
           id="helpContext"
           onChange={(event) => {
             const { value } = event.target;
             if (value.length <= maxContextLen) {
-              setHelpContext(value);
+              dispatch(camera.setHelpContext(value));
             }
           }}
         />
@@ -146,6 +183,31 @@ const PopUp: React.FC<IPopUP> = ({
         id="InfoDiv-CommonBtn"
         styles={{
           backgroundColor: "#2cd261",
+        }}
+        onClick={() => {
+          async function saveHelpWithImage() {
+            if (value) {
+              const blob = await fetch(value).then((response) => {
+                return response.blob();
+              });
+              if (blob) {
+                const jpgFile = new File([blob], "image.jpg", {
+                  type: "image/jpeg",
+                });
+                console.log(jpgFile);
+                dispatch(camera.clear());
+                setShow(false);
+              }
+            }
+          }
+
+          if (value) {
+            saveHelpWithImage();
+            // console.log("longitude", longitude);
+            // console.log("latitude", latitude);
+          } else {
+            console.log("no - image");
+          }
         }}
       />
     </div>
@@ -175,13 +237,15 @@ const InfoDiv = ({ infoDivHeight }: { infoDivHeight: number }) => {
     const { calorie } = state.plogging;
     return calorie;
   });
+  const isOnWrite = useSelector<rootState, boolean>((state) => {
+    return state.camera.isOnWrite;
+  });
 
-  const [helpImage, setHelpImage] = useState<string>("");
-  const [helpContext, setHelpContext] = useState<string>("");
   const [show, setShow] = useState<boolean>(false);
   const [preventShow, setPreventShow] = useState<boolean>(false);
 
   function helpBtnEvent() {
+    dispatch(camera.setTarget("help"));
     setPreventShow(true);
     setShow(true);
   }
@@ -200,18 +264,27 @@ const InfoDiv = ({ infoDivHeight }: { infoDivHeight: number }) => {
         Swal.close();
         dispatch(P.setPloggingType("none"));
         dispatch(P.setCbURL("/"));
+        dispatch(camera.clear());
         navigate("/plogging/complete");
       }
     });
   }
   function CameraBtnEvent() {
+    dispatch(camera.setTarget("save"));
     handleImageCapture();
   }
+
+  useEffect(() => {
+    if (isOnWrite) {
+      setPreventShow(true);
+      setShow(true);
+    }
+  }, []);
 
   // 이미지가 로드되었을 때, 이미지를 넘겨준다.
   useEffect(() => {
     if (image) {
-      dispatch(setImage(image));
+      dispatch(camera.setImage(image));
       navigate("/plogging/image");
     }
   }, [image]);
@@ -258,10 +331,8 @@ const InfoDiv = ({ infoDivHeight }: { infoDivHeight: number }) => {
         <BottomUpModal show={show} setShow={setShow}>
           <PopUp
             CameraDivHeight={windowHeight * 0.25}
-            helpImage={helpImage}
-            setHelpImage={setHelpImage}
-            helpContext={helpContext}
-            setHelpContext={setHelpContext}
+            handleImageCapture={handleImageCapture}
+            setShow={setShow}
           />
         </BottomUpModal>
       )}

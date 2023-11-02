@@ -2,10 +2,13 @@ import React, { useEffect, useState } from "react";
 import ImageCropper from "components/plogging/PloggingImagePage/ImageCropper";
 import { useNavigate } from "react-router-dom";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
+import { setImage, setIsOnWrite } from "store/camera-slice";
 
 const PloggingImagePage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [uploadImage, setUploadImage] = useState<string | null>(null);
   function handleUploadImage(image: string) {
     setUploadImage(image);
@@ -14,13 +17,15 @@ const PloggingImagePage = () => {
     return state.window.height;
   });
 
-  const navigate = useNavigate();
   const cbURL = useSelector<rootState, string>((state) => {
     return state.plogging.cbURL;
   });
+  const target = useSelector<rootState, string>((state) => {
+    return state.camera.target;
+  });
 
   useEffect(() => {
-    async function sendImage() {
+    async function saveImage() {
       if (uploadImage) {
         const blob = await fetch(uploadImage).then((response) =>
           response.blob(),
@@ -32,8 +37,13 @@ const PloggingImagePage = () => {
       }
     }
     if (uploadImage) {
-      // console.log(uploadImage);
-      sendImage();
+      if (target === "save") {
+        saveImage();
+      } else {
+        dispatch(setImage(uploadImage));
+        dispatch(setIsOnWrite(true));
+        navigate("/plogging");
+      }
     }
   }, [uploadImage]);
 

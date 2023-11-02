@@ -9,7 +9,7 @@ import "cropperjs/dist/cropper.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
-import { clear } from "store/camera-slice";
+import { setImage as setReduxImage } from "store/camera-slice";
 
 interface PropsType {
   onCrop: (image: string) => void;
@@ -37,7 +37,7 @@ const ImageCropper: React.FC<PropsType> = ({ onCrop, aespectRatio }) => {
   useEffect(() => {
     if (storedImage) {
       setImage(storedImage);
-      dispatch(clear());
+      dispatch(setReduxImage(""));
     } else {
       navigate(cbURL);
     }
