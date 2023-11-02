@@ -1,14 +1,12 @@
 package com.plonit.plonitservice.api.crew.controller.request;
 
 import lombok.Data;
-import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Data
-@ToString
 public class SaveCrewReq {
 
     @NotBlank(message = "크루명은 필수 입력값입니다.")
