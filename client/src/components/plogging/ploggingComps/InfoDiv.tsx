@@ -9,6 +9,7 @@ import BottomUpModal from "./BottomUpModal";
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
 import * as P from "store/plogging-slice";
+import { setImage } from "store/camera-slice";
 
 interface IInfoTop {
   infoLabel: string;
@@ -80,28 +81,34 @@ const PopUp: React.FC<IPopUP> = ({
         className={style.CameraDiv}
         style={{ height: `${CameraDivHeight}px`, width: "100%" }}
       >
-        <div
-          style={{
-            height: "40%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "flex-end",
-          }}
-        >
-          <div
-            className={style.camera_image}
-            style={{
-              backgroundImage: `url("images/PloggingPage/camera-solid.svg")`,
-              height: "40%",
-              aspectRatio: "1/1",
-            }}
-          ></div>
-        </div>
-        <div style={{ height: "60%", fontSize: "1rem" }}>
-          <div>{`쓰레기가 많은 구간을 찍어 등록하면`}</div>
-          <div>{`주변의 유저들에게 도움을 요청할 수`}</div>
-          <div>{` 있습니다.`}</div>
-        </div>
+        {!helpImage ? (
+          <div style={{ height: "100%", width: "100%" }}>
+            <div
+              style={{
+                height: "40%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "flex-end",
+              }}
+            >
+              <div
+                className={style.camera_image}
+                style={{
+                  backgroundImage: `url("images/PloggingPage/camera-solid.svg")`,
+                  height: "40%",
+                  aspectRatio: "1/1",
+                }}
+              ></div>
+            </div>
+            <div style={{ height: "60%", fontSize: "1rem" }}>
+              <div>{`쓰레기가 많은 구간을 찍어 등록하면`}</div>
+              <div>{`주변의 유저들에게 도움을 요청할 수`}</div>
+              <div>{` 있습니다.`}</div>
+            </div>
+          </div>
+        ) : (
+          <img src={helpImage} alt="helpImage" />
+        )}
       </div>
     );
   };
@@ -204,7 +211,8 @@ const InfoDiv = ({ infoDivHeight }: { infoDivHeight: number }) => {
   // 이미지가 로드되었을 때, 이미지를 넘겨준다.
   useEffect(() => {
     if (image) {
-      navigate("/plogging/image", { state: { value: image } });
+      dispatch(setImage(image));
+      navigate("/plogging/image");
     }
   }, [image]);
 

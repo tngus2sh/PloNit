@@ -14,11 +14,13 @@ import storageSession from "redux-persist/lib/storage/session";
 import userSlice from "./user-slice";
 import windowSlice from "./window-slice";
 import ploggingSlice from "./plogging-slice";
+import cameraSlice from "./camera-slice";
 
 const rootReducer = combineReducers({
   user: userSlice,
   window: windowSlice,
   plogging: ploggingSlice,
+  camera: cameraSlice,
 });
 const persistConfig = {
   key: "PloNit",
