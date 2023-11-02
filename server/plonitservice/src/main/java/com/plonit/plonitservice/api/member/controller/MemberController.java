@@ -1,6 +1,7 @@
 package com.plonit.plonitservice.api.member.controller;
 
 import com.plonit.plonitservice.api.member.controller.request.UpdateMemberReq;
+import com.plonit.plonitservice.api.member.controller.response.FindMemberRes;
 import com.plonit.plonitservice.api.member.service.MemberService;
 import com.plonit.plonitservice.common.CustomApiResponse;
 import com.plonit.plonitservice.common.exception.CustomException;
@@ -39,8 +40,9 @@ public class MemberController {
         Long memberKey = RequestUtils.getMemberKey(request);
         log.info("memberKey : " + memberKey);
 
+        FindMemberRes findMemberRes = memberService.updateMember(memberKey, memberUpdateReq);
         log.info(logCurrent(getClassName(), getMethodName(), END));
-        return CustomApiResponse.ok(memberService.updateMember(memberKey, memberUpdateReq));
+        return CustomApiResponse.ok(findMemberRes);
     }
 }
 
