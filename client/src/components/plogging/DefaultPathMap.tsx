@@ -5,11 +5,16 @@ import * as N from "./functions/useNaverMap";
 
 import { useSelector } from "react-redux";
 import { rootState } from "store/store";
-import { dummy_location } from "./dummyData";
+// import { dummy_location } from "./dummyData";
+
+interface IPathMap {
+  subHeight: number;
+  paths: Coordinate[];
+}
 
 const defaultZoom = 16;
 
-const PathMap = ({ subHeight }: { subHeight: number }) => {
+const PathMap: React.FC<IPathMap> = ({ subHeight, paths }) => {
   const isMapLoaded = useRef<boolean>(false);
   const windowHeight = useSelector<rootState, number>((state) => {
     return state.window.height;
