@@ -1,7 +1,7 @@
 import { AxiosHeaderValue } from "axios";
 
 export interface CrewInterface {
-  id: number;
+  id?: number;
   name: string;
   crewImage: string;
   region: string;
