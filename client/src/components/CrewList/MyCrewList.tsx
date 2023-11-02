@@ -1,52 +1,28 @@
 import React from "react";
 import style from "styles/css/CrewList/CrewListItem.module.css";
-import { useNavigate } from "react-router-dom";
-
-type CrewItemProps = {
-  title: string;
-  location: string;
-  memberCount: string;
-};
-
-const CrewItem: React.FC<CrewItemProps> = ({
-  title,
-  location,
-  memberCount,
-}) => {
-  const navigate = useNavigate();
-  const goCommunity = () => {
-    navigate("/crew/community");
-  };
-
-  return (
-    <div className={style.crewping_Item} onClick={goCommunity}>
-      <div className={style.crewping_img}>
-        <img src="your-image-url-1.jpg" alt="Crew Image" />
-      </div>
-      <div className={style.crewping_content}>
-        <div className={style.crewping_title}>{title}</div>
-        <div className={style.first}>
-          <div className={style.place}>{location}</div>
-          <div className={style.people}>{memberCount}</div>
-        </div>
-      </div>
-    </div>
-  );
-};
+import CrewItem from "./CrewItem";
 
 const MyCrewList = () => {
+  const list = [
+    {
+      name: "하남동 플로깅 크루",
+      region: "광산구 장덕동",
+      cntPeople: 25,
+      crewImage: "your-image-url-1.jpg",
+    },
+    {
+      name: "장덕동",
+      region: "다른 위치",
+      cntPeople: 20,
+      crewImage: "your-image-url-2.jpg",
+    },
+  ];
+
   return (
     <div>
-      <CrewItem
-        title="하남동 플로깅 크루"
-        location="광산구 장덕동"
-        memberCount="인원수 25"
-      />
-      <CrewItem
-        title="하남동 플로깅 크루"
-        location="광산구 장덕동"
-        memberCount="멤버 25"
-      />
+      {list.map((crew, index) => (
+        <CrewItem key={index} crew={crew} />
+      ))}
     </div>
   );
 };

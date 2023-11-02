@@ -1,15 +1,11 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { BasicTopBar } from "components/common/TopBar";
 import CustomTab from "components/common/CustomTab";
 import MyCrewList from "components/CrewList/MyCrewList";
 import TotalCrewList from "components/CrewList/TotalCrewList";
 import { Icon } from "@iconify/react";
 import style from "styles/css/CrewListPage.module.css";
-import { useNavigate } from "react-router-dom";
-
-type IconProps = {
-  onClick: (event: React.MouseEvent<SVGSVGElement>) => void;
-};
 
 const CrewListPage = () => {
   const navigate = useNavigate();
