@@ -4,6 +4,7 @@ import Input from "components/common/Input";
 import CommonButton from "components/common/CommonButton";
 import { addInfo } from "api/lib/members";
 import { useSelector } from "react-redux";
+import style from "styles/css/AddInfoPage.module.css";
 
 const AddInfoPage = () => {
   const navigate = useNavigate();
@@ -11,7 +12,7 @@ const AddInfoPage = () => {
   const [signupInput, setSignupInput] = useState({
     name: "",
     nickname: "",
-    gender: "",
+    gender: false,
     birth: "",
     region: "",
   });
@@ -22,6 +23,14 @@ const AddInfoPage = () => {
       [id]: value,
     }));
   };
+
+  const onChangeGender = (value: boolean) => {
+    setSignupInput((prevState) => ({
+      ...prevState,
+      gender: value,
+    }));
+  };
+
   const SendInfo = () => {
     const data = signupInput;
     console.log(data);
@@ -41,8 +50,10 @@ const AddInfoPage = () => {
   };
 
   return (
-    <div>
-      <div> 서비스 사용을 위해 추가 정보를 등록해 주세요!</div>
+    <div className={style.add_info}>
+      <div className={style.guide}>
+        서비스 사용을 위해 추가 정보를 등록해 주세요!
+      </div>
       <Input
         id="name"
         labelTitle="이름"
@@ -57,18 +68,34 @@ const AddInfoPage = () => {
         value={signupInput.nickname}
         onChange={onChange}
       />
-      <Input
-        id="gender"
-        labelTitle="성별"
-        type="text"
-        value={signupInput.gender}
-        onChange={onChange}
-      />
+      <div className={style.gender}>
+        <div
+          className={
+            signupInput.gender === false
+              ? `${style.choice1} ${style.selected}`
+              : style.choice1
+          }
+          onClick={() => onChangeGender(false)}
+        >
+          남
+        </div>
+        <div
+          className={
+            signupInput.gender === true
+              ? `${style.choice2} ${style.selected}`
+              : style.choice2
+          }
+          onClick={() => onChangeGender(true)}
+        >
+          여
+        </div>
+      </div>
       <Input
         id="birth"
         labelTitle="생년월일"
         type="text"
         value={signupInput.birth}
+        placeholder="1990.01.01"
         onChange={onChange}
       />
       <Input
@@ -76,6 +103,7 @@ const AddInfoPage = () => {
         labelTitle="활동 지역"
         type="text"
         value={signupInput.region}
+        placeholder="예) 장덕동"
         onChange={onChange}
       />
       <CommonButton
