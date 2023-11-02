@@ -5,7 +5,7 @@ import CommonButton from "components/common/CommonButton";
 import { addInfo } from "api/lib/members";
 import { useSelector } from "react-redux";
 
-const AddInfo = () => {
+const AddInfoPage = () => {
   const navigate = useNavigate();
   const accessToken = useSelector((state: any) => state.user.accessToken);
   const [signupInput, setSignupInput] = useState({
@@ -89,4 +89,4 @@ const AddInfo = () => {
   );
 };
 
-export default AddInfo;
+export default AddInfoPage;
