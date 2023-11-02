@@ -1,0 +1,23 @@
+@import "../styles";
+
+.CameraDiv {
+  background-color: $gray;
+  border-radius: 0.5rem;
+
+  .camera_image {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+}
+
+.ContextDiv {
+  textarea {
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    resize: none;
+    &::placeholder {
+      color: $darkgray;
+    }
+  }
+}

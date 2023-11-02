@@ -143,8 +143,13 @@ const DefaultMap: React.FC<IDefaultMap> = ({
           naver.maps.Event.once(map, "init", () => {
             centerBtnIndicator_active.setMap(map);
             if (!isBefore) {
-              arrowBtnIndcator_up.setMap(map);
-              arrowBtnRef.current = arrowBtnIndcator_up;
+              if (showBottom) {
+                arrowBtnIndcator_down.setMap(map);
+                arrowBtnRef.current = arrowBtnIndcator_down;
+              } else {
+                arrowBtnIndcator_up.setMap(map);
+                arrowBtnRef.current = arrowBtnIndcator_up;
+              }
             }
             binBtnIndicator_inactive.setMap(map);
             toiletBtnIndicator_inactive.setMap(map);

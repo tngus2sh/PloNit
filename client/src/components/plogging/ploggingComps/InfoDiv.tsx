@@ -1,14 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import style from "styles/css/PloggingPage/InfoDiv.module.css";
 import Swal from "sweetalert2";
 import useCamera from "../functions/useCamera";
 import { useNavigate } from "react-router-dom";
-import CommonButton from "components/common/CommonButton";
-import { renderToString } from "react-dom/server";
 
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
 import * as P from "store/plogging-slice";
+import * as camera from "store/camera-slice";
 
 interface IInfoTop {
   infoLabel: string;
@@ -19,6 +18,12 @@ interface IIconBottom {
   icon: string;
   backgroundSize: string;
   onClick?: () => void;
+}
+
+interface IInfoDiv {
+  infoDivHeight: number;
+  setShow: (value: boolean) => void;
+  setPreventShow: (value: boolean) => void;
 }
 
 function formatNumber(n: number): string {
@@ -57,36 +62,17 @@ const IconBottom: React.FC<IIconBottom> = ({
   );
 };
 
-const PopUp: React.FC = ({}) => {
-  const CameraDiv = ({ id }: { id?: string }) => {
-    return <div className={style.CamerDiv}></div>;
-  };
-  const MediumDiv = ({ id }: { id?: string }) => {
-    return (
-      <div className={style.MediumDiv}>
-        반경<span></span> 이내 플로퍼들에게 도움 요청하기
-      </div>
-    );
-  };
-  const ContextDiv = ({ id }: { id?: string }) => {
-    return <div className={style.ContextDiv}></div>;
-  };
-
-  return (
-    <div>
-      <h2 style={{ margin: `0 0` }}>도움 요청하기</h2>
-      <CameraDiv />
-      <MediumDiv />
-      <ContextDiv />
-      <CommonButton text="등록하기" id="help-popup-commonBtn" />
-    </div>
-  );
-};
-
-const InfoDiv = ({ infoDivHeight }: { infoDivHeight: number }) => {
+const InfoDiv: React.FC<IInfoDiv> = ({
+  infoDivHeight,
+  setShow,
+  setPreventShow,
+}) => {
   const { image, handleImageCapture, fileInputRef } = useCamera();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const windowHeight = useSelector<rootState, number>((state) => {
+    return state.window.height;
+  });
   const distance = useSelector<rootState, number>((state) => {
     const { distance } = state.plogging;
     return Math.round(distance * 100) / 100;
@@ -103,22 +89,14 @@ const InfoDiv = ({ infoDivHeight }: { infoDivHeight: number }) => {
     const { calorie } = state.plogging;
     return calorie;
   });
+  const isOnWrite = useSelector<rootState, boolean>((state) => {
+    return state.camera.isOnWrite;
+  });
 
   function helpBtnEvent() {
-    Swal.fire({
-      position: "bottom",
-      html: renderToString(<PopUp />),
-      showConfirmButton: false,
-      showClass: {
-        popup: "animate__animated animate__slideInUp",
-      },
-      hideClass: {
-        popup: "animate__animated animate__slideOutDown",
-      },
-      willOpen: () => {
-        console.log("옵흔");
-      },
-    });
+    dispatch(camera.setTarget("help"));
+    setPreventShow(true);
+    setShow(true);
   }
   function stopBtnEvent() {
     Swal.fire({
@@ -135,18 +113,28 @@ const InfoDiv = ({ infoDivHeight }: { infoDivHeight: number }) => {
         Swal.close();
         dispatch(P.setPloggingType("none"));
         dispatch(P.setCbURL("/"));
+        dispatch(camera.clear());
         navigate("/plogging/complete");
       }
     });
   }
   function CameraBtnEvent() {
+    dispatch(camera.setTarget("save"));
     handleImageCapture();
   }
+
+  useEffect(() => {
+    if (isOnWrite) {
+      setPreventShow(true);
+      setShow(true);
+    }
+  }, []);
 
   // 이미지가 로드되었을 때, 이미지를 넘겨준다.
   useEffect(() => {
     if (image) {
-      navigate("/plogging/image", { state: { value: image } });
+      dispatch(camera.setImage(image));
+      navigate("/plogging/image");
     }
   }, [image]);
 
@@ -165,7 +153,9 @@ const InfoDiv = ({ infoDivHeight }: { infoDivHeight: number }) => {
         <IconBottom
           icon="images/PloggingPage/help-solid.svg"
           backgroundSize="50%"
-          onClick={helpBtnEvent}
+          onClick={() => {
+            helpBtnEvent();
+          }}
         />
         <IconBottom
           icon="images/PloggingPage/stop-green.svg"
@@ -182,7 +172,7 @@ const InfoDiv = ({ infoDivHeight }: { infoDivHeight: number }) => {
         type="file"
         accept="image/*"
         capture="environment"
-        id="cameraInput"
+        id="cameraInput-InfoDiv"
         ref={fileInputRef}
         style={{ display: "none" }}
       />

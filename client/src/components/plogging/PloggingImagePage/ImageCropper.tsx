@@ -6,9 +6,10 @@ import { BasicTopBar } from "components/common/TopBar";
 import Swal from "sweetalert2";
 import "cropperjs/dist/cropper.css";
 
-import { useNavigate, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
+import { setImage as setReduxImage } from "store/camera-slice";
 
 interface PropsType {
   onCrop: (image: string) => void;
@@ -17,7 +18,7 @@ interface PropsType {
 
 const ImageCropper: React.FC<PropsType> = ({ onCrop, aespectRatio }) => {
   const navigate = useNavigate();
-  const location = useLocation();
+  const dispatch = useDispatch();
   const { image, setImage } = useCamera();
   const cropperRef = useRef<ReactCropperElement>(null);
   const windowHeight = useSelector<rootState, number>((state) => {
@@ -26,16 +27,17 @@ const ImageCropper: React.FC<PropsType> = ({ onCrop, aespectRatio }) => {
   const cbURL = useSelector<rootState, string>((state) => {
     return state.plogging.cbURL;
   });
+  const storedImage = useSelector<rootState, string>((state) => {
+    return state.camera.value;
+  });
 
   const trimmedHeight = windowHeight * 0.93 - 56;
   const bottomBtnPercent = 12;
 
   useEffect(() => {
-    if (location.state) {
-      const { value } = location.state;
-      if (value) {
-        setImage(value);
-      }
+    if (storedImage) {
+      setImage(storedImage);
+      dispatch(setReduxImage(""));
     } else {
       navigate(cbURL);
     }
