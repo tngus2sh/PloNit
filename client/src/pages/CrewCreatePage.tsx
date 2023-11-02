@@ -1,15 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import Input from "components/common/Input";
 import { BackTopBar } from "components/common/TopBar";
 import CommonButton from "components/common/CommonButton";
-import style from "styles/css/CrewpingCreatePage.module.css";
-import CrewpingImg from "components/CrewpingCreate/CrewpingImg";
-import CrewpingDate from "components/CrewpingCreate/CrewpingDate";
-import CrewpingAddress from "components/CrewpingCreate/CrewpingAddress";
-import CrewpingPeople from "components/CrewpingCreate/CrewpingPeople";
 import Input_img from "components/common/Input_img";
+import { getCrewCreate } from "api/lib/crew";
 
 const CrewCreatePage = () => {
+  const accessToken = useSelector((state: any) => state.user.accessToken);
+  const [crewInput, setCrewInput] = useState({
+    name: "",
+    crewImage: "",
+    introduce: "",
+    region: "",
+  });
+  const onChange = (event: any) => {
+    const { id, value } = event.target;
+    setCrewInput((prevState) => ({
+      ...prevState,
+      [id]: value,
+    }));
+  };
+  const crewCreateHandler = () => {
+    const data = crewInput;
+    getCrewCreate(
+      accessToken,
+      data,
+      (res) => {
+        console.log("크루 생성 성공");
+      },
+      (err) => {
+        console.log("크루 생성 에러");
+      },
+    );
+  };
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -21,9 +45,27 @@ const CrewCreatePage = () => {
   return (
     <div>
       <BackTopBar text="크루 생성" />
-      <Input id="crewp_name" labelTitle="크루 명" type="text" />
-      <Input id="crewp_intro" labelTitle="크루 소개" type="text" />
-      <Input id="crewp_location" labelTitle="주요 활동 지역" type="text" />
+      <Input
+        id="crew_name"
+        labelTitle="크루 이름"
+        type="text"
+        value={crewInput.name}
+        onChange={onChange}
+      />
+      <Input
+        id="crew_intro"
+        labelTitle="크루 소개"
+        type="text"
+        value={crewInput.introduce}
+        onChange={onChange}
+      />
+      <Input
+        id="crew_location"
+        labelTitle="주요 활동 지역"
+        type="text"
+        value={crewInput.region}
+        onChange={onChange}
+      />
       <Input_img
         type="file"
         labelTitle="이미지 업로드"
@@ -34,6 +76,7 @@ const CrewCreatePage = () => {
         styles={{
           backgroundColor: "#2cd261",
         }}
+        onClick={crewCreateHandler}
       />
     </div>
   );
