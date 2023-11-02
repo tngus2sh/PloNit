@@ -36,6 +36,7 @@ public class CrewController {
     @PostMapping // 크루 생성
     public CustomApiResponse<Object> saveCrew(@ModelAttribute SaveCrewReq saveCrewReq, HttpServletRequest request, Errors errors) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
+        log.info(saveCrewReq.toString());
 
         if (errors.hasErrors()) {
             errors.getFieldErrors().forEach(e -> {
