@@ -12,7 +12,7 @@ export const customApi = (baseURL: string) => {
 
 export const customApiForm = (baseURL: string) => {
   const Api = axios.create({
-    baseURL: `${process.env.REACT_APP_API_URL}/${baseURL}`,
+    baseURL: `${process.env.REACT_APP_API_URL}${baseURL}`,
     headers: {
       "Content-Type": "multipart/form-data",
     },
