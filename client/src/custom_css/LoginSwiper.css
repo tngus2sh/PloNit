@@ -1,0 +1,10 @@
+.swiper-pagination {
+    margin-top: 1rem;
+    position: relative;
+}
+.swiper-pagination-bullet-active{
+    background: #2cd261 ;
+}
+.swiper-wrapper {
+    height: calc(100vh - 10rem);
+}

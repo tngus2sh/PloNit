@@ -1,0 +1,59 @@
+.login {
+  position: relative;
+  height: max(100%, 100vh);
+  z-index: 200;
+  background-color: #fff;
+  .login_btn {
+    position: absolute;
+    bottom: 3.5rem;
+  }
+}
+
+// Section_1.tsx
+.section1 {
+  text-align: left;
+  padding: 5rem 1rem;
+  .title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  .content {
+    font-size: 0.9rem;
+  }
+  img {
+    width: 90%;
+    margin: 1rem 0;
+    margin-left: 5%;
+  }
+}
+
+// Section_2.tsx
+.section2 {
+  text-align: left;
+  padding: 5rem 1rem;
+  .content {
+    font-size: 1.3rem;
+    font-weight: 600;
+  }
+  img {
+    width: 90%;
+    margin: 1rem 0;
+    margin-left: 5%;
+  }
+}
+
+// Section_3.tsx
+.section3 {
+  text-align: left;
+  padding: 5rem 1rem;
+  .content {
+    font-size: 1.3rem;
+    font-weight: 600;
+  }
+  img {
+    width: 90%;
+    margin: 1rem 0;
+    margin-left: 5%;
+  }
+}
