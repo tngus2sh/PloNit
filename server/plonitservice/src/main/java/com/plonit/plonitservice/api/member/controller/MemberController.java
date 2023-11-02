@@ -27,8 +27,10 @@ public class MemberController {
     private final MemberService memberService;
 
     @PutMapping // 사용자 정보 수정
-    public CustomApiResponse<Object> updateMemberInfo(@ModelAttribute UpdateMemberReq memberUpdateReq, HttpServletRequest request, Errors errors) {
+    public CustomApiResponse<Object> updateMemberInfo(@ModelAttribute UpdateMemberReq updateMemberReq, HttpServletRequest request, Errors errors) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
+        log.info(updateMemberReq.toString());
+
         if (errors.hasErrors()) {
             errors.getFieldErrors().forEach(e -> {
                 log.info("error message : " + e.getDefaultMessage());
@@ -40,7 +42,7 @@ public class MemberController {
         Long memberKey = RequestUtils.getMemberKey(request);
         log.info("memberKey : " + memberKey);
 
-        FindMemberRes findMemberRes = memberService.updateMember(memberKey, memberUpdateReq);
+        FindMemberRes findMemberRes = memberService.updateMember(memberKey, updateMemberReq);
         log.info(logCurrent(getClassName(), getMethodName(), END));
         return CustomApiResponse.ok(findMemberRes);
     }
