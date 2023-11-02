@@ -28,24 +28,17 @@ const CrewListPage = () => {
       <BasicTopBar text="크루 목록" />
       <CustomTab tabProps={tabProps} />
 
-      <div>
-        <h1>나 여깄어.</h1>
-      </div>
-
-      <div className={style.plus}>
-        <Icon
-          icon="bi:plus-lg"
-          style={{
-            width: "2.5rem",
-            height: "2.5rem",
-            color: "white",
-            marginTop: "0.25rem",
-          }}
-        />
-      </div>
-      <div>
-        <button onClick={goCrewcreate}>button</button>
-      </div>
+      <Icon
+        className={style.plus}
+        onClick={goCrewcreate}
+        icon="bi:plus-lg"
+        style={{
+          width: "2.5rem",
+          height: "2.5rem",
+          color: "white",
+          marginTop: "0.25rem",
+        }}
+      />
     </div>
   );
 };

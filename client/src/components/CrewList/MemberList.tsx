@@ -4,18 +4,22 @@ import { Icon } from "@iconify/react";
 import Input from "components/common/Input";
 
 // CrewItem 컴포넌트의 props 타입
-type CrewItemProps = {
+type MemberListProps = {
   title: string;
   location?: string;
   memberCount?: string;
   imageUrl: string; // 이미지 URL 추가
+  showApproveButton?: boolean; // 승인 버튼 표시 여부를 위한 prop
+  onApprove?: () => void; // 승인 버튼 클릭 시 호출할 함수
 };
 
-const CrewItem: React.FC<CrewItemProps> = ({
+const MemberList: React.FC<MemberListProps> = ({
   title,
   location,
   memberCount,
   imageUrl,
+  showApproveButton = false,
+  onApprove,
 }) => {
   return (
     <div className={style.crewping_Item}>
@@ -29,6 +33,12 @@ const CrewItem: React.FC<CrewItemProps> = ({
           <div className={style.people}>{memberCount}</div>
         </div>
       </div>
+      {showApproveButton && (
+        <React.Fragment>
+          <button>승인</button>
+          <button>거부</button>
+        </React.Fragment>
+      )}
     </div>
   );
 };
@@ -55,7 +65,7 @@ const TotalCrewList = () => {
   return (
     <div>
       {list.map((crew, index) => (
-        <CrewItem key={index} title={crew.title} imageUrl={crew.imageUrl} />
+        <MemberList key={index} title={crew.title} imageUrl={crew.imageUrl} />
       ))}
     </div>
   );
