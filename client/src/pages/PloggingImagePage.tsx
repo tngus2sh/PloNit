@@ -39,6 +39,7 @@ const PloggingImagePage = () => {
     if (uploadImage) {
       if (target === "save") {
         saveImage();
+        navigate("/plogging");
       } else {
         dispatch(setImage(uploadImage));
         dispatch(setIsOnWrite(true));
