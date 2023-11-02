@@ -94,7 +94,7 @@ const PopUp: React.FC<IPopUP> = ({
                 aspectRatio: "1/1",
                 position: "fixed",
                 cursor: "pointer",
-                top: "0.5rem",
+                top: "2rem",
                 right: "0.5rem",
               }}
               onClick={() => {
