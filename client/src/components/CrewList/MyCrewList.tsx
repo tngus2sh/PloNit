@@ -1,5 +1,6 @@
 import React from "react";
 import style from "styles/css/CrewList/CrewListItem.module.css";
+import { useNavigate } from "react-router-dom";
 
 type CrewItemProps = {
   title: string;
@@ -12,8 +13,13 @@ const CrewItem: React.FC<CrewItemProps> = ({
   location,
   memberCount,
 }) => {
+  const navigate = useNavigate();
+  const goCommunity = () => {
+    navigate("/crew/community");
+  };
+
   return (
-    <div className={style.crewping_Item}>
+    <div className={style.crewping_Item} onClick={goCommunity}>
       <div className={style.crewping_img}>
         <img src="your-image-url-1.jpg" alt="Crew Image" />
       </div>
