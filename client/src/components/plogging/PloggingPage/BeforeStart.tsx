@@ -67,18 +67,8 @@ const PopUp: React.FC<IPopUp> = ({ nickname, onClick1, onClick2 }) => {
   return (
     <div>
       <TextComponent />
-      <CommonButton
-        text="자유 플로깅"
-        styles={styles}
-        // id="beforeStart-commonBtn1"
-        onClick={onClick1}
-      />
-      <CommonButton
-        text="봉사 플로깅"
-        styles={styles}
-        // id="beforeStart-commonBtn2"
-        onClick={onClick2}
-      />
+      <CommonButton text="자유 플로깅" styles={styles} onClick={onClick1} />
+      <CommonButton text="봉사 플로깅" styles={styles} onClick={onClick2} />
     </div>
   );
 };
