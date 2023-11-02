@@ -1,6 +1,5 @@
 package com.plonit.plonitservice.domain.crew.repository;
 
-import com.plonit.plonitservice.api.crew.controller.response.FindCrewRes;
 import com.plonit.plonitservice.api.crew.controller.response.FindCrewsRes;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -32,5 +31,4 @@ public class CrewQueryRepository {
                 .orderBy(crew.createdDate.asc())
                 .fetch();
     }
-
 }
