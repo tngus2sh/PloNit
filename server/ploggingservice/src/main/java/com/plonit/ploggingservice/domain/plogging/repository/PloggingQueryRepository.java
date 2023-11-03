@@ -4,6 +4,7 @@ import com.plonit.ploggingservice.api.plogging.controller.response.PloggingLogRe
 import com.plonit.ploggingservice.api.plogging.controller.response.PloggingPeriodRes;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
@@ -23,6 +24,7 @@ public class PloggingQueryRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
+    @Transactional(readOnly = true)
     public List<PloggingPeriodRes> findPloggingLogByDay(LocalDate startDate, LocalDate endDate, Long memberKey) {
         return queryFactory.select(constructor(PloggingPeriodRes.class,
                         plogging.id,
@@ -37,6 +39,7 @@ public class PloggingQueryRepository {
                 .fetch();
     }
     
+    @Transactional(readOnly = true)
     public Optional<PloggingLogRes> findPloggingLogDetail(Long ploggingId, Long memberKey) {
         return Optional.ofNullable(queryFactory.select(constructor(PloggingLogRes.class,
                         plogging.id))

@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -25,6 +26,7 @@ import static com.plonit.ploggingservice.common.exception.ErrorCode.PLOGGING_BAD
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class PloggingQueryServiceImpl implements PloggingQueryService {
 
     private final SidoGugunFeignClient sidoGugunFeignClient;
