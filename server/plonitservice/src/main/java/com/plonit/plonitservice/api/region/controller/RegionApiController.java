@@ -20,7 +20,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 //@RequestMapping("/api/plonit-service/v1/region")
-@RequestMapping("/api/plonit-service/test/region")
+@RequestMapping("/api/plonit-service/na/region")
 public class RegionApiController {
 
     private final RegionQueryService regionQueryService;
