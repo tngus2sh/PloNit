@@ -12,24 +12,22 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Setter
-@ToString
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 @DynamicInsert
 @DynamicUpdate
+@Table(name = "members")
 public class Member extends TimeBaseEntity {
     @Id
-    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id")
+    @Column(name = "members_id")
     private Long id;
 
-    @NonNull
+    @Column(nullable = false)
     private String email;
 
-    @NonNull
+    @Column(nullable = false)
     private long kakaoId;
 
     private String name;
@@ -37,10 +35,11 @@ public class Member extends TimeBaseEntity {
     @Column(unique = true)
     private String nickname;
 
+    @Setter
     private String profileImage;
 
     @ColumnDefault("false")
-    private boolean gender; // 0 : 남자 / 1 : 여자
+    private Boolean gender; // 0 : 남자 / 1 : 여자
 
     private String region;
 

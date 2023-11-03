@@ -26,7 +26,7 @@ import static com.plonit.plonitservice.common.exception.ErrorCode.INVALID_FIELDS
 import static com.plonit.plonitservice.common.util.LogCurrent.*;
 
 @RequestMapping("/api/plonit-service/auth")
-@Tag(name = "Test", description = "설명")
+@Tag(name = "Auth API Controller", description = "Auth API Document")
 @RestController
 @Slf4j
 @RequiredArgsConstructor
@@ -35,7 +35,7 @@ public class AuthController {
     private final MemberQueryRepository memberQueryRepository;
     private final MemberRepository memberRepository;
 
-    @Operation(summary = "get test", description = "test설정")
+    @Operation(summary = "Test", description = "test설정")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK")
     })
@@ -45,6 +45,7 @@ public class AuthController {
         return "Hi, there. This is a message from plonit-service";
     }
 
+    @Operation(summary = "카카오 로그인 URL 발급", description = "카카오 로그인 URL 발급")
     @GetMapping("/kakao/url") // kakao 로그인 url 생성
     public CustomApiResponse<Object> kakaoLoginURL() {
         log.info(logCurrent(getClassName(), getMethodName(), START));
@@ -53,6 +54,7 @@ public class AuthController {
         return CustomApiResponse.ok(logInUrlRes);
     }
 
+    @Operation(summary = "카카오 로그인", description = "카카오 로그인 후 토큰을 발급해줍니다.")
     @GetMapping("/kakao/login/{code}") // kakao 로그인 및 token 발급
     public CustomApiResponse<Object> kakaoToken(@PathVariable("code") String code, HttpServletResponse response) throws Exception {
         log.info(logCurrent(getClassName(), getMethodName(), START));
@@ -61,6 +63,7 @@ public class AuthController {
         return CustomApiResponse.ok(logInRes);
     }
 
+    @Operation(summary = "닉네임 중복 체크", description = "닉네임을 중복 체크합니다.")
     @GetMapping("/check-nickname/{nickname}") // 닉네임 중복 체크
     public CustomApiResponse<Object> checkNickname(@PathVariable("nickname") String nickname) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
@@ -69,6 +72,7 @@ public class AuthController {
         return CustomApiResponse.ok(checkNicknameRes);
     }
 
+    @Operation(summary = "토큰 재발급", description = "인증된 사용자에게 토큰을 재발급해줍니다.")
     @GetMapping("/regenerate") // 토큰 재발급
     public CustomApiResponse<Object> regenerate(@Validated @RequestBody ReissueReq reissueReq, HttpServletResponse response, Errors errors) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
@@ -86,6 +90,7 @@ public class AuthController {
         return CustomApiResponse.ok("", "Token 정보가 갱신되었습니다.");
     }
 
+    @Operation(summary = "카카오 로그아웃", description = "카카오 로그아웃을 합니다.")
     @PostMapping("/kakao/logout") // 로그아웃
     public CustomApiResponse<Object> kakaoLogout(HttpServletRequest request) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
