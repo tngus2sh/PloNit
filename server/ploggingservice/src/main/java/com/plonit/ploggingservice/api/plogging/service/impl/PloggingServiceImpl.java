@@ -160,6 +160,7 @@ public class PloggingServiceImpl implements PloggingService {
         return ploggingHelpRepository.save(ploggingHelp).getId();
     }
     
+    @Transactional
     @Override
     public Long savePloggingImage(ImagePloggingDto dto) {
         
