@@ -11,6 +11,7 @@ import com.plonit.ploggingservice.api.plogging.controller.response.UsersRes;
 import com.plonit.ploggingservice.api.plogging.service.PloggingService;
 import com.plonit.ploggingservice.api.plogging.service.dto.EndPloggingDto;
 import com.plonit.ploggingservice.api.plogging.service.dto.HelpPloggingDto;
+import com.plonit.ploggingservice.api.plogging.service.dto.ImagePloggingDto;
 import com.plonit.ploggingservice.api.plogging.service.dto.StartPloggingDto;
 import com.plonit.ploggingservice.common.CustomApiResponse;
 import com.plonit.ploggingservice.common.exception.CustomException;
@@ -178,9 +179,10 @@ public class PloggingApiController {
             throw new CustomException(INVALID_FIELDS_REQUEST);
         }
 
-        // TODO: 2023-10-27 플로깅 중간에 이미지 저장 
-        
-        return null;
+        // 플로깅 중간에 이미지 저장 
+        Long ploggingImageId = ploggingService.savePloggingImage(ImagePloggingDto.of(request));
+
+        return CustomApiResponse.ok(ploggingImageId);
         
     }
     
