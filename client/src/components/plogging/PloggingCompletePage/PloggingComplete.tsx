@@ -2,6 +2,7 @@ import React from "react";
 import DefaultPathMap from "../DefaultPathMap";
 import { BasicTopBar } from "components/common/TopBar";
 import CommonButton from "components/common/CommonButton";
+import PloggingInfo from "../ploggingComps/PloggingInfo";
 import { Coordinate } from "interface/ploggingInterface";
 
 import { useSelector } from "react-redux";
@@ -37,10 +38,28 @@ const PloggingComplete = () => {
   const images = useSelector<rootState, string[]>((state) => {
     return state.plogging.images;
   });
+  const time = new Date();
+  const year = time.getFullYear();
+  const month = time.getMonth() + 1;
+  const date = time.getDate();
+  const day = ["일", "월", "화", "수", "목", "금", "토"][time.getDay()];
 
   return (
     <div style={{ width: "100%" }}>
       <BasicTopBar text="플로깅 완료" />
+      <div
+        style={{
+          width: "100%",
+          padding: "0 2.5%",
+          boxSizing: "border-box",
+        }}
+      >
+        <div>
+          <div>오늘도</div>
+          <div>플로깅 완료!!</div>
+        </div>
+        <div></div>
+      </div>
     </div>
   );
 };

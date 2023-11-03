@@ -1,18 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import style from "styles/css/PloggingPage/InfoDiv.module.css";
 import Swal from "sweetalert2";
 import useCamera from "../functions/useCamera";
+import PloggingInfo from "./PloggingInfo";
 import { useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
 import * as P from "store/plogging-slice";
 import * as camera from "store/camera-slice";
-
-interface IInfoTop {
-  infoLabel: string;
-  infoValue: number | string;
-}
 
 interface IIconBottom {
   icon: string;
@@ -33,15 +29,6 @@ function formatNumber(n: number): string {
 
   return n.toString();
 }
-
-const InfoTop: React.FC<IInfoTop> = ({ infoLabel, infoValue }) => {
-  return (
-    <div className={style.InfoTop}>
-      <div className={style.up}>{infoLabel}</div>
-      <div className={style.down}>{infoValue}</div>
-    </div>
-  );
-};
 
 const IconBottom: React.FC<IIconBottom> = ({
   icon,
@@ -70,9 +57,6 @@ const InfoDiv: React.FC<IInfoDiv> = ({
   const { image, handleImageCapture, fileInputRef } = useCamera();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const windowHeight = useSelector<rootState, number>((state) => {
-    return state.window.height;
-  });
   const distance = useSelector<rootState, number>((state) => {
     const { distance } = state.plogging;
     return Math.round(distance * 100) / 100;
@@ -142,12 +126,12 @@ const InfoDiv: React.FC<IInfoDiv> = ({
     <div style={{ height: `${infoDivHeight}px`, width: "100%" }}>
       <div style={{ height: "10%", width: "100%" }}></div>
       <div style={{ height: "40%", width: "100%", display: "flex" }}>
-        <InfoTop infoLabel="km" infoValue={distance} />
-        <InfoTop
+        <PloggingInfo infoLabel="km" infoValue={distance} />
+        <PloggingInfo
           infoLabel="시간"
           infoValue={`${minute}:${formatNumber(second)}`}
         />
-        <InfoTop infoLabel="칼로리" infoValue={calorie} />
+        <PloggingInfo infoLabel="칼로리" infoValue={calorie} />
       </div>
       <div style={{ height: "50%", width: "100%", display: "flex" }}>
         <IconBottom

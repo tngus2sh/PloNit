@@ -13,11 +13,11 @@ const PloggingCompletePage = () => {
   });
 
   // 플러깅이 아닐 시 접근하면 돌려보내기
-  useEffect(() => {
-    if (!isEnd) {
-      navigate("/plogging");
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!isEnd) {
+  //     navigate("/plogging");
+  //   }
+  // }, []);
 
   return (
     <div>
