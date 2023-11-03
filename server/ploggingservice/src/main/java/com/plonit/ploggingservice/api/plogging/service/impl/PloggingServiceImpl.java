@@ -5,9 +5,11 @@ import com.plonit.ploggingservice.api.plogging.controller.response.*;
 import com.plonit.ploggingservice.api.plogging.service.PloggingService;
 import com.plonit.ploggingservice.api.plogging.service.dto.EndPloggingDto;
 import com.plonit.ploggingservice.api.plogging.service.dto.HelpPloggingDto;
+import com.plonit.ploggingservice.api.plogging.service.dto.ImagePloggingDto;
 import com.plonit.ploggingservice.api.plogging.service.dto.StartPloggingDto;
 import com.plonit.ploggingservice.common.AwsS3Uploader;
 import com.plonit.ploggingservice.common.enums.Finished;
+import com.plonit.ploggingservice.common.enums.Time;
 import com.plonit.ploggingservice.common.exception.CustomException;
 import com.plonit.ploggingservice.common.util.WebClientUtil;
 import com.plonit.ploggingservice.domain.plogging.LatLong;
@@ -81,13 +83,14 @@ public class PloggingServiceImpl implements PloggingService {
     public Long saveStartPlogging(StartPloggingDto dto) {
         
         // 위도, 경도로 위치 구하기
-        String place = getRoadAddress(dto.getLatitude(), dto.getLongitude()).getAddress_name();
-        if (place == null) {
+        KakaoAddressRes.RoadAddress roadAddress = getRoadAddress(dto.getLatitude(), dto.getLongitude());
+        if (roadAddress == null) {
             throw new CustomException(INVALID_PLACE_REQUEST);
         }
+        String place = roadAddress.getAddress_name();
 
         // 시작 시간 구하기
-        LocalDateTime startTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+        LocalDateTime startTime = LocalDateTime.now(ZoneId.of(Time.SEOUL.name()));
         
         // 오늘 날짜 구하기
         LocalDate today = startTime.toLocalDate();
@@ -107,7 +110,7 @@ public class PloggingServiceImpl implements PloggingService {
     public Long saveEndPlogging(EndPloggingDto dto) {
         
         // 끝난 시간 구하기
-        LocalDateTime endTime = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+        LocalDateTime endTime = LocalDateTime.now(ZoneId.of(Time.SEOUL.name()));
         
         // 플로깅 id로 플로깅 가져오기
         Plogging plogging = ploggingRepository.findById(dto.getPloggingId())
@@ -205,8 +208,7 @@ public class PloggingServiceImpl implements PloggingService {
     public List<PloggingHelpRes> findPloggingHelp(Double latitude, Double longitude) {
 
         KakaoAddressRes.RoadAddress roadAddress = getRoadAddress(latitude, longitude);
-        String place = roadAddress.getAddress_name();
-        if (place == null) {
+        if (roadAddress == null) {
             throw new CustomException(INVALID_PLACE_REQUEST);
         }
         
@@ -223,8 +225,29 @@ public class PloggingServiceImpl implements PloggingService {
         }
         
         // 구군 코드로 플로깅 도움 요청 조회
-        LocalDate now = LocalDate.now(ZoneId.of("Asia/Seoul"));
+        LocalDate now = LocalDate.now(ZoneId.of(Time.SEOUL.name()));
         return ploggingHelpQueryRepository.findPloggingHelp(now, sidoGugunCodeRes.getGugunCode());
+    }
+
+    @Override
+    public Long savePloggingImage(ImagePloggingDto dto) {
+        
+        // 플로깅 id 있는지 확인
+        ploggingRepository.existById(dto.getId())
+                .orElseThrow(() -> new CustomException(PLOGGING_BAD_REQUEST));
+
+        // S3에 등록
+        String imageUrl = null;
+        if (dto.getImage() != null) {
+            try {
+                imageUrl = awsS3Uploader.uploadFile(dto.getImage(), "picture/image");
+            } catch (IOException e) {
+                throw new CustomException(INVALID_FIELDS_REQUEST);
+            }
+        }
+        
+        // 플로깅 이미지 저장
+        return ImagePloggingDto.toEntity(dto.getId(), imageUrl).getId();
     }
 
 
@@ -232,7 +255,7 @@ public class PloggingServiceImpl implements PloggingService {
      * 지번 주소 전체 내용 가져오기
      * @param latitude 위도
      * @param longitude 경도
-     * @return
+     * @return 주소
      */
     private KakaoAddressRes.RoadAddress getRoadAddress(Double latitude, Double longitude) {
         
