@@ -36,9 +36,10 @@ public class HelpPloggingDto {
                 .build();
     }
 
-    public static PloggingHelp toEntity(HelpPloggingDto dto, String place, String imageUrl) {
+    public static PloggingHelp toEntity(HelpPloggingDto dto, Long gugunCode, String place, String imageUrl) {
         return PloggingHelp.builder()
                 .memberKey(dto.getMemberKey())
+                .gugunCode(gugunCode)
                 .latitude(dto.getLatitude())
                 .longitude(dto.getLongitude())
                 .place(place)

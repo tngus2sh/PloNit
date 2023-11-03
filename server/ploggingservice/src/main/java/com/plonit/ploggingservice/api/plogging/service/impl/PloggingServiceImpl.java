@@ -1,10 +1,7 @@
 package com.plonit.ploggingservice.api.plogging.service.impl;
 
-import com.plonit.ploggingservice.api.plogging.controller.PlonitFeignClient;
-import com.plonit.ploggingservice.api.plogging.controller.response.KakaoAddressRes;
-import com.plonit.ploggingservice.api.plogging.controller.response.PloggingHelpRes;
-import com.plonit.ploggingservice.api.plogging.controller.response.PloggingLogRes;
-import com.plonit.ploggingservice.api.plogging.controller.response.PloggingPeriodRes;
+import com.plonit.ploggingservice.api.plogging.controller.SidoGugunFeignClient;
+import com.plonit.ploggingservice.api.plogging.controller.response.*;
 import com.plonit.ploggingservice.api.plogging.service.PloggingService;
 import com.plonit.ploggingservice.api.plogging.service.dto.EndPloggingDto;
 import com.plonit.ploggingservice.api.plogging.service.dto.HelpPloggingDto;
@@ -16,9 +13,7 @@ import com.plonit.ploggingservice.common.util.WebClientUtil;
 import com.plonit.ploggingservice.domain.plogging.LatLong;
 import com.plonit.ploggingservice.domain.plogging.Plogging;
 import com.plonit.ploggingservice.domain.plogging.PloggingHelp;
-import com.plonit.ploggingservice.domain.plogging.repository.LatLongRepository;
-import com.plonit.ploggingservice.domain.plogging.repository.PloggingQueryRepository;
-import com.plonit.ploggingservice.domain.plogging.repository.PloggingRepository;
+import com.plonit.ploggingservice.domain.plogging.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,50 +38,36 @@ import java.util.List;
 import static com.plonit.ploggingservice.common.exception.ErrorCode.*;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class PloggingServiceImpl implements PloggingService {
     
     private final Environment env;
-    private final PlonitFeignClient plonitFeignClient;
+    private final SidoGugunFeignClient sidoGugunFeignClient;
     private final CircuitBreakerFactory circuitBreakerFactory;
     private final WebClientUtil webClientUtil;
     private final AwsS3Uploader awsS3Uploader;
     private final PloggingRepository ploggingRepository;
     private final PloggingQueryRepository ploggingQueryRepository;
     private final LatLongRepository latLongRepository;
+    private final PloggingHelpRepository ploggingHelpRepository;
+    private final PloggingHelpQueryRepository ploggingHelpQueryRepository;
     private String kakaoBaseUrl;
     private String kakaoKey;
-    
+
     @Autowired
-    public PloggingServiceImpl(AwsS3Uploader awsS3Uploader, PloggingQueryRepository ploggingQueryRepository, LatLongRepository latLongRepository, PloggingRepository ploggingRepository, WebClientUtil webClientUtil, CircuitBreakerFactory circuitBreakerFactory, PlonitFeignClient plonitFeignClient, Environment env) {
-        this.awsS3Uploader = awsS3Uploader;
-        this.ploggingQueryRepository = ploggingQueryRepository;
-        this.latLongRepository = latLongRepository;
-        this.ploggingRepository = ploggingRepository;
+    public PloggingServiceImpl(Environment env, SidoGugunFeignClient sidoGugunFeignClient, CircuitBreakerFactory circuitBreakerFactory, WebClientUtil webClientUtil, AwsS3Uploader awsS3Uploader, PloggingRepository ploggingRepository, PloggingQueryRepository ploggingQueryRepository, LatLongRepository latLongRepository, PloggingHelpRepository ploggingHelpRepository, PloggingHelpQueryRepository ploggingHelpQueryRepository) {
+        this.env = env;
+        this.sidoGugunFeignClient = sidoGugunFeignClient;
         this.circuitBreakerFactory = circuitBreakerFactory;
         this.webClientUtil = webClientUtil;
-        this.plonitFeignClient = plonitFeignClient;
-        this.env = env;
+        this.awsS3Uploader = awsS3Uploader;
+        this.ploggingRepository = ploggingRepository;
+        this.ploggingQueryRepository = ploggingQueryRepository;
+        this.latLongRepository = latLongRepository;
+        this.ploggingHelpRepository = ploggingHelpRepository;
+        this.ploggingHelpQueryRepository = ploggingHelpQueryRepository;
         this.kakaoBaseUrl = env.getProperty("kakao.base-url");
         this.kakaoKey = env.getProperty("kakao.apikey");
-    }
-
-    /***
-     * CircuitBreaker(장애처리) 사용법
-     * - microservice 사이의 호출에서 에러가 발생했을 경우 처리
-     * - 하나의 서비스가 에러를 발생하면서 다른 서비스가 정지되어버리면 안되니 처리
-     * - 여기서는 Error가 발생할 경우 비어있는 리스트를 반환
-     */
-    public void circuitTest() {
-        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
-
-        List<String> testList = circuitBreaker.run(
-                () -> plonitFeignClient.getTest().getResultBody(), // 통신하는 서비스
-                throwable -> new ArrayList<>() // 에러 발생시 빈 배열 반환
-        );
-        
-        log.info(testList.toString());
     }
 
 
@@ -100,7 +81,7 @@ public class PloggingServiceImpl implements PloggingService {
     public Long saveStartPlogging(StartPloggingDto dto) {
         
         // 위도, 경도로 위치 구하기
-        String place = getPlace(dto.getLatitude(), dto.getLongitude());
+        String place = getRoadAddress(dto.getLatitude(), dto.getLongitude()).getAddress_name();
         if (place == null) {
             throw new CustomException(INVALID_PLACE_REQUEST);
         }
@@ -198,40 +179,63 @@ public class PloggingServiceImpl implements PloggingService {
             }
         }
 
-        String place = getPlace(dto.getLatitude(), dto.getLongitude());
-        if (place == null) {
+        KakaoAddressRes.RoadAddress roadAddress = getRoadAddress(dto.getLatitude(), dto.getLongitude());
+        if (roadAddress == null) {
             throw new CustomException(INVALID_PLACE_REQUEST);
         }
-
-        PloggingHelp ploggingHelp = HelpPloggingDto.toEntity(dto, place, imageUrl);
         
-        return ploggingHelp.getId();
+        // 구군 코드 얻어오기
+        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
+
+        SidoGugunCodeRes sidoGugunCodeRes = circuitBreaker.run(
+                () -> sidoGugunFeignClient.findSidoGugunCode(roadAddress.getRegion_1depth_name(), roadAddress.getRegion_2depth_name())
+                        .getResultBody(), // 통신하는 서비스
+                throwable -> null // 에러 발생시 null 반환
+        );
+
+        if (sidoGugunCodeRes == null) {
+            throw new CustomException(INVALID_PLACE_REQUEST);
+        }
+        
+        PloggingHelp ploggingHelp = HelpPloggingDto.toEntity(dto, sidoGugunCodeRes.getGugunCode(), roadAddress.getAddress_name(), imageUrl);
+        return ploggingHelpRepository.save(ploggingHelp).getId();
     }
 
     @Override
     public List<PloggingHelpRes> findPloggingHelp(Double latitude, Double longitude) {
 
-        String place = getPlace(latitude, longitude);
+        KakaoAddressRes.RoadAddress roadAddress = getRoadAddress(latitude, longitude);
+        String place = roadAddress.getAddress_name();
         if (place == null) {
             throw new CustomException(INVALID_PLACE_REQUEST);
         }
         
         // 구군 코드 얻어오기
-        String[] sidoGugun = getSidoGugun(latitude, longitude);
-        // TODO: 2023-11-01 feignClient 
+        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
 
-        return null;
+        SidoGugunCodeRes sidoGugunCodeRes = circuitBreaker.run(
+                () -> sidoGugunFeignClient.findSidoGugunCode(roadAddress.getRegion_1depth_name(), roadAddress.getRegion_2depth_name()).getResultBody(), // 통신하는 서비스
+                throwable -> null // 에러 발생시 null 반환
+        );
+
+        if (sidoGugunCodeRes == null) {
+            throw new CustomException(INVALID_PLACE_REQUEST);
+        }
+        
+        // 구군 코드로 플로깅 도움 요청 조회
+        LocalDate now = LocalDate.now(ZoneId.of("Asia/Seoul"));
+        return ploggingHelpQueryRepository.findPloggingHelp(now, sidoGugunCodeRes.getGugunCode());
     }
 
 
     /**
-     * 위도, 경도로 지번 주소 얻어옴
-     * @param latitude 위도(y)
-     * @param longitude 경도(x)
-     * @return 지번 주소
+     * 지번 주소 전체 내용 가져오기
+     * @param latitude 위도
+     * @param longitude 경도
+     * @return
      */
-    private String getPlace(Double latitude, Double longitude) {
-
+    private KakaoAddressRes.RoadAddress getRoadAddress(Double latitude, Double longitude) {
+        
         // webClient 기본 설정
         WebClient webClient = WebClient.builder()
                 .baseUrl(kakaoBaseUrl)
@@ -247,34 +251,10 @@ public class PloggingServiceImpl implements PloggingService {
                 .retrieve()
                 .bodyToMono(KakaoAddressRes.class)
                 .block();
-        
+
         // 결과 확인
         log.info(response.toString());
-        
-        return response.getDocuments().length >=1 ? response.getDocuments()[0].getRoad_address().getAddress_name() : null;
-    }
 
-    private String[] getSidoGugun(Double latitude, Double longitude) {
-
-        // webClient 기본 설정
-        WebClient webClient = WebClient.builder()
-                .baseUrl(kakaoBaseUrl)
-                .defaultHeader(HttpHeaders.AUTHORIZATION, kakaoKey)
-                .build();
-
-        KakaoAddressRes response = webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .queryParam("x", longitude)
-                        .queryParam("y", latitude)
-                        .queryParam("input_cord", "WGS84")
-                        .build())
-                .retrieve()
-                .bodyToMono(KakaoAddressRes.class)
-                .block();
-        
-        return response.getDocuments().length >=1 ? 
-                new String[] {response.getDocuments()[0].getRoad_address().getRegion_1depth_name(),
-                        response.getDocuments()[0].getRoad_address().getRegion_2depth_name()}
-                : null;
+        return response.getDocuments().length >=1 ? response.getDocuments()[0].getRoad_address() : null;
     }
 }
