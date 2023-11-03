@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Input from "components/common/Input";
 import { BackTopBar } from "components/common/TopBar";
 import CommonButton from "components/common/CommonButton";
 import Input_img from "components/common/Input_img";
 import { getCrewCreate } from "api/lib/crew";
+import style from "styles/css/CrewCreatePage.module.css";
+
+interface SetFunction {
+  setSelectedImage: React.Dispatch<React.SetStateAction<File>>;
+}
 
 const CrewCreatePage = () => {
+  const imgRef = useRef();
   const accessToken = useSelector((state: any) => state.user.accessToken);
   const [crewInput, setCrewInput] = useState({
     name: "",
@@ -15,7 +21,6 @@ const CrewCreatePage = () => {
     region: "",
   });
   const onChange = (event: any) => {
-    console.log("하");
     const { id, value } = event.target;
     setCrewInput((prevState) => ({
       ...prevState,
@@ -36,17 +41,37 @@ const CrewCreatePage = () => {
       },
     );
   };
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  const handleImageUpload = (event: any) => {
+    const file = event.target.files[0];
     if (file) {
-      console.log("File chosen", file);
-      // 이곳에서 파일을 처리하는 로직을 추가할 수 있습니다.
+      const reader = new FileReader();
+
+      reader.onload = (event: any) => {
+        const dataURL = event.target.result;
+
+        setCrewInput((prevCrewInput) => ({
+          ...prevCrewInput,
+          crewImage: dataURL,
+        }));
+      };
+
+      reader.readAsDataURL(file);
     }
   };
 
   return (
-    <div>
+    <div className={style.crew_create}>
       <BackTopBar text="크루 생성" />
+      <img
+        src={crewInput.crewImage ? crewInput.crewImage : `/metamong.png`}
+        alt="프로필 이미지"
+      />
+      <Input_img
+        type="file"
+        labelTitle="이미지 업로드"
+        id="crewImage"
+        onChange={handleImageUpload}
+      />
       <Input
         id="name"
         labelTitle="크루 이름"
@@ -68,11 +93,7 @@ const CrewCreatePage = () => {
         value={crewInput.region}
         onChange={onChange}
       />
-      <Input_img
-        type="file"
-        labelTitle="이미지 업로드"
-        onChange={handleImageUpload}
-      />
+
       <CommonButton
         text="크루 생성"
         styles={{
