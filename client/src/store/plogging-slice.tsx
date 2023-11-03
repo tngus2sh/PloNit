@@ -4,6 +4,8 @@ import getDistance from "components/plogging/functions/getDistance";
 import { ploggingType } from "types/ploggingTypes";
 
 const initialState = {
+  isStart: true as boolean,
+  isEnd: false as boolean,
   ploggingType: "none" as ploggingType,
   crewpingId: -1 as number,
   paths: [] as Coordinate[],
@@ -22,6 +24,12 @@ const ploggingSlice = createSlice({
   reducers: {
     clear: () => {
       return initialState;
+    },
+    setIsStart: (state, action: PayloadAction<boolean>) => {
+      state.isStart = action.payload;
+    },
+    setIsEnd: (state, action: PayloadAction<boolean>) => {
+      state.isEnd = action.payload;
     },
     setPloggingType: (state, action: PayloadAction<ploggingType>) => {
       state.ploggingType = action.payload;
@@ -56,6 +64,8 @@ const ploggingSlice = createSlice({
 
 export const {
   clear,
+  setIsStart,
+  setIsEnd,
   setPloggingType,
   setCrewpingId,
   addPath,

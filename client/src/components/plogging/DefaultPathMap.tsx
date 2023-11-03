@@ -5,11 +5,15 @@ import * as N from "./functions/useNaverMap";
 
 import { useSelector } from "react-redux";
 import { rootState } from "store/store";
-import { dummy_location } from "./dummyData";
+
+interface IPathMap {
+  subHeight: number;
+  paths: Coordinate[];
+}
 
 const defaultZoom = 16;
 
-const PathMap = ({ subHeight }: { subHeight: number }) => {
+const DefaultPathMap: React.FC<IPathMap> = ({ subHeight, paths }) => {
   const isMapLoaded = useRef<boolean>(false);
   const windowHeight = useSelector<rootState, number>((state) => {
     return state.window.height;
@@ -24,11 +28,11 @@ const PathMap = ({ subHeight }: { subHeight: number }) => {
 
   useEffect(() => {
     if (!isMapLoaded.current) {
-      // setNaverPaths(
-      //   dummy_location.map((location) => {
-      //     return new naver.maps.LatLng(location.latitude, location.longitude);
-      //   }),
-      // );
+      setNaverPaths(
+        paths.map((path) => {
+          return new naver.maps.LatLng(path.latitude, path.longitude);
+        }),
+      );
 
       const map = new naver.maps.Map("map", {
         zoom: defaultZoom,
@@ -90,4 +94,4 @@ const PathMap = ({ subHeight }: { subHeight: number }) => {
   );
 };
 
-export default PathMap;
+export default DefaultPathMap;

@@ -7,8 +7,9 @@ import useCluster from "./functions/useCluster";
 import * as N from "./functions/useNaverMap";
 import { naver } from "components/common/useNaver";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
+import * as P from "store/plogging-slice";
 import { dummy_location, dummy_helps } from "./dummyData";
 
 // 대략적으로 필요한 기능들
@@ -28,6 +29,7 @@ import { dummy_location, dummy_helps } from "./dummyData";
 const defaultZoom = 16;
 const neighbor_help_maxZoom = 12;
 const navbarHeight = 56;
+const popupTime = 1;
 
 interface IDefaultMap {
   subHeight: number;
@@ -40,8 +42,12 @@ const DefaultMap: React.FC<IDefaultMap> = ({
   isBefore,
   children,
 }) => {
+  const dispatch = useDispatch();
   const windowHeight = useSelector<rootState, number>((state) => {
     return state.window.height;
+  });
+  const isStart = useSelector<rootState, boolean>((state) => {
+    return state.plogging.isStart;
   });
   const isMapLoaded = useRef<boolean>(false);
   const { latitude, longitude, onCenter, setOnCenter } = useGPS();
@@ -87,10 +93,10 @@ const DefaultMap: React.FC<IDefaultMap> = ({
 
       getGPS
         .then((response) => {
-          // setBins(dummy_location);
-          // setToilets(dummy_location);
-          // setNeighbors(dummy_location);
-          // setHelps(dummy_helps);
+          setBins(dummy_location);
+          setToilets(dummy_location);
+          setNeighbors(dummy_location);
+          setHelps(dummy_helps);
           mapRef.current = null;
           const { latitude, longitude } = response.coords;
           const map = new naver.maps.Map("map", {
@@ -143,13 +149,8 @@ const DefaultMap: React.FC<IDefaultMap> = ({
           naver.maps.Event.once(map, "init", () => {
             centerBtnIndicator_active.setMap(map);
             if (!isBefore) {
-              if (showBottom) {
-                arrowBtnIndcator_down.setMap(map);
-                arrowBtnRef.current = arrowBtnIndcator_down;
-              } else {
-                arrowBtnIndcator_up.setMap(map);
-                arrowBtnRef.current = arrowBtnIndcator_up;
-              }
+              arrowBtnIndcator_up.setMap(map);
+              arrowBtnRef.current = arrowBtnIndcator_up;
             }
             binBtnIndicator_inactive.setMap(map);
             toiletBtnIndicator_inactive.setMap(map);
@@ -286,6 +287,12 @@ const DefaultMap: React.FC<IDefaultMap> = ({
     return () => {
       if (!isMapLoaded.current) {
         isMapLoaded.current = true;
+        setTimeout(() => {
+          if (!isBefore && isStart && arrowBtnRef.current) {
+            arrowBtnRef.current.getElement().click();
+            dispatch(P.setIsStart(false));
+          }
+        }, popupTime * 1000);
       }
     };
   }, []);
@@ -414,7 +421,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
             : windowHeight - navbarHeight
         }px`,
         width: "100%",
-        transition: `all 200ms ease-in-out`,
+        transition: `all 300ms ease-in-out`,
       }}
     >
       <div id="map" style={{ height: "100%", width: "100%" }}></div>

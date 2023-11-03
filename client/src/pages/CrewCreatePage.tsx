@@ -23,6 +23,7 @@ const CrewCreatePage = () => {
   };
   const crewCreateHandler = () => {
     const data = crewInput;
+    console.log(data);
     getCrewCreate(
       accessToken,
       data,

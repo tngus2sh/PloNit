@@ -31,6 +31,9 @@ const PopUp: React.FC<IPopUP> = ({
 
   return (
     <div>
+      <div>
+        <h2 style={{ margin: `0 0` }}>도움 요청하기</h2>
+      </div>
       <div
         className={style.CameraDiv}
         style={{ height: `${CameraDivHeight}px`, width: "100%" }}
@@ -91,7 +94,7 @@ const PopUp: React.FC<IPopUP> = ({
                 aspectRatio: "1/1",
                 position: "fixed",
                 cursor: "pointer",
-                top: "0.5rem",
+                top: "2rem",
                 right: "0.5rem",
               }}
               onClick={() => {
@@ -101,7 +104,6 @@ const PopUp: React.FC<IPopUP> = ({
           </div>
         )}
       </div>
-      <h2 style={{ margin: `0 0` }}>도움 요청하기</h2>
       <br />
       <div
         className={style.ContextDiv}
