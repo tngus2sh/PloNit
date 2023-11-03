@@ -1,9 +1,26 @@
 @import "styles";
 
 .add_info {
+  img {
+    margin-top: 2rem;
+    width: 60%;
+  }
   .guide {
-    margin: 2rem 1rem;
-    font-size: 1.5rem;
+    margin: 0 3rem;
+  }
+  .nickname_true {
+    text-align: left;
+    margin-left: 1.2rem;
+    margin-top: -1rem;
+    font-size: 0.8rem;
+    color: blue;
+  }
+  .nickname_false {
+    text-align: left;
+    margin-left: 1.2rem;
+    margin-top: -1rem;
+    font-size: 0.8rem;
+    color: red;
   }
   .gender {
     margin: 1rem;
