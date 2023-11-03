@@ -11,6 +11,6 @@ public class SidoRes {
     
     private Long sidoCode;
     
-    private Long sidoName;
+    private String sidoName;
     
 }

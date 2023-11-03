@@ -11,5 +11,5 @@ public class DongRes {
     
     private Long dongCode;
     
-    private Long dongName;
+    private String dongName;
 }

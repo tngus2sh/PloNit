@@ -11,5 +11,5 @@ public class GugunRes {
     
     private Long gugunCode;
     
-    private Long gugunName;
+    private String gugunName;
 }
