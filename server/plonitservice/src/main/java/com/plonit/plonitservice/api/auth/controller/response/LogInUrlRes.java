@@ -9,4 +9,9 @@ import lombok.ToString;
 @ToString
 public class LogInUrlRes {
     private String url;
+    public static LogInUrlRes of(String url) {
+        return LogInUrlRes.builder()
+                .url(url)
+                .build();
+    }
 }
