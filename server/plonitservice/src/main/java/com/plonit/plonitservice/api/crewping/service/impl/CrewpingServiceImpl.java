@@ -50,7 +50,7 @@ public class CrewpingServiceImpl implements CrewpingService {
 
         // TODO: N + 1 문제 해결 필요
         Crew crew = crewRepository.findById(dto.getCrewId())
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_CREW));
+                .orElseThrow(() -> new CustomException(ErrorCode.CREW_NOT_FOUND));
 
         Integer isValidCrewMember = crewMemberQueryRepository.isValidCrewMember(dto.getMemberKey(), dto.getCrewId());
         if(isValidCrewMember == 0) {
