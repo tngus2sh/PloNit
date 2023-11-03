@@ -11,9 +11,15 @@ export const LogoTopBar = () => {
   );
 };
 
-export const BasicTopBar = ({ text }: { text: string }) => {
+export const BasicTopBar = ({
+  text,
+  styles,
+}: {
+  text: string;
+  styles?: { [key: string]: string };
+}) => {
   return (
-    <div className={style.basicTopbar}>
+    <div className={style.basicTopbar} style={{ ...styles }}>
       <div className={style.title_name}>{text}</div>
     </div>
   );
