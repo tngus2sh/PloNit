@@ -47,7 +47,7 @@ public class FeedServiceImpl implements FeedService {
         Member member = memberRepository.findById(saveFeedDto.getMemberKey())
                 .orElseThrow(() -> new CustomException(USER_BAD_REQUEST));
 
-        CrewMember crewMember = crewMemberRepository.findByFetch(saveFeedDto.getMemberKey(), saveFeedDto.getCrewId())
+        CrewMember crewMember = crewMemberRepository.findCrewMemberWithCrewByFetch(saveFeedDto.getMemberKey(), saveFeedDto.getCrewId())
                 .orElseThrow(() -> new CustomException(CREW_NOT_FOUND));
 
         Feed feed = feedRepository.save(SaveFeedDto.toEntity(member, crewMember.getCrew(), saveFeedDto));
@@ -57,7 +57,7 @@ public class FeedServiceImpl implements FeedService {
         for(MultipartFile item : multipartFiles) {
             if (item != null) {
                 try {
-                    feedImageUrl.add(awsS3Uploader.uploadFile(item, "feed/" + saveFeedDto.getCrewId() + "/" + crewMember.getCrew().getId()));
+                    feedImageUrl.add(awsS3Uploader.uploadFile(item, "feed/" + saveFeedDto.getCrewId() + "/" + feed.getId()));
                 } catch (IOException e) {
                     throw new CustomException(S3_CONNECTED_FAIL);
                 }
