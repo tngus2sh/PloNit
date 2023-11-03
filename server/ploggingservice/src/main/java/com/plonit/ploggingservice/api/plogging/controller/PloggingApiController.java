@@ -91,7 +91,7 @@ public class PloggingApiController {
     }
     
     @Operation(summary = "플로깅 기록 일별 조회", description = "처음 날짜와 마지막 날짜를 지정해 해당 기간에 포함되어 있는 플로깅들을 조회한다.")
-    @GetMapping("/period/{start-day}-{end-day}")
+    @GetMapping("/period/{start-day}/{end-day}")
     public CustomApiResponse<List<PloggingPeriodRes>> findPloggingLogbyDay(
             @PathVariable(value = "start-day") String startDay,
             @PathVariable(value = "end-day") String endDay,
@@ -149,15 +149,17 @@ public class PloggingApiController {
     }
     
     @Operation(summary = "플로깅 도움 요청 지역별 조회", description = "위도와 경도를 보내서 해당 위치 구에 있는 도움 요청들을 보낸다.")
-    @GetMapping("/help/{latitude}-{longitude}")
+    @GetMapping("/help/{latitude}/{longitude}")
     public CustomApiResponse<List<PloggingHelpRes>> findPloggingHelp (
             @PathVariable(value = "latitude") Double latitude,
             @PathVariable(value = "longitude") Double longitude
     ) {
 
-        // TODO: 2023-10-27 플로깅 도움 요청 지역별 조회 
+        // 플로깅 도움 요청 지역별 조회 
 
-        return null;
+        List<PloggingHelpRes> ploggingHelp = ploggingService.findPloggingHelp(latitude, longitude);
+
+        return CustomApiResponse.ok(ploggingHelp);
     }
     
     @Operation(summary = "플로깅 중간에 이미지 전송", description = "플로깅 중간에 이미지를 전송하고자 할때 이미지 정보를 넣는다.")
