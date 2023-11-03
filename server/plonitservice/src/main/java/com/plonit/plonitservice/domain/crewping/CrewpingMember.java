@@ -33,4 +33,13 @@ public class CrewpingMember {
 
     @ColumnDefault("false")
     private Boolean isCrewpingMaster;
+
+
+    public static CrewpingMember of(Member member, Crewping crewping, Boolean isCrewpingMaster) {
+        return CrewpingMember.builder()
+                .member(member)
+                .crewping(crewping)
+                .isCrewpingMaster(isCrewpingMaster)
+                .build();
+    }
 }

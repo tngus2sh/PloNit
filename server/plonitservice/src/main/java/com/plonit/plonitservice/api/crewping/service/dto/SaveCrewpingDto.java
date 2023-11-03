@@ -9,6 +9,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
+
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -18,15 +20,17 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 public class SaveCrewpingDto {
 
-    private long memberKey;
+    private Long memberKey;
+
+    private Long crewId;
 
     private String name;
 
     private MultipartFile crewpingImage;
 
-    private String startDate;
+    private LocalDateTime startDate;
 
-    private String endDate;
+    private LocalDateTime endDate;
 
     private Integer maxPeople;
 
@@ -51,19 +55,19 @@ public class SaveCrewpingDto {
                 .build();
     }
 
-    public static Crewping toEntity(SaveCrewpingDto dto, String crewpingImageUrl) {
+    public Crewping toEntity(Crew crew, String crewpingImageUrl) {
         return Crewping.builder()
-                .crew()
-                .crewName()
-                .name(dto.getName())
+                .crew(crew)
+                .crewName(crew.getName())
+                .name(name)
                 .crewpingImage(crewpingImageUrl)
                 .startDate(startDate)
                 .endDate(endDate)
                 .cntPeople(1)
-                .maxPeople(dto.getMaxPeople())
-                .place(dto.getPlace())
-                .introduce(dto.getIntroduce())
-                .notice(dto.getNotice())
+                .maxPeople(maxPeople)
+                .place(place)
+                .introduce(introduce)
+                .notice(notice)
                 .activeTime(0l)
                 .build();
     }

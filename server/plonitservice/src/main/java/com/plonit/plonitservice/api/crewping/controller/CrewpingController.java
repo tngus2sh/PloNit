@@ -46,6 +46,8 @@ public class CrewpingController {
 
         Long memberKey = RequestUtils.getMemberKey(request);
         crewpingService.saveCrewping(SaveCrewpingDto.of(memberKey, saveCrewpingReq));
+
+        return CustomApiResponse.ok(null);
     }
 
 }
