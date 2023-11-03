@@ -1,6 +1,5 @@
 package com.plonit.plonitservice.api.feed.controller.response;
 
-import com.plonit.plonitservice.domain.crew.Crew;
 import lombok.*;
 
 import java.util.List;

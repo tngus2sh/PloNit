@@ -4,7 +4,6 @@ import com.plonit.plonitservice.api.crew.service.CrewService;
 import com.plonit.plonitservice.api.crew.service.dto.SaveCrewDto;
 import com.plonit.plonitservice.common.AwsS3Uploader;
 import com.plonit.plonitservice.common.exception.CustomException;
-import com.plonit.plonitservice.common.exception.ErrorCode;
 import com.plonit.plonitservice.domain.crew.Crew;
 import com.plonit.plonitservice.domain.crew.CrewMember;
 import com.plonit.plonitservice.domain.crew.repository.CrewMemberRepository;
@@ -21,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 
 import static com.plonit.plonitservice.common.exception.ErrorCode.INVALID_FIELDS_REQUEST;
+import static com.plonit.plonitservice.common.exception.ErrorCode.USER_BAD_REQUEST;
 import static com.plonit.plonitservice.common.util.LogCurrent.*;
 
 @Slf4j
@@ -39,7 +39,7 @@ public class CrewServiceImpl implements CrewService{
     public void saveCrew(SaveCrewDto saveCrewDTO) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
         Member member = memberRepository.findById(saveCrewDTO.getMemberKey())
-                        .orElseThrow(() -> new CustomException(ErrorCode.USER_BAD_REQUEST));
+                        .orElseThrow(() -> new CustomException(USER_BAD_REQUEST));
 
         String crewImageUrl = null;
         if (saveCrewDTO.getCrewImage() != null) {
