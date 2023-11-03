@@ -1,6 +1,6 @@
 package com.plonit.plonitservice.api.crew.service.impl;
 
-import com.plonit.plonitservice.api.crew.service.DTO.SaveCrewDTO;
+import com.plonit.plonitservice.api.crew.service.dto.SaveCrewDto;
 import com.plonit.plonitservice.domain.crew.repository.CrewRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -12,10 +12,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @DisplayName("크루 서비스 테스트")
@@ -48,7 +45,7 @@ class CrewServiceImplTest{
                     fileInputStream
             );
 
-            SaveCrewDTO saveCrewDTO = saveCrewDTO(memberId, "test","test", "test", image);
+            SaveCrewDto saveCrewDTO = saveCrewDTO(memberId, "test","test", "test", image);
             // when, then
             Assertions.assertDoesNotThrow(() -> crewService.saveCrew(saveCrewDTO));
         }
@@ -60,9 +57,9 @@ class CrewServiceImplTest{
 
     }
 
-    private SaveCrewDTO saveCrewDTO(long memberKey, String name, String introducem, String region,
+    private SaveCrewDto saveCrewDTO(long memberKey, String name, String introducem, String region,
                                     MultipartFile image) {
-        return SaveCrewDTO.builder()
+        return SaveCrewDto.builder()
                 .memberKey(memberKey)
                 .name(name)
                 .crewImage(image)

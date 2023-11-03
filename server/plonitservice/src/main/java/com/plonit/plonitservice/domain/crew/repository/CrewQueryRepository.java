@@ -23,13 +23,12 @@ public class CrewQueryRepository {
                 .select(Projections.constructor(FindCrewsRes.class,
                         crew.id,
                         crew.name,
+                        crew.cntPeople,
                         crew.crewImage,
-                        crew.region,
-                        crew.cntPeople
+                        crew.region
                 ))
                 .from(crew)
                 .orderBy(crew.createdDate.asc())
                 .fetch();
     }
-
 }

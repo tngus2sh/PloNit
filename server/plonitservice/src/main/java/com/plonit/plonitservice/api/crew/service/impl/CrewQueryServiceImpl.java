@@ -4,6 +4,8 @@ import com.plonit.plonitservice.api.crew.controller.response.FindCrewRes;
 import com.plonit.plonitservice.api.crew.controller.response.FindCrewsRes;
 import com.plonit.plonitservice.api.crew.service.CrewQueryService;
 import com.plonit.plonitservice.common.AwsS3Uploader;
+import com.plonit.plonitservice.common.exception.CustomException;
+import com.plonit.plonitservice.domain.crew.Crew;
 import com.plonit.plonitservice.domain.crew.repository.CrewMemberRepository;
 import com.plonit.plonitservice.domain.crew.repository.CrewQueryRepository;
 import com.plonit.plonitservice.domain.crew.repository.CrewRepository;
@@ -17,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.List;
 
+import static com.plonit.plonitservice.common.exception.ErrorCode.CREW_NOT_FOUND;
+import static com.plonit.plonitservice.common.exception.ErrorCode.USER_NOT_FOUND;
 import static com.plonit.plonitservice.common.util.LogCurrent.*;
 import static com.plonit.plonitservice.common.util.LogCurrent.END;
 
@@ -35,6 +39,7 @@ public class CrewQueryServiceImpl implements CrewQueryService {
 
     public List<FindCrewsRes> findCrews() { // 크루 목록 조회
         log.info(logCurrent(getClassName(), getMethodName(), START));
+//        List<Crew> crew = crewRepository.findAll();
         List<FindCrewsRes> crewList = crewQueryRepository.findCrews();
 
         if(crewList.isEmpty())
@@ -44,11 +49,13 @@ public class CrewQueryServiceImpl implements CrewQueryService {
         return crewList;
     }
 
-    public FindCrewRes findCrew(long crewId) {
+    public FindCrewRes findCrew(long crewId) { // 크루 상세 조회
         log.info(logCurrent(getClassName(), getMethodName(), START));
-        FindCrewRes findCrewRes = null;
+        Crew crew = crewRepository.findById(crewId)
+                .orElseThrow(() -> new CustomException(CREW_NOT_FOUND));
+
         log.info(logCurrent(getClassName(), getMethodName(), END));
-        return findCrewRes;
+        return FindCrewRes.of(crew);
     }
 
 }

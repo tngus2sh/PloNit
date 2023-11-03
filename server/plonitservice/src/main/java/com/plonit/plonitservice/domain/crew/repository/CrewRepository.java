@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface CrewRepository extends JpaRepository<Crew, Long> {
-    Optional<Crew> findById(long id);
+    Optional<Crew> findById(Long id);
 }
