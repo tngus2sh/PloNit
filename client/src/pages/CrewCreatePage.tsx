@@ -15,6 +15,7 @@ const CrewCreatePage = () => {
     region: "",
   });
   const onChange = (event: any) => {
+    // console.log("하하");
     const { id, value } = event.target;
     setCrewInput((prevState) => ({
       ...prevState,
@@ -47,21 +48,21 @@ const CrewCreatePage = () => {
     <div>
       <BackTopBar text="크루 생성" />
       <Input
-        id="crew_name"
+        id="name"
         labelTitle="크루 이름"
         type="text"
         value={crewInput.name}
         onChange={onChange}
       />
       <Input
-        id="crew_intro"
+        id="introduce"
         labelTitle="크루 소개"
         type="text"
         value={crewInput.introduce}
         onChange={onChange}
       />
       <Input
-        id="crew_location"
+        id="region"
         labelTitle="주요 활동 지역"
         type="text"
         value={crewInput.region}
