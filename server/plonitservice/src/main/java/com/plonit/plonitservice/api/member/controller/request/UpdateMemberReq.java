@@ -9,11 +9,11 @@ import javax.validation.constraints.*;
 public class UpdateMemberReq {
 
     @NotEmpty(message = "이름은 필수 입력값입니다.")
-    @Size(min = 2, max = 50)
+    @Size(min = 2, max = 20)
     private String name;
 
     @NotEmpty(message = "닉네임은 필수 입력값입니다.")
-    @Size(min = 2, max = 50)
+    @Size(min = 2, max = 20)
     private String nickname;
 
     private MultipartFile profileImage;
