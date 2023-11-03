@@ -5,10 +5,16 @@ import style from "styles/css/Common/Input_img.module.css";
 interface InputImgProps {
   labelTitle?: string;
   type: string;
+  id?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Input_img: React.FC<InputImgProps> = ({ type, onChange, labelTitle }) => {
+const Input_img: React.FC<InputImgProps> = ({
+  type,
+  onChange,
+  labelTitle,
+  id,
+}) => {
   return (
     <div>
       {labelTitle && <label>{labelTitle}</label>}

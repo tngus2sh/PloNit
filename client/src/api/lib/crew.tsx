@@ -34,7 +34,7 @@ export async function getCrewList(
     | void,
   fail: (err: any) => PromiseLike<never> | null | undefined | void,
 ) {
-  const api = customApiForm("/plonit-service/v1/crew");
+  const api = customApi("/plonit-service/v1/crew");
   api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
   await api.get("").then(success).catch(fail);
 }
