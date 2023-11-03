@@ -2,7 +2,7 @@ package com.plonit.plonitservice.api.auth.service.impl;
 
 import com.plonit.plonitservice.api.auth.controller.response.*;
 import com.plonit.plonitservice.api.auth.service.AuthService;
-import com.plonit.plonitservice.api.auth.service.DTO.KakaoToken;
+import com.plonit.plonitservice.api.auth.service.dto.KakaoToken;
 import com.plonit.plonitservice.common.exception.CustomException;
 import com.plonit.plonitservice.common.security.JwtTokenProvider;
 import com.plonit.plonitservice.domain.member.Member;
@@ -75,6 +75,7 @@ public class AuthServiceImpl implements AuthService {
                 + "&response_type=code");
     }
 
+    @Transactional
     public LogInRes getKakaoToken(HttpServletResponse httpServletResponse, String code) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
         String accessToken = "";
@@ -129,7 +130,8 @@ public class AuthServiceImpl implements AuthService {
         return logInRes;
     }
 
-    private LogInRes getUserInfoWithToken(HttpServletResponse httpServletResponse, KakaoToken kakaoToken) {
+    @Transactional
+    public LogInRes getUserInfoWithToken(HttpServletResponse httpServletResponse, KakaoToken kakaoToken) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
         // 1. HttpHeader 생성
         HttpHeaders headers = new HttpHeaders();
@@ -185,7 +187,8 @@ public class AuthServiceImpl implements AuthService {
         }
     }
 
-    private TokenInfoRes generateToken(long id, KakaoToken kakaoToken, boolean regenerate) {
+    @Transactional
+    public TokenInfoRes generateToken(long id, KakaoToken kakaoToken, boolean regenerate) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
         // 1. token 재발급
         TokenInfoRes tokenInfoRes = jwtTokenProvider.generateToken(id);
@@ -203,6 +206,7 @@ public class AuthServiceImpl implements AuthService {
         return tokenInfoRes;
     }
 
+    @Transactional
     public boolean kakaoLogout(HttpServletRequest request) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
 
@@ -321,6 +325,7 @@ public class AuthServiceImpl implements AuthService {
         response.addHeader("refreshToken", tokenInfo.getRefreshToken());
     }
 
+    @Transactional
     public CheckNicknameRes checkNickname(String nickname) {
         if (memberQueryRepository.existNickname(nickname))
             return CheckNicknameRes.of(false);

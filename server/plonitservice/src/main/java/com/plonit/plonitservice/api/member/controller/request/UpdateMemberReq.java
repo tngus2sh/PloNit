@@ -1,15 +1,11 @@
 package com.plonit.plonitservice.api.member.controller.request;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.*;
 
-@Getter
-@Setter
+@Data
 public class UpdateMemberReq {
 
     @NotEmpty(message = "이름은 필수 입력값입니다.")

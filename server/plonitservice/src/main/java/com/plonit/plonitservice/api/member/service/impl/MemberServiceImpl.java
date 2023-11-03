@@ -17,6 +17,8 @@ import java.io.IOException;
 
 import static com.plonit.plonitservice.common.exception.ErrorCode.INVALID_FIELDS_REQUEST;
 import static com.plonit.plonitservice.common.exception.ErrorCode.USER_BAD_REQUEST;
+import static com.plonit.plonitservice.common.util.LogCurrent.*;
+import static com.plonit.plonitservice.common.util.LogCurrent.START;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -27,6 +29,7 @@ public class MemberServiceImpl implements MemberService {
     private final AwsS3Uploader awsS3Uploader;
     @Transactional
     public FindMemberRes updateMember(Long userId, UpdateMemberReq updateMemberReq) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
         Member member = memberRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(USER_BAD_REQUEST));
 
@@ -39,6 +42,7 @@ public class MemberServiceImpl implements MemberService {
             }
         }
         member.changeInfo(updateMemberReq);
+        log.info(logCurrent(getClassName(), getMethodName(), END));
         return FindMemberRes.of(member);
     }
 }
