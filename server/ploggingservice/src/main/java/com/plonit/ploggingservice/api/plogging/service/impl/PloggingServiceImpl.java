@@ -11,6 +11,7 @@ import com.plonit.ploggingservice.common.AwsS3Uploader;
 import com.plonit.ploggingservice.common.enums.Finished;
 import com.plonit.ploggingservice.common.enums.Time;
 import com.plonit.ploggingservice.common.exception.CustomException;
+import com.plonit.ploggingservice.common.util.KakaoPlaceUtils;
 import com.plonit.ploggingservice.common.util.WebClientUtil;
 import com.plonit.ploggingservice.domain.plogging.LatLong;
 import com.plonit.ploggingservice.domain.plogging.Plogging;
@@ -40,37 +41,18 @@ import java.util.List;
 import static com.plonit.ploggingservice.common.exception.ErrorCode.*;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class PloggingServiceImpl implements PloggingService {
     
-    private final Environment env;
     private final SidoGugunFeignClient sidoGugunFeignClient;
     private final CircuitBreakerFactory circuitBreakerFactory;
-    private final WebClientUtil webClientUtil;
+    private final KakaoPlaceUtils kakaoPlaceUtils;
     private final AwsS3Uploader awsS3Uploader;
     private final PloggingRepository ploggingRepository;
-    private final PloggingQueryRepository ploggingQueryRepository;
     private final LatLongRepository latLongRepository;
     private final PloggingHelpRepository ploggingHelpRepository;
-    private final PloggingHelpQueryRepository ploggingHelpQueryRepository;
-    private String kakaoBaseUrl;
-    private String kakaoKey;
 
-    @Autowired
-    public PloggingServiceImpl(Environment env, SidoGugunFeignClient sidoGugunFeignClient, CircuitBreakerFactory circuitBreakerFactory, WebClientUtil webClientUtil, AwsS3Uploader awsS3Uploader, PloggingRepository ploggingRepository, PloggingQueryRepository ploggingQueryRepository, LatLongRepository latLongRepository, PloggingHelpRepository ploggingHelpRepository, PloggingHelpQueryRepository ploggingHelpQueryRepository) {
-        this.env = env;
-        this.sidoGugunFeignClient = sidoGugunFeignClient;
-        this.circuitBreakerFactory = circuitBreakerFactory;
-        this.webClientUtil = webClientUtil;
-        this.awsS3Uploader = awsS3Uploader;
-        this.ploggingRepository = ploggingRepository;
-        this.ploggingQueryRepository = ploggingQueryRepository;
-        this.latLongRepository = latLongRepository;
-        this.ploggingHelpRepository = ploggingHelpRepository;
-        this.ploggingHelpQueryRepository = ploggingHelpQueryRepository;
-        this.kakaoBaseUrl = env.getProperty("kakao.base-url");
-        this.kakaoKey = env.getProperty("kakao.apikey");
-    }
 
 
     /**
@@ -83,7 +65,7 @@ public class PloggingServiceImpl implements PloggingService {
     public Long saveStartPlogging(StartPloggingDto dto) {
         
         // 위도, 경도로 위치 구하기
-        KakaoAddressRes.RoadAddress roadAddress = getRoadAddress(dto.getLatitude(), dto.getLongitude());
+        KakaoAddressRes.RoadAddress roadAddress = kakaoPlaceUtils.getRoadAddress(dto.getLatitude(), dto.getLongitude());
         if (roadAddress == null) {
             throw new CustomException(INVALID_PLACE_REQUEST);
         }
@@ -137,33 +119,7 @@ public class PloggingServiceImpl implements PloggingService {
         
         return plogging.getId();
     }
-
-    /**
-     * 플로깅 기록 일별 조회
-     * @param startDay 조회 시작 날짜
-     * @param endDay 조회 마지막 날짜
-     * @param memberKey 사용자 식별키
-     * @return 플로깅 기록 일별 조회
-     */
-    @Override
-    public List<PloggingPeriodRes> findPloggingLogByDay(String startDay, String endDay, Long memberKey) {
-        
-        // 조회 시작 날짜 -> LocalDate
-        LocalDate startDate = LocalDate.parse(startDay, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        
-        // 조회 마지막 날짜 -> LocalDate
-        LocalDate endDate = LocalDate.parse(endDay, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-
-        return ploggingQueryRepository.findPloggingLogByDay(startDate, endDate, memberKey);
-    }
-
-    @Override
-    public PloggingLogRes findPloggingLogDetail(Long ploggingId, Long memberKey) {
-        // ploggingId와 memberKey로 플로깅 정보 가져오기
-        return ploggingQueryRepository.findPloggingLogDetail(ploggingId, memberKey)
-                .orElseThrow(() -> new CustomException(PLOGGING_BAD_REQUEST));
-    }
-
+    
     /**
      * 플로깅 도움 요청 저장
      * @param dto 플로깅 도움 요청 데이터
@@ -182,7 +138,7 @@ public class PloggingServiceImpl implements PloggingService {
             }
         }
 
-        KakaoAddressRes.RoadAddress roadAddress = getRoadAddress(dto.getLatitude(), dto.getLongitude());
+        KakaoAddressRes.RoadAddress roadAddress = kakaoPlaceUtils.getRoadAddress(dto.getLatitude(), dto.getLongitude());
         if (roadAddress == null) {
             throw new CustomException(INVALID_PLACE_REQUEST);
         }
@@ -203,32 +159,7 @@ public class PloggingServiceImpl implements PloggingService {
         PloggingHelp ploggingHelp = HelpPloggingDto.toEntity(dto, sidoGugunCodeRes.getGugunCode(), roadAddress.getAddress_name(), imageUrl);
         return ploggingHelpRepository.save(ploggingHelp).getId();
     }
-
-    @Override
-    public List<PloggingHelpRes> findPloggingHelp(Double latitude, Double longitude) {
-
-        KakaoAddressRes.RoadAddress roadAddress = getRoadAddress(latitude, longitude);
-        if (roadAddress == null) {
-            throw new CustomException(INVALID_PLACE_REQUEST);
-        }
-        
-        // 구군 코드 얻어오기
-        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
-
-        SidoGugunCodeRes sidoGugunCodeRes = circuitBreaker.run(
-                () -> sidoGugunFeignClient.findSidoGugunCode(roadAddress.getRegion_1depth_name(), roadAddress.getRegion_2depth_name()).getResultBody(), // 통신하는 서비스
-                throwable -> null // 에러 발생시 null 반환
-        );
-
-        if (sidoGugunCodeRes == null) {
-            throw new CustomException(INVALID_PLACE_REQUEST);
-        }
-        
-        // 구군 코드로 플로깅 도움 요청 조회
-        LocalDate now = LocalDate.now(ZoneId.of(Time.SEOUL.name()));
-        return ploggingHelpQueryRepository.findPloggingHelp(now, sidoGugunCodeRes.getGugunCode());
-    }
-
+    
     @Override
     public Long savePloggingImage(ImagePloggingDto dto) {
         
@@ -251,33 +182,4 @@ public class PloggingServiceImpl implements PloggingService {
     }
 
 
-    /**
-     * 지번 주소 전체 내용 가져오기
-     * @param latitude 위도
-     * @param longitude 경도
-     * @return 주소
-     */
-    private KakaoAddressRes.RoadAddress getRoadAddress(Double latitude, Double longitude) {
-        
-        // webClient 기본 설정
-        WebClient webClient = WebClient.builder()
-                .baseUrl(kakaoBaseUrl)
-                .defaultHeader(HttpHeaders.AUTHORIZATION, kakaoKey)
-                .build();
-
-        KakaoAddressRes response = webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .queryParam("x", longitude)
-                        .queryParam("y", latitude)
-                        .queryParam("input_cord", "WGS84")
-                        .build())
-                .retrieve()
-                .bodyToMono(KakaoAddressRes.class)
-                .block();
-
-        // 결과 확인
-        log.info(response.toString());
-
-        return response.getDocuments().length >=1 ? response.getDocuments()[0].getRoad_address() : null;
-    }
 }

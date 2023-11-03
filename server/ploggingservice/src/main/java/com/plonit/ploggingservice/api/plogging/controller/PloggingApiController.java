@@ -8,6 +8,7 @@ import com.plonit.ploggingservice.api.plogging.controller.response.PloggingHelpR
 import com.plonit.ploggingservice.api.plogging.controller.response.PloggingLogRes;
 import com.plonit.ploggingservice.api.plogging.controller.response.PloggingPeriodRes;
 import com.plonit.ploggingservice.api.plogging.controller.response.UsersRes;
+import com.plonit.ploggingservice.api.plogging.service.PloggingQueryService;
 import com.plonit.ploggingservice.api.plogging.service.PloggingService;
 import com.plonit.ploggingservice.api.plogging.service.dto.EndPloggingDto;
 import com.plonit.ploggingservice.api.plogging.service.dto.HelpPloggingDto;
@@ -38,6 +39,7 @@ import static com.plonit.ploggingservice.common.exception.ErrorCode.INVALID_FIEL
 public class PloggingApiController {
     
     private final PloggingService ploggingService;
+    private final PloggingQueryService ploggingQueryService;
     
     @Operation(summary = "플로깅 시작하기", description = "플로깅을 시작할 때 초기 플로깅 정보들을 저장합니다.")
     @PostMapping("/start")
@@ -102,7 +104,7 @@ public class PloggingApiController {
         Long memberKey = RequestUtils.getMemberKey(servletRequest);
         log.info("memberKey : " + memberKey);
 
-        List<PloggingPeriodRes> ploggingLogByDay = ploggingService.findPloggingLogByDay(startDay, endDay, memberKey);
+        List<PloggingPeriodRes> ploggingLogByDay = ploggingQueryService.findPloggingLogByDay(startDay, endDay, memberKey);
 
         return CustomApiResponse.ok(ploggingLogByDay);
     }
@@ -117,7 +119,7 @@ public class PloggingApiController {
         Long memberKey = RequestUtils.getMemberKey(servletRequest);
         log.info("memberKey : " + memberKey);
 
-        PloggingLogRes ploggingLogDetail = ploggingService.findPloggingLogDetail(ploggingId, memberKey);
+        PloggingLogRes ploggingLogDetail = ploggingQueryService.findPloggingLogDetail(ploggingId, memberKey);
 
         return CustomApiResponse.ok(ploggingLogDetail);
     }
@@ -158,7 +160,7 @@ public class PloggingApiController {
 
         // 플로깅 도움 요청 지역별 조회 
 
-        List<PloggingHelpRes> ploggingHelp = ploggingService.findPloggingHelp(latitude, longitude);
+        List<PloggingHelpRes> ploggingHelp = ploggingQueryService.findPloggingHelp(latitude, longitude);
 
         return CustomApiResponse.ok(ploggingHelp);
     }
@@ -187,12 +189,13 @@ public class PloggingApiController {
     }
     
     @Operation(summary = "플로깅 주변의 유저 조회", description = "위도, 경도에 맞는 '구'를 가져와 해당 구에 있는 유저를 조회한다.")
-    @GetMapping("/users/{latitude}-{longitude}")
+    @GetMapping("/users/{latitude}/{longitude}")
     public CustomApiResponse<UsersRes> findPloggingUsers(
             @PathVariable(value = "latitude") Double latitude,
             @PathVariable(value = "longitude") Double longitude
     ) {
         // TODO: 2023-10-27 주변에 있는 유저 조회 
+        
         
         return null;
     }
