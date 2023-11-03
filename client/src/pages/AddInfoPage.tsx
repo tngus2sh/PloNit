@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Input from "components/common/Input";
 import CommonButton from "components/common/CommonButton";
+import { nicknameCheck } from "api/lib/auth";
 import { addInfo } from "api/lib/members";
 import { useSelector } from "react-redux";
 import style from "styles/css/AddInfoPage.module.css";
@@ -9,6 +10,7 @@ import style from "styles/css/AddInfoPage.module.css";
 const AddInfoPage = () => {
   const navigate = useNavigate();
   const accessToken = useSelector((state: any) => state.user.accessToken);
+  const [isnickname, setnickname] = useState(false);
   const [signupInput, setSignupInput] = useState({
     name: "",
     nickname: "",
@@ -22,6 +24,27 @@ const AddInfoPage = () => {
       ...prevState,
       [id]: value,
     }));
+  };
+
+  const onChangeNickname = (value: any) => {
+    nicknameCheck(
+      value,
+      (res) => {
+        console.log("닉네임 중복 확인");
+        console.log(res);
+        console.log(res.data);
+        if (!res.data.resultStatus) {
+          setnickname(true);
+          setSignupInput((prevState) => ({
+            ...prevState,
+            gender: value,
+          }));
+        }
+      },
+      (err) => {
+        console.log("닉네임 중복 확인 에러...");
+      },
+    );
   };
 
   const onChangeGender = (value: boolean) => {
@@ -51,8 +74,10 @@ const AddInfoPage = () => {
 
   return (
     <div className={style.add_info}>
+      <img src="/plonit_logo.png" alt="로고" />
       <div className={style.guide}>
-        서비스 사용을 위해 추가 정보를 등록해 주세요!
+        <div>서비스 사용을 위해</div>
+        <div>추가 정보를 등록해 주세요!</div>
       </div>
       <Input
         id="name"
@@ -60,14 +85,24 @@ const AddInfoPage = () => {
         type="text"
         value={signupInput.name}
         onChange={onChange}
+        placeholder="20자 이내로 입력해주세요"
+        maxLength={20}
       />
       <Input
         id="nickname"
         labelTitle="닉네임"
         type="text"
         value={signupInput.nickname}
-        onChange={onChange}
+        onChange={onChangeNickname}
+        placeholder="20자 이내로 입력해주세요"
+        maxLength={20}
       />
+      {isnickname ? (
+        <div className={style.nickname_true}>사용가능한 닉네임입니다.</div>
+      ) : (
+        <div className={style.nickname_false}>중복된 닉네임입니다.</div>
+      )}
+
       <div className={style.gender}>
         <div
           className={

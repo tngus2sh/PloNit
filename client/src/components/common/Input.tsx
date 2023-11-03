@@ -10,7 +10,8 @@ interface InputProps {
   labelTitle?: string | "";
   required?: boolean;
   disabled?: boolean;
-  placeholder?: string; // 이 부분을 추가
+  placeholder?: string;
+  maxLength?: number;
 }
 
 const Input = ({
@@ -23,6 +24,7 @@ const Input = ({
   required,
   disabled,
   placeholder,
+  maxLength,
 }: InputProps) => {
   return (
     <div className={style.input_area} style={styles}>
@@ -39,6 +41,7 @@ const Input = ({
         placeholder={placeholder || ""}
         required={required}
         disabled={disabled}
+        maxLength={maxLength}
       />
     </div>
   );
