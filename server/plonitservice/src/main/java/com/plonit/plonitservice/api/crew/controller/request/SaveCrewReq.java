@@ -1,6 +1,7 @@
 package com.plonit.plonitservice.api.crew.controller.request;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;

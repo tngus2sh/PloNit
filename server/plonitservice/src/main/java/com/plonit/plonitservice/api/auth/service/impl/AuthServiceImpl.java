@@ -2,7 +2,7 @@ package com.plonit.plonitservice.api.auth.service.impl;
 
 import com.plonit.plonitservice.api.auth.controller.response.*;
 import com.plonit.plonitservice.api.auth.service.AuthService;
-import com.plonit.plonitservice.api.auth.service.DTO.KakaoToken;
+import com.plonit.plonitservice.api.auth.service.dto.KakaoToken;
 import com.plonit.plonitservice.common.exception.CustomException;
 import com.plonit.plonitservice.common.security.JwtTokenProvider;
 import com.plonit.plonitservice.domain.member.Member;
