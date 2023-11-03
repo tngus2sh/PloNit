@@ -11,6 +11,9 @@ const PloggingCompletePage = () => {
   const isEnd = useSelector<rootState, boolean>((state) => {
     return state.plogging.isEnd;
   });
+  const windowHeight = useSelector<rootState, number>((state) => {
+    return state.window.height;
+  });
 
   // 플러깅이 아닐 시 접근하면 돌려보내기
   // useEffect(() => {
@@ -20,7 +23,7 @@ const PloggingCompletePage = () => {
   // }, []);
 
   return (
-    <div>
+    <div style={{ height: windowHeight }}>
       <PloggingComplete />
     </div>
   );

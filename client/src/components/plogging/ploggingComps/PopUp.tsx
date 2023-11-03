@@ -56,7 +56,7 @@ const PopUp: React.FC<IPopUP> = ({
               <div
                 className={style.camera_image}
                 style={{
-                  backgroundImage: `url("images/PloggingPage/camera-solid.svg")`,
+                  backgroundImage: `url("/images/PloggingPage/camera-solid.svg")`,
                   height: "40%",
                   aspectRatio: "1/1",
                 }}

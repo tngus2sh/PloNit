@@ -1,0 +1,19 @@
+@import "../styles";
+
+.text {
+  width: 100%;
+  text-align: start;
+  font-size: 1.5rem;
+  font-weight: bold;
+  box-sizing: border-box;
+  margin: 1.5rem 0;
+}
+
+.text_sm {
+  width: 100%;
+  text-align: start;
+  font-size: 1.25rem;
+  font-weight: bold;
+  box-sizing: border-box;
+  margin: 0.75rem 0;
+}

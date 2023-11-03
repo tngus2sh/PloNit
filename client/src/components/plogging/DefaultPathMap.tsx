@@ -83,13 +83,22 @@ const DefaultPathMap: React.FC<IPathMap> = ({ subHeight, paths }) => {
     <div
       style={{
         height: `${(windowHeight - subHeight) / 3}px`,
-        width: "90%",
+        width: "100%",
         transition: `all 200ms ease-in-out`,
         display: "flex",
         justifyContent: "center",
+        alignItems: "center",
       }}
     >
-      <div id="map" style={{ height: "100%", width: "100%" }}></div>
+      <div
+        id="map"
+        style={{
+          height: "100%",
+          width: "100%",
+          borderRadius: "2.5%",
+          boxShadow: `0 0.3rem 0.3rem #9D9D9D`,
+        }}
+      ></div>
     </div>
   );
 };

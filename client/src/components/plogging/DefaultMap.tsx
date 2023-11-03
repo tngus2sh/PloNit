@@ -93,10 +93,10 @@ const DefaultMap: React.FC<IDefaultMap> = ({
 
       getGPS
         .then((response) => {
-          setBins(dummy_location);
-          setToilets(dummy_location);
-          setNeighbors(dummy_location);
-          setHelps(dummy_helps);
+          // setBins(dummy_location);
+          // setToilets(dummy_location);
+          // setNeighbors(dummy_location);
+          // setHelps(dummy_helps);
           mapRef.current = null;
           const { latitude, longitude } = response.coords;
           const map = new naver.maps.Map("map", {
