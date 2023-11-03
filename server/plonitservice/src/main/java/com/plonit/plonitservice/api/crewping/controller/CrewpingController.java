@@ -1,6 +1,8 @@
 package com.plonit.plonitservice.api.crewping.controller;
 
 import com.plonit.plonitservice.api.crewping.controller.request.SaveCrewpingReq;
+import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingRes;
+import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingsRes;
 import com.plonit.plonitservice.api.crewping.service.CrewpingService;
 import com.plonit.plonitservice.api.crewping.service.dto.SaveCrewpingDto;
 import com.plonit.plonitservice.common.CustomApiResponse;
@@ -11,12 +13,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.List;
 
 import static com.plonit.plonitservice.common.exception.ErrorCode.INVALID_FIELDS_REQUEST;
 import static com.plonit.plonitservice.common.util.LogCurrent.*;
@@ -48,6 +49,26 @@ public class CrewpingController {
         crewpingService.saveCrewping(SaveCrewpingDto.of(memberKey, saveCrewpingReq));
 
         return CustomApiResponse.ok(null);
+    }
+
+    @GetMapping("/{crew-id}")
+    public CustomApiResponse<List<FindCrewpingsRes>> findCrewpings(@PathVariable("crew-id") Long crewId, HttpServletRequest request) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+        log.info("FindCrewpings={}", crewId);
+
+        List<FindCrewpingsRes> response = crewpingService.findCrewpings(RequestUtils.getMemberKey(request), crewId);
+
+        return CustomApiResponse.ok(response);
+    }
+
+    @GetMapping("/detail/{crewping-id}")
+    public CustomApiResponse<FindCrewpingRes> findCrewping(@PathVariable("crewping-id") Long crewpingId, HttpServletRequest request) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+        log.info("FindCrewping={}", crewpingId);
+
+        FindCrewpingRes response = crewpingService.findCrewpings(RequestUtils.getMemberKey(request), crewpingId);
+
+        return CustomApiResponse.ok(response);
     }
 
 }

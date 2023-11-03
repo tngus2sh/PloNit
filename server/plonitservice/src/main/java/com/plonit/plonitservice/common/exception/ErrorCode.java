@@ -29,6 +29,8 @@ public enum ErrorCode {
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."),
     CREW_NOT_FOUND(HttpStatus.BAD_REQUEST, "존재하지 않은 크루입니다."),
+    CREWPING_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않은 크루핑입니다."),
+    CREWPINGMEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않은 크루핑 멤버입니다."),
 
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     USER_ALREADY_EXIST(HttpStatus.CONFLICT, "이미 가입되어 있는 유저입니다."),
