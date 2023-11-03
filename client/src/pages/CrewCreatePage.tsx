@@ -15,7 +15,7 @@ const CrewCreatePage = () => {
     region: "",
   });
   const onChange = (event: any) => {
-    // console.log("하하");
+    console.log("하");
     const { id, value } = event.target;
     setCrewInput((prevState) => ({
       ...prevState,
