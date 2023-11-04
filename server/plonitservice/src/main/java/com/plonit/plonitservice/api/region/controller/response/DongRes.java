@@ -1,10 +1,11 @@
 package com.plonit.plonitservice.api.region.controller.response;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Data
+@AllArgsConstructor
+@Builder(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class DongRes {
     
     private Long dongCode;
