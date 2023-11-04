@@ -1,5 +1,3 @@
-import { AxiosHeaderValue } from "axios";
-
 export interface UserInterface {
   profileImg?: string;
   email?: string;

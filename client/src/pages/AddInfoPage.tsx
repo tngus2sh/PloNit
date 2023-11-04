@@ -1,45 +1,38 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import Input from "components/common/Input";
 import CommonButton from "components/common/CommonButton";
+import RegionModal from "components/common/RegionModal";
 import { nicknameCheck } from "api/lib/auth";
 import { addInfo } from "api/lib/members";
-import { useSelector } from "react-redux";
 import style from "styles/css/AddInfoPage.module.css";
 
 const AddInfoPage = () => {
   const navigate = useNavigate();
   const accessToken = useSelector((state: any) => state.user.accessToken);
+  const [isSignupName, setSignupName] = useState("");
+  const [isSignupNickname, setSignupNickname] = useState("");
+  const [isSignupGender, setSignupGender] = useState(false);
+  const [isSignupBirth, setSignupBirth] = useState("");
+  const [isSignupRegion, setSignupRegion] = useState("");
   const [isnickname, setnickname] = useState(false);
-  const [signupInput, setSignupInput] = useState({
-    name: "",
-    nickname: "",
-    gender: false,
-    birth: "",
-    region: "",
-  });
-  const onChange = (event: any) => {
-    const { id, value } = event.target;
-    setSignupInput((prevState) => ({
-      ...prevState,
-      [id]: value,
-    }));
+  const [isOpenRegionModal, setOpenRegionModal] = useState(false);
+
+  const onChangeName = (event: any) => {
+    setSignupName(event.target.value);
   };
 
-  const onChangeNickname = (value: any) => {
+  const onChangeNickname = (event: any) => {
+    const newNickname = event.target.value;
+    setSignupNickname(newNickname);
     nicknameCheck(
-      value,
+      newNickname,
       (res) => {
         console.log("닉네임 중복 확인");
         console.log(res);
         console.log(res.data);
-        if (!res.data.resultStatus) {
-          setnickname(true);
-          setSignupInput((prevState) => ({
-            ...prevState,
-            gender: value,
-          }));
-        }
+        // setnickname(true);
       },
       (err) => {
         console.log("닉네임 중복 확인 에러...");
@@ -48,14 +41,40 @@ const AddInfoPage = () => {
   };
 
   const onChangeGender = (value: boolean) => {
-    setSignupInput((prevState) => ({
-      ...prevState,
-      gender: value,
-    }));
+    setSignupGender(value);
+  };
+
+  const onChangeBirth = (event: any) => {
+    setSignupBirth(event.target.value);
+  };
+
+  const OpenRegionModal = () => {
+    setOpenRegionModal(!isOpenRegionModal);
   };
 
   const SendInfo = () => {
-    const data = signupInput;
+    const data = {
+      name: isSignupName,
+      nickname: isSignupNickname,
+      gender: isSignupGender,
+      birth: isSignupBirth,
+      region: isSignupRegion,
+    };
+    if (!data.name) {
+      alert("이름을 입력하세요");
+      return;
+    } else if (!data.nickname) {
+      alert("닉네임을 입력하세요");
+    } else if (!isnickname) {
+      alert("중복된 닉네임입니다");
+    } else if (!data.birth) {
+      alert("생년월일을 입력하세요");
+    } else if (data.birth.length > 6) {
+      alert("생년월일을 다시 입력하세요");
+    }
+    // else if (!data.region) {
+    //   alert("활동 지역을 입력하세요");
+    // }
     console.log(data);
     console.log(accessToken);
     addInfo(
@@ -83,8 +102,8 @@ const AddInfoPage = () => {
         id="name"
         labelTitle="이름"
         type="text"
-        value={signupInput.name}
-        onChange={onChange}
+        value={isSignupName}
+        onChange={onChangeName}
         placeholder="20자 이내로 입력해주세요"
         maxLength={20}
       />
@@ -92,21 +111,23 @@ const AddInfoPage = () => {
         id="nickname"
         labelTitle="닉네임"
         type="text"
-        value={signupInput.nickname}
+        value={isSignupNickname}
         onChange={onChangeNickname}
         placeholder="20자 이내로 입력해주세요"
         maxLength={20}
       />
-      {isnickname ? (
-        <div className={style.nickname_true}>사용가능한 닉네임입니다.</div>
-      ) : (
-        <div className={style.nickname_false}>중복된 닉네임입니다.</div>
-      )}
+      {isSignupNickname ? (
+        isnickname ? (
+          <div className={style.nickname_true}>사용가능한 닉네임입니다.</div>
+        ) : (
+          <div className={style.nickname_false}>중복된 닉네임입니다.</div>
+        )
+      ) : null}
 
       <div className={style.gender}>
         <div
           className={
-            signupInput.gender === false
+            isSignupGender === false
               ? `${style.choice1} ${style.selected}`
               : style.choice1
           }
@@ -116,7 +137,7 @@ const AddInfoPage = () => {
         </div>
         <div
           className={
-            signupInput.gender === true
+            isSignupGender === true
               ? `${style.choice2} ${style.selected}`
               : style.choice2
           }
@@ -128,19 +149,22 @@ const AddInfoPage = () => {
       <Input
         id="birth"
         labelTitle="생년월일"
-        type="text"
-        value={signupInput.birth}
-        placeholder="1990.01.01"
-        onChange={onChange}
+        type="number"
+        value={isSignupBirth}
+        placeholder="900101"
+        onChange={onChangeBirth}
+        maxLength={6}
       />
-      <Input
-        id="region"
-        labelTitle="활동 지역"
-        type="text"
-        value={signupInput.region}
-        placeholder="예) 장덕동"
-        onChange={onChange}
-      />
+      <div className={style.region}>
+        <div className={style.title}>활동지역</div>
+        <div className={style.input_area} onClick={OpenRegionModal}></div>
+        {isOpenRegionModal && (
+          <>
+            <div className={style.modalbackground}></div>
+            <RegionModal onClose={OpenRegionModal} />
+          </>
+        )}
+      </div>
       <CommonButton
         text="시작하기"
         styles={{
@@ -148,6 +172,8 @@ const AddInfoPage = () => {
         }}
         onClick={SendInfo}
       />
+
+      <div style={{ height: "4rem" }}></div>
     </div>
   );
 };
