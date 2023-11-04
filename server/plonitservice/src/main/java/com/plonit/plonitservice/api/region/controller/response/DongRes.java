@@ -5,8 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@RequiredArgsConstructor
 public class DongRes {
     
     private Long dongCode;
