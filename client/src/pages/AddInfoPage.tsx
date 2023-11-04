@@ -62,7 +62,6 @@ const AddInfoPage = () => {
     };
     if (!data.name) {
       alert("이름을 입력하세요");
-      return;
     } else if (!data.nickname) {
       alert("닉네임을 입력하세요");
     } else if (!isnickname) {
