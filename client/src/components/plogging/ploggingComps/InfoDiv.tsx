@@ -95,8 +95,7 @@ const InfoDiv: React.FC<IInfoDiv> = ({
       if (result.isConfirmed) {
         // axios 요청 성공 시
         Swal.close();
-        dispatch(P.setPloggingType("none"));
-        dispatch(P.setCbURL("/"));
+        dispatch(P.setIsEnd(true));
         dispatch(camera.clear());
         navigate("/plogging/complete");
       }
@@ -135,19 +134,19 @@ const InfoDiv: React.FC<IInfoDiv> = ({
       </div>
       <div style={{ height: "50%", width: "100%", display: "flex" }}>
         <IconBottom
-          icon="images/PloggingPage/help-solid.svg"
+          icon="/images/PloggingPage/help-solid.svg"
           backgroundSize="50%"
           onClick={() => {
             helpBtnEvent();
           }}
         />
         <IconBottom
-          icon="images/PloggingPage/stop-green.svg"
+          icon="/images/PloggingPage/stop-green.svg"
           backgroundSize="contain"
           onClick={stopBtnEvent}
         />
         <IconBottom
-          icon="images/PloggingPage/camera-solid.svg"
+          icon="/images/PloggingPage/camera-solid.svg"
           backgroundSize="50%"
           onClick={CameraBtnEvent}
         />

@@ -87,7 +87,7 @@ const PopUp: React.FC<IPopUP> = ({
               }}
             />
             <img
-              src="images/PloggingPage/delete-button.svg"
+              src="/images/PloggingPage/delete-button.svg"
               alt="delete-button"
               style={{
                 maxWidth: "10%",

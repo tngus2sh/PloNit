@@ -54,7 +54,7 @@ const DefaultPathMap: React.FC<IPathMap> = ({ subHeight, paths }) => {
       const start = N.createMarker_small({
         latlng: naverPaths[0],
         map: mapRef.current ?? undefined,
-        url: `images/PloggingPage/start.png`,
+        url: `/images/PloggingPage/start.png`,
         cursor: `default`,
       });
       startRef.current = start;
@@ -62,7 +62,7 @@ const DefaultPathMap: React.FC<IPathMap> = ({ subHeight, paths }) => {
       const end = N.createMarker_small({
         latlng: naverPaths[len - 1],
         map: mapRef.current ?? undefined,
-        url: `images/PloggingPage/stop.png`,
+        url: `/images/PloggingPage/stop.png`,
         cursor: `default`,
       });
       endRef.current = end;

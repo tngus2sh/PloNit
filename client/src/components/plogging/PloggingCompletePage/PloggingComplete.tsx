@@ -6,12 +6,14 @@ import PloggingInfo from "../ploggingComps/PloggingInfo";
 import PloggingSwiper from "../ploggingComps/PloggingSwiper";
 import { Coordinate } from "interface/ploggingInterface";
 import useCamera from "../functions/useCamera";
+import Swal from "sweetalert2";
 import style from "styles/css/PloggingPage/PloggingComplete.module.css";
 
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
 import * as camera from "store/camera-slice";
+import * as P from "store/plogging-slice";
 
 function formatNumber(n: number): string {
   if (n < 10) {
@@ -58,12 +60,12 @@ const PloggingComplete = () => {
   const day = ["일", "월", "화", "수", "목", "금", "토"][time.getDay()];
   const { image, handleImageCapture, fileInputRef } = useCamera();
 
-  // useEffect(() => {
-  //   if (image) {
-  //     dispatch(camera.setImage(image));
-  //     navigate("/plogging/image");
-  //   }
-  // }, [image]);
+  useEffect(() => {
+    if (image) {
+      dispatch(camera.setImage(image));
+      navigate("/plogging/image");
+    }
+  }, [image]);
 
   return (
     <div
@@ -126,7 +128,7 @@ const PloggingComplete = () => {
         <PloggingSwiper
           images={images}
           onClick={() => {
-            console.log("카메라 연결");
+            handleImageCapture();
           }}
         />
         <div className={style.text_sm}>{`플로깅 기록`}</div>
@@ -161,7 +163,22 @@ const PloggingComplete = () => {
           margin: `5px ${windowHeight * 0.025}px`,
         }}
         onClick={() => {
-          console.log("플로깅 완전 종료");
+          Swal.fire({
+            icon: "question",
+            text: "작성을 종료하시겠습니까?",
+            showCancelButton: true,
+            confirmButtonText: "예",
+            cancelButtonText: "아니오",
+            confirmButtonColor: "#2CD261",
+            cancelButtonColor: "#FF2953",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              // axios 요청
+              dispatch(camera.clear());
+              dispatch(P.clear());
+              navigate("/");
+            }
+          });
         }}
       />
     </div>

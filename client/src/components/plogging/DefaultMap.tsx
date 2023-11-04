@@ -71,18 +71,18 @@ const DefaultMap: React.FC<IDefaultMap> = ({
   const toiletCluster = useRef<any>(null);
   const [showBottom, setShowBottom] = useState<boolean>(isBefore);
 
-  const centerBtn_inactive = `<div class="${style.btn_white_margin_inc}" style="background-image:url('images/PloggingPage/location-cross-black.svg')"></div>`;
-  const centerBtn_active = `<div class="${style.btn_white_margin_inc}" style="background-image:url('images/PloggingPage/location-cross-blue.svg')"></div>`;
+  const centerBtn_inactive = `<div class="${style.btn_white_margin_inc}" style="background-image:url('/images/PloggingPage/location-cross-black.svg')"></div>`;
+  const centerBtn_active = `<div class="${style.btn_white_margin_inc}" style="background-image:url('/images/PloggingPage/location-cross-blue.svg')"></div>`;
   const binBtn_inactive = isBefore
-    ? `<div class="${style.btn_black_margin_inc}" style="background-image:url('images/PloggingPage/bin.svg')"></div>`
-    : `<div class="${style.btn_black}" style="background-image:url('images/PloggingPage/bin.svg')"></div>`;
+    ? `<div class="${style.btn_black_margin_inc}" style="background-image:url('/images/PloggingPage/bin.svg')"></div>`
+    : `<div class="${style.btn_black}" style="background-image:url('/images/PloggingPage/bin.svg')"></div>`;
   const binBtn_active = isBefore
-    ? `<div class="${style.btn_green_margin_inc}" style="background-image:url('images/PloggingPage/bin.svg')"></div>`
-    : `<div class="${style.btn_green}" style="background-image:url('images/PloggingPage/bin.svg')"></div>`;
-  const toiletBtn_inactive = `<div class="${style.btn_black}" style="background-image:url('images/PloggingPage/toilet.svg')"></div>`;
-  const toiletBtn_active = `<div class="${style.btn_blue}" style="background-image:url('images/PloggingPage/toilet.svg')"></div>`;
-  const arrow_up = `<div class="${style.btn_black_margin_inc}" style="background-image:url('images/PloggingPage/arrow-up.svg')"></div>`;
-  const arrow_down = `<div class="${style.btn_black_margin_inc}" style="background-image:url('images/PloggingPage/arrow-down.svg')"></div>`;
+    ? `<div class="${style.btn_green_margin_inc}" style="background-image:url('/images/PloggingPage/bin.svg')"></div>`
+    : `<div class="${style.btn_green}" style="background-image:url('/images/PloggingPage/bin.svg')"></div>`;
+  const toiletBtn_inactive = `<div class="${style.btn_black}" style="background-image:url('/images/PloggingPage/toilet.svg')"></div>`;
+  const toiletBtn_active = `<div class="${style.btn_blue}" style="background-image:url('/images/PloggingPage/toilet.svg')"></div>`;
+  const arrow_up = `<div class="${style.btn_black_margin_inc}" style="background-image:url('/images/PloggingPage/arrow-up.svg')"></div>`;
+  const arrow_down = `<div class="${style.btn_black_margin_inc}" style="background-image:url('/images/PloggingPage/arrow-down.svg')"></div>`;
 
   // 초기맵 생성 및 기초 구조 구성
   useEffect(() => {
@@ -108,7 +108,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
           const user = N.createMarker({
             latlng: new naver.maps.LatLng(latitude, longitude),
             map: map,
-            url: `images/PloggingPage/myLocation.svg`,
+            url: `/images/PloggingPage/myLocation.svg`,
             cursor: "default",
           });
           userRef.current = user;
@@ -320,7 +320,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
     binMarkers.current = binMarkers.current = N.createMarkers({
       items: bins,
       map: undefined,
-      url: `images/PloggingPage/bin-pin.png`,
+      url: `/images/PloggingPage/bin-pin.png`,
       cursor: "default",
     });
     binCluster.current = makeMarkerClustering_green({
@@ -340,7 +340,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
     toiletMarkers.current = N.createMarkers({
       items: toilets,
       map: undefined,
-      url: `images/PloggingPage/toilet-pin.png`,
+      url: `/images/PloggingPage/toilet-pin.png`,
       cursor: "default",
     });
     toiletCluster.current = makeMarkerClustering_blue({
@@ -393,7 +393,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
     neighborMarkers.current = N.createMarkers({
       items: neighbors,
       map: mapRef.current ?? undefined,
-      url: `images/PloggingPage/neighborLocation.svg`,
+      url: `/images/PloggingPage/neighborLocation.svg`,
       cursor: "default",
     });
   }, [neighbors]);
@@ -408,7 +408,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
     helpMarkers.current = N.createMarkers({
       items: helps,
       map: mapRef.current ?? undefined,
-      url: `images/PloggingPage/help-icon.png`,
+      url: `/images/PloggingPage/help-icon.png`,
     });
   }, [helps]);
 

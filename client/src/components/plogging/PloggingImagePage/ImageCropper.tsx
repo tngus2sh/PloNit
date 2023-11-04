@@ -24,11 +24,11 @@ const ImageCropper: React.FC<PropsType> = ({ onCrop, aespectRatio }) => {
   const windowHeight = useSelector<rootState, number>((state) => {
     return state.window.height;
   });
-  const cbURL = useSelector<rootState, string>((state) => {
-    return state.plogging.cbURL;
-  });
   const storedImage = useSelector<rootState, string>((state) => {
     return state.camera.value;
+  });
+  const isEnd = useSelector<rootState, boolean>((state) => {
+    return state.plogging.isEnd;
   });
 
   const trimmedHeight = windowHeight * 0.93 - 56;
@@ -39,7 +39,11 @@ const ImageCropper: React.FC<PropsType> = ({ onCrop, aespectRatio }) => {
       setImage(storedImage);
       dispatch(setReduxImage(""));
     } else {
-      navigate(cbURL);
+      if (isEnd) {
+        navigate("/plogging/complete");
+      } else {
+        navigate("/plogging");
+      }
     }
   }, []);
 
@@ -55,7 +59,11 @@ const ImageCropper: React.FC<PropsType> = ({ onCrop, aespectRatio }) => {
     }).then((result) => {
       if (result.isConfirmed) {
         setImage(null);
-        navigate(cbURL);
+        if (isEnd) {
+          navigate("/plogging/complete");
+        } else {
+          navigate("/plogging");
+        }
       }
     });
   }
