@@ -14,7 +14,9 @@ const CrewDetailPage = () => {
   const accessToken = useSelector((state: any) => state.user.accessToken);
   const { crewId } = useParams();
   console.log(crewId);
-  const [isCrewDetail, setCrewDetail] = useState<CrewInterface>();
+  const [isCrewDetail, setCrewDetail] = useState<CrewInterface>(
+    {} as CrewInterface,
+  );
 
   useEffect(() => {
     getCrewDetail(
@@ -24,7 +26,8 @@ const CrewDetailPage = () => {
         console.log("크루 상세 조회 성공");
         console.log(res);
         console.log(res.data);
-        setCrewDetail(res.data);
+        console.log(res.data.resultBody);
+        setCrewDetail(res.data.resultBody);
       },
       (err) => {
         console.log("크루 상세 조회 실패", err);
@@ -37,9 +40,9 @@ const CrewDetailPage = () => {
       <BackTopBar text="장덕동 플로깅" />
       <div>
         <CrewLeader />
-        <CrewInfo />
-        <CrewRanking />
-        <CrewIntroduce />
+        <CrewInfo crew={isCrewDetail} />
+        <CrewRanking crew={isCrewDetail} />
+        <CrewIntroduce crew={isCrewDetail} />
       </div>
       <CommonButton
         text="크루 탈퇴"

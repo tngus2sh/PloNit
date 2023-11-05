@@ -37,3 +37,20 @@ export async function nicknameCheck(
     .then(success)
     .catch(fail);
 }
+
+export async function logout(
+  accessToken: string,
+  success: (
+    res: AxiosResponse<any, any>,
+  ) =>
+    | AxiosResponse<any, any>
+    | PromiseLike<AxiosResponse<any, any>>
+    | null
+    | undefined
+    | void,
+  fail: (err: any) => PromiseLike<never> | null | undefined | void,
+) {
+  const api = customApi("/plonit-service/auth");
+  api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
+  await api.post(`/kakao/logout`).then(success).catch(fail);
+}
