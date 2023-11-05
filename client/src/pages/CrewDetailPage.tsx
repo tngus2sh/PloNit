@@ -41,8 +41,8 @@ const CrewDetailPage = () => {
       <div>
         <CrewLeader />
         <CrewInfo crew={isCrewDetail} />
-        <CrewRanking />
-        <CrewIntroduce />
+        <CrewRanking crew={isCrewDetail} />
+        <CrewIntroduce crew={isCrewDetail} />
       </div>
       <CommonButton
         text="크루 탈퇴"
