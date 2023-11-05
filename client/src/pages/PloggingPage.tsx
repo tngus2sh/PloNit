@@ -9,6 +9,7 @@ import Crewping from "components/plogging/PloggingPage/Crewping";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { rootState } from "store/store";
+import { stat } from "fs";
 
 function getComponent(ploggingType: ploggingType): JSX.Element {
   switch (ploggingType) {
@@ -25,8 +26,8 @@ function getComponent(ploggingType: ploggingType): JSX.Element {
 
 const PloggingPage = () => {
   const navigate = useNavigate();
-  const isEnd = useSelector<rootState, boolean>((state) => {
-    return state.plogging.isEnd;
+  const showComponent = useSelector<rootState, boolean>((state) => {
+    return !state.plogging.isEnd && !state.plogging.beforeEnd;
   });
   const componentType: ploggingType = useSelector<rootState, ploggingType>(
     (state) => {
@@ -36,12 +37,12 @@ const PloggingPage = () => {
   const Component = getComponent(componentType);
 
   useEffect(() => {
-    if (isEnd) {
+    if (!showComponent) {
       navigate("/plogging/complete");
     }
-  }, [isEnd]);
+  }, [showComponent]);
 
-  return <div>{!isEnd && Component}</div>;
+  return <div>{showComponent && Component}</div>;
 };
 
 export default PloggingPage;

@@ -2,8 +2,10 @@ import React, { useEffect } from "react";
 import style from "styles/css/PloggingPage/InfoDiv.module.css";
 import Swal from "sweetalert2";
 import PloggingInfo from "./PloggingInfo";
-import { useNavigate } from "react-router-dom";
+import { ploggingType } from "types/ploggingTypes";
+import { renderToString } from "react-dom/server";
 
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
 import * as P from "store/plogging-slice";
@@ -76,6 +78,9 @@ const InfoDiv: React.FC<IInfoDiv> = ({
   const isOnWrite = useSelector<rootState, boolean>((state) => {
     return state.camera.isOnWrite;
   });
+  const nowType = useSelector<rootState, ploggingType>((state) => {
+    return state.plogging.ploggingType;
+  });
 
   function helpBtnEvent() {
     dispatch(camera.setTarget("help"));
@@ -83,23 +88,48 @@ const InfoDiv: React.FC<IInfoDiv> = ({
     setShow(true);
   }
   function stopBtnEvent() {
-    Swal.fire({
-      icon: "question",
-      text: "플로깅을 종료하시겠습니까?",
-      showCancelButton: true,
-      confirmButtonText: "예",
-      cancelButtonText: "아니오",
-      confirmButtonColor: "#2CD261",
-      cancelButtonColor: "#FF2953",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // axios 요청 성공 시
-        Swal.close();
-        dispatch(P.setIsEnd(true));
-        dispatch(camera.clear());
-        navigate("/plogging/complete");
-      }
-    });
+    if (nowType !== "VOL") {
+      Swal.fire({
+        icon: "question",
+        text: "플로깅을 종료하시겠습니까?",
+        showCancelButton: true,
+        confirmButtonText: "예",
+        cancelButtonText: "아니오",
+        confirmButtonColor: "#2CD261",
+        cancelButtonColor: "#FF2953",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // axios 요청 성공 시
+          Swal.close();
+          dispatch(P.setIsEnd(true));
+          dispatch(camera.clear());
+          navigate("/plogging/complete");
+        }
+      });
+    } else {
+      Swal.fire({
+        icon: "question",
+        html: renderToString(
+          <div>
+            <div>플로깅을 종료하시겠습니까?</div>
+            <div>종료 시 사진 촬영을 진행합니다.</div>
+          </div>,
+        ),
+        showCancelButton: true,
+        confirmButtonText: "예",
+        cancelButtonText: "아니오",
+        confirmButtonColor: "#2CD261",
+        cancelButtonColor: "#FF2953",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // axios 요청 성공 시
+          Swal.close();
+          dispatch(P.setBeforeEnd(true));
+          dispatch(camera.clear());
+          navigate("/plogging/complete");
+        }
+      });
+    }
   }
   function CameraBtnEvent() {
     dispatch(camera.setTarget("save"));

@@ -23,6 +23,9 @@ const PloggingImagePage = () => {
   const isEnd = useSelector<rootState, boolean>((state) => {
     return state.plogging.isEnd;
   });
+  const beforeEnd = useSelector<rootState, boolean>((state) => {
+    return state.plogging.beforeEnd;
+  });
 
   useEffect(() => {
     async function saveImage() {
@@ -40,7 +43,7 @@ const PloggingImagePage = () => {
     }
 
     if (uploadImage) {
-      if (isEnd) {
+      if (isEnd || beforeEnd) {
         saveImage();
         dispatch(P.addImage("/metamong.png")); // 추후 제거(더미 테스트용)
         navigate("/plogging/complete");
@@ -60,7 +63,6 @@ const PloggingImagePage = () => {
   return (
     <div style={{ height: windowHeight, width: "100%" }}>
       <ImageCropper aespectRatio={1 / 1} onCrop={handleUploadImage} />
-      {/* {uploadImage && <img src={uploadImage} />} */}
     </div>
   );
 };

@@ -6,6 +6,13 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { rootState } from "store/store";
 
+function getComponent(isEnd: boolean) {
+  if (isEnd) {
+    return <PloggingComplete />;
+  }
+  return <PloggingVolunteerInput />;
+}
+
 const PloggingCompletePage = () => {
   const navigate = useNavigate();
   const isEnd = useSelector<rootState, boolean>((state) => {
@@ -14,22 +21,20 @@ const PloggingCompletePage = () => {
   const windowHeight = useSelector<rootState, number>((state) => {
     return state.window.height;
   });
-
-  function getComponent() {
-    return <></>;
-  }
-
-  const [infoUploaded, setInfoUploaded] = useState<boolean>(false);
+  const showCompenent = useSelector<rootState, boolean>((state) => {
+    return state.plogging.isEnd || state.plogging.beforeEnd;
+  });
+  const Component = getComponent(isEnd);
 
   // 플러깅이 아닐 시 접근하면 돌려보내기
   useEffect(() => {
-    if (!isEnd) {
+    if (!showCompenent) {
       navigate("/plogging");
     }
   }, []);
 
   return (
-    <div style={{ height: windowHeight }}>{isEnd && <PloggingComplete />}</div>
+    <div style={{ height: windowHeight }}>{showCompenent && Component}</div>
   );
 };
 
