@@ -7,6 +7,7 @@ const CrewCommunityInfo = () => {
   const navigate = useNavigate();
   const handleGoCommunityDetail = () => {
     navigate("/crew/community/detail");
+    // navigate(`/crew/community/detail/${crewId}`);
   };
   const handleGoMemberList = () => {
     navigate("/crew/member");

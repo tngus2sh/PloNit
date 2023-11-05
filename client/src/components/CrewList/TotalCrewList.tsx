@@ -19,7 +19,7 @@ const TotalCrewList = () => {
       accessToken,
       (res) => {
         console.log(res.data);
-        setTotalCrewList(res.data);
+        setTotalCrewList(res.data.resultBody);
         console.error("크루 목록조회 성공");
       },
       (err) => {
@@ -27,28 +27,6 @@ const TotalCrewList = () => {
       },
     );
   }, []);
-
-  const list = [
-    {
-      name: "하남동 플로깅 크루",
-      region: "광산구 장덕동",
-      cntPeople: 25,
-      crewImage: "your-image-url-1.jpg",
-    },
-    {
-      name: "다른 크루 이름",
-      region: "다른 위치",
-      cntPeople: 20,
-      crewImage: "your-image-url-2.jpg",
-    },
-    {
-      name: "다른 크루 이름",
-      region: "다른 위치",
-      cntPeople: 20,
-      crewImage: "your-image-url-2.jpg",
-    },
-    // ... 추가적으로 더 많은 아이템들을 넣을 수 있습니다.
-  ];
 
   return (
     <div>
@@ -60,7 +38,7 @@ const TotalCrewList = () => {
         placeholder="크루명, 지역으로 검색"
       />
 
-      {list.map((crew, index) => (
+      {totalCrewList.map((crew, index) => (
         <CrewItem key={index} crew={crew} />
       ))}
     </div>
