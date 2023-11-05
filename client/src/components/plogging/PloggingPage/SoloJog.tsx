@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import DefaultMap from "../DefaultMap";
 import InfoDiv from "../ploggingComps/InfoDiv";
 import useCamera from "../functions/useCamera";

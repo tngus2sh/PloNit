@@ -3,7 +3,10 @@ import style from "styles/css/App.module.css";
 import NavBar from "components/common/NavBar";
 import RouteComponent from "pages/lib/index";
 import useGPS from "components/plogging/functions/useGPS";
+import { ploggingType } from "types/ploggingTypes";
+import Swal from "sweetalert2";
 
+import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
 import { setWindowHeight, setWindowWidth } from "store/window-slice";
@@ -15,6 +18,8 @@ import "animate.css";
 const intervalTime = 10;
 
 function App() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
   const interval = useRef<NodeJS.Timeout | null>(null);
   const windowHeight = useSelector<rootState, number>((state) => {
@@ -23,11 +28,20 @@ function App() {
   const windowWidth = useSelector<rootState, number>((state) => {
     return state.window.width;
   });
-  const isBefore = useSelector<rootState, boolean>((state) => {
-    return state.plogging.ploggingType === "none";
+  const useTimer = useSelector<rootState, boolean>((state) => {
+    return state.plogging.ploggingType != "none" && !state.plogging.isEnd;
   });
   const second = useSelector<rootState, number>((state) => {
     return state.plogging.second;
+  });
+  const minute = useSelector<rootState, number>((state) => {
+    return state.plogging.minute;
+  });
+  const nowType = useSelector<rootState, ploggingType>((state) => {
+    return state.plogging.ploggingType;
+  });
+  const volTakePicture = useSelector<rootState, boolean>((state) => {
+    return state.plogging.volTakePicture;
   });
   const { latitude, longitude, onSearch, setOnSearch } = useGPS();
 
@@ -44,7 +58,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (!isBefore) {
+    if (useTimer) {
       dispatch(P.addPath({ latitude: latitude, longitude: longitude }));
       interval.current = setInterval(() => {
         dispatch(P.addTime());
@@ -54,16 +68,34 @@ function App() {
         clearInterval(interval.current);
       }
     }
-  }, [isBefore]);
+  }, [useTimer]);
 
   useEffect(() => {
-    if (!isBefore && second % intervalTime === 0) {
+    if (useTimer && second % intervalTime === 0) {
       setOnSearch(true);
     }
   }, [second]);
 
   useEffect(() => {
-    if (!isBefore && !onSearch) {
+    if (nowType === "VOL" && minute >= 30 && !volTakePicture) {
+      Swal.fire({
+        icon: "info",
+        title: "중간 사진 촬영",
+        html: "<div>지금까지 플로깅한 봉투<br/>사진을 찍어주세요.</div>",
+        confirmButtonText: "확인",
+        confirmButtonColor: "#2CD261",
+        didClose: () => {
+          dispatch(P.setVolTakePicture(true));
+          if (location.pathname !== "/plogging") {
+            navigate("/plogging");
+          }
+        },
+      });
+    }
+  }, [minute]);
+
+  useEffect(() => {
+    if (useTimer && !onSearch) {
       dispatch(P.addPath({ latitude: latitude, longitude: longitude }));
     }
   }, [onSearch]);

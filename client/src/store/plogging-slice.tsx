@@ -15,6 +15,8 @@ const initialState = {
   distance: 0 as number,
   calorie: 0 as number,
   images: [] as string[],
+  volTakePicture: false as boolean,
+  isVolTakePicture: false as boolean,
 };
 
 const ploggingSlice = createSlice({
@@ -55,6 +57,12 @@ const ploggingSlice = createSlice({
         state.minute++;
       }
     },
+    setVolTakePicture: (state, action: PayloadAction<boolean>) => {
+      state.volTakePicture = action.payload;
+    },
+    setIsVolTakePicture: (state, action: PayloadAction<boolean>) => {
+      state.isVolTakePicture = action.payload;
+    },
   },
 });
 
@@ -67,5 +75,7 @@ export const {
   addPath,
   addImage,
   addTime,
+  setVolTakePicture,
+  setIsVolTakePicture,
 } = ploggingSlice.actions;
 export default ploggingSlice.reducer;
