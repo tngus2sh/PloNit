@@ -35,4 +35,8 @@ public class Feed extends TimeBaseEntity {
 
     @ColumnDefault("false")
     private Boolean delete;
+
+    public void changeDelete(){
+        this.delete = true;
+    }
 }
