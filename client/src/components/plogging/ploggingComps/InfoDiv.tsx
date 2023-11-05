@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import style from "styles/css/PloggingPage/InfoDiv.module.css";
 import Swal from "sweetalert2";
-import useCamera from "../functions/useCamera";
 import PloggingInfo from "./PloggingInfo";
 import { useNavigate } from "react-router-dom";
 
@@ -20,6 +19,7 @@ interface IInfoDiv {
   infoDivHeight: number;
   setShow: (value: boolean) => void;
   setPreventShow: (value: boolean) => void;
+  handleImageCapture: () => void;
 }
 
 function formatNumber(n: number): string {
@@ -53,8 +53,8 @@ const InfoDiv: React.FC<IInfoDiv> = ({
   infoDivHeight,
   setShow,
   setPreventShow,
+  handleImageCapture,
 }) => {
-  const { image, handleImageCapture, fileInputRef } = useCamera();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const distance = useSelector<rootState, number>((state) => {
@@ -113,14 +113,6 @@ const InfoDiv: React.FC<IInfoDiv> = ({
     }
   }, []);
 
-  // 이미지가 로드되었을 때, 이미지를 넘겨준다.
-  useEffect(() => {
-    if (image) {
-      dispatch(camera.setImage(image));
-      navigate("/plogging/image");
-    }
-  }, [image]);
-
   return (
     <div style={{ height: `${infoDivHeight}px`, width: "100%" }}>
       <div style={{ height: "10%", width: "100%" }}></div>
@@ -151,14 +143,6 @@ const InfoDiv: React.FC<IInfoDiv> = ({
           onClick={CameraBtnEvent}
         />
       </div>
-      <input
-        type="file"
-        accept="image/*"
-        capture="environment"
-        id="cameraInput-InfoDiv"
-        ref={fileInputRef}
-        style={{ display: "none" }}
-      />
     </div>
   );
 };
