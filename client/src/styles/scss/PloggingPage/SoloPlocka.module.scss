@@ -1,0 +1,26 @@
+@import "../styles.scss";
+
+.First_PopUp {
+  width: 100%;
+  box-sizing: border-box;
+
+  .blue_top {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: $blue;
+  }
+  .black_bottom {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: $black;
+  }
+  .text {
+    font-size: 1rem;
+    color: $darkgray;
+    margin: 1rem 0;
+  }
+  hr {
+    border: 1.5px solid $darkgray;
+    margin-bottom: 1rem;
+  }
+}

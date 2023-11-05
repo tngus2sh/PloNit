@@ -81,7 +81,7 @@ const PopUp: React.FC<IPopUP> = ({
             <img
               src={value}
               alt="helpImage"
-              style={{ maxHeight: "100%", maxWidth: "100%" }}
+              style={{ height: "100%", aspectRatio: "1/1" }}
               onClick={() => {
                 handleImageCapture();
               }}
