@@ -48,9 +48,91 @@
       align-items: center;
     }
   }
+  .region {
+    text-align: left;
+    margin: 1rem;
+    .title {
+      font-size: 1.2rem;
+      display: flex;
+      margin-bottom: 0.5rem;
+      margin-left: 0.2rem;
+    }
+    .input_area {
+      border-radius: 0.5rem;
+      border: 1px solid $darkgray;
+      padding: 0.5rem 1rem;
+      font-size: 1.2em;
+      background-color: transparent;
+      height: 2rem;
+    }
+    .modalbackground {
+      background-color: rgba(0, 0, 0, 0.5);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: max(100vh, 100%);
+    }
+  }
 }
 
 .selected {
   background-color: $green !important;
   color: white;
+}
+
+//RegionModal.tsx
+.regionmodal {
+  width: 70%;
+  position: fixed;
+  border-radius: 0.5rem;
+  background-color: white;
+  padding: 1rem;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  .regioncontainer {
+    border: 1px solid $darkgray;
+    border-radius: 0.5rem;
+    height: 15rem;
+    display: flex;
+    .sido {
+      flex: 1;
+      .title {
+        font-size: 1rem;
+        justify-content: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid $darkgray;
+      }
+    }
+    .gugun {
+      flex: 1;
+      border-left: 1px solid $darkgray;
+      .title {
+        font-size: 1rem;
+        justify-content: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid $darkgray;
+      }
+    }
+    .dong {
+      flex: 1;
+      border-left: 1px solid $darkgray;
+      .title {
+        font-size: 1rem;
+        justify-content: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid $darkgray;
+      }
+    }
+  }
+  .confirm_btn {
+    background-color: $green;
+    text-align: center;
+    border-radius: 0.5rem;
+    width: 5rem;
+    padding: 0.5rem 1rem;
+    color: white;
+    margin: 1rem auto 0;
+  }
 }

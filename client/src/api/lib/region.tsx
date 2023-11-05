@@ -1,11 +1,9 @@
 import { AxiosResponse } from "axios";
-import { customApi, customApiForm } from "./index";
-import * as Interfaces from "interface/crewInterface";
+import { customApi } from "./index";
+import * as Interfaces from "interface/regionInterface";
 
-// 크루 생성
-export async function getCrewCreate(
+export async function getSido(
   accessToken: string,
-  formData: FormData,
   success: (
     res: AxiosResponse<any, any>,
   ) =>
@@ -16,14 +14,14 @@ export async function getCrewCreate(
     | void,
   fail: (err: any) => PromiseLike<never> | null | undefined | void,
 ) {
-  const api = customApiForm("/plonit-service/v1/crew");
+  const api = customApi("/plonit-service/v1/region");
   api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
-  await api.post("", formData).then(success).catch(fail);
+  await api.get("/sido").then(success).catch(fail);
 }
 
-// 크루 리스트 조회
-export async function getCrewList(
+export async function getGugun(
   accessToken: string,
+  sidocode: number,
   success: (
     res: AxiosResponse<any, any>,
   ) =>
@@ -34,15 +32,14 @@ export async function getCrewList(
     | void,
   fail: (err: any) => PromiseLike<never> | null | undefined | void,
 ) {
-  const api = customApi("/plonit-service/v1/crew");
+  const api = customApi("/plonit-service/v1/region");
   api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
-  await api.get("").then(success).catch(fail);
+  await api.get(`/gugun/${sidocode}`).then(success).catch(fail);
 }
 
-// 크루 상세 조회
-export async function getCrewDetail(
+export async function getDong(
   accessToken: string,
-  crewId: number,
+  guguncode: number,
   success: (
     res: AxiosResponse<any, any>,
   ) =>
@@ -53,7 +50,7 @@ export async function getCrewDetail(
     | void,
   fail: (err: any) => PromiseLike<never> | null | undefined | void,
 ) {
-  const api = customApiForm("/plonit-service/v1/crew");
+  const api = customApi("/plonit-service/v1/region");
   api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
-  await api.get(`/${crewId}`).then(success).catch(fail);
+  await api.get(`/dong/${guguncode}`).then(success).catch(fail);
 }
