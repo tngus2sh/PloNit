@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import Input from "components/common/Input";
 import { BackTopBar } from "components/common/TopBar";
 import CommonButton from "components/common/CommonButton";
@@ -8,6 +9,7 @@ import { Icon } from "@iconify/react";
 import style from "styles/css/CrewCreatePage.module.css";
 
 const CrewCreatePage = () => {
+  const navigate = useNavigate();
   const accessToken = useSelector((state: any) => state.user.accessToken);
   const [isCrewName, setCrewName] = useState("");
   const [isCrewRegion, setCrewRegion] = useState("");
@@ -42,13 +44,12 @@ const CrewCreatePage = () => {
       accessToken,
       formData,
       (res) => {
-        console.log(res);
-        console.log(formData);
+        console.log(res.data);
         console.log("크루 생성 성공");
+        navigate("/crew/list");
       },
       (err) => {
-        console.log(formData);
-        console.log("크루 생성 에러");
+        console.log("크루 생성 에러", err);
       },
     );
   };
@@ -59,7 +60,6 @@ const CrewCreatePage = () => {
 
       reader.onload = (event: any) => {
         const dataURL = event.target.result;
-
         setCrewImage(file);
       };
 
