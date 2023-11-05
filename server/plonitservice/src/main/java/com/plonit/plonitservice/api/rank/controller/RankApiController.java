@@ -24,7 +24,7 @@ public class RankApiController {
 
     @Operation(summary = "회원 랭킹 조회", description = "전체 회원들의 랭킹을 조회합니다.")
     @GetMapping
-    public CustomApiResponse<List<MembersRankResponse>> findAllMembersRank() {
+    public CustomApiResponse<MembersRankResponse> findAllMembersRank() {
         // TODO: 2023-10-30 회원 랭킹 조회
 
 
@@ -34,7 +34,7 @@ public class RankApiController {
     @Operation(summary = "크루 전체 랭킹 조회", description = "크루 전체의 랭킹을 조회합니다.")
     @GetMapping("/crew-total")
 
-    public CustomApiResponse<List<CrewTotalResponse>> findAllCrewRank() {
+    public CustomApiResponse<CrewTotalResponse> findAllCrewRank() {
         // TODO: 2023-10-30 크루 전체 랭킹 조회 
 
         return null;
