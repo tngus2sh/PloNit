@@ -52,5 +52,5 @@ export async function logout(
 ) {
   const api = customApi("/plonit-service/auth");
   api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
-  await api.get(`/kakao/logout`).then(success).catch(fail);
+  await api.post(`/kakao/logout`).then(success).catch(fail);
 }

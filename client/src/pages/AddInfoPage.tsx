@@ -32,9 +32,7 @@ const AddInfoPage = () => {
         console.log("닉네임 중복 확인");
         console.log(res);
         console.log(res.data);
-        if (res.data.resultBody.avl) {
-          setnickname(true);
-        }
+        setnickname(res.data.resultBody.avl);
       },
       (err) => {
         console.log("닉네임 중복 확인 에러...");
