@@ -1,5 +1,3 @@
-import { AxiosHeaderValue } from "axios";
-
 export interface CrewInterface {
   id?: number;
   name: string;
@@ -10,4 +8,10 @@ export interface CrewInterface {
   rankinginfo?: string;
   totalRanking?: number;
   avgRanking?: number;
+}
+
+export interface FeedInterface {
+  content?: string;
+  crewId?: number;
+  feedPicture?: any;
 }

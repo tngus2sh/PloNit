@@ -64,7 +64,10 @@ const RouteComponent = () => {
       ></Route>
       <Route path="/crew/member" element={<CrewMemberListPage />}></Route>
       <Route path="/crew/community" element={<CrewCommunityPage />}></Route>
-      <Route path="/crew/community/detail" element={<CrewDetailPage />}></Route>
+      <Route
+        path="/crew/community/detail/:crewId"
+        element={<CrewDetailPage />}
+      ></Route>
       <Route
         path="/crew/community/approval"
         element={<CrewMemberApprovalPage />}

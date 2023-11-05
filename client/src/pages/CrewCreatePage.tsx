@@ -1,42 +1,53 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Input from "components/common/Input";
 import { BackTopBar } from "components/common/TopBar";
 import CommonButton from "components/common/CommonButton";
-import Input_img from "components/common/Input_img";
 import { getCrewCreate } from "api/lib/crew";
+import { Icon } from "@iconify/react";
 import style from "styles/css/CrewCreatePage.module.css";
 
-interface SetFunction {
-  setSelectedImage: React.Dispatch<React.SetStateAction<File>>;
-}
-
 const CrewCreatePage = () => {
-  const imgRef = useRef();
   const accessToken = useSelector((state: any) => state.user.accessToken);
-  const [crewInput, setCrewInput] = useState({
-    name: "",
-    crewImage: "",
-    introduce: "",
-    region: "",
-  });
-  const onChange = (event: any) => {
-    const { id, value } = event.target;
-    setCrewInput((prevState) => ({
-      ...prevState,
-      [id]: value,
-    }));
+  const [isCrewName, setCrewName] = useState("");
+  const [isCrewRegion, setCrewRegion] = useState("");
+  const [isCrewIntroduce, setCrewIntroduce] = useState("");
+  const [isCrewImage, setCrewImage] = useState(null);
+
+  const onChangeName = (event: any) => {
+    setCrewName(event.target.value);
   };
+  const onChangeRegion = (event: any) => {
+    setCrewRegion(event.target.value);
+  };
+  const onChangeIntroduce = (event: any) => {
+    setCrewIntroduce(event.target.value);
+  };
+
   const crewCreateHandler = () => {
-    const data = crewInput;
-    console.log(data);
+    if (!isCrewName) {
+      alert("크루 이름을 입력하세요");
+    } else if (!isCrewIntroduce) {
+      alert("크루 소개를 입력하세요");
+    }
+    const formData = new FormData();
+    formData.append("name", isCrewName);
+    formData.append("region", isCrewRegion);
+    formData.append("introduce", isCrewIntroduce);
+    if (isCrewImage) {
+      formData.append("crewImage", isCrewImage);
+    }
+    console.log(formData);
     getCrewCreate(
       accessToken,
-      data,
+      formData,
       (res) => {
+        console.log(res);
+        console.log(formData);
         console.log("크루 생성 성공");
       },
       (err) => {
+        console.log(formData);
         console.log("크루 생성 에러");
       },
     );
@@ -49,10 +60,7 @@ const CrewCreatePage = () => {
       reader.onload = (event: any) => {
         const dataURL = event.target.result;
 
-        setCrewInput((prevCrewInput) => ({
-          ...prevCrewInput,
-          crewImage: dataURL,
-        }));
+        setCrewImage(file);
       };
 
       reader.readAsDataURL(file);
@@ -62,38 +70,52 @@ const CrewCreatePage = () => {
   return (
     <div className={style.crew_create}>
       <BackTopBar text="크루 생성" />
-      <img
-        src={crewInput.crewImage ? crewInput.crewImage : `/metamong.png`}
-        alt="프로필 이미지"
-      />
-      <Input_img
-        type="file"
-        labelTitle="이미지 업로드"
-        id="crewImage"
-        onChange={handleImageUpload}
-      />
+      <div className={style.crew_img}>
+        <img
+          src={isCrewImage ? URL.createObjectURL(isCrewImage) : `/metamong.png`}
+          alt="프로필 이미지"
+        />
+        <label className={style.img_edit_icon} htmlFor="input_file">
+          <Icon
+            icon="bi:pencil"
+            className={style.icon}
+            style={{ width: "1.5rem", height: "1.5rem" }}
+          />
+        </label>
+        <input
+          type="file"
+          id="input_file"
+          accept="image/*"
+          style={{ display: "none" }}
+          onChange={handleImageUpload}
+        />
+      </div>
       <Input
         id="name"
         labelTitle="크루 이름"
         type="text"
-        value={crewInput.name}
-        onChange={onChange}
-      />
-      <Input
-        id="introduce"
-        labelTitle="크루 소개"
-        type="text"
-        value={crewInput.introduce}
-        onChange={onChange}
+        value={isCrewName}
+        onChange={onChangeName}
       />
       <Input
         id="region"
         labelTitle="주요 활동 지역"
         type="text"
-        value={crewInput.region}
-        onChange={onChange}
+        value={isCrewRegion}
+        onChange={onChangeRegion}
       />
-
+      <div className={style.introduce}>
+        <label className={style.label} htmlFor="introduce">
+          크루 소개
+        </label>
+        <textarea
+          className={style.inputBox}
+          name="introduce"
+          id="introduce"
+          value={isCrewIntroduce}
+          onChange={onChangeIntroduce}
+        ></textarea>
+      </div>
       <CommonButton
         text="크루 생성"
         styles={{

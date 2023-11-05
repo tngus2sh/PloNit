@@ -1,6 +1,43 @@
+@import "styles";
+
 .crew_create {
-  img {
-    width: 7rem;
-    height: 7rem;
+  .crew_img {
+    margin: 2rem 1rem 1rem;
+    position: relative;
+    img {
+      border-radius: 50%;
+      width: 10rem;
+      height: 10rem;
+    }
+    .img_edit_icon {
+      position: absolute;
+      background-color: $darkgray;
+      border-radius: 50%;
+      padding: 0.5rem 0.5rem 0.4rem;
+      bottom: 1rem;
+      left: calc(50% + 2.5rem);
+    }
+  }
+  .introduce {
+    margin: 1rem;
+    display: flex;
+    flex-direction: column;
+    .label {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+      margin-left: 0.2rem;
+      display: flex;
+    }
+    .inputBox {
+      border-radius: 0.5rem;
+      border: 1px solid $darkgray;
+      padding: 0.5rem 1rem;
+      background-color: transparent;
+      height: 5rem;
+      resize: none;
+    }
+    textarea {
+      font-size: 1.4em;
+    }
   }
 }
