@@ -16,6 +16,7 @@ public class RankServiceImpl implements RankService {
     public MembersRankResponse findAllMembersRank(Long memberKey) {
 
         // Redis에서 랭킹 조회
+        
 
         return null;
     }
