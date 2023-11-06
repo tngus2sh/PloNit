@@ -17,7 +17,6 @@ public class StartPloggingReq {
     
     @Schema(description = "플로깅 유형 / CREWPING, IND, VOL ")
     @NotNull(message = "유형은 필수 입력값입니다.")
-    @Pattern(regexp = "^(CREWPING|IND|VOL)$")
     private Type type;
     
     @Schema(description = "위도")
