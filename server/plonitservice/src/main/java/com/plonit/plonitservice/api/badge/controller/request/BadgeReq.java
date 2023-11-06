@@ -1,7 +1,10 @@
 package com.plonit.plonitservice.api.badge.controller.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDateTime;
 
 @Data
 public class BadgeReq {
@@ -15,9 +18,11 @@ public class BadgeReq {
     private String status;
 
     private Integer value;
-
-    private String startDate;
-
-    private String endDate;
+    
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+    private LocalDateTime startDate;
+    
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+    private LocalDateTime endDate;
 
 }
