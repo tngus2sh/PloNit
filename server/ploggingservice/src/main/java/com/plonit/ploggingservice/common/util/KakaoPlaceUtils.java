@@ -43,7 +43,7 @@ public class KakaoPlaceUtils {
                 .uri(uriBuilder -> uriBuilder
                         .queryParam("x", longitude)
                         .queryParam("y", latitude)
-                        .queryParam("input_cord", "WGS84")
+//                        .queryParam("input_coord", "WGS84")
                         .build())
                 .retrieve()
                 .bodyToMono(KakaoAddressRes.class)
