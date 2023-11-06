@@ -2,18 +2,19 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import style from "styles/css/CrewCommunityPage/CrewCommunityInfo.module.css";
+import { CrewInterface } from "interface/crewInterface";
 
-const CrewCommunityInfo = () => {
+const CrewCommunityInfo = ({ crew }: { crew: CrewInterface }) => {
   const navigate = useNavigate();
   const handleGoCommunityDetail = () => {
-    navigate("/crew/community/detail");
-    // navigate(`/crew/community/detail/${crewId}`);
+    // navigate("/crew/community/detail");
+    navigate(`/crew/community/detail/${crew.id}`);
   };
   const handleGoMemberList = () => {
     navigate("/crew/member");
   };
   const crewImageStyle = {
-    backgroundImage: `url("/crewbg.png")`,
+    backgroundImage: `url("${crew.crewImage}")`,
   };
   return (
     <div className={style.crew_info}>
@@ -21,7 +22,7 @@ const CrewCommunityInfo = () => {
       <div className={style.crew_text}>
         <div className={style.crew_title}>
           <div className={style.crew_name} onClick={handleGoCommunityDetail}>
-            장덕동 플로깅 크루
+            {crew.name}
           </div>
           <Icon
             icon="bi:chevron-right"
@@ -34,10 +35,10 @@ const CrewCommunityInfo = () => {
         </div>
         <div className={style.crew_content}>
           <div className={style.crew_member} onClick={handleGoMemberList}>
-            멤버 25
+            멤버 {crew.cntPeople}
           </div>
           <div className={style.invite}>
-            초대a
+            초대
             <Icon icon="bi:paperclip" />
           </div>
         </div>

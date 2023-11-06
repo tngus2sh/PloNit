@@ -63,7 +63,10 @@ const RouteComponent = () => {
         element={<MyPloggingDetailPage />}
       ></Route>
       <Route path="/crew/member" element={<CrewMemberListPage />}></Route>
-      <Route path="/crew/community" element={<CrewCommunityPage />}></Route>
+      <Route
+        path="/crew/community/:crewId"
+        element={<CrewCommunityPage />}
+      ></Route>
       <Route
         path="/crew/community/detail/:crewId"
         element={<CrewDetailPage />}
@@ -73,14 +76,14 @@ const RouteComponent = () => {
         element={<CrewMemberApprovalPage />}
       ></Route>
       <Route
-        path="/crew/crewping/create"
+        path="/crew/crewping/create/:crewId"
         element={<CrewpingCreatePage />}
       ></Route>
       <Route
         path="/crew/crewping/detail"
         element={<CrewpingDetailPage />}
       ></Route>
-      <Route path="/feed/create" element={<FeedCreatePage />}></Route>
+      <Route path="/feed/create/:crewId" element={<FeedCreatePage />}></Route>
       <Route path="/*" element={<PageNotFound404 />}></Route>
     </Routes>
   );

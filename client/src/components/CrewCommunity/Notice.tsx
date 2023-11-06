@@ -1,8 +1,9 @@
 import { statSync } from "fs";
 import React from "react";
 import style from "styles/css/CrewCommunityPage/Notice.module.css";
+import { CrewInterface } from "interface/crewInterface";
 
-const Notice = () => {
+const Notice = ({ crew }: { crew: CrewInterface }) => {
   return (
     <div className={style.notice_compo}>
       <div className={style.notice_title}>공지사항</div>

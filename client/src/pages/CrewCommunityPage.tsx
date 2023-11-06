@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import { Icon } from "@iconify/react";
 import CrewCommunityInfo from "components/CrewCommunity/CrewCommunityInfo";
 import Notice from "components/CrewCommunity/Notice";
@@ -7,22 +8,46 @@ import CustomizedTabs from "components/common/CustomTab";
 import CrewFeed from "components/CrewCommunity/CrewFeed";
 import CrewpingList from "components/CrewCommunity/CrewpingList";
 import style from "styles/css/CrewCommunityPage.module.css";
+import { getCrewDetail } from "api/lib/crew";
+import { CrewInterface } from "interface/crewInterface";
 
 const CrewCommunityPage = () => {
   const navigate = useNavigate();
+  const accessToken = useSelector((state: any) => state.user.accessToken);
+  const { crewId } = useParams();
   const [isVisibleButton, setVisibleButton] = useState(false);
+  const [isCrewDetail, setCrewDetail] = useState<CrewInterface>(
+    {} as CrewInterface,
+  );
 
   const goBackHandler = () => {
     navigate(-1);
   };
   const goFeedHandler = () => {
     document.body.style.overflow = "scroll";
-    navigate("/feed/create");
+    navigate(`/feed/create/${crewId}`);
   };
   const goCrewpingCreateHandler = () => {
     document.body.style.overflow = "scroll";
-    navigate("/crew/crewping/create");
+    navigate(`/crew/crewping/${crewId}`);
   };
+
+  useEffect(() => {
+    getCrewDetail(
+      accessToken,
+      Number(crewId),
+      (res) => {
+        console.log("크루 상세 조회 성공");
+        console.log(res);
+        console.log(res.data);
+        console.log(res.data.resultBody);
+        setCrewDetail(res.data.resultBody);
+      },
+      (err) => {
+        console.log("크루 상세 조회 실패", err);
+      },
+    );
+  }, []);
 
   const tabProps = {
     피드: <CrewFeed />,
@@ -50,9 +75,9 @@ const CrewCommunityPage = () => {
         }}
         className={style.back_Icon}
       />
-      <CrewCommunityInfo />
+      <CrewCommunityInfo crew={isCrewDetail} />
       <div className={style.divide}></div>
-      <Notice />
+      <Notice crew={isCrewDetail} />
       <div className={style.divide}></div>
       <CustomizedTabs tabProps={tabProps} />
 

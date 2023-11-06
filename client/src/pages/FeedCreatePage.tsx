@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import { BackTopBar } from "components/common/TopBar";
 import CommonButton from "components/common/CommonButton";
 import style from "styles/css/FeedCreate.module.css";
@@ -20,10 +21,9 @@ const StyledSwiper = styled(Swiper)`
 
 const FeedCreatePage = () => {
   const accessToken = useSelector((state: any) => state.user.accessToken);
+  const { crewId } = useParams();
   const [isFeedIntroduce, setFeedIntroduce] = useState("");
-  const [isCrewId, setCrewId] = useState(2);
   const [isFeedImages, setFeedImages] = useState<File[]>([]);
-
   const onChangeFeedIntroduce = (event: any) => {
     setFeedIntroduce(event.target.value);
   };
@@ -49,8 +49,9 @@ const FeedCreatePage = () => {
   const feedCreateHandler = () => {
     const formData = new FormData();
     formData.append("content", isFeedIntroduce);
-    formData.append("crewId", isCrewId.toString());
-
+    if (crewId) {
+      formData.append("crewId", crewId);
+    }
     if (isFeedImages) {
       isFeedImages.forEach((image) => {
         formData.append("feedPictures", image);
