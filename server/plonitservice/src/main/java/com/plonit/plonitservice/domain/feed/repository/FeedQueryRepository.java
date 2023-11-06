@@ -32,7 +32,7 @@ public class FeedQueryRepository {
                 .selectFrom(feed)
                 .join(feed.member, member).fetchJoin()
                 .orderBy(feed.createdDate.asc())
-                .where(feed.delete.eq(false))
+                .where(feed.isDelete.eq(false))
                 .fetch();
 
         // 각 Feed ID를 기준으로 FeedPicture를 조회
