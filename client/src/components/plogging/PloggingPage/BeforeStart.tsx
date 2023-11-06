@@ -6,7 +6,7 @@ import useGPS from "../functions/useGPS";
 
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
-import { clear, setPloggingType, setCbURL } from "store/plogging-slice";
+import { clear, setPloggingType } from "store/plogging-slice";
 
 interface IBtnDiv {
   height: number;
@@ -89,12 +89,10 @@ const BeforeStart = () => {
   function onClick1() {
     dispatch(clear());
     dispatch(setPloggingType("IND"));
-    dispatch(setCbURL("/plogging"));
   }
   function onClick2() {
     dispatch(clear());
     dispatch(setPloggingType("VOL"));
-    dispatch(setCbURL("/plogging"));
   }
 
   return (

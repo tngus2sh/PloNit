@@ -56,7 +56,7 @@ const PopUp: React.FC<IPopUP> = ({
               <div
                 className={style.camera_image}
                 style={{
-                  backgroundImage: `url("images/PloggingPage/camera-solid.svg")`,
+                  backgroundImage: `url("/images/PloggingPage/camera-solid.svg")`,
                   height: "40%",
                   aspectRatio: "1/1",
                 }}
@@ -81,13 +81,13 @@ const PopUp: React.FC<IPopUP> = ({
             <img
               src={value}
               alt="helpImage"
-              style={{ maxHeight: "100%", maxWidth: "100%" }}
+              style={{ height: "100%", aspectRatio: "1/1" }}
               onClick={() => {
                 handleImageCapture();
               }}
             />
             <img
-              src="images/PloggingPage/delete-button.svg"
+              src="/images/PloggingPage/delete-button.svg"
               alt="delete-button"
               style={{
                 maxWidth: "10%",

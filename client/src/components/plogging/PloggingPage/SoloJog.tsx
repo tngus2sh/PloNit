@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import DefaultMap from "../DefaultMap";
 import InfoDiv from "../ploggingComps/InfoDiv";
 import useCamera from "../functions/useCamera";
@@ -32,6 +32,7 @@ const SoloJog = () => {
     }
   }, []);
 
+  // 이미지가 로드되었을 때, 이미지를 넘겨준다.
   useEffect(() => {
     if (image) {
       dispatch(camera.setImage(image));
@@ -46,6 +47,7 @@ const SoloJog = () => {
           infoDivHeight={infoDivHeight}
           setShow={setShow}
           setPreventShow={setPreventShow}
+          handleImageCapture={handleImageCapture}
         />
       </DefaultMap>
       {preventShow && (

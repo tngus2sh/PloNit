@@ -2,10 +2,12 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Coordinate } from "interface/ploggingInterface";
 import getDistance from "components/plogging/functions/getDistance";
 import { ploggingType } from "types/ploggingTypes";
+import { stat } from "fs";
 
 const initialState = {
   isStart: true as boolean,
   isEnd: false as boolean,
+  beforeEnd: false as boolean,
   ploggingType: "none" as ploggingType,
   crewpingId: -1 as number,
   paths: [] as Coordinate[],
@@ -15,7 +17,10 @@ const initialState = {
   distance: 0 as number,
   calorie: 0 as number,
   images: [] as string[],
-  cbURL: "/" as string,
+  isVolStart: false as boolean,
+  volTakePicture: false as boolean,
+  isVolTakePicture: false as boolean,
+  isVolEnd: false as boolean,
 };
 
 const ploggingSlice = createSlice({
@@ -30,6 +35,9 @@ const ploggingSlice = createSlice({
     },
     setIsEnd: (state, action: PayloadAction<boolean>) => {
       state.isEnd = action.payload;
+    },
+    setBeforeEnd: (state, action: PayloadAction<boolean>) => {
+      state.beforeEnd = action.payload;
     },
     setPloggingType: (state, action: PayloadAction<ploggingType>) => {
       state.ploggingType = action.payload;
@@ -56,8 +64,17 @@ const ploggingSlice = createSlice({
         state.minute++;
       }
     },
-    setCbURL: (state, action: PayloadAction<string>) => {
-      state.cbURL = action.payload;
+    setIsVolStart: (state, action: PayloadAction<boolean>) => {
+      state.isVolStart = action.payload;
+    },
+    setVolTakePicture: (state, action: PayloadAction<boolean>) => {
+      state.volTakePicture = action.payload;
+    },
+    setIsVolTakePicture: (state, action: PayloadAction<boolean>) => {
+      state.isVolTakePicture = action.payload;
+    },
+    setIsVolEnd: (state, action: PayloadAction<boolean>) => {
+      state.isVolEnd = action.payload;
     },
   },
 });
@@ -66,11 +83,15 @@ export const {
   clear,
   setIsStart,
   setIsEnd,
+  setBeforeEnd,
   setPloggingType,
   setCrewpingId,
   addPath,
   addImage,
   addTime,
-  setCbURL,
+  setIsVolStart,
+  setVolTakePicture,
+  setIsVolTakePicture,
+  setIsVolEnd,
 } = ploggingSlice.actions;
 export default ploggingSlice.reducer;
