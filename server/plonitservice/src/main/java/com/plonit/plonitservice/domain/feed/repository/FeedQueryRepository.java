@@ -32,7 +32,7 @@ public class FeedQueryRepository {
                 .selectFrom(feed)
                 .join(feed.member, member).fetchJoin()
                 .orderBy(feed.createdDate.asc())
-                .fetchJoin()
+                .where(feed.isDelete.eq(false))
                 .fetch();
 
         // 각 Feed ID를 기준으로 FeedPicture를 조회
@@ -59,6 +59,7 @@ public class FeedQueryRepository {
                         feedComment -> feedComment.getFeed().getId(),
                         Collectors.mapping(
                                 comment -> FeedCommentDto.builder().nickname(comment.getMember().getNickname())
+                                        .commentId(comment.getId())
                                         .profileImage(comment.getMember().getProfileImage())
                                         .content(comment.getContent()).build(),
                                 Collectors.toList()
@@ -89,7 +90,6 @@ public class FeedQueryRepository {
                 .selectFrom(feed)
                 .join(feed.member, member).fetchJoin()
                 .orderBy(feed.createdDate.asc())
-                .fetchJoin()
                 .fetch();
     }
 }

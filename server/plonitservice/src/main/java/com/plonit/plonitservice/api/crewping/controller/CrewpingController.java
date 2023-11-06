@@ -66,7 +66,7 @@ public class CrewpingController {
         log.info(logCurrent(getClassName(), getMethodName(), START));
         log.info("FindCrewping={}", crewpingId);
 
-        FindCrewpingRes response = crewpingService.findCrewpings(RequestUtils.getMemberKey(request), crewpingId);
+        FindCrewpingRes response = crewpingService.findCrewping(RequestUtils.getMemberKey(request), crewpingId);
 
         return CustomApiResponse.ok(response);
     }

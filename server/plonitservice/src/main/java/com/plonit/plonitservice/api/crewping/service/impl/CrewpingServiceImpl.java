@@ -101,13 +101,11 @@ public class CrewpingServiceImpl implements CrewpingService {
             throw new CustomException(CREWPING_BAD_REQUEST);
         }
 
-        Optional<CrewpingMember> masterCrewpingMember = crewpingMemberRepository.findMasterCrewpingMemberWitMemberJoinFetch(crewpingId);
-        if(masterCrewpingMember.isEmpty()) {
-            throw new CustomException(CREWPINGMEMBER_NOT_FOUND);
-        }
+        CrewpingMember masterCrewpingMember = crewpingMemberRepository.findMasterCrewpingMemberWitMemberJoinFetch(crewpingId)
+                .orElseThrow(() -> new CustomException(CREWPINGMEMBER_NOT_FOUND));
 
         FindCrewpingRes result = FindCrewpingRes.of(crewping, masterCrewpingMember);
 
-        return null;
+        return result;
     }
 }
