@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ImageCropper from "components/plogging/PloggingImagePage/ImageCropper";
 import { useNavigate } from "react-router-dom";
+import * as P from "store/plogging-slice";
 
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
@@ -47,7 +48,7 @@ const PloggingImagePage = () => {
             plogging_id: ploggingId,
             image: jpgFile,
             success: (response) => {
-              console.log(response);
+              dispatch(P.addImage(response.data.resultBody));
               if (isEnd || beforeEnd) {
                 navigate("/plogging/complete");
               } else {
