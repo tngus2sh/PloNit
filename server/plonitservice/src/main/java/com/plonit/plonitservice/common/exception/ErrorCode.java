@@ -25,6 +25,7 @@ public enum ErrorCode {
     NOT_LOGIN_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "로그인 후 이용해주세요."),
 
     /* 403 FORBIDDEN : 페이지 접근 거부 */
+    CREWPING_JOIN_EXCEED(HttpStatus.FORBIDDEN, "크루핑 최대 참가 인원을 초과했습니다."),
 
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."),
@@ -37,7 +38,7 @@ public enum ErrorCode {
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     USER_ALREADY_EXIST(HttpStatus.CONFLICT, "이미 가입되어 있는 유저입니다."),
     ID_ALREADY_EXIST(HttpStatus.CONFLICT, "이미 존재하는 아이디입니다."),
-
+    CREWPING_ALREADY_JOIN(HttpStatus.CONFLICT, "이미 참가되어 있는 크루핑입니다."),
 
     /* 500 INTERNAL_SERVER_ERROR : 서버 내부 로직 에러 */
     SSE_CONNECTED_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "SSE 연결이 실패하였습니다."),

@@ -13,4 +13,5 @@ public interface CrewpingService {
     void saveCrewping(SaveCrewpingDto dto);
     List<FindCrewpingsRes> findCrewpings(Long memberId, Long crewId);
     FindCrewpingRes findCrewping(Long memberId, Long crewpingId);
+    void joinCrewping(Long memberId, Long crewpingId);
 }
