@@ -50,6 +50,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
     return state.plogging.isStart;
   });
   const isMapLoaded = useRef<boolean>(false);
+  const isBottomLoaded = useRef<boolean>(false);
   const { latitude, longitude, onCenter, setOnCenter } = useGPS();
   const mapRef = useRef<naver.maps.Map | null>(null);
   const userRef = useRef<naver.maps.Marker | null>(null);
@@ -287,15 +288,24 @@ const DefaultMap: React.FC<IDefaultMap> = ({
     return () => {
       if (!isMapLoaded.current) {
         isMapLoaded.current = true;
-        setTimeout(() => {
-          if (!isBefore && isStart && arrowBtnRef.current) {
-            arrowBtnRef.current.getElement().click();
-            dispatch(P.setIsStart(false));
-          }
-        }, popupTime * 1000);
       }
     };
   }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (
+        !isBottomLoaded.current &&
+        !isBefore &&
+        isStart &&
+        arrowBtnRef.current
+      ) {
+        isBottomLoaded.current = true;
+        arrowBtnRef.current.getElement().click();
+        dispatch(P.setIsStart(false));
+      }
+    }, popupTime * 1000);
+  }, [isStart]);
 
   // 사용자의 위치 가운데로 갱신 시
   useEffect(() => {
