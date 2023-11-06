@@ -2,17 +2,31 @@ import React, { useState } from "react";
 import AddressModal from "components/CrewpingCreate/AddressModal";
 import style from "styles/css/CrewpingCreatePage.module.css";
 
-const CrewpingAddress = () => {
+const CrewpingAddress = ({ setCrewpingPlace }: any) => {
   const [isAddressModalOpen, setAddressModalOpen] = useState(false);
+  // 주소 모달에서 바로 저장되는 주소
   const [selectedAddress, setSelectedAddress] = useState<{
     roadAddress: string | null;
     jibunAddress: string | null;
   }>({ roadAddress: null, jibunAddress: null });
+  // 기본 주소
   const [addressInput, setAddressInput] = useState("");
+  // 상세 주소
+  const [addressDetailInput, setAddressDetailInput] = useState("");
+
+  const handleAddressInputChange = (event: any) => {
+    const newAddress = event.target.value;
+    setAddressInput(newAddress);
+    setCrewpingPlace(newAddress + " " + addressDetailInput);
+  };
+  const handleAddressDetailInputChange = (e: any) => {
+    const newAddressDetail = e.target.value;
+    setAddressDetailInput(newAddressDetail);
+    setCrewpingPlace(addressInput + " " + newAddressDetail);
+  };
 
   const handleAddressSelected = (addressData: any) => {
     setSelectedAddress(addressData);
-
     setAddressInput(addressData.roadAddress || addressData.jibunAddress || "");
     setAddressModalOpen(false);
   };
@@ -32,7 +46,7 @@ const CrewpingAddress = () => {
           className={style.inputBox}
           readOnly={true}
           value={addressInput}
-          onChange={(e) => setAddressInput(e.target.value)}
+          onChange={handleAddressInputChange}
           onClick={() => setAddressModalOpen(true)}
         />
         <button
@@ -48,6 +62,8 @@ const CrewpingAddress = () => {
         id="address_detail"
         placeholder="상세 주소"
         className={style.inputBox_detail}
+        value={addressDetailInput}
+        onChange={handleAddressDetailInputChange}
       />
       {isAddressModalOpen && (
         <AddressModal
