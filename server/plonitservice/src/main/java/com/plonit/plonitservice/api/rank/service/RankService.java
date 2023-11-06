@@ -11,7 +11,7 @@ public interface RankService {
     public MembersRankResponse findAllMembersRank(Long memberKey);
 
     public CrewTotalResponse findAllCrewRank(Long memberKey);
-
-    public CrewAvgResponse findAllCrewRankByAVG(Long crewId);
-
+    
+    public CrewAvgResponse findAllCrewRankByAVG(Long memberKey);
+    
 }

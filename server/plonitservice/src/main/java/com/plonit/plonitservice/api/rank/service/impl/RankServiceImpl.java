@@ -104,15 +104,16 @@ public class RankServiceImpl implements RankService {
         
         // memberKey로 crewId 가져오기
         Optional<Long> crewMemberByMemberId = crewMemberRepository.findCrewMemberByMemberId(memberKey);
-        Long crewId = crewMemberByMemberId.get();
-        if (crewId == null) {
-            crewId = -1L;
+        Long crewId = -1L;
+        if (crewMemberByMemberId.isPresent()) {
+            crewId = crewMemberByMemberId.get();
         }
 
         CrewTotalResponse crewTotalResponse = new CrewTotalResponse();
         
         // 현재 랭킹 기간 조회
         String rankingPeriod = nowRankingPeriod();
+        crewTotalResponse.setRankingPeriod(rankingPeriod);
         
         // Redis에서 랭킹 조회
         Set<ZSetOperations.TypedTuple<String>> sortedSetRangeWithScores = redisUtils.getSortedSetRangeWithScores("CREW-RANK", 0, 9);
@@ -164,8 +165,68 @@ public class RankServiceImpl implements RankService {
     }
 
     @Override
-    public CrewAvgResponse findAllCrewRankByAVG(Long crewId) {
-        return null;
+    public CrewAvgResponse findAllCrewRankByAVG(Long memberKey) {
+
+        // memberKey로 crewId 가져오기
+        Optional<Long> crewMemberByMemberId = crewMemberRepository.findCrewMemberByMemberId(memberKey);
+        Long crewId = -1L;
+        if (crewMemberByMemberId.isPresent()) {
+            crewId = crewMemberByMemberId.get();
+        }
+        
+        CrewAvgResponse crewAvgResponse = new CrewAvgResponse();
+        
+        // 현재 랭킹 기간 조회
+        String rankingPeriod = nowRankingPeriod();
+        crewAvgResponse.setRankingPeriod(rankingPeriod);
+
+        // Redis에서 랭킹 조회
+        Set<ZSetOperations.TypedTuple<String>> sortedSetRangeWithScores = redisUtils.getSortedSetRangeWithScores("CREW-AVG-RANK", 0, 9);
+
+        List<CrewAvgResponse.CrewsAvgRanks> crewsAvgRanks = crewAvgResponse.getCrewsAvgRanks();
+
+        List<Long> crewIds = new LinkedList<>();
+        Map<Long, Object[]> disanceRankings = new HashMap<>();
+
+        // 크루 식별키, 평균 거리, 랭킹 정리
+        Integer index = 0;
+        for (ZSetOperations.TypedTuple<String> sortedSetRangeWithScore : sortedSetRangeWithScores) {
+            Long crewKey = Long.valueOf(sortedSetRangeWithScore.getValue());
+            Double distance = sortedSetRangeWithScore.getScore();
+
+            crewIds.add(crewKey);
+            disanceRankings.put(crewKey, new Object[]{distance, ++index});
+        }
+
+        // 크루 이미지, 크루 닉네임 가져오기
+        List<CrewRankRes> crewRankResList = crewQueryRepository.findByIds(crewIds);
+
+        for (CrewRankRes crewRankRes : crewRankResList) {
+            Long crewKey = crewRankRes.getId();
+
+            // 내 크루인지 확인
+            boolean isMine = false;
+            if (crewKey.equals(crewId)) {
+                isMine = true;
+            }
+
+            // 누적 거리와 랭킹
+            Object[] distanceRanking = disanceRankings.get(crewKey);
+            Double distance = (Double) distanceRanking[0];
+            Integer ranking = (Integer) distanceRanking[1];
+
+            crewsAvgRanks.add(CrewAvgResponse.CrewsAvgRanks.builder()
+                    .nickName(crewRankRes.getName())
+                    .profileImage(crewRankRes.getCrewImage())
+                    .ranking(ranking)
+                    .distance(distance)
+                    .isMine(isMine)
+                    .build());
+        }
+        
+        crewAvgResponse.setCrewsAvgRanks(crewsAvgRanks);
+
+        return crewAvgResponse;
     }
 
     /**

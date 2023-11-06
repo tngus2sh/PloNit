@@ -52,11 +52,14 @@ public class RankApiController {
 
     @Operation(summary = "크루 평균 랭킹 조회", description = "크루 평균 랭킹을 조회합니다.")
     @GetMapping("/crew-avg")
-    public CustomApiResponse<List<CrewAvgResponse>> findAllCrewRankByAVG() {
+    public CustomApiResponse<CrewAvgResponse> findAllCrewRankByAVG(
+            HttpServletRequest request
+    ) {
 
-        // TODO: 2023-10-30 크루 평균 랭킹 조회 
-
-        return null;
+        // 크루 평균 랭킹 조회
+        Long memberKey = RequestUtils.getMemberKey(request);
+        CrewAvgResponse allCrewRankByAVG = rankService.findAllCrewRankByAVG(memberKey);
+        return CustomApiResponse.ok(allCrewRankByAVG);
     }
 
 
