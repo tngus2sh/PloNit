@@ -208,7 +208,7 @@ public class PloggingServiceImpl implements PloggingService {
         Plogging plogging = ploggingRepository.findById(dto.getId())
                 .orElseThrow(() -> new CustomException(PLOGGING_BAD_REQUEST));
 
-        // S3에 등록
+        // S3에 등록/**/
         String imageUrl = null;
         if (dto.getImage() != null) {
             try {
