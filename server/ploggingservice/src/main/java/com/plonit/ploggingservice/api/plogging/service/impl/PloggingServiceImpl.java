@@ -72,7 +72,7 @@ public class PloggingServiceImpl implements PloggingService {
         String place = roadAddress.getAddress_name();
 
         // 시작 시간 구하기
-        LocalDateTime startTime = LocalDateTime.now(ZoneId.of(Time.SEOUL.name()));
+        LocalDateTime startTime = LocalDateTime.now(ZoneId.of(Time.SEOUL.text));
         
         // 오늘 날짜 구하기
         LocalDate today = startTime.toLocalDate();
@@ -92,7 +92,7 @@ public class PloggingServiceImpl implements PloggingService {
     public Long saveEndPlogging(EndPloggingDto dto) {
         
         // 끝난 시간 구하기
-        LocalDateTime endTime = LocalDateTime.now(ZoneId.of(Time.SEOUL.name()));
+        LocalDateTime endTime = LocalDateTime.now(ZoneId.of(Time.SEOUL.text));
         
         // 플로깅 id로 플로깅 가져오기
         Plogging plogging = ploggingRepository.findById(dto.getPloggingId())
