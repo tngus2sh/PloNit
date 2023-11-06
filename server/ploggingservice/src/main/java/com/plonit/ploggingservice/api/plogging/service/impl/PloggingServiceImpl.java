@@ -168,7 +168,7 @@ public class PloggingServiceImpl implements PloggingService {
     public String savePloggingImage(ImagePloggingDto dto) {
         
         // 플로깅 id 있는지 확인
-        ploggingRepository.existById(dto.getId())
+        Plogging plogging = ploggingRepository.findById(dto.getId())
                 .orElseThrow(() -> new CustomException(PLOGGING_BAD_REQUEST));
 
         // S3에 등록
@@ -182,7 +182,7 @@ public class PloggingServiceImpl implements PloggingService {
         }
         
         // 플로깅 이미지 저장
-        PloggingPicture ploggingPicture = ImagePloggingDto.toEntity(dto.getId(), imageUrl);
+        PloggingPicture ploggingPicture = ImagePloggingDto.toEntity(dto.getId(), plogging, imageUrl);
         ploggingPictureRepository.save(ploggingPicture);
         
         return imageUrl;

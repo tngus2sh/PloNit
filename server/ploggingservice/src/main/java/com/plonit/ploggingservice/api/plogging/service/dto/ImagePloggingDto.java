@@ -1,6 +1,7 @@
 package com.plonit.ploggingservice.api.plogging.service.dto;
 
 import com.plonit.ploggingservice.api.plogging.controller.request.ImagePloggingReq;
+import com.plonit.ploggingservice.domain.plogging.Plogging;
 import com.plonit.ploggingservice.domain.plogging.PloggingPicture;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,9 +23,10 @@ public class ImagePloggingDto {
                 .build();
     }
 
-    public static PloggingPicture toEntity(Long id, String image) {
+    public static PloggingPicture toEntity(Long id, Plogging plogging, String image) {
         return PloggingPicture.builder()
                 .id(id)
+                .plogging(plogging)
                 .image(image)
                 .build();
     }
