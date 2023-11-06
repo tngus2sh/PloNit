@@ -5,6 +5,7 @@ import com.plonit.plonitservice.api.badge.controller.request.CrewBadgeReq;
 import com.plonit.plonitservice.api.badge.controller.request.MembersBadgeReq;
 import com.plonit.plonitservice.api.badge.service.BadgeService;
 import com.plonit.plonitservice.api.badge.service.dto.BadgeDto;
+import com.plonit.plonitservice.api.badge.service.dto.MembersBadgeDto;
 import com.plonit.plonitservice.common.CustomApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -47,9 +48,14 @@ public class BadgeApiController {
     public CustomApiResponse<Void> saveBadgeByIndividual(
             @RequestBody List<MembersBadgeReq> reqs
     ) {
-        // TODO: 2023-10-30 개인 배지 부여 
+        // 개인 배지 부여
+        List<MembersBadgeDto> membersBadgeDtos = new ArrayList<>();
+        for (MembersBadgeReq req : reqs) {
+            membersBadgeDtos.add(MembersBadgeDto.of(req));
+        }
+        badgeService.saveBadgeByIndividual(membersBadgeDtos);
         
-        return null;
+        return CustomApiResponse.ok(null);
     }
     
     
