@@ -11,10 +11,14 @@ import javax.validation.constraints.Positive;
 @Schema(description = "플로깅 종료 후 저장 request")
 public class EndPloggingReq {
     
-    @Schema(description = "플로깅 id")
+    @Schema(description = "플로깅 id : 플로깅 시작시에 반환된 id")
     @NotBlank(message = "플로깅 id는 필수 입력값입니다.")
     @Positive
     private Long ploggingId;
+
+    @Schema(description = "크루핑 id : 크루핑 생성시에 반환된 id")
+    @Positive
+    private Long crewpingId;
 
     @Schema(description = "좌표")
     private Coordinate[] coordinates;
@@ -31,6 +35,9 @@ public class EndPloggingReq {
 
     @Schema(description = "한줄평")
     private String review;
+
+    @Schema(description = "크루핑시 참여한 사람들 수")
+    private Integer people;
     
     @Data
     @RequiredArgsConstructor

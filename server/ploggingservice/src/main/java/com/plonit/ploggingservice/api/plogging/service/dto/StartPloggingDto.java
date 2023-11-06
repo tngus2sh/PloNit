@@ -24,15 +24,12 @@ public class StartPloggingDto {
 
     private Double longitude;
 
-    private Long crewpingId;
-
     @Builder
-    public StartPloggingDto(Long memberKey, Type type, Double latitude, Double longitude, Long crewpingId) {
+    public StartPloggingDto(Long memberKey, Type type, Double latitude, Double longitude) {
         this.memberKey = memberKey;
         this.type = type;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.crewpingId = crewpingId;
     }
 
     public static StartPloggingDto of (StartPloggingReq request, Long memberKey) {
@@ -41,7 +38,6 @@ public class StartPloggingDto {
                 .type(request.getType())
                 .latitude(request.getLatitude())
                 .longitude(request.getLongitude())
-                .crewpingId(request.getCrewpingId())
                 .build();
     }
     

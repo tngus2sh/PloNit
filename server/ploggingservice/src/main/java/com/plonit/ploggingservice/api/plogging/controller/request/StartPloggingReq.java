@@ -29,7 +29,4 @@ public class StartPloggingReq {
     @Positive
     private Double longitude;
     
-    @Schema(description = "크루핑 id")
-    private Long crewpingId;
-    
 }

@@ -10,6 +10,7 @@ import com.plonit.ploggingservice.api.plogging.service.dto.StartPloggingDto;
 import com.plonit.ploggingservice.common.AwsS3Uploader;
 import com.plonit.ploggingservice.common.enums.Finished;
 import com.plonit.ploggingservice.common.enums.Time;
+import com.plonit.ploggingservice.common.enums.Type;
 import com.plonit.ploggingservice.common.exception.CustomException;
 import com.plonit.ploggingservice.common.util.KakaoPlaceUtils;
 import com.plonit.ploggingservice.common.util.RedisUtils;
@@ -39,7 +40,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.plonit.ploggingservice.common.enums.RedisKey.MEMBER_RANK;
+import static com.plonit.ploggingservice.common.enums.RedisKey.*;
 import static com.plonit.ploggingservice.common.exception.ErrorCode.*;
 
 @Service
@@ -75,7 +76,7 @@ public class PloggingServiceImpl implements PloggingService {
         String place = roadAddress.getAddress_name();
 
         // 시작 시간 구하기
-        LocalDateTime startTime = LocalDateTime.now(ZoneId.of(Time.SEOUL.name()));
+        LocalDateTime startTime = LocalDateTime.now(ZoneId.of(Time.SEOUL.getText()));
         
         // 오늘 날짜 구하기
         LocalDate today = startTime.toLocalDate();
@@ -95,7 +96,7 @@ public class PloggingServiceImpl implements PloggingService {
     public Long saveEndPlogging(EndPloggingDto dto) {
         
         // 끝난 시간 구하기
-        LocalDateTime endTime = LocalDateTime.now(ZoneId.of(Time.SEOUL.name()));
+        LocalDateTime endTime = LocalDateTime.now(ZoneId.of(Time.SEOUL.getText()));
         
         // 플로깅 id로 플로깅 가져오기
         Plogging plogging = ploggingRepository.findById(dto.getPloggingId())
@@ -120,15 +121,37 @@ public class PloggingServiceImpl implements PloggingService {
         
         latLongRepository.saveAll(latLongs);
 
+        /* 크루핑시에 크루핑 테이블에 내용 저장 */
+
+
         /* 랭킹*/
-        // 1. 기존에 존재하는 랭킹 파악하기
-        Double valueInSortedSet = redisUtils.getValueInSortedSet(MEMBER_RANK.name(), String.valueOf(dto.getMemberKey()));
-        if (valueInSortedSet == null) {
-            // 1-1. 없다면 새로운 랭킹 생성
+        // 기존에 존재하는 랭킹 파악하기 -> 없다면 새로운 랭킹 생성, 랭킹 있다면 값 업데이트
+        Double memberRankValue = redisUtils.getValueInSortedSet(MEMBER_RANK.name(), String.valueOf(dto.getMemberKey()));
+        if (memberRankValue == null) {
             redisUtils.setRedisSortedSet(MEMBER_RANK.name(), String.valueOf(dto.getMemberKey()), dto.getDistance());
         } else {
-            // 1-2. 랭킹 있다면 값 업데이트
-            redisUtils.updateRedisSortedSet(MEMBER_RANK.name(), String.valueOf(dto.getMemberKey()), valueInSortedSet + dto.getDistance());
+                redisUtils.updateRedisSortedSet(MEMBER_RANK.name(), String.valueOf(dto.getMemberKey()), memberRankValue + dto.getDistance());
+        }
+
+        // 크루핑이라면 크루 플로깅 랭킹에 넣기
+        if (plogging.getType().equals(Type.CREWPING)) {
+            // 크루 누적 랭킹
+            Double crewRankValue = redisUtils.getValueInSortedSet(CREW_RANK.name(), String.valueOf(dto.getCrewpingId()));
+            if (crewRankValue == null) {
+                redisUtils.setRedisSortedSet(CREW_RANK.name(), String.valueOf(dto.getMemberKey()), dto.getDistance());
+            } else {
+                redisUtils.updateRedisSortedSet(CREW_RANK.name(), String.valueOf(dto.getMemberKey()), crewRankValue + dto.getDistance());
+            }
+
+
+            // 크루 평균 랭킹
+            Double crewAvgRankValue = redisUtils.getValueInSortedSet(CREW_AVG_RANK.name(), String.valueOf(dto.getCrewpingId()));
+            Double avgDistance = (dto.getDistance() / dto.getPeople());
+            if (crewAvgRankValue == null) {
+                redisUtils.setRedisSortedSet(CREW_AVG_RANK.name(), String.valueOf(dto.getCrewpingId()), avgDistance);
+            } else {
+                redisUtils.updateRedisSortedSet(CREW_AVG_RANK.name(), String.valueOf(dto.getCrewpingId()), crewAvgRankValue + avgDistance);
+            }
         }
 
         return plogging.getId();
