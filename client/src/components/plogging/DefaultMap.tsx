@@ -277,6 +277,20 @@ const DefaultMap: React.FC<IDefaultMap> = ({
               );
             }
           });
+
+          // 플로깅 시작 시 정보창 애니메이션
+          setTimeout(() => {
+            if (
+              !isBottomLoaded.current &&
+              !isBefore &&
+              isStart &&
+              arrowBtnRef.current
+            ) {
+              isBottomLoaded.current = true;
+              arrowBtnRef.current.getElement().click();
+              dispatch(P.setIsStart(false));
+            }
+          }, popupTime * 1000);
         })
         .catch((error) => {
           console.error(error);
@@ -291,21 +305,6 @@ const DefaultMap: React.FC<IDefaultMap> = ({
       }
     };
   }, []);
-
-  useEffect(() => {
-    setTimeout(() => {
-      if (
-        !isBottomLoaded.current &&
-        !isBefore &&
-        isStart &&
-        arrowBtnRef.current
-      ) {
-        isBottomLoaded.current = true;
-        arrowBtnRef.current.getElement().click();
-        dispatch(P.setIsStart(false));
-      }
-    }, popupTime * 1000);
-  }, [isStart]);
 
   // 사용자의 위치 가운데로 갱신 시
   useEffect(() => {
