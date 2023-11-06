@@ -9,10 +9,14 @@ import com.plonit.plonitservice.common.exception.CustomException;
 import com.plonit.plonitservice.common.exception.ErrorCode;
 import com.plonit.plonitservice.domain.badge.Badge;
 import com.plonit.plonitservice.domain.badge.BadgeCondition;
+import com.plonit.plonitservice.domain.badge.CrewBadge;
 import com.plonit.plonitservice.domain.badge.MemberBadge;
 import com.plonit.plonitservice.domain.badge.repository.BadgeConditionRepository;
 import com.plonit.plonitservice.domain.badge.repository.BadgeRepository;
+import com.plonit.plonitservice.domain.badge.repository.CrewBadgeRepository;
 import com.plonit.plonitservice.domain.badge.repository.MemberBadgeRepository;
+import com.plonit.plonitservice.domain.crew.Crew;
+import com.plonit.plonitservice.domain.crew.repository.CrewRepository;
 import com.plonit.plonitservice.domain.member.Member;
 import com.plonit.plonitservice.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,9 +36,11 @@ import static com.plonit.plonitservice.common.exception.ErrorCode.INVALID_FIELDS
 public class BadgeServiceImpl implements BadgeService {
     
     private final MemberRepository memberRepository;
+    private final CrewRepository crewRepository;
     private final BadgeRepository badgeRepository;
     private final BadgeConditionRepository badgeConditionRepository;
     private final MemberBadgeRepository memberBadgeRepository;
+    private final CrewBadgeRepository crewBadgeRepository;
     private final AwsS3Uploader awsS3Uploader;
 
     @Override
@@ -87,6 +93,22 @@ public class BadgeServiceImpl implements BadgeService {
 
     @Override
     public void saveBadgeByCrew(List<CrewBadgeDto> crewBadgeDtos) {
+        
+        List<CrewBadge> crewBadges = new ArrayList<>();
+
+        for (CrewBadgeDto crewBadgeDto : crewBadgeDtos) {
+            // 뱃지 가져오기
+            Badge badge = badgeRepository.findById(crewBadgeDto.getBadgeId())
+                    .orElseThrow(() -> new CustomException(INVALID_FIELDS_REQUEST));
+
+            // 크루 가져오기
+            Crew crew = crewRepository.findById(crewBadgeDto.getCrewId())
+                    .orElseThrow(() -> new CustomException(INVALID_FIELDS_REQUEST));
+
+            crewBadges.add(CrewBadgeDto.toEntity(badge, crew));
+        }
+
+        crewBadgeRepository.saveAll(crewBadges);
 
     }
 }
