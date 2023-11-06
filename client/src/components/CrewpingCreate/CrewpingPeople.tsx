@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import style from "styles/css/CrewpingCreatePage.module.css";
 
-const CrewpingPeople = () => {
+const CrewpingPeople = ({ setCrewpingMaxPeople }: any) => {
+  const [isPeople, setPeople] = useState();
+  const OnChangePeople = (event: any) => {
+    setPeople(event.target.value);
+    setCrewpingMaxPeople(event.target.value);
+  };
   return (
     <div className={style.people_area}>
       <label className={style.label} htmlFor="person">
@@ -12,6 +17,8 @@ const CrewpingPeople = () => {
           type="number"
           name="people"
           id="people"
+          value={isPeople}
+          onChange={OnChangePeople}
           className={style.inputBox}
         />
         <div className={style.slash}>/</div>

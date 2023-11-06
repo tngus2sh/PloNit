@@ -6,13 +6,10 @@ import { Icon } from "@iconify/react";
 
 interface AddressModalProps {
   onClose: () => void;
-  onAddressSelected: (addressData: any) => void; // Use 'any' type for address data
+  onAddressSelected: (addressData: any) => void;
 }
 
-const AddressModal: React.FC<AddressModalProps> = ({
-  onClose,
-  onAddressSelected,
-}) => {
+const AddressModal = ({ onClose, onAddressSelected }: AddressModalProps) => {
   const handleComplete = (data: any) => {
     onAddressSelected(data);
     onClose();

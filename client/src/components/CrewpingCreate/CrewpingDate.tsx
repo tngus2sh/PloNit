@@ -6,11 +6,17 @@ import getYear from "date-fns/getYear";
 import getMonth from "date-fns/getMonth";
 import "custom_css/CrewCreateDatePicker.css";
 
-const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-
-const CrewpingDate = () => {
+const CrewpingDate = ({ setCrewpingStartDate, setCrewpingEndDate }: any) => {
   const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(null);
   const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(null);
+  const onChangeStartDate = (date: any) => {
+    setSelectedStartDate(date);
+    setCrewpingStartDate(date);
+  };
+  const onChangeEndDate = (date: any) => {
+    setSelectedEndDate(date);
+    setCrewpingEndDate(date);
+  };
   return (
     <div className={style.date_time}>
       <label className={style.label} htmlFor="date_time">
@@ -24,7 +30,7 @@ const CrewpingDate = () => {
         name="date_time"
         id="date_time"
         placeholderText="시작 일시"
-        onChange={(date) => setSelectedStartDate(date)}
+        onChange={onChangeStartDate}
         dateFormat="yyyy.MM.dd hh:mm"
       />
       <DatePicker
@@ -35,7 +41,7 @@ const CrewpingDate = () => {
         name="date_time"
         id="date_time"
         placeholderText="종료 일시"
-        onChange={(date) => setSelectedEndDate(date)}
+        onChange={onChangeEndDate}
         dateFormat="yyyy.MM.dd hh:mm"
       />
     </div>
