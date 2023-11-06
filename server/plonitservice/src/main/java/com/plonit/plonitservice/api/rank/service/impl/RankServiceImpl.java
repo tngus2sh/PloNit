@@ -1,6 +1,7 @@
 package com.plonit.plonitservice.api.rank.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.plonit.plonitservice.api.crew.controller.response.CrewRankRes;
 import com.plonit.plonitservice.api.member.controller.response.MemberRankRes;
 import com.plonit.plonitservice.api.member.service.MemberService;
 import com.plonit.plonitservice.api.rank.controller.response.CrewAvgResponse;
@@ -10,6 +11,7 @@ import com.plonit.plonitservice.api.rank.service.RankService;
 import com.plonit.plonitservice.common.exception.CustomException;
 import com.plonit.plonitservice.common.exception.ErrorCode;
 import com.plonit.plonitservice.common.util.RedisUtils;
+import com.plonit.plonitservice.domain.crew.repository.CrewQueryRepository;
 import com.plonit.plonitservice.domain.member.repository.MemberQueryRepository;
 import com.plonit.plonitservice.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ import static com.plonit.plonitservice.common.exception.ErrorCode.RANKING_PERIOD
 public class RankServiceImpl implements RankService {
     
     private final MemberQueryRepository memberQueryRepository;
+    private final CrewQueryRepository crewQueryRepository;
     private final RedisUtils redisUtils;
 
     /**
@@ -39,27 +42,28 @@ public class RankServiceImpl implements RankService {
     @Override
     public MembersRankResponse findAllMembersRank(Long memberKey) {
 
+        MembersRankResponse membersRankResponse = new MembersRankResponse();
+        
         // 현재 랭킹 기간 조회
         String rankingPeriod = nowRankingPeriod();
+        membersRankResponse.setRankingPeriod(rankingPeriod);
 
         // Redis에서 랭킹 조회
         Set<ZSetOperations.TypedTuple<String>> sortedSetRangeWithScores = redisUtils.getSortedSetRangeWithScores("MEMBER-RANK", 0, 9);
 
-        MembersRankResponse membersRankResponse = new MembersRankResponse();
-        membersRankResponse.setRankingPeriod(rankingPeriod);
         List<MembersRankResponse.MembersRank> membersRanks = membersRankResponse.getMembersRanks();
         
         List<Long> memberIds = new LinkedList<>();
         Map<Long, Object[]> distanceRankings = new HashMap<>();
         
         // 멤버 식별키와 누적거리 및 랭킹 저장
-        int index = 0;
+        Integer index = 0;
         for (ZSetOperations.TypedTuple<String> sortedSetRangeWithScore : sortedSetRangeWithScores) {
             Long memberId = Long.parseLong(sortedSetRangeWithScore.getValue());
             Double distance = sortedSetRangeWithScore.getScore();
 
             memberIds.add(memberId);
-            distanceRankings.put(memberId, new Object[]{distance, index + 1});
+            distanceRankings.put(memberId, new Object[]{distance, ++index});
         }
 
         // 닉네임, 프로필이미지, 랭킹, 거리, 내꺼인지 확인
@@ -96,13 +100,36 @@ public class RankServiceImpl implements RankService {
     @Override
     public CrewTotalResponse findAllCrewRank(Long crewId) {
         
+        CrewTotalResponse crewTotalResponse = new CrewTotalResponse();
+        
         // 현재 랭킹 기간 조회
         String rankingPeriod = nowRankingPeriod();
         
         // Redis에서 랭킹 조회
         Set<ZSetOperations.TypedTuple<String>> sortedSetRangeWithScores = redisUtils.getSortedSetRangeWithScores("CREW-RANK", 0, 9);
 
+        List<CrewTotalResponse.CrewsRanks> crewsRanks = crewTotalResponse.getCrewsRanks();
+        
+        List<Long> crewIds = new LinkedList<>();
+        Map<Long, Object[]> disanceRankings = new HashMap<>();
+        
+        // 크루 식별키, 누적 거리, 랭킹 순위 정리
+        Integer index = 0;
+        for (ZSetOperations.TypedTuple<String> sortedSetRangeWithScore : sortedSetRangeWithScores) {
+            Long crewKey = Long.valueOf(sortedSetRangeWithScore.getValue());
+            Double distance = sortedSetRangeWithScore.getScore();
 
+            crewIds.add(crewKey);
+            disanceRankings.put(crewKey, new Object[]{distance, ++index});
+        }
+
+        // 크루 이미지, 크루 닉네임 가져오기
+        List<CrewRankRes> crewRankResList = crewQueryRepository.findByIds(crewIds);
+
+        for (CrewRankRes crewRankRes : crewRankResList) {
+            
+        }
+        
         return null;
     }
 
