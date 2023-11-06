@@ -22,6 +22,7 @@ import com.plonit.plonitservice.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -44,6 +45,7 @@ public class BadgeServiceImpl implements BadgeService {
     private final AwsS3Uploader awsS3Uploader;
 
     @Override
+    @Transactional
     public void saveBadge(List<BadgeDto> badgeDtos) {
 
         List<BadgeCondition> badgeConditions = new ArrayList<>();
@@ -72,6 +74,7 @@ public class BadgeServiceImpl implements BadgeService {
     }
 
     @Override
+    @Transactional
     public void saveBadgeByIndividual(List<MembersBadgeDto> membersBadgeDtos) {
         
         List<MemberBadge>  memberBadges = new ArrayList<>();
@@ -92,6 +95,7 @@ public class BadgeServiceImpl implements BadgeService {
     }
 
     @Override
+    @Transactional
     public void saveBadgeByCrew(List<CrewBadgeDto> crewBadgeDtos) {
         
         List<CrewBadge> crewBadges = new ArrayList<>();
