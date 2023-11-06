@@ -25,6 +25,9 @@ public enum ErrorCode {
     NOT_LOGIN_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "로그인 후 이용해주세요."),
 
     /* 403 FORBIDDEN : 페이지 접근 거부 */
+    FEED_NOT_FORBIDDEN(HttpStatus.FORBIDDEN, "접근할 수 없는 피드입니다."),
+    FEED_COMMENT_NOT_FORBIDDEN(HttpStatus.FORBIDDEN, "접근할 수 없는 피드 댓글입니다."),
+    CREW_NOT_FORBIDDEN(HttpStatus.FORBIDDEN, "접근할 수 없는 크루입니다."),
 
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."),

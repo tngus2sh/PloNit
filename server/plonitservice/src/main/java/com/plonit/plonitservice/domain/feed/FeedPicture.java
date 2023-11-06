@@ -24,4 +24,11 @@ public class FeedPicture extends TimeBaseEntity {
 
     @Column(length = 500)
     private String image;
+
+    public static FeedPicture toEntity(Feed feed, String url) {
+        return FeedPicture.builder()
+                .feed(feed)
+                .image(url)
+                .build();
+    }
 }

@@ -61,7 +61,8 @@ public class FeedController {
     public CustomApiResponse<Object> findFeeds(HttpServletRequest request) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
 
-        List<FindFeedRes> findFeedRes = feedQueryService.findFeeds();
+        Long memberKey = RequestUtils.getMemberKey(request); // 내가 작성한 피드 인지 확인
+        List<FindFeedRes> findFeedRes = feedQueryService.findFeeds(memberKey);
 
         log.info(logCurrent(getClassName(), getMethodName(), END));
         return CustomApiResponse.ok(findFeedRes, "피드 조회에 성공했습니다.");

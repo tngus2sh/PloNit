@@ -3,6 +3,7 @@ package com.plonit.plonitservice.domain.feed.repository;
 import com.plonit.plonitservice.api.feed.service.dto.FeedCommentDto;
 import com.plonit.plonitservice.api.feed.service.dto.FeedPictureDto;
 import com.plonit.plonitservice.api.feed.controller.response.FindFeedRes;
+import com.plonit.plonitservice.domain.crew.Crew;
 import com.plonit.plonitservice.domain.feed.Feed;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
@@ -11,12 +12,15 @@ import javax.persistence.EntityManager;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.plonit.plonitservice.domain.feed.QFeed.feed;
 import static com.plonit.plonitservice.domain.feed.QFeedPicture.feedPicture;
 import static com.plonit.plonitservice.domain.feed.QComment.comment;
 import static com.plonit.plonitservice.domain.member.QMember.member;
+import static com.plonit.plonitservice.domain.crew.QCrew.crew;
+import static com.plonit.plonitservice.domain.crew.QCrewMember.crewMember;
 
 @Repository
 public class FeedQueryRepository {
@@ -26,7 +30,7 @@ public class FeedQueryRepository {
     public FeedQueryRepository(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
-    public List<FindFeedRes> findFeedsWithPictureAndComment() {
+    public List<FindFeedRes> findFeedsWithPictureAndComment(Long memberKey) {
         // Feed 기본 정보와 연관된 Member 상세 정보를 조회
         List<Feed> feeds = queryFactory
                 .selectFrom(feed)
@@ -76,6 +80,7 @@ public class FeedQueryRepository {
                     .id(feedEntity.getId())
                     .content(feedEntity.getContent())
                     .isLike(false)
+                    .isMine(feedEntity.getMember().getId().equals(memberKey))
                     .nickname(feedEntity.getMember().getNickname())
                     .profileImage(feedEntity.getMember().getProfileImage())
                     .feedPictures(feedPictureDtos)
@@ -91,5 +96,14 @@ public class FeedQueryRepository {
                 .join(feed.member, member).fetchJoin()
                 .orderBy(feed.createdDate.asc())
                 .fetch();
+    }
+
+    public Optional<Feed> findFeedWithCrewMember(Long feedId, Long memberKey) {
+        return Optional.ofNullable(queryFactory
+                .selectFrom(feed)
+                .join(feed.crew, crew)
+                .join(crewMember).on(crewMember.crew.eq(crew)).fetchJoin()
+                .where(feed.id.eq(feedId), crewMember.member.id.eq(memberKey))
+                .fetchOne());
     }
 }

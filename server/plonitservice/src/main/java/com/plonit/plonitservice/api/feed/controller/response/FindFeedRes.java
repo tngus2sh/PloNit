@@ -18,6 +18,7 @@ public class FindFeedRes {
 
     private String nickname;
     private String profileImage;
+    private Boolean isMine;
 
     private List<FeedPictureDto> feedPictures;
 

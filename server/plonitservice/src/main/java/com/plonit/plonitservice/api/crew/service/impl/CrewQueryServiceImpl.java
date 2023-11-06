@@ -6,6 +6,7 @@ import com.plonit.plonitservice.api.crew.service.CrewQueryService;
 import com.plonit.plonitservice.common.AwsS3Uploader;
 import com.plonit.plonitservice.common.exception.CustomException;
 import com.plonit.plonitservice.domain.crew.Crew;
+import com.plonit.plonitservice.domain.crew.CrewMember;
 import com.plonit.plonitservice.domain.crew.repository.CrewMemberRepository;
 import com.plonit.plonitservice.domain.crew.repository.CrewQueryRepository;
 import com.plonit.plonitservice.domain.crew.repository.CrewRepository;
@@ -51,11 +52,12 @@ public class CrewQueryServiceImpl implements CrewQueryService {
 
     public FindCrewRes findCrew(long crewId) { // 크루 상세 조회
         log.info(logCurrent(getClassName(), getMethodName(), START));
-        Crew crew = crewRepository.findById(crewId)
+
+        FindCrewRes findCrewRes = crewQueryRepository.findCrewWithCrewMember(crewId)
                 .orElseThrow(() -> new CustomException(CREW_NOT_FOUND));
 
         log.info(logCurrent(getClassName(), getMethodName(), END));
-        return FindCrewRes.of(crew);
+        return findCrewRes;
     }
 
 }
