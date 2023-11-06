@@ -24,7 +24,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/plonit-service/v1/badge")
+@RequestMapping("/api/plonit-service/na/badge")
 public class BadgeApiController {
     
     private final BadgeService badgeService;
