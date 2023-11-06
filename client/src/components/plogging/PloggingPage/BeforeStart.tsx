@@ -6,7 +6,7 @@ import useGPS from "../functions/useGPS";
 
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
-import { clear, setPloggingType } from "store/plogging-slice";
+import * as P from "store/plogging-slice";
 
 import { startPlogging } from "api/lib/plogging";
 
@@ -92,38 +92,34 @@ const BeforeStart = () => {
 
   const dispatch = useDispatch();
   function onClick1() {
-    // dispatch(clear());
-    // dispatch(setPloggingType("IND"));
     startPlogging({
       accessToken: accessToken,
       type: "IND",
       latitude: latitude,
       longitude: longitude,
       success: (response) => {
-        console.log(response);
-        // dispatch(clear());
-        // dispatch(setPloggingType("IND"));
+        dispatch(P.clear());
+        dispatch(P.setPloggingId(response.data.resultBody));
+        dispatch(P.setPloggingType("IND"));
       },
       fail: (error) => {
-        console.log(error);
+        console.error(error);
       },
     });
   }
   function onClick2() {
-    // dispatch(clear());
-    // dispatch(setPloggingType("VOL"));
     startPlogging({
       accessToken: accessToken,
       type: "VOL",
       latitude: latitude,
       longitude: longitude,
       success: (response) => {
-        console.log(response);
-        // dispatch(clear());
-        // dispatch(setPloggingType("VOL"));
+        dispatch(P.clear());
+        dispatch(P.setPloggingId(response.data.resultBody));
+        dispatch(P.setPloggingType("VOL"));
       },
       fail: (error) => {
-        console.log(error);
+        console.error(error);
       },
     });
   }
