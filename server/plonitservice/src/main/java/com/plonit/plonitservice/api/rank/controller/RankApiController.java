@@ -41,10 +41,13 @@ public class RankApiController {
     @Operation(summary = "크루 전체 랭킹 조회", description = "크루 전체의 랭킹을 조회합니다.")
     @GetMapping("/crew-total")
 
-    public CustomApiResponse<CrewTotalResponse> findAllCrewRank() {
-        // TODO: 2023-10-30 크루 전체 랭킹 조회 
-
-        return null;
+    public CustomApiResponse<CrewTotalResponse> findAllCrewRank(
+            HttpServletRequest request
+    ) {
+        // 크루 전체 랭킹 조회
+        Long memberKey = RequestUtils.getMemberKey(request);
+        CrewTotalResponse allCrewRank = rankService.findAllCrewRank(memberKey);
+        return CustomApiResponse.ok(allCrewRank);
     }
 
     @Operation(summary = "크루 평균 랭킹 조회", description = "크루 평균 랭킹을 조회합니다.")

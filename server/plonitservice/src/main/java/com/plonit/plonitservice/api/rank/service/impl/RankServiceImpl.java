@@ -11,6 +11,7 @@ import com.plonit.plonitservice.api.rank.service.RankService;
 import com.plonit.plonitservice.common.exception.CustomException;
 import com.plonit.plonitservice.common.exception.ErrorCode;
 import com.plonit.plonitservice.common.util.RedisUtils;
+import com.plonit.plonitservice.domain.crew.repository.CrewMemberRepository;
 import com.plonit.plonitservice.domain.crew.repository.CrewQueryRepository;
 import com.plonit.plonitservice.domain.member.repository.MemberQueryRepository;
 import com.plonit.plonitservice.domain.member.repository.MemberRepository;
@@ -32,6 +33,7 @@ public class RankServiceImpl implements RankService {
     
     private final MemberQueryRepository memberQueryRepository;
     private final CrewQueryRepository crewQueryRepository;
+    private final CrewMemberRepository crewMemberRepository;
     private final RedisUtils redisUtils;
 
     /**
@@ -98,8 +100,15 @@ public class RankServiceImpl implements RankService {
     }
 
     @Override
-    public CrewTotalResponse findAllCrewRank(Long crewId) {
+    public CrewTotalResponse findAllCrewRank(Long memberKey) {
         
+        // memberKey로 crewId 가져오기
+        Optional<Long> crewMemberByMemberId = crewMemberRepository.findCrewMemberByMemberId(memberKey);
+        Long crewId = crewMemberByMemberId.get();
+        if (crewId == null) {
+            crewId = -1L;
+        }
+
         CrewTotalResponse crewTotalResponse = new CrewTotalResponse();
         
         // 현재 랭킹 기간 조회
@@ -127,10 +136,31 @@ public class RankServiceImpl implements RankService {
         List<CrewRankRes> crewRankResList = crewQueryRepository.findByIds(crewIds);
 
         for (CrewRankRes crewRankRes : crewRankResList) {
+            Long crewKey = crewRankRes.getId();
+
+            // 내 크루인지 확인
+            boolean isMine = false;
+            if (crewKey.equals(crewId)) {
+                isMine = true;
+            }
             
+            // 누적 거리와 랭킹
+            Object[] distanceRanking = disanceRankings.get(crewKey);
+            Double distance = (Double) distanceRanking[0];
+            Integer ranking = (Integer) distanceRanking[1];
+
+            crewsRanks.add(CrewTotalResponse.CrewsRanks.builder()
+                    .nickName(crewRankRes.getName())
+                    .profileImage(crewRankRes.getCrewImage())
+                    .ranking(ranking)
+                    .distance(distance)
+                    .isMine(isMine)
+                    .build());
         }
         
-        return null;
+        crewTotalResponse.setCrewsRanks(crewsRanks);
+        
+        return crewTotalResponse;
     }
 
     @Override

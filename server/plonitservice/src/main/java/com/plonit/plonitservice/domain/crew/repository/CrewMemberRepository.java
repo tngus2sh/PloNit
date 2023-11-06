@@ -14,4 +14,6 @@ public interface CrewMemberRepository extends JpaRepository<CrewMember, Long> {
     @Query("SELECT cm FROM CrewMember cm JOIN FETCH cm.crew WHERE cm.member.id = :memberId AND cm.crew.id = :crewId")
     Optional<CrewMember> findCrewMemberWithCrewByFetch(Long memberId, Long crewId);
 
+    @Query("SELECT cm.crew.id FROM CrewMember cm WHERE cm.member.id = :memberId")
+    Optional<Long> findCrewMemberByMemberId(Long memberId);
 }
