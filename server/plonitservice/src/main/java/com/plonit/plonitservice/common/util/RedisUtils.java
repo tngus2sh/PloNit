@@ -1,16 +1,14 @@
 package com.plonit.plonitservice.common.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.*;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.stereotype.Service;
 
 import java.util.Base64;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -46,6 +44,17 @@ public class RedisUtils {
         stringRedisTemplate.expire(key, ttl, TimeUnit.SECONDS);
     }
 
+    /**
+     * Redis의 Sorted Set에 랭킹 추가
+     * @param key
+     * @param memberKey
+     * @param score
+     */
+    public void setRedisSortedSet(String key, String memberKey, double score) {
+        redisTemplate.opsForZSet().add(key, memberKey, score);
+    }
+    
+
     public <T> T getRedisValue(String key, Class<T> classType) throws JsonProcessingException {
         String redisValue = redisTemplate.opsForValue().get(key);
 
@@ -63,6 +72,22 @@ public class RedisUtils {
     public Map<String, String> getRedisHash(String key) { // redis DB 정보 가져오기
         HashOperations<String, String, String> hashOperations = stringRedisTemplate.opsForHash();
         return hashOperations.entries(key);
+    }
+
+    public Set<ZSetOperations.TypedTuple<String>> getSortedSetRangeWithScores(String key, long start, long end) {
+        Set<ZSetOperations.TypedTuple<String>> membersWithScores = redisTemplate.opsForZSet().rangeWithScores(key, start, end);
+
+        // Sorted Set에서 멤버와 Score를 가져와서 DefaultTypedTuple로 반환합니다.
+        return membersWithScores;
+    }
+
+    /**
+     * 총 멤버 수 가져오기
+     * @param key
+     * @return
+     */
+    public Long getSortedSetSize(String key) {
+        return redisTemplate.opsForZSet().size(key);
     }
 
     public void deleteRedisKey(String key, String loginId) {
