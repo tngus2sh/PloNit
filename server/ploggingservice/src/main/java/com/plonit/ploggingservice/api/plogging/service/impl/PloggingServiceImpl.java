@@ -16,6 +16,7 @@ import com.plonit.ploggingservice.common.util.WebClientUtil;
 import com.plonit.ploggingservice.domain.plogging.LatLong;
 import com.plonit.ploggingservice.domain.plogging.Plogging;
 import com.plonit.ploggingservice.domain.plogging.PloggingHelp;
+import com.plonit.ploggingservice.domain.plogging.PloggingPicture;
 import com.plonit.ploggingservice.domain.plogging.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -52,6 +53,7 @@ public class PloggingServiceImpl implements PloggingService {
     private final PloggingRepository ploggingRepository;
     private final LatLongRepository latLongRepository;
     private final PloggingHelpRepository ploggingHelpRepository;
+    private final PloggingPictureRepository ploggingPictureRepository;
 
 
 
@@ -180,7 +182,8 @@ public class PloggingServiceImpl implements PloggingService {
         }
         
         // 플로깅 이미지 저장
-        return ImagePloggingDto.toEntity(dto.getId(), imageUrl).getId();
+        PloggingPicture ploggingPicture = ImagePloggingDto.toEntity(dto.getId(), imageUrl);
+        return ploggingPictureRepository.save(ploggingPicture).getId();
     }
 
 
