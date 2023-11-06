@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "plonit-service")
 public interface SidoGugunFeignClient {
 
-    @GetMapping("/api/plonit-service/v1/sido/{sido-name}/{gugun-name}")
+    @GetMapping("/api/plonit-service/na/region/code/{sido-name}/{gugun-name}")
     CustomApiResponse<SidoGugunCodeRes> findSidoGugunCode(
             @PathVariable("sido-name") String sidoName,
             @PathVariable("gugun-name") String gugunName);
