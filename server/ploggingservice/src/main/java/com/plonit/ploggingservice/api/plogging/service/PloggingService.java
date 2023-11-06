@@ -14,5 +14,5 @@ public interface PloggingService {
 
     public Long savePloggingHelp(HelpPloggingDto dto);
 
-    public Long savePloggingImage(ImagePloggingDto dto);
+    public String savePloggingImage(ImagePloggingDto dto);
 }

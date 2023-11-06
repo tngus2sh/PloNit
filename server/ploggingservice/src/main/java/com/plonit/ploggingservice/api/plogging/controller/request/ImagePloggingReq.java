@@ -5,12 +5,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
 @RequiredArgsConstructor
 public class ImagePloggingReq {
     
-    @NotBlank(message = "플로깅 id는 필수 값입니다.")
+    @NotNull(message = "플로깅 id는 필수 값입니다.")
     private Long id;
     
     private MultipartFile image;

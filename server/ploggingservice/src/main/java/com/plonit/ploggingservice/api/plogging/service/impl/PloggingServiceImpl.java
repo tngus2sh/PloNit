@@ -18,6 +18,7 @@ import com.plonit.ploggingservice.common.util.WebClientUtil;
 import com.plonit.ploggingservice.domain.plogging.LatLong;
 import com.plonit.ploggingservice.domain.plogging.Plogging;
 import com.plonit.ploggingservice.domain.plogging.PloggingHelp;
+import com.plonit.ploggingservice.domain.plogging.PloggingPicture;
 import com.plonit.ploggingservice.domain.plogging.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -56,6 +57,7 @@ public class PloggingServiceImpl implements PloggingService {
     private final PloggingRepository ploggingRepository;
     private final LatLongRepository latLongRepository;
     private final PloggingHelpRepository ploggingHelpRepository;
+    private final PloggingPictureRepository ploggingPictureRepository;
 
 
 
@@ -81,8 +83,9 @@ public class PloggingServiceImpl implements PloggingService {
         // 오늘 날짜 구하기
         LocalDate today = startTime.toLocalDate();
 
-        return StartPloggingDto.toEntity(dto.getMemberKey(), dto.getType(), place, startTime, Finished.ACTIVE, today)
-                .getId();
+        Plogging plogging = StartPloggingDto.toEntity(dto.getMemberKey(), dto.getType(), place, startTime, Finished.ACTIVE, today);
+
+        return ploggingRepository.save(plogging).getId();
     }
 
 
@@ -199,10 +202,10 @@ public class PloggingServiceImpl implements PloggingService {
     
     @Transactional
     @Override
-    public Long savePloggingImage(ImagePloggingDto dto) {
+    public String savePloggingImage(ImagePloggingDto dto) {
         
         // 플로깅 id 있는지 확인
-        ploggingRepository.existById(dto.getId())
+        Plogging plogging = ploggingRepository.findById(dto.getId())
                 .orElseThrow(() -> new CustomException(PLOGGING_BAD_REQUEST));
 
         // S3에 등록
@@ -216,7 +219,10 @@ public class PloggingServiceImpl implements PloggingService {
         }
         
         // 플로깅 이미지 저장
-        return ImagePloggingDto.toEntity(dto.getId(), imageUrl).getId();
+        PloggingPicture ploggingPicture = ImagePloggingDto.toEntity(dto.getId(), plogging, imageUrl);
+        ploggingPictureRepository.save(ploggingPicture);
+
+        return imageUrl;
     }
 
 

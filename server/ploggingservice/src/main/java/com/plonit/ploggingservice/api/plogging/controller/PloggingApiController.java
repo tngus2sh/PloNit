@@ -167,7 +167,7 @@ public class PloggingApiController {
     
     @Operation(summary = "플로깅 중간에 이미지 전송", description = "플로깅 중간에 이미지를 전송하고자 할때 이미지 정보를 넣는다.")
     @PostMapping("/image")
-    public CustomApiResponse<Long> savePloggingImage(
+    public CustomApiResponse<String> savePloggingImage(
             @Validated @ModelAttribute ImagePloggingReq request,
             Errors errors
             ) {
@@ -182,9 +182,9 @@ public class PloggingApiController {
         }
 
         // 플로깅 중간에 이미지 저장 
-        Long ploggingImageId = ploggingService.savePloggingImage(ImagePloggingDto.of(request));
+        String imageUrl = ploggingService.savePloggingImage(ImagePloggingDto.of(request));
 
-        return CustomApiResponse.ok(ploggingImageId);
+        return CustomApiResponse.ok(imageUrl);
         
     }
     

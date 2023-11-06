@@ -8,6 +8,6 @@ import lombok.Getter;
 public enum Time {
     SEOUL("Asia/Seoul");
     
-    private final String text;
+    public final String text;
     
 }

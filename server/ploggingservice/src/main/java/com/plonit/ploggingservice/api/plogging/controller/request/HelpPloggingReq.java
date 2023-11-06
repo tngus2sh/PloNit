@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 @Data
@@ -14,12 +15,12 @@ import javax.validation.constraints.Positive;
 public class HelpPloggingReq {
 
     @Schema(description = "위도")
-    @NotBlank(message = "위도는 필수 입력값입니다.")
+    @NotNull(message = "위도는 필수 입력값입니다.")
     @Positive
     private Double latitude;
 
     @Schema(description = "경도")
-    @NotBlank(message = "경도는 필수 입력값입니다.")
+    @NotNull(message = "경도는 필수 입력값입니다.")
     @Positive
     private Double longitude;
 
