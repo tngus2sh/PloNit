@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 @Data
@@ -12,7 +13,7 @@ import javax.validation.constraints.Positive;
 public class EndPloggingReq {
     
     @Schema(description = "플로깅 id")
-    @NotBlank(message = "플로깅 id는 필수 입력값입니다.")
+    @NotNull(message = "플로깅 id는 필수 입력값입니다.")
     @Positive
     private Long ploggingId;
 
@@ -20,12 +21,12 @@ public class EndPloggingReq {
     private Coordinate[] coordinates;
     
     @Schema(description = "거리")
-    @NotBlank(message = "거리는 필수 입력값입니다.")
+    @NotNull(message = "거리는 필수 입력값입니다.")
     @Positive
     private Double distance;
     
     @Schema(description = "칼로리")
-    @NotBlank(message = "칼로리는 필수 입력값입니다.")
+    @NotNull(message = "칼로리는 필수 입력값입니다.")
     @Positive
     private Double calorie;
 
