@@ -14,7 +14,7 @@ export async function getSido(
     | void,
   fail: (err: any) => PromiseLike<never> | null | undefined | void,
 ) {
-  const api = customApi("/plonit-service/v1/region");
+  const api = customApi("/plonit-service/na/region");
   api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
   await api.get("/sido").then(success).catch(fail);
 }
@@ -32,7 +32,7 @@ export async function getGugun(
     | void,
   fail: (err: any) => PromiseLike<never> | null | undefined | void,
 ) {
-  const api = customApi("/plonit-service/v1/region");
+  const api = customApi("/plonit-service/na/region");
   api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
   await api.get(`/gugun/${sidocode}`).then(success).catch(fail);
 }
@@ -50,7 +50,7 @@ export async function getDong(
     | void,
   fail: (err: any) => PromiseLike<never> | null | undefined | void,
 ) {
-  const api = customApi("/plonit-service/v1/region");
+  const api = customApi("/plonit-service/na/region");
   api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
   await api.get(`/dong/${guguncode}`).then(success).catch(fail);
 }

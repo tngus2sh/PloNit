@@ -8,7 +8,7 @@ import { Pagination } from "swiper/modules";
 
 import "swiper/css";
 import "swiper/css/pagination";
-import "custom_css/LoginSwiper.css";
+// import "custom_css/LoginSwiper.css";
 
 const LoginPage = () => {
   const client_id = process.env.REACT_APP_CLIENT_ID;
