@@ -29,3 +29,11 @@ export interface CrewpingInterface {
   maxPeople?: number | string;
   introduce?: string;
 }
+
+export interface CommentInterface {
+  feedId?: number;
+  commentId?: number;
+  nickname?: string;
+  profileimage?: string;
+  content?: string;
+}

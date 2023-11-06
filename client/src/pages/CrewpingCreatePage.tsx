@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Input from "components/common/Input";
 import { BackTopBar } from "components/common/TopBar";
 import style from "styles/css/CrewpingCreatePage.module.css";
@@ -14,6 +14,7 @@ import { getCrewpingCreate } from "api/lib/crewping";
 const CrewpingCreatePage = () => {
   const navigate = useNavigate();
   const accessToken = useSelector((state: any) => state.user.accessToken);
+  const { crewId } = useParams();
   const [isCrewpingName, setCrewpingName] = useState("");
   const [isCrewpingPlace, setCrewpingPlace] = useState("");
   const [isCrewpingIntroduce, setCrewpingIntroduce] = useState("");
@@ -21,6 +22,8 @@ const CrewpingCreatePage = () => {
   const [isCrewpingStartDate, setCrewpingStartDate] = useState("");
   const [isCrewpingEndDate, setCrewpingEndDate] = useState("");
   const [isCrewpingMaxPeople, setCrewpingMaxPeople] = useState<number>(0);
+  const [isCrewpingNotice, setCrewpingNotice] = useState("");
+
   const onChangeName = (event: any) => {
     setCrewpingName(event.target.value);
   };
@@ -30,15 +33,20 @@ const CrewpingCreatePage = () => {
 
   const crewpingCreateHandler = () => {
     const formData = new FormData();
+    if (crewId) {
+      formData.append("crewId", crewId);
+    }
     formData.append("name", isCrewpingName);
-    formData.append("place", isCrewpingPlace);
-    formData.append("introduce", isCrewpingIntroduce);
-    formData.append("startDate", isCrewpingStartDate);
-    formData.append("endDate", isCrewpingEndDate);
-    formData.append("maxPeople", isCrewpingMaxPeople.toString());
     if (isCrewpingImage) {
       formData.append("crewpingImage", isCrewpingImage);
     }
+    formData.append("startDate", isCrewpingStartDate);
+    formData.append("endDate", isCrewpingEndDate);
+    formData.append("maxPeople", isCrewpingMaxPeople.toString());
+    formData.append("place", isCrewpingPlace);
+    formData.append("introduce", isCrewpingIntroduce);
+    formData.append("notice", isCrewpingNotice);
+
     console.log(formData);
     getCrewpingCreate(
       accessToken,
