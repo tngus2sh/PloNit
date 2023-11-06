@@ -23,7 +23,7 @@ const RegionModal = ({ onClose }: RegionModalProps) => {
       (res) => {
         console.log("시도 API 연결 성공");
         console.log(res);
-        setsidoData(res.data);
+        setsidoData(res.data.resultBody);
       },
       (err) => {
         console.log("시도 API 연결 실패", err);
