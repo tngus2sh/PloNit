@@ -50,7 +50,7 @@ const PloggingImagePage = () => {
             success: (response) => {
               console.log("성공");
               console.log(response);
-              dispatch(P.addImage(response.data.resultBody));
+              dispatch(P.addImage(response.data.resultBody.id));
               if (isEnd || beforeEnd) {
                 navigate("/plogging/complete");
               } else {
