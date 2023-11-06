@@ -48,6 +48,8 @@ const PloggingImagePage = () => {
             plogging_id: ploggingId,
             image: jpgFile,
             success: (response) => {
+              console.log("성공");
+              console.log(response);
               dispatch(P.addImage(response.data.resultBody));
               if (isEnd || beforeEnd) {
                 navigate("/plogging/complete");
