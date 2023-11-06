@@ -21,6 +21,7 @@ const StyledSwiper = styled(Swiper)`
 const FeedCreatePage = () => {
   const accessToken = useSelector((state: any) => state.user.accessToken);
   const [isFeedIntroduce, setFeedIntroduce] = useState("");
+  const [isCrewId, setCrewId] = useState(2);
   const [isFeedImages, setFeedImages] = useState<File[]>([]);
 
   const onChangeFeedIntroduce = (event: any) => {
@@ -48,11 +49,13 @@ const FeedCreatePage = () => {
   const feedCreateHandler = () => {
     const formData = new FormData();
     formData.append("introduce", isFeedIntroduce);
+    formData.append("crewId", isCrewId.toString());
     if (isFeedImages) {
       isFeedImages.forEach((image) => {
         formData.append("feedPicture", image);
       });
     }
+
     getFeedCreate(
       accessToken,
       formData,
