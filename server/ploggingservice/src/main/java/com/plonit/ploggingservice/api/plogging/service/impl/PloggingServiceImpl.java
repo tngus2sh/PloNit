@@ -165,7 +165,7 @@ public class PloggingServiceImpl implements PloggingService {
     
     @Transactional
     @Override
-    public Long savePloggingImage(ImagePloggingDto dto) {
+    public String savePloggingImage(ImagePloggingDto dto) {
         
         // 플로깅 id 있는지 확인
         ploggingRepository.existById(dto.getId())
@@ -183,7 +183,9 @@ public class PloggingServiceImpl implements PloggingService {
         
         // 플로깅 이미지 저장
         PloggingPicture ploggingPicture = ImagePloggingDto.toEntity(dto.getId(), imageUrl);
-        return ploggingPictureRepository.save(ploggingPicture).getId();
+        ploggingPictureRepository.save(ploggingPicture);
+        
+        return imageUrl;
     }
 
 
