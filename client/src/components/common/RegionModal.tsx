@@ -23,6 +23,7 @@ const RegionModal = ({ onClose }: RegionModalProps) => {
       (res) => {
         console.log("시도 API 연결 성공");
         console.log(res);
+        console.log(res.data.resultBody);
         setsidoData(res.data.resultBody);
       },
       (err) => {
@@ -30,14 +31,14 @@ const RegionModal = ({ onClose }: RegionModalProps) => {
       },
     );
   }, []);
-
+  console.log(sidoData);
   return (
     <div className={style.regionmodal}>
       <div className={style.regioncontainer}>
         <div className={style.sido}>
           <div className={style.title}>시 / 도</div>
-          {sidoData.map((item) => (
-            <div key={item.sidoCode}>{item.sidoName}</div>
+          {sidoData.map((item, index) => (
+            <div key={index}>{item.sidoName}</div>
           ))}
         </div>
         <div className={style.gugun}>
