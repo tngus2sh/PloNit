@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
 import { clear, setPloggingType } from "store/plogging-slice";
 
+import { startPlogging } from "api/lib/plogging";
+
 interface IBtnDiv {
   height: number;
   onClick?: () => void;
@@ -81,18 +83,49 @@ const BeforeStart = () => {
   const nickname = useSelector<rootState, string>((state) => {
     return state.user.nickname;
   });
+  const accessToken = useSelector<rootState, string>((state) => {
+    return state.user.accessToken;
+  });
   const { latitude, longitude } = useGPS(); // 시작 시 GPS 정보 전달
   const [show, setShow] = useState<boolean>(false);
   const [preventShow, setPreventShow] = useState<boolean>(false);
 
   const dispatch = useDispatch();
   function onClick1() {
-    dispatch(clear());
-    dispatch(setPloggingType("IND"));
+    // dispatch(clear());
+    // dispatch(setPloggingType("IND"));
+    startPlogging({
+      accessToken: accessToken,
+      type: "IND",
+      latitude: latitude,
+      longitude: longitude,
+      success: (response) => {
+        console.log(response);
+        // dispatch(clear());
+        // dispatch(setPloggingType("IND"));
+      },
+      fail: (error) => {
+        console.log(error);
+      },
+    });
   }
   function onClick2() {
-    dispatch(clear());
-    dispatch(setPloggingType("VOL"));
+    // dispatch(clear());
+    // dispatch(setPloggingType("VOL"));
+    startPlogging({
+      accessToken: accessToken,
+      type: "VOL",
+      latitude: latitude,
+      longitude: longitude,
+      success: (response) => {
+        console.log(response);
+        // dispatch(clear());
+        // dispatch(setPloggingType("VOL"));
+      },
+      fail: (error) => {
+        console.log(error);
+      },
+    });
   }
 
   return (
