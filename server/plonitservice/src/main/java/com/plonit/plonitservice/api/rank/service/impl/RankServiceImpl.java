@@ -40,12 +40,7 @@ public class RankServiceImpl implements RankService {
     public MembersRankResponse findAllMembersRank(Long memberKey) {
 
         // 현재 랭킹 기간 조회
-        String rankingPeriod = null;
-        try {
-            rankingPeriod = redisUtils.getRedisValue("RANKING-PERIOD", String.class);
-        } catch (JsonProcessingException e) {
-            throw new CustomException(RANKING_PERIOD_NOT_FOUND);
-        }
+        String rankingPeriod = nowRankingPeriod();
 
         // Redis에서 랭킹 조회
         Set<ZSetOperations.TypedTuple<String>> sortedSetRangeWithScores = redisUtils.getSortedSetRangeWithScores("MEMBER-RANK", 0, 9);
@@ -100,11 +95,33 @@ public class RankServiceImpl implements RankService {
 
     @Override
     public CrewTotalResponse findAllCrewRank(Long crewId) {
+        
+        // 현재 랭킹 기간 조회
+        String rankingPeriod = nowRankingPeriod();
+        
+        // Redis에서 랭킹 조회
+        Set<ZSetOperations.TypedTuple<String>> sortedSetRangeWithScores = redisUtils.getSortedSetRangeWithScores("CREW-RANK", 0, 9);
+
+
         return null;
     }
 
     @Override
     public CrewAvgResponse findAllCrewRankByAVG(Long crewId) {
         return null;
+    }
+
+    /**
+     * 현재 랭킹 기간 조회
+     * @return 현재 랭킹 기간
+     */
+    private String nowRankingPeriod() {
+        String rankingPeriod = null;
+        try {
+            rankingPeriod = redisUtils.getRedisValue("RANKING-PERIOD", String.class);
+        } catch (JsonProcessingException e) {
+            throw new CustomException(RANKING_PERIOD_NOT_FOUND);
+        }
+        return rankingPeriod;
     }
 }

@@ -5,13 +5,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.LinkedList;
+import java.util.List;
+
 @Schema(name = "크루 전체 랭킹 정보")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class CrewTotalResponse {
     private String rankingPeriod;
-    private CrewsRanks[] crewsRanks;
+    private List<CrewsRanks> crewsRanks = new LinkedList<>();
 
     @Data
     @NoArgsConstructor
