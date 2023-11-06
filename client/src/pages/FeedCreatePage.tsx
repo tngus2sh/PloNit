@@ -53,7 +53,7 @@ const FeedCreatePage = () => {
 
     if (isFeedImages) {
       isFeedImages.forEach((image) => {
-        formData.append("feedPicture", image);
+        formData.append("feedPictures", image);
       });
     }
 
