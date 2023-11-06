@@ -50,6 +50,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
     return state.plogging.isStart;
   });
   const isMapLoaded = useRef<boolean>(false);
+  const isBottomLoaded = useRef<boolean>(false);
   const { latitude, longitude, onCenter, setOnCenter } = useGPS();
   const mapRef = useRef<naver.maps.Map | null>(null);
   const userRef = useRef<naver.maps.Marker | null>(null);
@@ -276,6 +277,20 @@ const DefaultMap: React.FC<IDefaultMap> = ({
               );
             }
           });
+
+          // 플로깅 시작 시 정보창 애니메이션
+          setTimeout(() => {
+            if (
+              !isBottomLoaded.current &&
+              !isBefore &&
+              isStart &&
+              arrowBtnRef.current
+            ) {
+              isBottomLoaded.current = true;
+              arrowBtnRef.current.getElement().click();
+              dispatch(P.setIsStart(false));
+            }
+          }, popupTime * 1000);
         })
         .catch((error) => {
           console.error(error);
@@ -287,12 +302,6 @@ const DefaultMap: React.FC<IDefaultMap> = ({
     return () => {
       if (!isMapLoaded.current) {
         isMapLoaded.current = true;
-        setTimeout(() => {
-          if (!isBefore && isStart && arrowBtnRef.current) {
-            arrowBtnRef.current.getElement().click();
-            dispatch(P.setIsStart(false));
-          }
-        }, popupTime * 1000);
       }
     };
   }, []);
