@@ -12,6 +12,7 @@ import com.plonit.ploggingservice.common.enums.Finished;
 import com.plonit.ploggingservice.common.enums.Time;
 import com.plonit.ploggingservice.common.exception.CustomException;
 import com.plonit.ploggingservice.common.util.KakaoPlaceUtils;
+import com.plonit.ploggingservice.common.util.RedisUtils;
 import com.plonit.ploggingservice.common.util.WebClientUtil;
 import com.plonit.ploggingservice.domain.plogging.LatLong;
 import com.plonit.ploggingservice.domain.plogging.Plogging;
@@ -38,6 +39,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.plonit.ploggingservice.common.enums.RedisKey.MEMBER_RANK;
 import static com.plonit.ploggingservice.common.exception.ErrorCode.*;
 
 @Service
@@ -49,6 +51,7 @@ public class PloggingServiceImpl implements PloggingService {
     private final CircuitBreakerFactory circuitBreakerFactory;
     private final KakaoPlaceUtils kakaoPlaceUtils;
     private final AwsS3Uploader awsS3Uploader;
+    private final RedisUtils redisUtils;
     private final PloggingRepository ploggingRepository;
     private final LatLongRepository latLongRepository;
     private final PloggingHelpRepository ploggingHelpRepository;
@@ -116,7 +119,18 @@ public class PloggingServiceImpl implements PloggingService {
         }
         
         latLongRepository.saveAll(latLongs);
-        
+
+        /* 랭킹*/
+        // 1. 기존에 존재하는 랭킹 파악하기
+        Double valueInSortedSet = redisUtils.getValueInSortedSet(MEMBER_RANK.name(), String.valueOf(dto.getMemberKey()));
+        if (valueInSortedSet == null) {
+            // 1-1. 없다면 새로운 랭킹 생성
+            redisUtils.setRedisSortedSet(MEMBER_RANK.name(), String.valueOf(dto.getMemberKey()), dto.getDistance());
+        } else {
+            // 1-2. 랭킹 있다면 값 업데이트
+            redisUtils.updateRedisSortedSet(MEMBER_RANK.name(), String.valueOf(dto.getMemberKey()), valueInSortedSet + dto.getDistance());
+        }
+
         return plogging.getId();
     }
     

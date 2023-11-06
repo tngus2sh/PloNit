@@ -3,12 +3,14 @@ package com.plonit.ploggingservice.api.plogging.service.dto;
 import com.plonit.ploggingservice.api.plogging.controller.request.EndPloggingReq;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 
 @Data
 @RequiredArgsConstructor
+@Getter
 public class EndPloggingDto {
     
     private Long memberKey;
