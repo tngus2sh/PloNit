@@ -98,6 +98,8 @@ const BeforeStart = () => {
       latitude: latitude,
       longitude: longitude,
       success: (response) => {
+        console.log("개인 플로깅 선택");
+        console.log(response);
         dispatch(P.clear());
         dispatch(P.setPloggingId(response.data.resultBody));
         dispatch(P.setPloggingType("IND"));
@@ -114,6 +116,8 @@ const BeforeStart = () => {
       latitude: latitude,
       longitude: longitude,
       success: (response) => {
+        console.log("봉사 플로깅 선택");
+        console.log(response);
         dispatch(P.clear());
         dispatch(P.setPloggingId(response.data.resultBody));
         dispatch(P.setPloggingType("VOL"));
