@@ -6,8 +6,9 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@RequiredArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class PloggingHelp extends TimeBaseEntity {
 
     @Id
@@ -35,16 +36,5 @@ public class PloggingHelp extends TimeBaseEntity {
     
     @Column
     private String context;
-
-
-    @Builder
-    public PloggingHelp(Long memberKey, Long gugunCode, Double latitude, Double longitude, String place, String image, String context) {
-        this.memberKey = memberKey;
-        this.gugunCode = gugunCode;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.place = place;
-        this.image = image;
-        this.context = context;
-    }
+    
 }
