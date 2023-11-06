@@ -1,13 +1,12 @@
 import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import style from "styles/css/CrewList/CrewListItem.module.css";
 import { CrewInterface } from "interface/crewInterface";
 
 const CrewItem = ({ crew }: { crew: CrewInterface }) => {
   const navigate = useNavigate();
-  const { crewId } = useParams();
   const goCommunity = () => {
-    navigate(`/crew/community/${crewId}`);
+    navigate(`/crew/community/${crew.id}`);
   };
 
   return (
