@@ -15,3 +15,17 @@ export interface FeedInterface {
   crewId?: number;
   feedPicture?: any;
 }
+
+export interface CrewpingInterface {
+  id?: number;
+  name: string;
+  crewpingImage?: string;
+  masterNickname?: string;
+  masterImage?: string;
+  place: string;
+  startDate?: string;
+  endDate?: string;
+  cntPeople?: number;
+  maxPeople?: number | string;
+  introduce?: string;
+}

@@ -67,6 +67,13 @@ const CrewCreatePage = () => {
     }
   };
 
+  // const handleImageUpload = (event: any) => {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     setCrewImage(file);
+  //   }
+  // };
+
   return (
     <div className={style.crew_create}>
       <BackTopBar text="크루 생성" />
