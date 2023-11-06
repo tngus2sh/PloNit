@@ -9,7 +9,7 @@ const initialState = {
   isEnd: false as boolean,
   beforeEnd: false as boolean,
   ploggingType: "none" as ploggingType,
-  crewpingId: -1 as number,
+  ploggingId: -1 as number,
   paths: [] as Coordinate[],
   pathlen: 0 as number,
   second: 0 as number,
@@ -42,8 +42,8 @@ const ploggingSlice = createSlice({
     setPloggingType: (state, action: PayloadAction<ploggingType>) => {
       state.ploggingType = action.payload;
     },
-    setCrewpingId: (state, action: PayloadAction<number>) => {
-      state.crewpingId = action.payload;
+    setPloggingId: (state, action: PayloadAction<number>) => {
+      state.ploggingId = action.payload;
     },
     addPath: (state, action: PayloadAction<Coordinate>) => {
       state.paths.push(action.payload);
@@ -85,7 +85,7 @@ export const {
   setIsEnd,
   setBeforeEnd,
   setPloggingType,
-  setCrewpingId,
+  setPloggingId,
   addPath,
   addImage,
   addTime,
