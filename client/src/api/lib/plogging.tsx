@@ -1,7 +1,6 @@
 import { AxiosResponse } from "axios";
 import { customApi, customApiForm } from "./index";
 import { Coordinate } from "interface/ploggingInterface";
-import axios from "axios";
 
 const ploggingApi = customApi(`/plogging-service/v1`);
 const ploggingApiForm = customApiForm(`/plogging-service/v1`);
@@ -57,7 +56,7 @@ const startPlogging = ({
   type: "IND" | "VOL" | "CREWPING";
   latitude: number;
   longitude: number;
-  crewpingId: number;
+  crewpingId?: number;
   success: (response: AxiosResponse<any, any>) => void | undefined;
   fail: (error: any) => void | undefined;
 }) => {
@@ -232,5 +231,18 @@ const registerVolInfo = ({
 
   const api = ploggingApiForm;
   api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
-  api.post(`/volunteer`).then(success).catch(fail);
+  api.post(`/volunteer`, formData).then(success).catch(fail);
+};
+
+export {
+  savePlogging,
+  startPlogging,
+  searchPloggingUsingDay,
+  searchPloggingInfo,
+  saveHelp,
+  searchHelpUsingLatLng,
+  savePloggingImage,
+  searchNeighbor,
+  searchVolInfo,
+  registerVolInfo,
 };
