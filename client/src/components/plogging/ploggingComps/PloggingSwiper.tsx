@@ -33,7 +33,7 @@ const PlusImage = () => {
           backgroundSize: "contain",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
-          backgroundImage: `url("/images/PloggingPage/plus-button.svg")`,
+          backgroundImage: `url("/images/PloggingPage/Plus-Button.svg")`,
         }}
       ></div>
     </div>
