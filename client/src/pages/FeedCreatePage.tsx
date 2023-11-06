@@ -48,11 +48,12 @@ const FeedCreatePage = () => {
   console.log(isFeedImages);
   const feedCreateHandler = () => {
     const formData = new FormData();
-    formData.append("introduce", isFeedIntroduce);
+    formData.append("content", isFeedIntroduce);
     formData.append("crewId", isCrewId.toString());
+
     if (isFeedImages) {
       isFeedImages.forEach((image) => {
-        formData.append("feedPicture", image);
+        formData.append("feedPictures", image);
       });
     }
 
