@@ -58,10 +58,8 @@ public class CrewpingServiceImpl implements CrewpingService {
         Crew crew = crewRepository.findById(dto.getCrewId())
                 .orElseThrow(() -> new CustomException(ErrorCode.CREW_NOT_FOUND));
 
-        Integer isValidCrewMember = crewMemberQueryRepository.isValidCrewMember(dto.getMemberKey(), dto.getCrewId());
-        if(isValidCrewMember == 0) {
-           throw new CustomException(CREWPING_BAD_REQUEST);
-        }
+        crewMemberRepository.findCrewMemberWithCrewByFetch(dto.getMemberKey(), dto.getCrewId())
+                .orElseThrow(() -> new CustomException(CREWPING_BAD_REQUEST));
 
         String crewpingImageUrl = null;
         if(dto.getCrewpingImage() != null) {
@@ -81,10 +79,8 @@ public class CrewpingServiceImpl implements CrewpingService {
         Crew crew = crewRepository.findById(crewId)
                 .orElseThrow(() -> new CustomException(CREW_NOT_FOUND));
 
-        Integer isValidCrewMember = crewMemberQueryRepository.isValidCrewMember(memberId, crew.getId());
-        if(isValidCrewMember == 0) {
-            throw new CustomException(CREWPING_BAD_REQUEST);
-        }
+        crewMemberRepository.findCrewMemberWithCrewByFetch(memberId, crewId)
+                .orElseThrow(() -> new CustomException(CREWPING_BAD_REQUEST));
 
         List<FindCrewpingsRes> result = crewpingQueryRepository.findCrewpings(crewId);
 
