@@ -3,6 +3,8 @@ package com.plonit.plonitservice.api.badge.controller;
 import com.plonit.plonitservice.api.badge.controller.request.BadgeReq;
 import com.plonit.plonitservice.api.badge.controller.request.CrewBadgeReq;
 import com.plonit.plonitservice.api.badge.controller.request.MembersBadgeReq;
+import com.plonit.plonitservice.api.badge.service.BadgeService;
+import com.plonit.plonitservice.api.badge.service.dto.BadgeDto;
 import com.plonit.plonitservice.common.CustomApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Tag(name = "Badge API Controller", description = "Badge API Document")
@@ -22,14 +25,21 @@ import java.util.List;
 @RequestMapping("/api/plonit-service/v1/badge")
 public class BadgeApiController {
     
+    private final BadgeService badgeService;
+    
     @Operation(summary = "[관리자용] 배지 설정", description = "배지를 설정합니다.")
     @PostMapping("/setting")
     public CustomApiResponse<Void> saveBadge(
             @RequestBody List<BadgeReq> reqs
             ) {
-        // TODO: 2023-10-30 배지 설정
+        // 배지 설정
+        List<BadgeDto> badgeDtos = new ArrayList<>();
+        for (BadgeReq req : reqs) {
+            badgeDtos.add(BadgeDto.of(req));
+        }
+        badgeService.saveBadge(badgeDtos);
         
-        return null;
+        return CustomApiResponse.ok(null);
     }
 
     @Operation(summary = "[관리자용] 개인 배지 부여", description = "개인 배지를 부여합니다.")
