@@ -2,12 +2,12 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Coordinate } from "interface/ploggingInterface";
 import getDistance from "components/plogging/functions/getDistance";
 import { ploggingType } from "types/ploggingTypes";
-import { stat } from "fs";
 
 const initialState = {
   isStart: true as boolean,
   isEnd: false as boolean,
   beforeEnd: false as boolean,
+  beforeCrewping: false as boolean,
   ploggingType: "none" as ploggingType,
   ploggingId: -1 as number,
   paths: [] as Coordinate[],
@@ -38,6 +38,9 @@ const ploggingSlice = createSlice({
     },
     setBeforeEnd: (state, action: PayloadAction<boolean>) => {
       state.beforeEnd = action.payload;
+    },
+    setBeforeCrewping: (state, action: PayloadAction<boolean>) => {
+      state.beforeCrewping = action.payload;
     },
     setPloggingType: (state, action: PayloadAction<ploggingType>) => {
       state.ploggingType = action.payload;
@@ -84,6 +87,7 @@ export const {
   setIsStart,
   setIsEnd,
   setBeforeEnd,
+  setBeforeCrewping,
   setPloggingType,
   setPloggingId,
   addPath,
