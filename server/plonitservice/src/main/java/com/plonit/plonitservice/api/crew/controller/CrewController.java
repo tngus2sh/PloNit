@@ -2,6 +2,8 @@ package com.plonit.plonitservice.api.crew.controller;
 
 import com.plonit.plonitservice.api.crew.controller.request.ApproveCrewReq;
 import com.plonit.plonitservice.api.crew.controller.request.SaveCrewReq;
+import com.plonit.plonitservice.api.crew.controller.response.FindCrewMasterMemberRes;
+import com.plonit.plonitservice.api.crew.controller.response.FindCrewMemberRes;
 import com.plonit.plonitservice.api.crew.controller.response.FindCrewRes;
 import com.plonit.plonitservice.api.crew.controller.response.FindCrewsRes;
 import com.plonit.plonitservice.api.crew.service.CrewQueryService;
@@ -90,10 +92,10 @@ public class CrewController {
     public CustomApiResponse<Object> findCrewMember(@PathVariable("crew-id") long crewId, HttpServletRequest request) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
 
-        // todo : 크루원 조회(크루원)
+        List<FindCrewMemberRes> findCrewMemberResList = crewQueryService.findCrewMember(crewId);
 
         log.info(logCurrent(getClassName(), getMethodName(), END));
-        return CustomApiResponse.ok("", "크루원 조회에 성공했습니다.");
+        return CustomApiResponse.ok(findCrewMemberResList, "크루원 조회에 성공했습니다.");
     }
 
     @Operation(summary = "크루원 조회(크루장)", description = "크루원을 조회한다.")
@@ -101,10 +103,11 @@ public class CrewController {
     public CustomApiResponse<Object> findCrewMasterMember(@PathVariable("crew-id") long crewId, HttpServletRequest request) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
 
-        // todo : 크루원 조회(크루장)
+        Long memberKey = RequestUtils.getMemberKey(request);
+        List<FindCrewMasterMemberRes> findCrewMasterMemberResList = crewQueryService.findCrewMasterMember(memberKey, crewId);
 
         log.info(logCurrent(getClassName(), getMethodName(), END));
-        return CustomApiResponse.ok("", "크루원 조회에 성공했습니다.");
+        return CustomApiResponse.ok(findCrewMasterMemberResList, "크루원 조회에 성공했습니다.");
     }
 
     @Operation(summary = "크루 가입 요청", description = "크루 가입을 요청한다.")
