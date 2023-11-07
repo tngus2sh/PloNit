@@ -92,44 +92,44 @@ const BeforeStart = () => {
 
   const dispatch = useDispatch();
   function onClick1() {
-    // startPlogging({
-    //   accessToken: accessToken,
-    //   type: "IND",
-    //   latitude: latitude,
-    //   longitude: longitude,
-    //   success: (response) => {
-    //     console.log("개인 플로깅 선택");
-    //     console.log(response);
-    //     dispatch(P.clear());
-    //     dispatch(P.setPloggingId(response.data.resultBody));
-    //     dispatch(P.setPloggingType("IND"));
-    //   },
-    //   fail: (error) => {
-    //     console.error(error);
-    //   },
-    // });
-    dispatch(P.clear());
-    dispatch(P.setPloggingType("IND"));
+    startPlogging({
+      accessToken: accessToken,
+      type: "IND",
+      latitude: latitude,
+      longitude: longitude,
+      success: (response) => {
+        console.log("개인 플로깅 선택");
+        console.log(response);
+        dispatch(P.clear());
+        dispatch(P.setPloggingId(response.data.resultBody));
+        dispatch(P.setPloggingType("IND"));
+      },
+      fail: (error) => {
+        console.error(error);
+      },
+    });
+    // dispatch(P.clear());
+    // dispatch(P.setPloggingType("IND"));
   }
   function onClick2() {
-    // startPlogging({
-    //   accessToken: accessToken,
-    //   type: "VOL",
-    //   latitude: latitude,
-    //   longitude: longitude,
-    //   success: (response) => {
-    //     console.log("봉사 플로깅 선택");
-    //     console.log(response);
-    //     dispatch(P.clear());
-    //     dispatch(P.setPloggingId(response.data.resultBody));
-    //     dispatch(P.setPloggingType("VOL"));
-    //   },
-    //   fail: (error) => {
-    //     console.error(error);
-    //   },
-    // });
-    dispatch(P.clear());
-    dispatch(P.setPloggingType("VOL"));
+    startPlogging({
+      accessToken: accessToken,
+      type: "VOL",
+      latitude: latitude,
+      longitude: longitude,
+      success: (response) => {
+        console.log("봉사 플로깅 선택");
+        console.log(response);
+        dispatch(P.clear());
+        dispatch(P.setPloggingId(response.data.resultBody));
+        dispatch(P.setPloggingType("VOL"));
+      },
+      fail: (error) => {
+        console.error(error);
+      },
+    });
+    // dispatch(P.clear());
+    // dispatch(P.setPloggingType("VOL"));
   }
 
   return (

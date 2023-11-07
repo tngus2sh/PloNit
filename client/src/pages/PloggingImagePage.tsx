@@ -47,6 +47,14 @@ const PloggingImagePage = () => {
         dispatch(setImage(uploadImage));
         dispatch(setIsOnWrite(true));
         navigate("/plogging");
+        return;
+      }
+
+      console.log("이미지 비동기 저장 로직 실행!");
+      if (isEnd || beforeEnd) {
+        navigate("/plogging/complete");
+      } else {
+        navigate("/plogging");
       }
 
       const blob = await fetch(uploadImage).then((response) => response.blob());
@@ -58,6 +66,20 @@ const PloggingImagePage = () => {
         if (compressedImage) {
           setCompressedImage(compressedImage);
           console.log("after compress", compressedImage.size / (1024 * 1024));
+
+          savePloggingImage({
+            accessToken: accessToken,
+            plogging_id: ploggingId,
+            image: compressedImage,
+            success: (response) => {
+              console.log("성공");
+              console.log(response);
+              dispatch(P.addImage(response.data.resultBody));
+            },
+            fail: (error) => {
+              console.log(error);
+            },
+          });
         }
       }
     }
@@ -67,42 +89,36 @@ const PloggingImagePage = () => {
     }
   }, [uploadImage]);
 
-  useEffect(() => {
-    async function saveImage() {
-      if (compressedImage) {
-        savePloggingImage({
-          accessToken: accessToken,
-          plogging_id: ploggingId,
-          image: compressedImage,
-          success: (response) => {
-            console.log("성공");
-            console.log(response);
-            dispatch(P.addImage(response.data.resultBody));
-            if (isEnd || beforeEnd) {
-              navigate("/plogging/complete");
-            } else {
-              navigate("/plogging");
-            }
-          },
-          fail: (error) => {
-            console.error(error);
-          },
-        });
+  // useEffect(() => {
+  //   async function saveImage() {
+  //     if (compressedImage) {
+  //       savePloggingImage({
+  //         accessToken: accessToken,
+  //         plogging_id: ploggingId,
+  //         image: compressedImage,
+  //         success: (response) => {
+  //           console.log("성공");
+  //           console.log(response);
+  //           dispatch(P.addImage(response.data.resultBody));
+  //           if (isEnd || beforeEnd) {
+  //             navigate("/plogging/complete");
+  //           } else {
+  //             navigate("/plogging");
+  //           }
+  //         },
+  //         fail: (error) => {
+  //           console.error(error);
+  //         },
+  //       });
+  //     }
+  //   }
 
-        // if (isEnd || beforeEnd) {
-        //   navigate("/plogging/complete");
-        // } else {
-        //   navigate("/plogging");
-        // }
-      }
-    }
-
-    if (compressedImage) {
-      if (isEnd || beforeEnd || target === "save") {
-        saveImage();
-      }
-    }
-  }, [compressedImage]);
+  //   if (compressedImage) {
+  //     if (isEnd || beforeEnd || target === "save") {
+  //       saveImage();
+  //     }
+  //   }
+  // }, [compressedImage]);
 
   return (
     <div style={{ height: windowHeight, width: "100%" }}>
