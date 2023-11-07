@@ -149,7 +149,7 @@ const RegionModal = ({ onClose, setSignupRegion }: RegionModalProps) => {
                 }`}
                 onClick={() => SelectedDong(item)}
               >
-                {item.gugunName}
+                {item.dongName}
               </div>
             ))}
           </div>
