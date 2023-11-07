@@ -1,5 +1,6 @@
 package com.plonit.plonitservice.api.crewping.service.impl;
 
+import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingMembersRes;
 import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingRes;
 import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingsRes;
 import com.plonit.plonitservice.api.crewping.service.dto.SaveCrewpingDto;
@@ -26,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -143,6 +143,24 @@ public class CrewpingServiceImpl implements CrewpingService {
 
         CrewpingMember crewpingMember = crewpingMemberRepository.findCrewpingMemberByJoinFetch(memberId, crewpingId).get();
         crewpingMemberRepository.delete(crewpingMember);
+    }
+
+    @Override
+    public List<FindCrewpingMembersRes> findCrewpingMembers(Long memberId, Long crewpingId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        Crewping crewping = crewpingRepository.findById(crewpingId)
+                .orElseThrow(() -> new CustomException(ErrorCode.CREWPING_NOT_FOUND));
+
+        CrewpingMember masterCrewpingMember = crewpingMemberRepository.findMasterCrewpingMemberWitMemberJoinFetch(crewpingId).get();
+        if(masterCrewpingMember.getMember().getId() != memberId) {
+            throw new CustomException(ErrorCode.CREWPING_BAD_REQUEST);
+        }
+
+        List<FindCrewpingMembersRes> result = crewpingMemberQueryRepository.findCrewpingMembers(crewpingId);
+
+        return result;
     }
 
 }

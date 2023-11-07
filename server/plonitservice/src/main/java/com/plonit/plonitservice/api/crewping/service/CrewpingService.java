@@ -1,5 +1,6 @@
 package com.plonit.plonitservice.api.crewping.service;
 
+import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingMembersRes;
 import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingRes;
 import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingsRes;
 import com.plonit.plonitservice.api.crewping.service.dto.SaveCrewpingDto;
@@ -15,4 +16,5 @@ public interface CrewpingService {
     FindCrewpingRes findCrewping(Long memberId, Long crewpingId);
     void joinCrewping(Long memberId, Long crewpingId);
     void quitCrewping(Long memberId, Long crewpingId);
+    List<FindCrewpingMembersRes> findCrewpingMembers(Long memberId, Long crewpingId);
 }

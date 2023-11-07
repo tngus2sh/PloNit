@@ -1,6 +1,7 @@
 package com.plonit.plonitservice.api.crewping.controller;
 
 import com.plonit.plonitservice.api.crewping.controller.request.SaveCrewpingReq;
+import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingMembersRes;
 import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingRes;
 import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingsRes;
 import com.plonit.plonitservice.api.crewping.service.CrewpingService;
@@ -95,4 +96,16 @@ public class CrewpingController {
 
         return CustomApiResponse.ok("", "크루핑 참가를 취소했습니다.");
     }
+
+    // 크루핑 인원 조회
+    @GetMapping("/member/{crewping-id}")
+    public CustomApiResponse<List<FindCrewpingMembersRes>> findCrewpingMembers(@PathVariable("crewping-id") Long crewpingId, HttpServletRequest request) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+        log.info("FindCrewpingMembers={}", crewpingId);
+
+        List<FindCrewpingMembersRes> response = crewpingService.findCrewpingMembers(RequestUtils.getMemberKey(request), crewpingId);
+
+        return CustomApiResponse.ok(response, "크루핑 현재 인원 조회에 성공했습니다.");
+    }
+
 }
