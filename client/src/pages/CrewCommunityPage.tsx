@@ -29,7 +29,7 @@ const CrewCommunityPage = () => {
   };
   const goCrewpingCreateHandler = () => {
     document.body.style.overflow = "scroll";
-    navigate(`/crew/crewping/${crewId}`);
+    navigate(`/crew/crewping/create/${crewId}`);
   };
 
   useEffect(() => {
