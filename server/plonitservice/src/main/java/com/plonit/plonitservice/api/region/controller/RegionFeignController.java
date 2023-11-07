@@ -25,6 +25,7 @@ public class RegionFeignController {
             @PathVariable("sido-name") String sidoName,
             @PathVariable("gugun-name") String gugunName
     ) {
+        log.info("findSidoGugunCodeRes = {}", sidoName, gugunName);
         SidoGugunCodeRes sidogugunCode = regionQueryService.findSidogugunCode(sidoName, gugunName);
         return CustomApiResponse.ok(sidogugunCode);
     }
