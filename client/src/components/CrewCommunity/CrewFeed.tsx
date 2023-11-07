@@ -26,7 +26,7 @@ const CrewFeed = () => {
       },
     );
   }, []);
-
+  console.log(isFeedList);
   return (
     <div>
       <FeedItem />
