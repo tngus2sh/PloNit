@@ -39,7 +39,7 @@ const CrewDetailPage = () => {
     <div>
       <BackTopBar text="장덕동 플로깅" />
       <div>
-        <CrewLeader />
+        <CrewLeader crew={isCrewDetail} />
         <CrewInfo crew={isCrewDetail} />
         <CrewRanking crew={isCrewDetail} />
         <CrewIntroduce crew={isCrewDetail} />

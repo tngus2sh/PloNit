@@ -38,8 +38,6 @@ const CrewCommunityPage = () => {
       Number(crewId),
       (res) => {
         console.log("크루 상세 조회 성공");
-        console.log(res);
-        console.log(res.data);
         console.log(res.data.resultBody);
         setCrewDetail(res.data.resultBody);
       },
