@@ -1,5 +1,6 @@
 package com.plonit.plonitservice.domain.member.repository;
 
+import com.plonit.plonitservice.api.member.controller.response.MemberRankRes;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -9,6 +10,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static com.plonit.plonitservice.domain.member.QMember.member;
+import static com.querydsl.core.types.Projections.constructor;
 
 @Repository
 public class MemberQueryRepository {
@@ -48,5 +50,15 @@ public class MemberQueryRepository {
                 .fetchFirst();
         return fetchOne != null;
     }
+
+    public List<MemberRankRes> findByIds(List<Long> memberIds) {
+        return queryFactory.select(constructor(MemberRankRes.class,
+                        member.id,
+                        member.nickname,
+                        member.profileImage))
+                .from(member)
+                .where(member.id.in(memberIds))
+                .fetch();
+    } 
 
 }
