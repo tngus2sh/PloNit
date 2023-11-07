@@ -60,11 +60,11 @@ const RegionModal = ({ onClose, setSignupRegion }: RegionModalProps) => {
     );
   };
   const SelectedGugun = (item: any) => {
-    setSelectedGugunCode(item.Guguncode);
-    setSelectedGugunName(item.GugunName);
+    setSelectedGugunCode(item.gugunCode);
+    setSelectedGugunName(item.gugunName);
     getDong(
       accessToken,
-      item.Guguncode,
+      item.gugunCode,
       (res) => {
         console.log("동 API 연결 성공");
         console.log(res);
@@ -80,6 +80,9 @@ const RegionModal = ({ onClose, setSignupRegion }: RegionModalProps) => {
   const SelectedDong = (item: any) => {
     setSelectedDongCode(item.dongCode);
     setSelectedDongName(item.dongName);
+    setSignupRegion(
+      `${selectedSidoName} ${selectedGugunName} ${item.dongName}`,
+    );
   };
 
   // const sidoData = [
