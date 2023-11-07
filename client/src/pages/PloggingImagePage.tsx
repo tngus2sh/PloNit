@@ -89,37 +89,6 @@ const PloggingImagePage = () => {
     }
   }, [uploadImage]);
 
-  // useEffect(() => {
-  //   async function saveImage() {
-  //     if (compressedImage) {
-  //       savePloggingImage({
-  //         accessToken: accessToken,
-  //         plogging_id: ploggingId,
-  //         image: compressedImage,
-  //         success: (response) => {
-  //           console.log("성공");
-  //           console.log(response);
-  //           dispatch(P.addImage(response.data.resultBody));
-  //           if (isEnd || beforeEnd) {
-  //             navigate("/plogging/complete");
-  //           } else {
-  //             navigate("/plogging");
-  //           }
-  //         },
-  //         fail: (error) => {
-  //           console.error(error);
-  //         },
-  //       });
-  //     }
-  //   }
-
-  //   if (compressedImage) {
-  //     if (isEnd || beforeEnd || target === "save") {
-  //       saveImage();
-  //     }
-  //   }
-  // }, [compressedImage]);
-
   return (
     <div style={{ height: windowHeight, width: "100%" }}>
       <ImageCropper aespectRatio={1 / 1} onCrop={handleUploadImage} />
