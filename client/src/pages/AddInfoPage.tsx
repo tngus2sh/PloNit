@@ -65,13 +65,18 @@ const AddInfoPage = () => {
       return;
     } else if (!data.nickname) {
       alert("닉네임을 입력하세요");
+      return;
     } else if (!isnickname) {
       alert("중복된 닉네임입니다");
+      return;
     } else if (!data.birth) {
       alert("생년월일을 입력하세요");
+      return;
     } else if (data.birth.length > 6) {
       alert("생년월일을 다시 입력하세요");
+      return;
     }
+
     // else if (!data.region) {
     //   alert("활동 지역을 입력하세요");
     // }

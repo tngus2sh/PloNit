@@ -85,26 +85,6 @@ const RegionModal = ({ onClose, setSignupRegion }: RegionModalProps) => {
     );
   };
 
-  // const sidoData = [
-  //   { sidoCode: 1100000000, sidoName: "서울특별시" },
-  //   { sidoCode: 2600000000, sidoName: "부산광역시" },
-  //   { sidoCode: 2700000000, sidoName: "대구광역시" },
-  //   { sidoCode: 2900000000, sidoName: "광주광역시" },
-  //   { sidoCode: 3000000000, sidoName: "대전광역시" },
-  //   { sidoCode: 3100000000, sidoName: "울산광역시" },
-  //   { sidoCode: 3611000000, sidoName: "세종특별자치시" },
-  //   { sidoCode: 4100000000, sidoName: "경기도" },
-  //   { sidoCode: 4110500000, sidoName: "북부출장소" },
-  //   { sidoCode: 4300000000, sidoName: "충청북도" },
-  //   { sidoCode: 4400000000, sidoName: "충청남도" },
-  //   { sidoCode: 4500000000, sidoName: "전라북도" },
-  //   { sidoCode: 4600000000, sidoName: "전라남도" },
-  //   { sidoCode: 4700000000, sidoName: "경상북도" },
-  //   { sidoCode: 4800000000, sidoName: "경상남도" },
-  //   { sidoCode: 5000000000, sidoName: "제주특별자치도" },
-  //   { sidoCode: 5100000000, sidoName: "강원특별자치도" },
-  //   { sidoCode: 5110500000, sidoName: "동해출장소" },
-  // ];
   return (
     <div className={style.regionmodal}>
       <div className={style.regioncontainer}>
