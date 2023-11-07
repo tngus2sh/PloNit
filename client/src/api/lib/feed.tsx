@@ -73,7 +73,7 @@ export async function getCommentCreate(
     | void,
   fail: (err: any) => PromiseLike<never> | null | undefined | void,
 ) {
-  const api = customApiForm("/plonit-service/v1/feed");
+  const api = customApi("/plonit-service/v1/feed");
   api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
   await api.post("/comment", data).then(success).catch(fail);
 }

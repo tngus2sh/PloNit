@@ -31,7 +31,7 @@ const CrewpingDate = ({ setCrewpingStartDate, setCrewpingEndDate }: any) => {
         id="date_time"
         placeholderText="시작 일시"
         onChange={onChangeStartDate}
-        dateFormat="yyyy.MM.dd hh:mm"
+        dateFormat="yyyy-MM-dd HH:mm"
       />
       <DatePicker
         selected={selectedEndDate}
@@ -42,7 +42,7 @@ const CrewpingDate = ({ setCrewpingStartDate, setCrewpingEndDate }: any) => {
         id="date_time"
         placeholderText="종료 일시"
         onChange={onChangeEndDate}
-        dateFormat="yyyy.MM.dd hh:mm"
+        dateFormat="yyyy-MM-dd HH:mm"
       />
     </div>
   );

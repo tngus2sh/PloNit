@@ -20,6 +20,7 @@ const StyledSwiper = styled(Swiper)`
 `;
 
 const FeedCreatePage = () => {
+  const navigate = useNavigate();
   const accessToken = useSelector((state: any) => state.user.accessToken);
   const { crewId } = useParams();
   const [isFeedIntroduce, setFeedIntroduce] = useState("");
@@ -55,6 +56,7 @@ const FeedCreatePage = () => {
       (res) => {
         console.log(res.data);
         console.log("피드 생성 성공");
+        navigate(`/crew/community/${crewId}`);
       },
       (err) => {
         console.log("피드 생성 에러", err);

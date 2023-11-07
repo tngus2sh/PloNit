@@ -8,6 +8,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import styled from "styled-components";
 import { getFeedDelete } from "api/lib/feed";
+import Sheet from "react-modal-sheet";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -17,8 +18,23 @@ const StyledSwiper = styled(Swiper)`
     background: #2cd261;
   }
   .swiper-pagination {
-    margin-top: 1rem;
+    margin-top: 0.7rem;
     position: relative;
+    z-index: 0;
+  }
+`;
+const CustomSheet = styled(Sheet)`
+  .react-modal-sheet-backdrop {
+    @media (min-width: 500px) {
+      width: 500px !important;
+      left: calc((100% - 500px) / 2) !important;
+    }
+  }
+  .react-modal-sheet-container {
+    @media (min-width: 500px) {
+      width: 500px !important;
+      left: calc((100% - 500px) / 2) !important;
+    }
   }
 `;
 
@@ -34,11 +50,6 @@ const FeedItem = ({
   const isfeedImages = feed.feedPictures;
   const toggleCommentModal = () => {
     setCommentModalOpen(!isCommentModalOpen);
-    if (isCommentModalOpen) {
-      document.body.style.overflow = "scroll";
-    } else {
-      document.body.style.overflow = "hidden";
-    }
   };
 
   const handleDeleteFeed = () => {
@@ -110,8 +121,19 @@ const FeedItem = ({
       <div className={style.date}>10월 15일</div>
       {isCommentModalOpen && (
         <>
-          <div className={style.modalbackground}></div>
-          <CommentModal setCommentModalOpen={setCommentModalOpen} />
+          <CustomSheet
+            isOpen={isCommentModalOpen}
+            onClose={() => setCommentModalOpen(false)}
+            tweenConfig={{ ease: "easeOut", duration: 0.3 }}
+          >
+            <Sheet.Container>
+              <Sheet.Header />
+              <Sheet.Content>
+                <CommentModal feed={feed} fetchFeedList={fetchFeedList} />
+              </Sheet.Content>
+            </Sheet.Container>
+            <Sheet.Backdrop />
+          </CustomSheet>
         </>
       )}
     </div>
