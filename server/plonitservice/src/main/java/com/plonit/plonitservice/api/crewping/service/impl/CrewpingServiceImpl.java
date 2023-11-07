@@ -53,7 +53,7 @@ public class CrewpingServiceImpl implements CrewpingService {
         Crew crew = crewRepository.findById(dto.getCrewId())
                 .orElseThrow(() -> new CustomException(ErrorCode.CREW_NOT_FOUND));
 
-        crewMemberRepository.findCrewMemberWithCrewByFetch(dto.getMemberKey(), dto.getCrewId())
+        crewMemberRepository.findCrewMemberByJoinFetch(dto.getMemberKey(), dto.getCrewId())
                 .orElseThrow(() -> new CustomException(ErrorCode.CREWPING_BAD_REQUEST));
 
         String crewpingImageUrl = null;
@@ -74,7 +74,7 @@ public class CrewpingServiceImpl implements CrewpingService {
         Crew crew = crewRepository.findById(crewId)
                 .orElseThrow(() -> new CustomException(ErrorCode.CREW_NOT_FOUND));
 
-        crewMemberRepository.findCrewMemberWithCrewByFetch(memberId, crewId)
+        crewMemberRepository.findCrewMemberByJoinFetch(memberId, crewId)
                 .orElseThrow(() -> new CustomException(ErrorCode.CREWPING_BAD_REQUEST));
 
         List<FindCrewpingsRes> result = crewpingQueryRepository.findCrewpings(crewId);
@@ -87,7 +87,7 @@ public class CrewpingServiceImpl implements CrewpingService {
         Crewping crewping = crewpingRepository.findById(crewpingId)
                 .orElseThrow(() -> new CustomException(ErrorCode.CREWPING_NOT_FOUND));
 
-        crewMemberRepository.findCrewMemberWithCrewByFetch(memberId, crewping.getCrew().getId())
+        crewMemberRepository.findCrewMemberByJoinFetch(memberId, crewping.getCrew().getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.CREWPING_BAD_REQUEST));
 
         CrewpingMember masterCrewpingMember = crewpingMemberRepository.findMasterCrewpingMemberWitMemberJoinFetch(crewpingId)
@@ -106,7 +106,7 @@ public class CrewpingServiceImpl implements CrewpingService {
         Crewping crewping = crewpingRepository.findById(crewpingId)
                 .orElseThrow(() -> new CustomException(ErrorCode.CREWPING_NOT_FOUND));
 
-        crewMemberRepository.findCrewMemberWithCrewByFetch(memberId, crewping.getCrew().getId())
+        crewMemberRepository.findCrewMemberByJoinFetch(memberId, crewping.getCrew().getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.CREWPING_BAD_REQUEST));
 
         if(crewpingMemberQueryRepository.isCrewpingMember(memberId, crewpingId)) {
@@ -120,4 +120,5 @@ public class CrewpingServiceImpl implements CrewpingService {
         CrewpingMember crewpingMember = crewpingMemberRepository.save(CrewpingMember.of(member, crewping, false));
         crewping.updateCurrentPeople();
     }
+
 }

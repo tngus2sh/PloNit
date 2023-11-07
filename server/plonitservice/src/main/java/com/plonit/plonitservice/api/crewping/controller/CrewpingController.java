@@ -75,7 +75,7 @@ public class CrewpingController {
     }
 
     // 크루핑 참가
-    @GetMapping("/join/{crewping-id}")
+    @PostMapping("/join/{crewping-id}")
     public CustomApiResponse<Object> joinCrewping(@PathVariable("crewping-id") Long crewpingId, HttpServletRequest request) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
         log.info("JoinCrewping={}", crewpingId);
@@ -84,5 +84,4 @@ public class CrewpingController {
 
         return CustomApiResponse.ok("", "크루핑에 참가했습니다.");
     }
-
 }

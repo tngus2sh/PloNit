@@ -11,7 +11,6 @@ import java.util.Optional;
 public interface CrewMemberRepository extends JpaRepository<CrewMember, Long> {
     Optional<CrewMember> findById(Long id);
 
-    @Query("SELECT cm FROM CrewMember cm JOIN FETCH cm.crew WHERE cm.member.id = :memberId AND cm.crew.id = :crewId")
-    Optional<CrewMember> findCrewMemberWithCrewByFetch(Long memberId, Long crewId);
-
+    @Query("SELECT cm FROM CrewMember cm JOIN FETCH cm.crew JOIN FETCH cm.member WHERE cm.member.id = :memberId AND cm.crew.id = :crewId")
+    Optional<CrewMember> findCrewMemberByJoinFetch(Long memberId, Long crewId);
 }
