@@ -62,6 +62,7 @@ const AddInfoPage = () => {
     };
     if (!data.name) {
       alert("이름을 입력하세요");
+      return;
     } else if (!data.nickname) {
       alert("닉네임을 입력하세요");
     } else if (!isnickname) {
@@ -156,11 +157,16 @@ const AddInfoPage = () => {
       />
       <div className={style.region}>
         <div className={style.title}>활동지역</div>
-        <div className={style.input_area} onClick={OpenRegionModal}></div>
+        <div className={style.input_area} onClick={OpenRegionModal}>
+          {isSignupRegion}
+        </div>
         {isOpenRegionModal && (
           <>
             <div className={style.modalbackground}></div>
-            <RegionModal onClose={OpenRegionModal} />
+            <RegionModal
+              onClose={OpenRegionModal}
+              setSignupRegion={setSignupRegion}
+            />
           </>
         )}
       </div>
