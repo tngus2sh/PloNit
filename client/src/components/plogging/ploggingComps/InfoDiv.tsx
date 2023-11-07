@@ -60,7 +60,7 @@ const InfoDiv: React.FC<IInfoDiv> = ({
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const distance = useSelector<rootState, number>((state) => {
-    const { distance } = state.plogging;
+    const distance = state.plogging.distance / 1000;
     return Math.round(distance * 100) / 100;
   });
   const second = useSelector<rootState, number>((state) => {
@@ -72,8 +72,8 @@ const InfoDiv: React.FC<IInfoDiv> = ({
     return minute;
   });
   const calorie = useSelector<rootState, number>((state) => {
-    const { calorie } = state.plogging;
-    return calorie;
+    const calorie = state.plogging.calorie;
+    return Math.round(calorie * 10) / 10;
   });
   const isOnWrite = useSelector<rootState, boolean>((state) => {
     return state.camera.isOnWrite;

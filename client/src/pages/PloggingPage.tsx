@@ -9,7 +9,6 @@ import Crewping from "components/plogging/PloggingPage/Crewping";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { rootState } from "store/store";
-import { stat } from "fs";
 
 function getComponent(ploggingType: ploggingType): JSX.Element {
   switch (ploggingType) {
