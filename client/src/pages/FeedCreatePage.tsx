@@ -24,6 +24,7 @@ const FeedCreatePage = () => {
   const { crewId } = useParams();
   const [isFeedIntroduce, setFeedIntroduce] = useState("");
   const [isFeedImages, setFeedImages] = useState<File[]>([]);
+  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const onChangeFeedIntroduce = (event: any) => {
     setFeedIntroduce(event.target.value);
   };
@@ -31,21 +32,11 @@ const FeedCreatePage = () => {
   const handleImageUpload = (event: any) => {
     const files = Array.from(event.target.files) as File[];
     setFeedImages([...isFeedImages, ...files]);
+
+    const newUrls = files.map((file) => URL.createObjectURL(file));
+    setPreviewUrls([...previewUrls, ...newUrls]);
   };
-  // const handleImageUpload = (event: any) => {
-  //   const files = Array.from(event.target.files) as File[];
 
-  //   const newImages = files.map((file) => {
-  //     return {
-  //       file,
-  //       previewURL: URL.createObjectURL(file),
-  //     };
-  //   });
-
-  //   setFeedImages([...isFeedImages, ...newImages]);
-  // };
-
-  console.log(isFeedImages);
   const feedCreateHandler = () => {
     const formData = new FormData();
     formData.append("content", isFeedIntroduce);
@@ -72,12 +63,12 @@ const FeedCreatePage = () => {
   };
   const handleDeleteImage = (id: any) => {
     setFeedImages(isFeedImages.filter((_, index) => index !== id));
+    setPreviewUrls(previewUrls.filter((_, index) => index !== id));
   };
 
   return (
     <div>
       <BackTopBar text="피드 생성" />
-
       <StyledSwiper
         pagination={true}
         modules={[Pagination]}
@@ -102,11 +93,11 @@ const FeedCreatePage = () => {
             />
           </SwiperSlide>
         )}
-        {isFeedImages.map((image, id) => (
+        {previewUrls.map((url, id) => (
           <SwiperSlide
             key={id}
             style={{
-              backgroundImage: `url(${URL.createObjectURL(image)})`,
+              backgroundImage: `url(${url})`,
             }}
             className={style.feedimg}
           >
