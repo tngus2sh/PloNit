@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Icon } from "@iconify/react";
 import style from "styles/css/CrewCommunityPage/FeedItem.module.css";
 import CommentModal from "components/CrewCommunity/CommentModal";
@@ -6,6 +7,7 @@ import { FeedInterface } from "interface/crewInterface";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import styled from "styled-components";
+import { getFeedDelete } from "api/lib/feed";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -20,15 +22,8 @@ const StyledSwiper = styled(Swiper)`
   }
 `;
 
-// const feedPictures = [
-//   { feedPicture: "/feed_img.png" },
-//   { feedPicture: "/metamong.png" },
-//   { feedPicture: "/feed_img.png" },
-//   { feedPicture: "/metamong.png" },
-//   { feedPicture: "/feed_img.png" },
-// ];
-
 const FeedItem = ({ feed }: { feed: FeedInterface }) => {
+  const accessToken = useSelector((state: any) => state.user.accessToken);
   const [isCommentModalOpen, setCommentModalOpen] = useState(false);
   const isfeedImages = feed.feedPictures;
   const toggleCommentModal = () => {
@@ -40,11 +35,34 @@ const FeedItem = ({ feed }: { feed: FeedInterface }) => {
     }
   };
 
+  const handleDeleteFeed = () => {
+    getFeedDelete(
+      accessToken,
+      feed.id,
+      (res) => {
+        console.log(res.data);
+        console.log("피드 삭제 성공");
+      },
+      (err) => {
+        console.log("피드 삭제 에러", err);
+      },
+    );
+  };
+
   return (
     <div className={style.feed_item}>
       <div className={style.name_area}>
-        <img src={feed.profileImage} alt="피드" />
-        <div className={style.nickname}>{feed.nickname}</div>
+        <div className={style.left}>
+          <img src={feed.profileImage} alt="프로필" />
+          <div className={style.nickname}>{feed.nickname}</div>
+        </div>
+        <div className={style.right}>
+          <Icon
+            icon="bi:trash"
+            style={{ width: "1.5rem", height: "1.5rem" }}
+            onClick={handleDeleteFeed}
+          />
+        </div>
       </div>
 
       <StyledSwiper

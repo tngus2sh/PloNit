@@ -15,7 +15,7 @@ export interface CrewInterface {
 
 export interface FeedInterface {
   crewId?: number;
-  id?: number;
+  id: number;
   nickname?: string;
   profileImage?: string;
   content?: string;

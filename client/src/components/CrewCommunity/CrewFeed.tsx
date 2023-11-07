@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import FeedItem from "./FeedItem";
-import { CrewInterface } from "interface/crewInterface";
+import { FeedInterface } from "interface/crewInterface";
 import { getFeedList } from "api/lib/feed";
 
 const CrewFeed = () => {
   const accessToken = useSelector((state: any) => state.user.accessToken);
   const { crewId } = useParams();
-  const [isFeedList, setFeedList] = useState<CrewInterface[]>([]);
+  const [isFeedList, setFeedList] = useState<FeedInterface[]>([]);
 
   useEffect(() => {
     getFeedList(
