@@ -49,8 +49,8 @@ const PloggingImagePage = () => {
             image: jpgFile,
             success: (response) => {
               console.log("성공");
-              console.log(response);
-              dispatch(P.addImage(response.data.resultBody.id));
+              alert(response);
+              dispatch(P.addImage(response.data.resultBody));
               if (isEnd || beforeEnd) {
                 navigate("/plogging/complete");
               } else {
