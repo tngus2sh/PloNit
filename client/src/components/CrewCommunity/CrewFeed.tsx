@@ -10,27 +10,29 @@ const CrewFeed = () => {
   const { crewId } = useParams();
   const [isFeedList, setFeedList] = useState<FeedInterface[]>([]);
 
-  useEffect(() => {
+  const fetchFeedList = () => {
     getFeedList(
       accessToken,
       Number(crewId),
       (res) => {
         console.log("피드 조회 성공");
-        console.log(res);
         console.log(res.data);
-        console.log(res.data.resultBody);
         setFeedList(res.data.resultBody);
       },
       (err) => {
         console.log("피드 조회 실패", err);
       },
     );
+  };
+
+  useEffect(() => {
+    fetchFeedList();
   }, []);
 
   return (
     <div>
       {isFeedList.map((feed, index) => (
-        <FeedItem key={index} feed={feed} />
+        <FeedItem key={index} feed={feed} fetchFeedList={fetchFeedList} />
       ))}
       <div style={{ height: "4rem" }}></div>
     </div>
