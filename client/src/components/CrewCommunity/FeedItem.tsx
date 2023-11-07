@@ -22,7 +22,13 @@ const StyledSwiper = styled(Swiper)`
   }
 `;
 
-const FeedItem = ({ feed }: { feed: FeedInterface }) => {
+const FeedItem = ({
+  feed,
+  fetchFeedList,
+}: {
+  feed: FeedInterface;
+  fetchFeedList: () => void;
+}) => {
   const accessToken = useSelector((state: any) => state.user.accessToken);
   const [isCommentModalOpen, setCommentModalOpen] = useState(false);
   const isfeedImages = feed.feedPictures;
@@ -42,6 +48,7 @@ const FeedItem = ({ feed }: { feed: FeedInterface }) => {
       (res) => {
         console.log(res.data);
         console.log("피드 삭제 성공");
+        fetchFeedList();
       },
       (err) => {
         console.log("피드 삭제 에러", err);
