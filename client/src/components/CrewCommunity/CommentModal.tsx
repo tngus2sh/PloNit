@@ -15,6 +15,8 @@ const CommentModal = ({
 }) => {
   const accessToken = useSelector((state: any) => state.user.accessToken);
   const profileImage = useSelector((state: any) => state.user.profileImg);
+  const user = useSelector((state: any) => state.user);
+  console.log(user);
   const [isComment, setComment] = useState("");
   const onChangeComment = (event: any) => {
     setComment(event.target.value);
