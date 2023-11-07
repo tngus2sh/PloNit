@@ -30,6 +30,9 @@ const PloggingVolunteerInput = () => {
   const reduxId1365 = useSelector<rootState, string>((state) => {
     return state.user.id_1365;
   });
+  const isVolEnd = useSelector<rootState, boolean>((state) => {
+    return state.plogging.isVolEnd;
+  });
 
   const { image, handleImageCapture, fileInputRef } = useCamera();
   const check = useRef<boolean>(false);
@@ -37,6 +40,21 @@ const PloggingVolunteerInput = () => {
   const [id_1365, setId_1365] = useState<string>(reduxId1365);
   const [email, setEmail] = useState<string>(reduxEmail);
   const [region, setRegion] = useState<string>("");
+
+  useEffect(() => {
+    if (!check.current && !isVolEnd) {
+      handleImageCapture();
+    }
+
+    return () => {
+      if (!check.current) {
+        check.current = true;
+        if (!isVolEnd) {
+          dispatch(P.setIsVolEnd(true));
+        }
+      }
+    };
+  }, []);
 
   // 이미지가 로드되었을 때, 이미지를 넘겨준다.
   useEffect(() => {
