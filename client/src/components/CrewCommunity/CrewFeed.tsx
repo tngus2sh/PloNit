@@ -26,11 +26,12 @@ const CrewFeed = () => {
       },
     );
   }, []);
-  console.log(isFeedList);
+
   return (
     <div>
-      <FeedItem />
-      <FeedItem />
+      {isFeedList.map((feed, index) => (
+        <FeedItem key={index} feed={feed} />
+      ))}
       <div style={{ height: "4rem" }}></div>
     </div>
   );
