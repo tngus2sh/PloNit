@@ -67,13 +67,6 @@ const ploggingSlice = createSlice({
           distance: distance,
           kg: state.kg,
         });
-        console.log(
-          getCalorie({
-            second: intervalTime,
-            distance: distance,
-            kg: state.kg,
-          }),
-        );
       }
     },
     addImage: (state, action: PayloadAction<string>) => {
