@@ -53,7 +53,7 @@ const ploggingSlice = createSlice({
       state.ploggingId = action.payload;
     },
     addPath: (state, action: PayloadAction<Coordinate>) => {
-      state.paths.push(action.payload);
+      state.paths = [...state.paths, action.payload];
 
       if (++state.pathlen > 1) {
         const distance = getDistance(
@@ -69,7 +69,7 @@ const ploggingSlice = createSlice({
       }
     },
     addImage: (state, action: PayloadAction<string>) => {
-      state.images.push(action.payload);
+      state.images = [...state.images, action.payload];
     },
     addTime: (state) => {
       if (++state.second === 60) {
