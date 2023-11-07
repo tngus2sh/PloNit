@@ -108,4 +108,15 @@ public class CrewpingController {
         return CustomApiResponse.ok(response, "크루핑 현재 인원 조회에 성공했습니다.");
     }
 
+    // 크루핑 강퇴
+    @DeleteMapping("/kick-out/{crewping-id}/{target-id}")
+    public CustomApiResponse<Object> kickoutCrewpingMember(@PathVariable("crewping-id") Long crewpingId, @PathVariable("target-id") Long targetId, HttpServletRequest request) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+        log.info("KickoutCrewpingMember={}, {}", crewpingId, targetId);
+
+        crewpingService.kickoutCrewpingMember(RequestUtils.getMemberKey(request), crewpingId, targetId);
+
+        return CustomApiResponse.ok("", "크루핑 멤버를 강퇴했습니다.");
+    }
+
 }

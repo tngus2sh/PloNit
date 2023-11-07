@@ -17,4 +17,5 @@ public interface CrewpingService {
     void joinCrewping(Long memberId, Long crewpingId);
     void quitCrewping(Long memberId, Long crewpingId);
     List<FindCrewpingMembersRes> findCrewpingMembers(Long memberId, Long crewpingId);
+    void kickoutCrewpingMember(Long memberId, Long crewpingId, Long targetId);
 }

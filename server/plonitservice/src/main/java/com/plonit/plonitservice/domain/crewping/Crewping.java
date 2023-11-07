@@ -61,7 +61,12 @@ public class Crewping extends TimeBaseEntity {
     private Status status;
 
 
-    public void updateCurrentPeople() {
-        this.cntPeople++;
+    public void updateCurrentPeople(boolean flag) {
+        if(flag) {
+            this.cntPeople++;
+        }
+        else {
+            this.cntPeople--;
+        }
     }
 }

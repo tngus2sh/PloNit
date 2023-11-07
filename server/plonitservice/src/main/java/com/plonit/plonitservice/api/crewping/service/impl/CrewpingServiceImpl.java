@@ -118,7 +118,7 @@ public class CrewpingServiceImpl implements CrewpingService {
         }
 
         CrewpingMember crewpingMember = crewpingMemberRepository.save(CrewpingMember.of(member, crewping, false));
-        crewping.updateCurrentPeople();
+        crewping.updateCurrentPeople(true);
     }
 
     @Override
@@ -143,6 +143,7 @@ public class CrewpingServiceImpl implements CrewpingService {
 
         CrewpingMember crewpingMember = crewpingMemberRepository.findCrewpingMemberByJoinFetch(memberId, crewpingId).get();
         crewpingMemberRepository.delete(crewpingMember);
+        crewping.updateCurrentPeople(false);
     }
 
     @Override
@@ -161,6 +162,31 @@ public class CrewpingServiceImpl implements CrewpingService {
         List<FindCrewpingMembersRes> result = crewpingMemberQueryRepository.findCrewpingMembers(crewpingId);
 
         return result;
+    }
+
+    @Override
+    public void kickoutCrewpingMember(Long memberId, Long crewpingId, Long targetId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        Member targetMember = memberRepository.findById(targetId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        Crewping crewping = crewpingRepository.findById(crewpingId)
+                .orElseThrow(() -> new CustomException(ErrorCode.CREWPING_NOT_FOUND));
+
+        CrewpingMember masterCrewpingMember = crewpingMemberRepository.findMasterCrewpingMemberWitMemberJoinFetch(crewpingId).get();
+        if(masterCrewpingMember.getMember().getId() != memberId) {
+            throw new CustomException(ErrorCode.CREWPING_BAD_REQUEST);
+        }
+
+        if(!crewpingMemberQueryRepository.isCrewpingMember(targetId, crewpingId)) {
+            throw new CustomException(ErrorCode.CREWPING_BAD_REQUEST);
+        }
+
+        CrewpingMember crewpingMember = crewpingMemberRepository.findCrewpingMemberByJoinFetch(targetId, crewpingId).get();
+        crewpingMemberRepository.delete(crewpingMember);
+        crewping.updateCurrentPeople(false);
     }
 
 }
