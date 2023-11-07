@@ -43,13 +43,14 @@ const PloggingImagePage = () => {
         );
         if (blob) {
           const jpgFile = new File([blob], "image.jpg", { type: "image/jpeg" });
+          console.log(jpgFile.size / (1024 * 1024));
           savePloggingImage({
             accessToken: accessToken,
             plogging_id: ploggingId,
             image: jpgFile,
             success: (response) => {
               console.log("성공");
-              alert(response);
+              console.log(response);
               dispatch(P.addImage(response.data.resultBody));
               if (isEnd || beforeEnd) {
                 navigate("/plogging/complete");
