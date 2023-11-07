@@ -7,7 +7,6 @@ import { CrewInterface } from "interface/crewInterface";
 const CrewCommunityInfo = ({ crew }: { crew: CrewInterface }) => {
   const navigate = useNavigate();
   const handleGoCommunityDetail = () => {
-    // navigate("/crew/community/detail");
     navigate(`/crew/community/detail/${crew.id}`);
   };
   const handleGoMemberList = () => {

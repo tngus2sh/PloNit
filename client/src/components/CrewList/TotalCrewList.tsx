@@ -4,14 +4,12 @@ import style from "styles/css/CrewList/CrewListItem.module.css";
 import { Icon } from "@iconify/react";
 import Input from "components/common/Input";
 import CrewItem from "./CrewItem";
-import * as Interfaces from "interface/crewInterface";
+import { CrewInterface } from "interface/crewInterface";
 import { getCrewList } from "api/lib/crew";
 
 const TotalCrewList = () => {
   const accessToken = useSelector((state: any) => state.user.accessToken);
-  const [totalCrewList, setTotalCrewList] = useState<
-    Interfaces.CrewInterface[]
-  >([]);
+  const [totalCrewList, setTotalCrewList] = useState<CrewInterface[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
 
   useEffect(() => {
