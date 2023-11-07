@@ -1,0 +1,69 @@
+@import "../styles";
+.regionmodal {
+  width: 70%;
+  position: absolute;
+  border-radius: 0.5rem;
+  background-color: white;
+  padding: 1rem;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  .regioncontainer {
+    border: 1px solid $darkgray;
+    border-radius: 0.5rem;
+    .top_section {
+      height: 2.5rem;
+      display: flex;
+      .title {
+        flex: 1;
+        font-size: 1.1rem;
+        justify-content: center;
+        padding: 0.5rem 0.3rem;
+        text-align: center;
+        margin: auto 0;
+        border-bottom: 1px solid $darkgray;
+      }
+    }
+    .bottom_section {
+      display: flex;
+      height: 15rem;
+      overflow: scroll;
+      .sido {
+        flex: 1;
+
+        .content {
+          padding: 0.5rem 0.3rem;
+          border-bottom: 1px solid $gray;
+          border-right: 1px solid $gray;
+        }
+      }
+      .gugun {
+        flex: 1;
+        .content {
+          padding: 0.5rem 0.3rem;
+          border-bottom: 1px solid $gray;
+          border-right: 1px solid $gray;
+        }
+      }
+      .dong {
+        flex: 1;
+        .content {
+          padding: 0.5rem 0.3rem;
+          border-bottom: 1px solid $gray;
+        }
+      }
+    }
+  }
+  .confirm_btn {
+    background-color: $green;
+    text-align: center;
+    border-radius: 0.5rem;
+    width: 5rem;
+    padding: 0.5rem 1rem;
+    color: white;
+    margin: 1rem auto 0;
+  }
+}
+.selected {
+  background-color: rgb(170, 202, 238);
+}
