@@ -5,7 +5,13 @@ import style from "styles/css/CrewCommunityPage/CommentModal.module.css";
 import { getCommentDelete } from "api/lib/feed";
 import { CommentInterface } from "interface/crewInterface";
 
-const CommentItem = ({ comment }: { comment: CommentInterface }) => {
+const CommentItem = ({
+  comment,
+  fetchFeedList,
+}: {
+  comment: CommentInterface;
+  fetchFeedList: () => void;
+}) => {
   const accessToken = useSelector((state: any) => state.user.accessToken);
   const handleDeleteComment = () => {
     if (comment.commentId) {
@@ -15,6 +21,7 @@ const CommentItem = ({ comment }: { comment: CommentInterface }) => {
         (res) => {
           console.log(res.data);
           console.log("댓글 삭제 성공");
+          fetchFeedList();
         },
         (err) => {
           console.log("댓글 삭제 에러", err);
