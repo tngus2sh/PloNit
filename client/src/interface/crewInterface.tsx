@@ -15,11 +15,11 @@ export interface CrewInterface {
 
 export interface FeedInterface {
   crewId?: number;
-  id: number;
+  id?: number;
   nickname?: string;
   profileImage?: string;
   content?: string;
-  feedPicture?: any;
+  feedPictures?: any;
   likeCount?: number;
   islike?: boolean;
   isMine?: boolean;
