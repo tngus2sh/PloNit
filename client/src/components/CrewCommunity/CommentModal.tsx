@@ -6,7 +6,13 @@ import CommentList from "./CommentList";
 import { getCommentCreate } from "api/lib/feed";
 import { FeedInterface } from "interface/crewInterface";
 
-const CommentModal = ({ feed }: { feed: FeedInterface }) => {
+const CommentModal = ({
+  feed,
+  fetchFeedList,
+}: {
+  feed: FeedInterface;
+  fetchFeedList: () => void;
+}) => {
   const accessToken = useSelector((state: any) => state.user.accessToken);
   const profileImage = useSelector((state: any) => state.user.profileImg);
   const [isComment, setComment] = useState("");
@@ -26,6 +32,7 @@ const CommentModal = ({ feed }: { feed: FeedInterface }) => {
       data,
       (res) => {
         console.log("댓글 생성 성공");
+        fetchFeedList();
       },
       (err) => {
         console.log("댓글 생성 실패", err);
