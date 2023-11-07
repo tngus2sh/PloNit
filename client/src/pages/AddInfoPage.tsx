@@ -75,11 +75,10 @@ const AddInfoPage = () => {
     } else if (data.birth.length > 6) {
       alert("생년월일을 다시 입력하세요");
       return;
+    } else if (!data.region) {
+      alert("활동 지역을 입력하세요");
+      return;
     }
-
-    // else if (!data.region) {
-    //   alert("활동 지역을 입력하세요");
-    // }
     console.log(data);
     console.log(accessToken);
     addInfo(
