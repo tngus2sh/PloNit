@@ -12,20 +12,6 @@ import { rootState } from "store/store";
 import * as P from "store/plogging-slice";
 import { dummy_location, dummy_helps } from "./dummyData";
 
-// 대략적으로 필요한 기능들
-
-// default useEffect에서 필요한 기능
-// 유저 초기 위치 확인 x
-// 청소된 구역 표시
-// 플로깅 기록
-
-// [latitude, longitude] useEffect에서 필요한 기능
-// 유저 위치 표시 x
-// 주변 유저 위치 표시 x
-// 주변 쓰레기통 표시 x
-// 주변 화장실 위치 표시 x
-// 주변 유저 도움 요청 표시 x
-
 const defaultZoom = 16;
 const neighbor_help_maxZoom = 12;
 const navbarHeight = 56;
