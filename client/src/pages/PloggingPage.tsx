@@ -9,9 +9,14 @@ import Crewping from "components/plogging/PloggingPage/Crewping";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { rootState } from "store/store";
-import { stat } from "fs";
 
-function getComponent(ploggingType: ploggingType): JSX.Element {
+function getComponent(
+  ploggingType: ploggingType,
+  beforeCrewping: boolean,
+): JSX.Element {
+  if (beforeCrewping) {
+    return <Crewping />;
+  }
   switch (ploggingType) {
     case "IND":
       return <SoloJog />;
@@ -29,12 +34,15 @@ const PloggingPage = () => {
   const showComponent = useSelector<rootState, boolean>((state) => {
     return !state.plogging.isEnd && !state.plogging.beforeEnd;
   });
+  const beforeCrewping = useSelector<rootState, boolean>((state) => {
+    return state.plogging.beforeCrewping;
+  });
   const componentType: ploggingType = useSelector<rootState, ploggingType>(
     (state) => {
       return state.plogging.ploggingType;
     },
   );
-  const Component = getComponent(componentType);
+  const Component = getComponent(componentType, beforeCrewping);
 
   useEffect(() => {
     if (!showComponent) {

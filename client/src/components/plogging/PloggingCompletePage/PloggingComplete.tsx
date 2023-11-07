@@ -38,7 +38,8 @@ const PloggingComplete = () => {
     return state.plogging.paths;
   });
   const distance = useSelector<rootState, number>((state) => {
-    return state.plogging.distance;
+    const distance = state.plogging.distance;
+    return Math.round(distance * 100) / 100;
   });
   const minute = useSelector<rootState, number>((state) => {
     return state.plogging.minute;
@@ -47,7 +48,8 @@ const PloggingComplete = () => {
     return state.plogging.second;
   });
   const calorie = useSelector<rootState, number>((state) => {
-    return state.plogging.calorie;
+    const calorie = state.plogging.calorie;
+    return Math.round(calorie * 10) / 10;
   });
   const images = useSelector<rootState, string[]>((state) => {
     return state.plogging.images;

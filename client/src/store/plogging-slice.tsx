@@ -1,13 +1,14 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Coordinate } from "interface/ploggingInterface";
 import getDistance from "components/plogging/functions/getDistance";
+import getCalorie from "components/plogging/functions/getCalorie";
 import { ploggingType } from "types/ploggingTypes";
-import { stat } from "fs";
 
 const initialState = {
   isStart: true as boolean,
   isEnd: false as boolean,
   beforeEnd: false as boolean,
+  beforeCrewping: false as boolean,
   ploggingType: "none" as ploggingType,
   ploggingId: -1 as number,
   paths: [] as Coordinate[],
@@ -21,7 +22,10 @@ const initialState = {
   volTakePicture: false as boolean,
   isVolTakePicture: false as boolean,
   isVolEnd: false as boolean,
+  kg: 65 as number,
 };
+
+const intervalTime = 10;
 
 const ploggingSlice = createSlice({
   name: "plogging",
@@ -39,6 +43,9 @@ const ploggingSlice = createSlice({
     setBeforeEnd: (state, action: PayloadAction<boolean>) => {
       state.beforeEnd = action.payload;
     },
+    setBeforeCrewping: (state, action: PayloadAction<boolean>) => {
+      state.beforeCrewping = action.payload;
+    },
     setPloggingType: (state, action: PayloadAction<ploggingType>) => {
       state.ploggingType = action.payload;
     },
@@ -49,10 +56,16 @@ const ploggingSlice = createSlice({
       state.paths.push(action.payload);
 
       if (++state.pathlen > 1) {
-        state.distance += getDistance(
+        const distance = getDistance(
           state.paths[state.pathlen - 2],
           state.paths[state.pathlen - 1],
         );
+        state.distance += distance;
+        state.calorie += getCalorie({
+          second: intervalTime,
+          distance: distance,
+          kg: state.kg,
+        });
       }
     },
     addImage: (state, action: PayloadAction<string>) => {
@@ -76,6 +89,9 @@ const ploggingSlice = createSlice({
     setIsVolEnd: (state, action: PayloadAction<boolean>) => {
       state.isVolEnd = action.payload;
     },
+    setKg: (state, action: PayloadAction<number>) => {
+      state.kg = action.payload;
+    },
   },
 });
 
@@ -84,6 +100,7 @@ export const {
   setIsStart,
   setIsEnd,
   setBeforeEnd,
+  setBeforeCrewping,
   setPloggingType,
   setPloggingId,
   addPath,
@@ -93,5 +110,6 @@ export const {
   setVolTakePicture,
   setIsVolTakePicture,
   setIsVolEnd,
+  setKg,
 } = ploggingSlice.actions;
 export default ploggingSlice.reducer;
