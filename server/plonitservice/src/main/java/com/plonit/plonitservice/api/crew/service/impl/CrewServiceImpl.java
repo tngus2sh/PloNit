@@ -50,13 +50,7 @@ public class CrewServiceImpl implements CrewService{
             }
         }
         Crew crew = crewRepository.save(SaveCrewDto.toEntity(saveCrewDTO, crewImageUrl));
-
-        CrewMember crewMember = CrewMember.builder()
-                .member(member)
-                .isCrewMaster(true)
-                .isCrewMember(true)
-                .crew(crew)
-                .build();
+        CrewMember crewMember = CrewMember.toEntity(crew, member);
 
         crewMemberRepository.save(crewMember);
         log.info(logCurrent(getClassName(), getMethodName(), END));

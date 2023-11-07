@@ -36,4 +36,13 @@ public class CrewMember {
         this.isCrewMaster = this.isCrewMaster != null;
         this.isCrewMember = this.isCrewMember != null;
     }
+
+    public static CrewMember toEntity (Crew crew, Member member) {
+        return CrewMember.builder()
+                .member(member)
+                .isCrewMaster(true)
+                .isCrewMember(true)
+                .crew(crew)
+                .build();
+    }
 }

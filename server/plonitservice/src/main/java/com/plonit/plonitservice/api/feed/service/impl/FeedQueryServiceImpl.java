@@ -38,10 +38,10 @@ public class FeedQueryServiceImpl implements FeedQueryService {
     private final FeedPictureRepository feedPictureRepository;
     private final FeedQueryRepository feedQueryRepository;
 
-    public List<FindFeedRes> findFeeds() { // 피드 조회
+    public List<FindFeedRes> findFeeds(Long memberKey, Long crewId) { // 피드 조회
         log.info(logCurrent(getClassName(), getMethodName(), START));
 
-        List<FindFeedRes> findFeedRes = feedQueryRepository.findFeedsWithPictureAndComment();
+        List<FindFeedRes> findFeedRes = feedQueryRepository.findFeedsWithPictureAndComment(memberKey, crewId);
 
         if (findFeedRes.isEmpty())
             return Collections.emptyList();

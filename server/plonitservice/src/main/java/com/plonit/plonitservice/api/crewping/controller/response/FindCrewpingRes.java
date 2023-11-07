@@ -5,6 +5,8 @@ import com.plonit.plonitservice.domain.crewping.CrewpingMember;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.format.DateTimeFormatter;
+
 import static lombok.AccessLevel.PRIVATE;
 
 @Data
@@ -31,10 +33,11 @@ public class FindCrewpingRes {
                 .masterNickname(master.getMember().getNickname())
                 .masterImage(master.getMember().getProfileImage())
                 .place(crewping.getPlace())
-                .startDate(crewping.getStartDate().toString())
-                .endDate(crewping.getEndDate().toString())
+                .startDate(crewping.getStartDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
+                .endDate(crewping.getEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
                 .cntPeople(crewping.getCntPeople())
                 .maxPeople(crewping.getMaxPeople())
+                .introduce(crewping.getIntroduce())
                 .build();
     }
 
