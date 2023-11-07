@@ -14,6 +14,7 @@ const CommentModal = ({ feed }: { feed: FeedInterface }) => {
     setComment(event.target.value);
   };
   console.log(isComment);
+  console.log(profileImage);
   const SendComment = () => {
     const data = {
       feedId: feed.id,
