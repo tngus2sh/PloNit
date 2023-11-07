@@ -1,19 +1,29 @@
 export interface CrewInterface {
   id?: number;
   name: string;
+  cntPeople?: number;
   crewImage: string;
   region: string;
   introduce?: string;
-  cntPeople?: number;
   rankinginfo?: string;
   totalRanking?: number;
   avgRanking?: number;
+  crewMasterProfileImage?: string;
+  crewMasterNickname?: string;
+  notice?: string;
 }
 
 export interface FeedInterface {
-  content?: string;
   crewId?: number;
+  id: number;
+  nickname?: string;
+  profileImage?: string;
+  content?: string;
   feedPicture?: any;
+  likeCount?: number;
+  islike?: boolean;
+  isMine?: boolean;
+  comments?: any;
 }
 
 export interface CrewpingInterface {
@@ -34,6 +44,6 @@ export interface CommentInterface {
   feedId?: number;
   commentId?: number;
   nickname?: string;
-  profileimage?: string;
+  profileImage?: string;
   content?: string;
 }

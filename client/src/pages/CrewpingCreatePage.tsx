@@ -54,6 +54,7 @@ const CrewpingCreatePage = () => {
       (res) => {
         console.log(res.data);
         console.log("크루핑 생성 성공");
+        navigate(`/crew/community/${crewId}`);
       },
       (err) => {
         console.log("크루핑 생성 에러", err);
