@@ -38,7 +38,7 @@ const PloggingComplete = () => {
     return state.plogging.paths;
   });
   const distance = useSelector<rootState, number>((state) => {
-    const distance = state.plogging.distance;
+    const distance = state.plogging.distance / 1000;
     return Math.round(distance * 100) / 100;
   });
   const minute = useSelector<rootState, number>((state) => {

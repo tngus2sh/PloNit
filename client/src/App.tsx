@@ -15,7 +15,7 @@ import * as P from "store/plogging-slice";
 // 부드러운 애니메이션 (https://animate.style/)
 import "animate.css";
 
-const intervalTime = 10;
+const intervalTime = 2.5;
 
 function App() {
   const navigate = useNavigate();
