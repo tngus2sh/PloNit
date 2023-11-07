@@ -1,5 +1,6 @@
 import React from "react";
 import useGPS from "../functions/useGPS";
+import useImageCompress from "../functions/useImageCompress";
 import CommonButton from "components/common/CommonButton";
 import style from "styles/css/PloggingPage/PopUp.module.css";
 
@@ -28,6 +29,7 @@ const PopUp: React.FC<IPopUP> = ({
     return state.camera.helpContext;
   });
   const { longitude, latitude } = useGPS();
+  const { compressImage } = useImageCompress();
 
   return (
     <div>
@@ -144,7 +146,9 @@ const PopUp: React.FC<IPopUP> = ({
                 const jpgFile = new File([blob], "image.jpg", {
                   type: "image/jpeg",
                 });
-                console.log(jpgFile);
+                const compressedImage = await compressImage(jpgFile);
+                // axios 요청
+                console.log(compressedImage);
                 dispatch(camera.clear());
                 setShow(false);
               }

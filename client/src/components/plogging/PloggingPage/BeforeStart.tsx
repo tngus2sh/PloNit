@@ -108,6 +108,8 @@ const BeforeStart = () => {
         console.error(error);
       },
     });
+    // dispatch(P.clear());
+    // dispatch(P.setPloggingType("IND"));
   }
   function onClick2() {
     startPlogging({
@@ -126,6 +128,8 @@ const BeforeStart = () => {
         console.error(error);
       },
     });
+    // dispatch(P.clear());
+    // dispatch(P.setPloggingType("VOL"));
   }
 
   return (
