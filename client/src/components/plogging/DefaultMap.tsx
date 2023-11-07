@@ -49,13 +49,15 @@ const DefaultMap: React.FC<IDefaultMap> = ({
   const isStart = useSelector<rootState, boolean>((state) => {
     return state.plogging.isStart;
   });
-  const LatLng = useSelector<rootState, Coordinate>((state) => {
-    const idx = state.plogging.pathlen;
-    return state.plogging.paths[idx - 1];
+  const pathlen = useSelector<rootState, number>((state) => {
+    return state.plogging.pathlen;
+  });
+  const paths = useSelector<rootState, Coordinate[]>((state) => {
+    return state.plogging.paths;
   });
   const isMapLoaded = useRef<boolean>(false);
   const isBottomLoaded = useRef<boolean>(false);
-  const { latitude, longitude, onSearch, onCenter, setOnCenter } = useGPS();
+  const { latitude, longitude, onCenter, setOnCenter } = useGPS();
   const mapRef = useRef<naver.maps.Map | null>(null);
   const userRef = useRef<naver.maps.Marker | null>(null);
   const centerBtnRef = useRef<naver.maps.CustomControl | null>(null);
@@ -312,12 +314,11 @@ const DefaultMap: React.FC<IDefaultMap> = ({
 
   // 사용자 위치 이동 시
   useEffect(() => {
-    if (!isBefore && LatLng.latitude) {
-      userRef.current?.setPosition(
-        new naver.maps.LatLng(LatLng.latitude, LatLng.longitude),
-      );
+    if (!isBefore && pathlen > 0) {
+      const { latitude, longitude } = paths[pathlen - 1];
+      userRef.current?.setPosition(new naver.maps.LatLng(latitude, longitude));
     }
-  }, [LatLng]);
+  }, [pathlen]);
 
   // 사용자의 위치 가운데로 갱신 시
   useEffect(() => {
