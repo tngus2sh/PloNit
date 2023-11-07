@@ -121,4 +121,28 @@ public class CrewpingServiceImpl implements CrewpingService {
         crewping.updateCurrentPeople();
     }
 
+    @Override
+    public void quitCrewping(Long memberId, Long crewpingId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        Crewping crewping = crewpingRepository.findById(crewpingId)
+                .orElseThrow(() -> new CustomException(ErrorCode.CREWPING_NOT_FOUND));
+
+        crewMemberRepository.findCrewMemberByJoinFetch(memberId, crewping.getCrew().getId())
+                .orElseThrow(() -> new CustomException(ErrorCode.CREWPING_BAD_REQUEST));
+
+        if(!crewpingMemberQueryRepository.isCrewpingMember(memberId, crewpingId)) {
+            throw new CustomException(ErrorCode.CREWPING_BAD_REQUEST);
+        }
+
+        CrewpingMember masterCrewpingMember = crewpingMemberRepository.findMasterCrewpingMemberWitMemberJoinFetch(crewpingId).get();
+        if(masterCrewpingMember.getMember().getId() == memberId) {
+            throw new CustomException(ErrorCode.CREWPING_BAD_REQUEST);
+        }
+
+        CrewpingMember crewpingMember = crewpingMemberRepository.findCrewpingMemberByJoinFetch(memberId, crewpingId).get();
+        crewpingMemberRepository.delete(crewpingMember);
+    }
+
 }

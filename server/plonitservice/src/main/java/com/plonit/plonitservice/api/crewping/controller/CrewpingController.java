@@ -84,4 +84,15 @@ public class CrewpingController {
 
         return CustomApiResponse.ok("", "크루핑에 참가했습니다.");
     }
+
+    // 크루핑 참가 취소
+    @DeleteMapping("/quit/{crewping-id}")
+    public CustomApiResponse<Object> quitCrewping(@PathVariable("crewping-id") Long crewpingId, HttpServletRequest request) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+        log.info("QuitCrewping={}", crewpingId);
+
+        crewpingService.quitCrewping(RequestUtils.getMemberKey(request), crewpingId);
+
+        return CustomApiResponse.ok("", "크루핑 참가를 취소했습니다.");
+    }
 }
