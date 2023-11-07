@@ -49,6 +49,10 @@ const DefaultMap: React.FC<IDefaultMap> = ({
   const isStart = useSelector<rootState, boolean>((state) => {
     return state.plogging.isStart;
   });
+  const LatLng = useSelector<rootState, Coordinate>((state) => {
+    const idx = state.plogging.pathlen;
+    return state.plogging.paths[idx - 1];
+  });
   const isMapLoaded = useRef<boolean>(false);
   const isBottomLoaded = useRef<boolean>(false);
   const { latitude, longitude, onSearch, onCenter, setOnCenter } = useGPS();
@@ -306,19 +310,26 @@ const DefaultMap: React.FC<IDefaultMap> = ({
     };
   }, []);
 
+  // 사용자 위치 이동 시
+  useEffect(() => {
+    if (!isBefore && LatLng.latitude) {
+      userRef.current?.setPosition(
+        new naver.maps.LatLng(LatLng.latitude, LatLng.longitude),
+      );
+    }
+  }, [LatLng]);
+
   // 사용자의 위치 가운데로 갱신 시
   useEffect(() => {
-    if (!onCenter || !onSearch) {
+    if (!onCenter) {
       if (typeof latitude === "number" && typeof longitude === "number") {
-        if (!onCenter) {
-          mapRef.current?.setCenter(new naver.maps.LatLng(latitude, longitude));
-        }
+        mapRef.current?.setCenter(new naver.maps.LatLng(latitude, longitude));
         userRef.current?.setPosition(
           new naver.maps.LatLng(latitude, longitude),
         );
       }
     }
-  }, [onSearch, onCenter]);
+  }, [onCenter]);
 
   // 쓰레기통 데이터 로드
   useEffect(() => {
