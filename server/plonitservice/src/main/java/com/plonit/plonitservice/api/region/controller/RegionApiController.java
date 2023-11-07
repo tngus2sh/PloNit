@@ -19,7 +19,6 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-//@RequestMapping("/api/plonit-service/v1/region")
 @RequestMapping("/api/plonit-service/na/region")
 public class RegionApiController {
 
