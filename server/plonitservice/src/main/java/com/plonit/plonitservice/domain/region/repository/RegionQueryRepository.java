@@ -61,7 +61,7 @@ public class RegionQueryRepository {
                         gugun.sido.code,
                         gugun.code))
                 .from(gugun)
-                .where(gugun.name.eq(gugunName).and(gugun.sido.name.eq(sidoName)))
+                .where(gugun.name.like(gugunName).and(gugun.sido.name.contains(sidoName)))
                 .fetchOne());
     }
 }
