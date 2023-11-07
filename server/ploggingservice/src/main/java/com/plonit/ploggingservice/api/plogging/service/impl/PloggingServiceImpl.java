@@ -71,11 +71,11 @@ public class PloggingServiceImpl implements PloggingService {
     public Long saveStartPlogging(StartPloggingDto dto) {
         
         // 위도, 경도로 위치 구하기
-        KakaoAddressRes.RoadAddress roadAddress = kakaoPlaceUtils.getRoadAddress(dto.getLatitude(), dto.getLongitude());
-        if (roadAddress == null) {
+        KakaoAddressRes.Address address = kakaoPlaceUtils.getAddress(dto.getLatitude(), dto.getLongitude());
+        if (address == null) {
             throw new CustomException(INVALID_PLACE_REQUEST);
         }
-        String place = roadAddress.getAddress_name();
+        String place = address.getAddress_name();
 
         // 시작 시간 구하기
         LocalDateTime startTime = LocalDateTime.now(ZoneId.of(Time.SEOUL.getText()));
@@ -178,8 +178,8 @@ public class PloggingServiceImpl implements PloggingService {
             }
         }
 
-        KakaoAddressRes.RoadAddress roadAddress = kakaoPlaceUtils.getRoadAddress(dto.getLatitude(), dto.getLongitude());
-        if (roadAddress == null) {
+        KakaoAddressRes.Address address = kakaoPlaceUtils.getAddress(dto.getLatitude(), dto.getLongitude());
+        if (address == null) {
             throw new CustomException(INVALID_PLACE_REQUEST);
         }
         
@@ -187,7 +187,7 @@ public class PloggingServiceImpl implements PloggingService {
         CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
 
         SidoGugunCodeRes sidoGugunCodeRes = circuitBreaker.run(
-                () -> sidoGugunFeignClient.findSidoGugunCode(roadAddress.getRegion_1depth_name(), roadAddress.getRegion_2depth_name())
+                () -> sidoGugunFeignClient.findSidoGugunCode(address.getRegion_1depth_name(), address.getRegion_2depth_name())
                         .getResultBody(), // 통신하는 서비스
                 throwable -> null // 에러 발생시 null 반환
         );
@@ -196,7 +196,7 @@ public class PloggingServiceImpl implements PloggingService {
             throw new CustomException(INVALID_PLACE_REQUEST);
         }
         
-        PloggingHelp ploggingHelp = HelpPloggingDto.toEntity(dto, sidoGugunCodeRes.getGugunCode(), roadAddress.getAddress_name(), imageUrl);
+        PloggingHelp ploggingHelp = HelpPloggingDto.toEntity(dto, sidoGugunCodeRes.getGugunCode(), address.getAddress_name(), imageUrl);
         return ploggingHelpRepository.save(ploggingHelp).getId();
     }
     
