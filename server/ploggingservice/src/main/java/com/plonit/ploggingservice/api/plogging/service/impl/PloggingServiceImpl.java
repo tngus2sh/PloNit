@@ -1,6 +1,8 @@
 package com.plonit.ploggingservice.api.plogging.service.impl;
 
+import com.plonit.ploggingservice.api.plogging.controller.CrewpingFeignClient;
 import com.plonit.ploggingservice.api.plogging.controller.SidoGugunFeignClient;
+import com.plonit.ploggingservice.api.plogging.controller.request.CrewpingRecordReq;
 import com.plonit.ploggingservice.api.plogging.controller.response.*;
 import com.plonit.ploggingservice.api.plogging.service.PloggingService;
 import com.plonit.ploggingservice.api.plogging.service.dto.EndPloggingDto;
@@ -50,6 +52,7 @@ import static com.plonit.ploggingservice.common.exception.ErrorCode.*;
 public class PloggingServiceImpl implements PloggingService {
     
     private final SidoGugunFeignClient sidoGugunFeignClient;
+    private final CrewpingFeignClient crewpingFeignClient;
     private final CircuitBreakerFactory circuitBreakerFactory;
     private final KakaoPlaceUtils kakaoPlaceUtils;
     private final AwsS3Uploader awsS3Uploader;
@@ -125,7 +128,25 @@ public class PloggingServiceImpl implements PloggingService {
         latLongRepository.saveAll(latLongs);
 
         /* 크루핑시에 크루핑 테이블에 내용 저장 */
-
+        if (plogging.getType().equals(Type.CREWPING)) {
+            CrewpingRecordReq crewpingRecordReq = CrewpingRecordReq.builder()
+                    .startDate(plogging.getStartTime())
+                    .endDate(endTime)
+                    .place(plogging.getPlace())
+                    .activeTime(totalTime)
+                    .build();
+            CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
+    
+            Long crewpingId = circuitBreaker.run(
+                    () -> crewpingFeignClient.saveCrewpingRecord(crewpingRecordReq)
+                            .getResultBody(),
+                    throwable -> null // 에러 발생시 null 반환
+            );
+    
+            if (crewpingId == null) {
+                throw new CustomException(INVALID_CREWPINGID_REQUEST);
+            }
+        }
 
         /* 랭킹*/
         // 기존에 존재하는 랭킹 파악하기 -> 없다면 새로운 랭킹 생성, 랭킹 있다면 값 업데이트
