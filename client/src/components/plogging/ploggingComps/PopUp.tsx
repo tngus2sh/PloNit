@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
 import * as camera from "store/camera-slice";
 
+import { saveHelp } from "api/lib/plogging";
+
 interface IPopUP {
   CameraDivHeight: number;
   handleImageCapture: () => void;
@@ -28,6 +30,10 @@ const PopUp: React.FC<IPopUP> = ({
   const context = useSelector<rootState, string>((state) => {
     return state.camera.helpContext;
   });
+  const accessToken = useSelector<rootState, string>((state) => {
+    return state.user.accessToken;
+  });
+
   const { longitude, latitude } = useGPS();
   const { compressImage } = useImageCompress();
 
@@ -137,8 +143,12 @@ const PopUp: React.FC<IPopUP> = ({
           backgroundColor: "#2cd261",
         }}
         onClick={() => {
-          async function saveHelpWithImage() {
-            if (value) {
+          const payloadValue = value;
+          const payloadContext = context;
+          dispatch(camera.clear());
+
+          async function saveHelpRequest() {
+            if (payloadValue) {
               const blob = await fetch(value).then((response) => {
                 return response.blob();
               });
@@ -147,21 +157,38 @@ const PopUp: React.FC<IPopUP> = ({
                   type: "image/jpeg",
                 });
                 const compressedImage = await compressImage(jpgFile);
-                // axios 요청
-                console.log(compressedImage);
-                dispatch(camera.clear());
-                setShow(false);
+                saveHelp({
+                  accessToken: accessToken,
+                  latitude: latitude,
+                  longitude: longitude,
+                  image: compressedImage,
+                  context: payloadContext,
+                  success: (response) => {
+                    console.log(response);
+                  },
+                  fail: (error) => {
+                    console.error(error);
+                  },
+                });
               }
+            } else {
+              saveHelp({
+                accessToken: accessToken,
+                latitude: latitude,
+                longitude: longitude,
+                context: payloadContext,
+                success: (response) => {
+                  console.log(response);
+                },
+                fail: (error) => {
+                  console.error(error);
+                },
+              });
             }
           }
 
-          if (value) {
-            saveHelpWithImage();
-            // console.log("longitude", longitude);
-            // console.log("latitude", latitude);
-          } else {
-            console.log("no - image");
-          }
+          setShow(false);
+          saveHelpRequest();
         }}
       />
     </div>

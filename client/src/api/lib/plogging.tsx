@@ -125,7 +125,7 @@ const saveHelp = ({
   accessToken: string;
   latitude: number;
   longitude: number;
-  image: File;
+  image?: File;
   context: string;
   success: (response: AxiosResponse<any, any>) => void | undefined;
   fail: (error: any) => void | undefined;
@@ -133,7 +133,9 @@ const saveHelp = ({
   const formData = new FormData();
   formData.append("latitude", `${latitude}`);
   formData.append("longitude", `${longitude}`);
-  formData.append("image", image);
+  if (image) {
+    formData.append("image", image);
+  }
   formData.append("context", context);
 
   const api = ploggingApiForm;

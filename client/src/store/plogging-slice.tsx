@@ -22,7 +22,7 @@ const initialState = {
   volTakePicture: false as boolean,
   isVolTakePicture: false as boolean,
   isVolEnd: false as boolean,
-  isLoading: false as boolean,
+  isLoading: 0 as number,
   kg: 65 as number,
 };
 
@@ -97,8 +97,8 @@ const ploggingSlice = createSlice({
     setIsVolEnd: (state, action: PayloadAction<boolean>) => {
       state.isVolEnd = action.payload;
     },
-    setIsLoading: (state, action: PayloadAction<boolean>) => {
-      state.isLoading = action.payload;
+    handleIsLoading: (state, action: PayloadAction<number>) => {
+      state.isLoading += action.payload;
     },
     setKg: (state, action: PayloadAction<number>) => {
       state.kg = action.payload;
@@ -121,7 +121,7 @@ export const {
   setVolTakePicture,
   setIsVolTakePicture,
   setIsVolEnd,
-  setIsLoading,
+  handleIsLoading,
   setKg,
 } = ploggingSlice.actions;
 export default ploggingSlice.reducer;

@@ -36,7 +36,6 @@ const PloggingImagePage = () => {
   function handleUploadImage(image: string) {
     setUploadImage(image);
   }
-  const [compressedImage, setCompressedImage] = useState<File | null>(null);
   const { compressImage } = useImageCompress();
 
   useEffect(() => {
@@ -59,12 +58,11 @@ const PloggingImagePage = () => {
 
       const blob = await fetch(uploadImage).then((response) => response.blob());
       if (blob) {
-        const jpgFile = new File([blob], "iamge.jpg", { type: "image/jpeg" });
+        const jpgFile = new File([blob], "image.jpg", { type: "image/jpeg" });
         console.log("before compress", jpgFile.size / (1024 * 1024));
         const compressedImage = await compressImage(jpgFile);
 
         if (compressedImage) {
-          setCompressedImage(compressedImage);
           console.log("after compress", compressedImage.size / (1024 * 1024));
 
           savePloggingImage({
