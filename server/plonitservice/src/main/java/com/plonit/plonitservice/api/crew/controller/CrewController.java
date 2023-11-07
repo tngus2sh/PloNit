@@ -1,5 +1,6 @@
 package com.plonit.plonitservice.api.crew.controller;
 
+import com.plonit.plonitservice.api.crew.controller.request.ApproveCrewReq;
 import com.plonit.plonitservice.api.crew.controller.request.SaveCrewReq;
 import com.plonit.plonitservice.api.crew.controller.response.FindCrewRes;
 import com.plonit.plonitservice.api.crew.controller.response.FindCrewsRes;
@@ -83,4 +84,60 @@ public class CrewController {
         log.info(logCurrent(getClassName(), getMethodName(), END));
         return CustomApiResponse.ok(findCrewRes, "크루 상세 조회에 성공했습니다.");
     }
+
+    @Operation(summary = "크루원 조회(크루원)", description = "크루원을 조회한다.")
+    @GetMapping ("/member/{crew-id}")
+    public CustomApiResponse<Object> findCrewMember(@PathVariable("crew-id") long crewId, HttpServletRequest request) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        // todo : 크루원 조회(크루원)
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+        return CustomApiResponse.ok("", "크루원 조회에 성공했습니다.");
+    }
+
+    @Operation(summary = "크루원 조회(크루장)", description = "크루원을 조회한다.")
+    @GetMapping ("/master-member/{crew-id}")
+    public CustomApiResponse<Object> findCrewMasterMember(@PathVariable("crew-id") long crewId, HttpServletRequest request) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        // todo : 크루원 조회(크루장)
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+        return CustomApiResponse.ok("", "크루원 조회에 성공했습니다.");
+    }
+
+    @Operation(summary = "크루 가입 요청", description = "크루 가입을 요청한다.")
+    @PostMapping ("/join/{crew-id}")
+    public CustomApiResponse<Object> joinCrewMember(@PathVariable("crew-id") long crewId, HttpServletRequest request) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        // todo : 크루 가입 요청
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+        return CustomApiResponse.ok("", "크루 가입 요청에 성공했습니다.");
+    }
+
+    @Operation(summary = "크루 가입 대기 조회", description = "크루 가입 대기 멤버를 조회한다.")
+    @GetMapping ("/join/{crew-id}")
+    public CustomApiResponse<Object> findWaitingCrewMember(@PathVariable("crew-id") long crewId, HttpServletRequest request) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        // todo : 크루 가입 대기 조회
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+        return CustomApiResponse.ok("", "크루 가입 대기 조회에 성공했습니다.");
+    }
+
+    @Operation(summary = "크루 가입 승인", description = "크루 가입을 승인한다.")
+    @PostMapping ("/approve")
+    public CustomApiResponse<Object> approveCrewMember(@Validated @RequestBody ApproveCrewReq approveCrewReq, HttpServletRequest request) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        // todo : 크루 가입 승인
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+        return CustomApiResponse.ok("", "크루 가입 승인에 성공했습니다.");
+    }
+
 }

@@ -57,12 +57,12 @@ public class FeedController {
     }
 
     @Operation(summary = "피드 조회", description = "피드를 조회한다.")
-    @GetMapping
-    public CustomApiResponse<Object> findFeeds(HttpServletRequest request) {
+    @GetMapping("/{crew-id}")
+    public CustomApiResponse<Object> findFeeds(HttpServletRequest request, @PathVariable("crew-id") long crewId) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
 
         Long memberKey = RequestUtils.getMemberKey(request); // 내가 작성한 피드 인지 확인
-        List<FindFeedRes> findFeedRes = feedQueryService.findFeeds(memberKey);
+        List<FindFeedRes> findFeedRes = feedQueryService.findFeeds(memberKey, crewId);
 
         log.info(logCurrent(getClassName(), getMethodName(), END));
         return CustomApiResponse.ok(findFeedRes, "피드 조회에 성공했습니다.");
