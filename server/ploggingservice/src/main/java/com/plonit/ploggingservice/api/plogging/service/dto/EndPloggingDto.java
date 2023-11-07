@@ -3,17 +3,22 @@ package com.plonit.ploggingservice.api.plogging.service.dto;
 import com.plonit.ploggingservice.api.plogging.controller.request.EndPloggingReq;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 
 @Data
 @RequiredArgsConstructor
+@Getter
+@Builder
 public class EndPloggingDto {
     
     private Long memberKey;
     
     private Long ploggingId;
+
+    private Long crewpingId;
 
     private Coordinate[] coordinates;
 
@@ -23,15 +28,7 @@ public class EndPloggingDto {
     
     private String review;
 
-    @Builder
-    public EndPloggingDto(Long memberKey, Long ploggingId, Coordinate[] coordinates, Double distance, Double calorie, String review) {
-        this.memberKey = memberKey;
-        this.ploggingId = ploggingId;
-        this.coordinates = coordinates;
-        this.distance = distance;
-        this.calorie = calorie;
-        this.review = review;
-    }
+    private Integer people;
 
     @Data
     @RequiredArgsConstructor
@@ -57,10 +54,12 @@ public class EndPloggingDto {
         return EndPloggingDto.builder()
                 .memberKey(memberKey)
                 .ploggingId(request.getPloggingId())
+                .crewpingId(request.getCrewpingId())
                 .coordinates(coordinates)
                 .distance(request.getDistance())
                 .calorie(request.getCalorie())
                 .review(request.getReview())
+                .people(request.getPeople())
                 .build();
     }
     

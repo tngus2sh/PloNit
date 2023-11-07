@@ -57,9 +57,12 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
 
-    //querydsl
+    // querydsl
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
+
+    // redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
     // actuator
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
