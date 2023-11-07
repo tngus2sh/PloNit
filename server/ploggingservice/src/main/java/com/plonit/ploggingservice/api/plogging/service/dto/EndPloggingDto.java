@@ -1,15 +1,13 @@
 package com.plonit.ploggingservice.api.plogging.service.dto;
 
 import com.plonit.ploggingservice.api.plogging.controller.request.EndPloggingReq;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.util.Arrays;
 
 @Data
-@RequiredArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Getter
 @Builder
 public class EndPloggingDto {

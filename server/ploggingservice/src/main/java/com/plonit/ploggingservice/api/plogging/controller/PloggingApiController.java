@@ -127,7 +127,7 @@ public class PloggingApiController {
     @Operation(summary = "플로깅 도움 요청 저장", description = "플로깅 도움 요청을 보낼 때 해당 정보들을 저장한다.")
     @PostMapping("/help")
     public CustomApiResponse<Long> savePloggingHelp(
-            @Validated @RequestBody HelpPloggingReq request,
+            @Validated @ModelAttribute HelpPloggingReq request,
             HttpServletRequest servletRequest,
             Errors errors
             ) {
