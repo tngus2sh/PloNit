@@ -32,6 +32,8 @@ public class PloggingLogRes {
 
     private Coordinate[] coordinates;
     
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @AllArgsConstructor
     public static class Coordinate {
         private Double latitude;
 
