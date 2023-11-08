@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { act } from "react-dom/test-utils";
 
 const initialState = {
   isLogin: false,
@@ -24,9 +25,18 @@ const userSlice = createSlice({
       state.isLogin = true;
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload.refreshToken;
+      state.profileImg = action.payload.profileImg;
+      state.nickname = action.payload.nickname;
     },
     logout: (state) => {
       state.isLogin = false;
+    },
+    addInfoHandler: (state, action) => {
+      state.name = action.payload.name;
+      state.nickname = action.payload.nickname;
+      state.gender = action.payload.gender;
+      state.birthday = action.payload.birth;
+      state.region = action.payload.region;
     },
   },
 });

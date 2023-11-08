@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { userActions } from "store/user-slice";
 import Input from "components/common/Input";
 import CommonButton from "components/common/CommonButton";
 import RegionModal from "components/common/RegionModal";
@@ -9,6 +10,7 @@ import { addInfo } from "api/lib/members";
 import style from "styles/css/AddInfoPage.module.css";
 
 const AddInfoPage = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const accessToken = useSelector((state: any) => state.user.accessToken);
   const [isSignupName, setSignupName] = useState("");
@@ -85,6 +87,7 @@ const AddInfoPage = () => {
       accessToken,
       data,
       (res) => {
+        dispatch(userActions.addInfoHandler(data));
         console.log("추가정보 입력 성공");
         navigate("/");
       },
