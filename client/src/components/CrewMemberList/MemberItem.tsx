@@ -1,12 +1,13 @@
 import React from "react";
 import { Icon } from "@iconify/react";
 import style from "styles/css/CrewMemberListPage.module.css";
+import { MemberInterface } from "interface/crewInterface";
 
-const MemberItem = () => {
+const MemberItem = ({ member }: { member: MemberInterface }) => {
   return (
     <div className={style.Member_Item}>
-      <img src="/metamong.png" alt="Crew Image" />
-      <div className={style.nickname}>메타몽</div>
+      <img src={member.profileImage} alt="Crew Image" />
+      <div className={style.nickname}>{member.nickname}</div>
       <Icon
         icon="bi:x"
         style={{

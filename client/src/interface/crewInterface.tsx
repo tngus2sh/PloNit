@@ -56,6 +56,12 @@ export interface CrewAllowInterface {
   status?: boolean;
 }
 
+export interface MemberInterface {
+  crewMemberId: number;
+  profileImage: string;
+  nickname: string;
+}
+
 export interface MemberListProps {
   title: string;
   location?: string;
