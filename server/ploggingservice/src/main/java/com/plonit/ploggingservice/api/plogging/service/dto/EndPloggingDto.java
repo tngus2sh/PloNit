@@ -29,7 +29,7 @@ public class EndPloggingDto {
 
     private Integer people;
     
-    private List<Coordinate> coordinates = new ArrayList<>();
+    private List<Coordinate> coordinates;
 
     @Data
     @RequiredArgsConstructor
