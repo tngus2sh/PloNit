@@ -23,13 +23,13 @@ public class FindPloggingLogRes {
 
     private LocalDateTime endTime;
 
-    private LocalTime totalTime;
+    private Long totalTime;
 
     private Double distance;
 
     private Double calorie;
 
-    public FindPloggingLogRes(Long id, Type type, String place, LocalDateTime startTime, LocalDateTime endTime, LocalTime totalTime, Double distance, Double calorie) {
+    public FindPloggingLogRes(Long id, Type type, String place, LocalDateTime startTime, LocalDateTime endTime, Long totalTime, Double distance, Double calorie) {
         this.id = id;
         this.type = type;
         this.place = place;

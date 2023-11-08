@@ -25,7 +25,7 @@ public class PloggingLogRes {
     
     private LocalDateTime endTime;
     
-    private LocalTime totalTime;
+    private Long totalTime;
     
     private Double distance;
     
