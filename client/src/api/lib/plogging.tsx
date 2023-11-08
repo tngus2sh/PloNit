@@ -36,7 +36,7 @@ const savePlogging = ({
       .post(
         ``,
         JSON.stringify({
-          plogging_id: ploggingId,
+          ploggingId: ploggingId,
           distance: distance,
           calorie: calorie,
           review: review,
@@ -50,7 +50,7 @@ const savePlogging = ({
       .post(
         ``,
         JSON.stringify({
-          crewping_id: crewpingId,
+          crewpingId: crewpingId,
           distance: distance,
           calorie: calorie,
           review: review,
