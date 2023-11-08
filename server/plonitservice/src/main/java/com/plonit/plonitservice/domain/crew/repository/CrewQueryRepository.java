@@ -6,6 +6,7 @@ import com.plonit.plonitservice.api.crew.controller.response.FindCrewsRes;
 import com.plonit.plonitservice.domain.crew.Crew;
 import com.plonit.plonitservice.domain.crew.CrewMember;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,7 +60,7 @@ public class CrewQueryRepository {
                 .fetch();
     }
 
-    public Optional<FindCrewRes> findCrewWithCrewMember(Long crewId) {
+    public Optional<FindCrewRes> findCrewWithCrewMember(Long crewId, Long memberId) {
         return Optional.ofNullable(queryFactory
                 .select(Projections.constructor(FindCrewRes.class,
                         crew.id,
@@ -70,7 +71,12 @@ public class CrewQueryRepository {
                         crew.introduce,
                         crew.notice,
                         crewMember.member.profileImage.as("crewMasterProfileImage"),
-                        crewMember.member.nickname.as("crewMasterNickname")))
+                        crewMember.member.nickname.as("crewMasterNickname"),
+                        new CaseBuilder()
+                                .when(crewMember.member.id.eq(crewId))
+                                .then(true)
+                                .otherwise(false)
+                                .as("isCrewMaster")))
                 .from(crew)
                 .join(crewMember).on(crewMember.crew.eq(crew)).fetchJoin()
                 .where(crewMember.crew.id.eq(crewId), crewMember.isCrewMaster.isTrue())
