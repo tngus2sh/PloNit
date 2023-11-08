@@ -7,6 +7,7 @@ import style from "styles/css/PloggingPage/PopUp.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
 import * as camera from "store/camera-slice";
+import * as P from "store/plogging-slice";
 
 import { saveHelp } from "api/lib/plogging";
 
@@ -149,6 +150,7 @@ const PopUp: React.FC<IPopUP> = ({
 
           async function saveHelpRequest() {
             if (payloadValue) {
+              dispatch(P.handleIsLoading(1));
               const blob = await fetch(value).then((response) => {
                 return response.blob();
               });
@@ -165,6 +167,7 @@ const PopUp: React.FC<IPopUP> = ({
                   context: payloadContext,
                   success: (response) => {
                     console.log(response);
+                    dispatch(P.handleIsLoading(-1));
                   },
                   fail: (error) => {
                     console.error(error);

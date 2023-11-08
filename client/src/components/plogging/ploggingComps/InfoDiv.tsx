@@ -44,6 +44,7 @@ const IconBottom: React.FC<IIconBottom> = ({
         style={{
           backgroundImage: `url("${icon}")`,
           backgroundSize: backgroundSize,
+          transition: `all 200ms ease-in-out`,
         }}
         onClick={onClick}
       ></div>
@@ -81,6 +82,9 @@ const InfoDiv: React.FC<IInfoDiv> = ({
   const nowType = useSelector<rootState, ploggingType>((state) => {
     return state.plogging.ploggingType;
   });
+  const isLoading = useSelector<rootState, number>((state) => {
+    return state.plogging.isLoading;
+  });
 
   function helpBtnEvent() {
     dispatch(camera.setTarget("help"));
@@ -88,6 +92,24 @@ const InfoDiv: React.FC<IInfoDiv> = ({
     setShow(true);
   }
   function stopBtnEvent() {
+    if (isLoading > 0) {
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top",
+        showConfirmButton: false,
+        timer: 2500,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseover = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: "info",
+        title: "이미지 전송 중입니다...",
+      });
+      return;
+    }
     if (nowType !== "VOL") {
       Swal.fire({
         icon: "question",
@@ -163,7 +185,11 @@ const InfoDiv: React.FC<IInfoDiv> = ({
           }}
         />
         <IconBottom
-          icon="/images/PloggingPage/stop-green.svg"
+          icon={
+            isLoading > 0
+              ? "/images/PloggingPage/stop-gray.svg"
+              : "/images/PloggingPage/stop-green.svg"
+          }
           backgroundSize="contain"
           onClick={stopBtnEvent}
         />

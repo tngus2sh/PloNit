@@ -86,6 +86,9 @@ const BeforeStart = () => {
   const accessToken = useSelector<rootState, string>((state) => {
     return state.user.accessToken;
   });
+  const weight = useSelector<rootState, number>((state) => {
+    return state.user.weight;
+  });
   const { latitude, longitude } = useGPS(); // 시작 시 GPS 정보 전달
   const [show, setShow] = useState<boolean>(false);
   const [preventShow, setPreventShow] = useState<boolean>(false);
@@ -94,6 +97,9 @@ const BeforeStart = () => {
   async function onClick1() {
     dispatch(P.clear());
     dispatch(P.setPloggingType("IND"));
+    if (weight > 0) {
+      dispatch(P.setKg(weight));
+    }
     startPlogging({
       accessToken: accessToken,
       type: "IND",
@@ -114,6 +120,9 @@ const BeforeStart = () => {
   async function onClick2() {
     dispatch(P.clear());
     dispatch(P.setPloggingType("VOL"));
+    if (weight > 0) {
+      dispatch(P.setKg(weight));
+    }
     startPlogging({
       accessToken: accessToken,
       type: "VOL",
