@@ -30,13 +30,14 @@ public class FeedQueryRepository {
     public FeedQueryRepository(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
-    public List<FindFeedRes> findFeedsWithPictureAndComment(Long memberKey) {
+    public List<FindFeedRes> findFeedsWithPictureAndComment(Long memberKey, Long crewId) {
         // Feed 기본 정보와 연관된 Member 상세 정보를 조회
         List<Feed> feeds = queryFactory
                 .selectFrom(feed)
+                .join(feed.crew, crew)
                 .join(feed.member, member).fetchJoin()
                 .orderBy(feed.createdDate.asc())
-                .where(feed.isDelete.eq(false))
+                .where(feed.isDelete.eq(false), feed.crew.id.eq(crewId))
                 .fetch();
 
         // 각 Feed ID를 기준으로 FeedPicture를 조회

@@ -56,4 +56,14 @@ public class Crewping extends TimeBaseEntity {
     @ColumnDefault("'ACTIVE'")
     @Enumerated(EnumType.STRING)
     private Status status;
+
+
+    public void updateCurrentPeople(boolean flag) {
+        if(flag) {
+            this.cntPeople++;
+        }
+        else {
+            this.cntPeople--;
+        }
+    }
 }
