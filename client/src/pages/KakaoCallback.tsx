@@ -21,12 +21,14 @@ const KakaoCallback = () => {
             console.log("로그인 api 성공");
             console.log(res);
             console.log(res.data);
-            const tokens = {
+            const data = {
               accessToken: res.headers.accesstoken,
               refreshToken: res.headers.refreshtoken,
+              profileImg: res.data.resultBody.profileImage,
+              nickname: res.data.resultBody.nickname,
             };
-            console.log(tokens);
-            dispatch(userActions.loginHandler(tokens));
+            console.log(data);
+            dispatch(userActions.loginHandler(data));
             console.log(res);
             console.log(res.data);
             if (res.data.resultBody.registeredMember) {
