@@ -8,9 +8,14 @@ import { RegionInterface } from "interface/regionInterface";
 interface RegionModalProps {
   onClose: () => void;
   setSignupRegion: any;
+  setRegionCode: any;
 }
 
-const RegionModal = ({ onClose, setSignupRegion }: RegionModalProps) => {
+const RegionModal = ({
+  onClose,
+  setSignupRegion,
+  setRegionCode,
+}: RegionModalProps) => {
   const accessToken = useSelector((state: any) => state.user.accessToken);
   const [sidoData, setsidoData] = useState<RegionInterface[]>([]);
   const [selectedSidoCode, setSelectedSidoCode] = useState<number | null>(null);
@@ -83,6 +88,7 @@ const RegionModal = ({ onClose, setSignupRegion }: RegionModalProps) => {
     setSignupRegion(
       `${selectedSidoName} ${selectedGugunName} ${item.dongName}`,
     );
+    setRegionCode(item.dongCode);
   };
 
   return (
