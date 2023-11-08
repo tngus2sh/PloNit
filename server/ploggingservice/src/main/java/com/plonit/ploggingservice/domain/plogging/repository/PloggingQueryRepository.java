@@ -52,7 +52,6 @@ public class PloggingQueryRepository {
                         plogging.distance,
                         plogging.calorie))
                 .from(plogging)
-                .leftJoin(latLong).on(latLong.plogging.id.eq(ploggingId))
                 .where(plogging.id.eq(ploggingId).and(plogging.memberKey.eq(memberKey)))
                 .fetchOne());
     }
