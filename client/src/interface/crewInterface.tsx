@@ -11,6 +11,7 @@ export interface CrewInterface {
   crewMasterProfileImage?: string;
   crewMasterNickname?: string;
   notice?: string;
+  isCrewMaster?: boolean;
 }
 
 export interface FeedInterface {
@@ -30,6 +31,7 @@ export interface CrewpingInterface {
   id?: number;
   name: string;
   crewpingImage?: string;
+  masterMemberId?: number;
   masterNickname?: string;
   masterImage?: string;
   place: string;
@@ -46,4 +48,10 @@ export interface CommentInterface {
   nickname?: string;
   profileImage?: string;
   content?: string;
+}
+
+export interface CrewAllowInterface {
+  crewId?: number;
+  commentId?: number;
+  status?: boolean;
 }
