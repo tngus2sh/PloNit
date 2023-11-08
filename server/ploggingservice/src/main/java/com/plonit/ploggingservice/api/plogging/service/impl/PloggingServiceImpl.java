@@ -193,7 +193,7 @@ public class PloggingServiceImpl implements PloggingService {
         String imageUrl = null;
         if (dto.getImage() != null) {
             try {
-                imageUrl = awsS3Uploader.uploadFile(dto.getImage(), "help/image");
+                imageUrl = awsS3Uploader.uploadFile(dto.getImage(), "plogging/help/image");
             } catch (IOException e) {
                 throw new CustomException(INVALID_FIELDS_REQUEST);
             }
@@ -233,7 +233,7 @@ public class PloggingServiceImpl implements PloggingService {
         String imageUrl = null;
         if (dto.getImage() != null) {
             try {
-                imageUrl = awsS3Uploader.uploadFile(dto.getImage(), "picture/image");
+                imageUrl = awsS3Uploader.uploadFile(dto.getImage(), "plogging/picture/image");
             } catch (IOException e) {
                 throw new CustomException(INVALID_FIELDS_REQUEST);
             }
