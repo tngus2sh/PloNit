@@ -38,6 +38,13 @@ const FeedCreatePage = () => {
   };
 
   const feedCreateHandler = () => {
+    if (isFeedImages.length < 1) {
+      alert("피드 이미지를 등록하세요");
+      return;
+    } else if (!isFeedIntroduce) {
+      alert("피드 내용을 입력하세요");
+      return;
+    }
     const formData = new FormData();
     formData.append("content", isFeedIntroduce);
     if (crewId) {
@@ -48,13 +55,7 @@ const FeedCreatePage = () => {
         formData.append("feedPictures", image);
       });
     }
-    if (isFeedImages.length < 1) {
-      alert("피드 이미지를 등록하세요");
-      return;
-    } else if (!isFeedIntroduce) {
-      alert("피드 내용을 입력하세요");
-      return;
-    }
+
     getFeedCreate(
       accessToken,
       formData,
