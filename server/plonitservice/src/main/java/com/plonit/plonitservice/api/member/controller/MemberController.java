@@ -3,6 +3,7 @@ package com.plonit.plonitservice.api.member.controller;
 import com.plonit.plonitservice.api.member.controller.request.UpdateMemberReq;
 import com.plonit.plonitservice.api.member.controller.response.FindMemberRes;
 import com.plonit.plonitservice.api.member.service.MemberService;
+import com.plonit.plonitservice.api.member.service.dto.UpdateMemberDto;
 import com.plonit.plonitservice.common.CustomApiResponse;
 import com.plonit.plonitservice.common.exception.CustomException;
 import com.plonit.plonitservice.common.util.RequestUtils;
@@ -44,7 +45,7 @@ public class MemberController {
         Long memberKey = RequestUtils.getMemberKey(request);
         log.info("memberKey : " + memberKey);
 
-        FindMemberRes findMemberRes = memberService.updateMember(memberKey, updateMemberReq);
+        FindMemberRes findMemberRes = memberService.updateMember(UpdateMemberDto.of(memberKey, updateMemberReq));
         log.info(logCurrent(getClassName(), getMethodName(), END));
         return CustomApiResponse.ok(findMemberRes);
     }

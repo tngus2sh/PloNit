@@ -14,6 +14,9 @@ import com.plonit.plonitservice.domain.crew.repository.CrewRepository;
 import com.plonit.plonitservice.domain.member.Member;
 import com.plonit.plonitservice.domain.member.repository.MemberQueryRepository;
 import com.plonit.plonitservice.domain.member.repository.MemberRepository;
+import com.plonit.plonitservice.domain.region.Dong;
+import com.plonit.plonitservice.domain.region.Gugun;
+import com.plonit.plonitservice.domain.region.repository.RegionQueryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,6 +39,7 @@ public class CrewServiceImpl implements CrewService {
     private final MemberQueryRepository memberQueryRepository;
     private final MemberRepository memberRepository;
     private final AwsS3Uploader awsS3Uploader;
+    private final RegionQueryRepository regionQueryRepository;
 
     @Override
     @Transactional // 크루 생성
@@ -52,7 +56,11 @@ public class CrewServiceImpl implements CrewService {
                 throw new CustomException(INVALID_FIELDS_REQUEST);
             }
         }
-        Crew crew = crewRepository.save(SaveCrewDto.toEntity(saveCrewDTO, crewImageUrl));
+
+        Gugun gugun = regionQueryRepository.findGugunFetchJoin(saveCrewDTO.getGugunCode())
+                .orElseThrow(() -> new CustomException(REGION_NOT_FOUND));
+
+        Crew crew = crewRepository.save(SaveCrewDto.toEntity(saveCrewDTO, crewImageUrl,gugun));
         CrewMember crewMember = CrewMember.toEntity(crew, member);
 
         crewMemberRepository.save(crewMember);
