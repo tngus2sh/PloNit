@@ -62,6 +62,11 @@ export interface MemberInterface {
   nickname: string;
 }
 
+export interface NoticeInterface {
+  crewId: number;
+  content: string;
+}
+
 export interface MemberListProps {
   title: string;
   location?: string;

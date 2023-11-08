@@ -8,15 +8,19 @@ const Notice = ({ crew }: { crew: CrewInterface }) => {
     <div className={style.notice_compo}>
       <div className={style.notice_title}>공지사항</div>
       <div className={style.notice_content}>
-        <div className={style.notice_upper}>
-          <img src="/metamong.png" alt="몽" />
-          <div className={style.nickname}>메타몽</div>
-          <div className={style.date}>10월 10일</div>
-        </div>
-        <div className={style.notice_down}>
-          <div className={style.imp}>중요</div>
-          <div>모두 즐거운 플로깅 되세요!</div>
-        </div>
+        {crew.notice ? (
+          <>
+            <div className={style.notice_upper}>
+              <img src={crew.crewMasterProfileImage} alt="프로필" />
+              <div className={style.nickname}>{crew.crewMasterNickname}</div>
+            </div>
+            <div className={style.notice_down}>
+              <div>{crew.notice}</div>
+            </div>
+          </>
+        ) : (
+          <div style={{ padding: "0.5rem" }}>등록된 공지사항이 없습니다.</div>
+        )}
       </div>
     </div>
   );

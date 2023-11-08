@@ -16,25 +16,13 @@
       margin-bottom: 0.5rem;
       align-items: center;
       img {
-        width: 2.5rem;
-        height: 2.5rem;
+        width: 2rem;
+        height: 2rem;
         border-radius: 50%;
       }
       .nickname {
         margin-left: 0.5rem;
-        font-size: 1.2rem;
-      }
-      .date {
-        margin-left: 0.5rem;
-        color: $darkgray;
-        font-size: 0.9rem;
-      }
-    }
-    .notice_down {
-      display: flex;
-      .imp {
-        color: $green;
-        margin-right: 0.5rem;
+        font-size: 1.1rem;
       }
     }
   }

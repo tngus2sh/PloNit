@@ -152,3 +152,22 @@ export async function getCrewAllow(
   api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
   await api.patch(`/approve`, data).then(success).catch(fail);
 }
+
+// 크루 가입 승인
+export async function getNotice(
+  accessToken: string,
+  data: Interfaces.NoticeInterface,
+  success: (
+    res: AxiosResponse<any, any>,
+  ) =>
+    | AxiosResponse<any, any>
+    | PromiseLike<AxiosResponse<any, any>>
+    | null
+    | undefined
+    | void,
+  fail: (err: any) => PromiseLike<never> | null | undefined | void,
+) {
+  const api = customApi("/plonit-service/v1/crew");
+  api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
+  await api.patch(`/notice`, data).then(success).catch(fail);
+}
