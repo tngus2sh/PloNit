@@ -3,9 +3,11 @@ package com.plonit.plonitservice.domain.crew.repository;
 import com.plonit.plonitservice.api.crew.controller.response.FindCrewRes;
 import com.plonit.plonitservice.api.crew.controller.response.CrewRankRes;
 import com.plonit.plonitservice.api.crew.controller.response.FindCrewsRes;
+import com.plonit.plonitservice.api.crew.controller.response.SearchCrewsRes;
 import com.plonit.plonitservice.domain.crew.Crew;
 import com.plonit.plonitservice.domain.crew.CrewMember;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
@@ -73,7 +75,7 @@ public class CrewQueryRepository {
                         crewMember.member.profileImage.as("crewMasterProfileImage"),
                         crewMember.member.nickname.as("crewMasterNickname"),
                         new CaseBuilder()
-                                .when(crewMember.member.id.eq(crewId))
+                                .when(crewMember.member.id.eq(memberId))
                                 .then(true)
                                 .otherwise(false)
                                 .as("isCrewMaster")))
@@ -82,4 +84,25 @@ public class CrewQueryRepository {
                 .where(crewMember.crew.id.eq(crewId), crewMember.isCrewMaster.isTrue())
                 .fetchOne());
     }
+
+    public List<SearchCrewsRes> SearchCrew(int type, String word){
+        return queryFactory
+                .select(constructor(SearchCrewsRes.class,
+                        crew.id,
+                        crew.name,
+                        crew.cntPeople,
+                        crew.crewImage,
+                        crew.region
+                ))
+                .from(crew)
+                .where(eqWord(type, word))
+                .orderBy(crew.createdDate.asc())
+                .fetch();
+    }
+    private BooleanExpression eqWord(int type, String word) {
+        if(type == 1) return crew.name.contains(word);
+        else if(type == 2) return crew.region.contains(word);
+        else return null;
+    }
+
 }
