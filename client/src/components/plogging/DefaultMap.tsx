@@ -9,7 +9,8 @@ import { naver } from "components/common/useNaver";
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
 import * as P from "store/plogging-slice";
-import { dummy_location, dummy_helps } from "./dummyData";
+
+import { getBins, getToilets } from "api/lib/items";
 
 const defaultZoom = 16;
 const neighbor_help_maxZoom = 12;
@@ -63,6 +64,10 @@ const DefaultMap: React.FC<IDefaultMap> = ({
   const toiletCluster = useRef<any>(null);
   const [showBottom, setShowBottom] = useState<boolean>(isBefore);
 
+  const accessToken = useSelector<rootState, string>((state) => {
+    return state.user.accessToken;
+  });
+
   const centerBtn_inactive = `<div class="${style.btn_white_margin_inc}" style="background-image:url('/images/PloggingPage/location-cross-black.svg')"></div>`;
   const centerBtn_active = `<div class="${style.btn_white_margin_inc}" style="background-image:url('/images/PloggingPage/location-cross-blue.svg')"></div>`;
   const binBtn_inactive = isBefore
@@ -85,10 +90,6 @@ const DefaultMap: React.FC<IDefaultMap> = ({
 
       getGPS
         .then((response) => {
-          // setBins(dummy_location);
-          // setToilets(dummy_location);
-          // setNeighbors(dummy_location);
-          // setHelps(dummy_helps);
           mapRef.current = null;
           const { latitude, longitude } = response.coords;
           const map = new naver.maps.Map("map", {
@@ -144,11 +145,11 @@ const DefaultMap: React.FC<IDefaultMap> = ({
             if (!isBefore) {
               arrowBtnIndcator_up.setMap(map);
               arrowBtnRef.current = arrowBtnIndcator_up;
-              binBtnIndicator_inactive.setMap(map);
-              toiletBtnIndicator_inactive.setMap(map);
-              binBtnRef.current = binBtnIndicator_inactive;
-              toiletBtnRef.current = toiletBtnIndicator_inactive;
             }
+            binBtnIndicator_inactive.setMap(map);
+            toiletBtnIndicator_inactive.setMap(map);
+            binBtnRef.current = binBtnIndicator_inactive;
+            toiletBtnRef.current = toiletBtnIndicator_inactive;
 
             naver.maps.Event.addListener(map, "dragend", () => {
               centerBtnIndicator_active.setMap(null);
@@ -281,6 +282,34 @@ const DefaultMap: React.FC<IDefaultMap> = ({
               dispatch(P.setIsStart(false));
             }
           }, popupTime * 1000);
+
+          return { latitude: latitude, longitude: longitude };
+        })
+        .then((response) => {
+          const { latitude, longitude } = response;
+          getBins({
+            accessToken: accessToken,
+            latitude: latitude,
+            longitude: longitude,
+            success: (response) => {
+              console.log(response.data);
+            },
+            fail: (error) => {
+              console.error(error);
+            },
+          });
+
+          getToilets({
+            accessToken: accessToken,
+            latitude: latitude,
+            longitude: longitude,
+            success: (response) => {
+              console.log(response.data);
+            },
+            fail: (error) => {
+              console.error(error);
+            },
+          });
         })
         .catch((error) => {
           console.error(error);
