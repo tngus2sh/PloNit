@@ -1,7 +1,9 @@
 package com.plonit.plonitservice.api.crew.controller;
 
 import com.plonit.plonitservice.api.crew.controller.request.ApproveCrewReq;
+import com.plonit.plonitservice.api.crew.controller.request.SaveCrewNoticeReq;
 import com.plonit.plonitservice.api.crew.controller.request.SaveCrewReq;
+import com.plonit.plonitservice.api.crew.controller.request.UpdateCrewNoticeReq;
 import com.plonit.plonitservice.api.crew.controller.response.*;
 import com.plonit.plonitservice.api.crew.service.CrewQueryService;
 import com.plonit.plonitservice.api.crew.service.CrewService;
@@ -142,6 +144,41 @@ public class CrewController {
 
         log.info(logCurrent(getClassName(), getMethodName(), END));
         return CustomApiResponse.ok("", "크루 가입 승인/거절에 성공했습니다.");
+    }
+
+    @Operation(summary = "크루 공지사항 등록", description = "크루 공지사항을 등록한다.")
+    @PostMapping ("/notice")
+    public CustomApiResponse<Object> saveCrewNotice(@Validated @RequestBody SaveCrewNoticeReq saveCrewNoticeReq) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        // todo : 크루 공지사항 등록
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+        return CustomApiResponse.ok("", "크루 공지사항 등록에 성공했습니다.");
+    }
+
+    @Operation(summary = "크루 공지사항 수정", description = "크루 공지사항을 수정한다.")
+    @PatchMapping ("/notice")
+    public CustomApiResponse<Object> updateCrewNotice(@Validated @RequestBody UpdateCrewNoticeReq updateCrewNoticeReq) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        // todo : 크루 공지사항 수정
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+        return CustomApiResponse.ok("", "크루 공지사항 수정에 성공했습니다.");
+    }
+
+    @Operation(summary = "크루 검색", description = "크루를 검색한다.")
+    @GetMapping ("/search/{word}")
+    public CustomApiResponse<Object> searchCrew(
+            @PathVariable("word") String word,
+            @RequestParam(name = "type", required = false, defaultValue = "0") int type) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        // todo : 크루 검색
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+        return CustomApiResponse.ok("", "크루 검색에 성공했습니다.");
     }
 
 }
