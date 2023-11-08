@@ -10,7 +10,7 @@ const CrewCommunityInfo = ({ crew }: { crew: CrewInterface }) => {
     navigate(`/crew/community/detail/${crew.id}`);
   };
   const handleGoMemberList = () => {
-    navigate("/crew/member");
+    navigate(`/crew/member/${crew.id}`);
   };
   const crewImageStyle = {
     backgroundImage: `url("${crew.crewImage}")`,
