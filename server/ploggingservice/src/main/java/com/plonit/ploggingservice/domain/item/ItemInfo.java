@@ -1,4 +1,4 @@
-package com.plonit.ploggingservice.domain.plogging;
+package com.plonit.ploggingservice.domain.item;
 
 import lombok.Builder;
 import lombok.Getter;
