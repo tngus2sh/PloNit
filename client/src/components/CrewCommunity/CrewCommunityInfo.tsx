@@ -4,13 +4,22 @@ import { Icon } from "@iconify/react";
 import style from "styles/css/CrewCommunityPage/CrewCommunityInfo.module.css";
 import { CrewInterface } from "interface/crewInterface";
 
-const CrewCommunityInfo = ({ crew }: { crew: CrewInterface }) => {
+const CrewCommunityInfo = ({
+  crew,
+  master,
+}: {
+  crew: CrewInterface;
+  master: boolean;
+}) => {
   const navigate = useNavigate();
   const handleGoCommunityDetail = () => {
     navigate(`/crew/community/detail/${crew.id}`);
   };
   const handleGoMemberList = () => {
     navigate(`/crew/member/${crew.id}`);
+  };
+  const handleGoApprovalList = () => {
+    navigate(`/crew/community/approval/${crew.id}`);
   };
   const crewImageStyle = {
     backgroundImage: `url("${crew.crewImage}")`,
@@ -40,6 +49,11 @@ const CrewCommunityInfo = ({ crew }: { crew: CrewInterface }) => {
             초대
             <Icon icon="bi:paperclip" />
           </div>
+          {master && (
+            <div className={style.allow} onClick={handleGoApprovalList}>
+              가입 대기
+            </div>
+          )}
         </div>
       </div>
     </div>

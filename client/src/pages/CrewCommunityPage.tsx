@@ -88,12 +88,15 @@ const CrewCommunityPage = () => {
         }}
         className={style.back_Icon}
       />
-      <CrewCommunityInfo crew={isCrewDetail} />
+      <CrewCommunityInfo
+        crew={isCrewDetail}
+        master={isCrewDetail.isCrewMaster || false}
+      />
       <div className={style.divide}></div>
       <Notice crew={isCrewDetail} />
       <div className={style.divide}></div>
       <CommonButton
-        text="크루 생성"
+        text="크루 가입"
         styles={{
           backgroundColor: "#2cd261",
         }}
