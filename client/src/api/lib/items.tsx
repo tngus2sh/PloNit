@@ -1,7 +1,7 @@
 import { AxiosResponse } from "axios";
 import { customApi, customApiForm } from "./index";
 
-const itemApi = customApi(`/api/plogging-service/v1/item`);
+const itemApi = customApi(`/plogging-service/v1/item`);
 
 const getBins = ({
   accessToken,
