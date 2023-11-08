@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import DefaultMap from "../DefaultMap";
 import BottomUpModal from "../ploggingComps/BottomUpModal";
 import CommonButton from "components/common/CommonButton";
-import useGPS from "../functions/useGPS";
+import getGPS from "../functions/getGPS";
 
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
@@ -89,7 +89,6 @@ const BeforeStart = () => {
   const weight = useSelector<rootState, number>((state) => {
     return state.user.weight;
   });
-  const { latitude, longitude } = useGPS(); // 시작 시 GPS 정보 전달
   const [show, setShow] = useState<boolean>(false);
   const [preventShow, setPreventShow] = useState<boolean>(false);
 
@@ -100,20 +99,27 @@ const BeforeStart = () => {
     if (weight > 0) {
       dispatch(P.setKg(weight));
     }
-    startPlogging({
-      accessToken: accessToken,
-      type: "IND",
-      latitude: latitude,
-      longitude: longitude,
-      success: (response) => {
-        console.log("개인 플로깅 선택");
-        console.log(response);
-        dispatch(P.setPloggingId(response.data.resultBody));
-      },
-      fail: (error) => {
+    getGPS()
+      .then((response) => {
+        const { latitude, longitude } = response.coords;
+        startPlogging({
+          accessToken: accessToken,
+          type: "IND",
+          latitude: latitude,
+          longitude: longitude,
+          success: (response) => {
+            console.log("개인 플로깅 선택");
+            console.log(response);
+            dispatch(P.setPloggingId(response.data.resultBody));
+          },
+          fail: (error) => {
+            console.error(error);
+          },
+        });
+      })
+      .catch((error) => {
         console.error(error);
-      },
-    });
+      });
     // dispatch(P.clear());
     // dispatch(P.setPloggingType("IND"));
   }
@@ -123,19 +129,22 @@ const BeforeStart = () => {
     if (weight > 0) {
       dispatch(P.setKg(weight));
     }
-    startPlogging({
-      accessToken: accessToken,
-      type: "VOL",
-      latitude: latitude,
-      longitude: longitude,
-      success: (response) => {
-        console.log("봉사 플로깅 선택");
-        console.log(response);
-        dispatch(P.setPloggingId(response.data.resultBody));
-      },
-      fail: (error) => {
-        console.error(error);
-      },
+    getGPS().then((response) => {
+      const { longitude, latitude } = response.coords;
+      startPlogging({
+        accessToken: accessToken,
+        type: "VOL",
+        latitude: latitude,
+        longitude: longitude,
+        success: (response) => {
+          console.log("봉사 플로깅 선택");
+          console.log(response);
+          dispatch(P.setPloggingId(response.data.resultBody));
+        },
+        fail: (error) => {
+          console.error(error);
+        },
+      });
     });
     // dispatch(P.clear());
     // dispatch(P.setPloggingType("VOL"));

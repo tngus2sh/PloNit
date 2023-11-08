@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import style from "styles/css/App.module.css";
 import NavBar from "components/common/NavBar";
 import RouteComponent from "pages/lib/index";
-import useGPS from "components/plogging/functions/useGPS";
+import getGPS from "components/plogging/functions/getGPS";
 import { ploggingType } from "types/ploggingTypes";
 import Swal from "sweetalert2";
 
@@ -43,7 +43,8 @@ function App() {
   const volTakePicture = useSelector<rootState, boolean>((state) => {
     return state.plogging.volTakePicture;
   });
-  const { latitude, longitude, onSearch, setOnSearch } = useGPS();
+
+  const [onSearch, setOnSearch] = useState<boolean>(false);
 
   useEffect(() => {
     function handleResize() {
@@ -59,10 +60,17 @@ function App() {
 
   useEffect(() => {
     if (useTimer) {
-      dispatch(P.addPath({ latitude: latitude, longitude: longitude }));
-      interval.current = setInterval(() => {
-        dispatch(P.addTime());
-      }, 1000);
+      getGPS()
+        .then((response) => {
+          const { latitude, longitude } = response.coords;
+          dispatch(P.addPath({ latitude: latitude, longitude: longitude }));
+          interval.current = setInterval(() => {
+            dispatch(P.addTime());
+          }, 1000);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     } else {
       if (interval.current) {
         clearInterval(interval.current);
@@ -95,8 +103,16 @@ function App() {
   }, [minute]);
 
   useEffect(() => {
-    if (useTimer && !onSearch) {
-      dispatch(P.addPath({ latitude: latitude, longitude: longitude }));
+    if (useTimer && onSearch) {
+      getGPS()
+        .then((response) => {
+          const { latitude, longitude } = response.coords;
+          dispatch(P.addPath({ latitude: latitude, longitude: longitude }));
+          setOnSearch(false);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
   }, [onSearch]);
 
