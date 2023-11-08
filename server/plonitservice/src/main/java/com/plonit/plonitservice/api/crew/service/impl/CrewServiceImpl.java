@@ -57,10 +57,10 @@ public class CrewServiceImpl implements CrewService {
             }
         }
 
-        Gugun gugun = regionQueryRepository.findGugunFetchJoin(saveCrewDTO.getGugunCode())
+        Dong dong = regionQueryRepository.findDongFetchJoin(saveCrewDTO.getDongCode())
                 .orElseThrow(() -> new CustomException(REGION_NOT_FOUND));
 
-        Crew crew = crewRepository.save(SaveCrewDto.toEntity(saveCrewDTO, crewImageUrl,gugun));
+        Crew crew = crewRepository.save(SaveCrewDto.toEntity(saveCrewDTO, crewImageUrl, dong));
         CrewMember crewMember = CrewMember.toEntity(crew, member);
 
         crewMemberRepository.save(crewMember);
