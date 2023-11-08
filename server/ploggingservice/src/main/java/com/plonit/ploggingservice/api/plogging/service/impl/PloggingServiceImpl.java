@@ -120,6 +120,7 @@ public class PloggingServiceImpl implements PloggingService {
         // 위도 경도 값 넣기
         for (EndPloggingDto.Coordinate coord : dto.getCoordinates()) {
             latLongs.add(LatLong.builder()
+                            .plogging(plogging)
                             .latitude(coord.getLatitude())
                             .longitude(coord.getLongitude())
                     .build());
