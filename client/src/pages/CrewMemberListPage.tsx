@@ -1,11 +1,16 @@
 import React from "react";
 import { BackTopBar } from "components/common/TopBar";
-import MemberList from "components/CrewList/MemberList";
+import MemberItem from "components/CrewMemberList/MemberItem";
 const CrewMemberListPage = () => {
   return (
     <div>
       <BackTopBar text="멤버 목록 " />
-      <MemberList />
+      {/* {list.map((member, index) => (
+        <MemberItem key={index} />
+      ))} */}
+      <MemberItem />
+      <MemberItem />
+      <MemberItem />
     </div>
   );
 };
