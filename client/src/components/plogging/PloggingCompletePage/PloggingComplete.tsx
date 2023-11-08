@@ -73,7 +73,7 @@ const PloggingComplete = () => {
   const people = useSelector<rootState, number | null>((state) => {
     return state.plogging.people;
   });
-  const coordinate = useSelector<rootState, Coordinate[]>((state) => {
+  const coordinates = useSelector<rootState, Coordinate[]>((state) => {
     return state.plogging.paths;
   });
   const [context, setContext] = useState<string>("");
@@ -206,7 +206,7 @@ const PloggingComplete = () => {
                   calorie: calorie,
                   review: context,
                   people: people,
-                  coordinate: coordinate,
+                  coordinates: coordinates,
                   success: (response) => {
                     console.log(response);
                     dispatch(camera.clear());
@@ -224,7 +224,7 @@ const PloggingComplete = () => {
                   distance: distance,
                   calorie: calorie,
                   review: context,
-                  coordinate: coordinate,
+                  coordinates: coordinates,
                   success: (response) => {
                     console.log(response);
                     dispatch(camera.clear());
