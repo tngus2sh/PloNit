@@ -5,11 +5,9 @@ import com.plonit.ploggingservice.api.excel.service.dto.ExcelColumn;
 import com.plonit.ploggingservice.api.excel.service.dto.PloggingDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -19,6 +17,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,19 +25,26 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ExcelServiceImpl implements ExcelService {
 
+    @Value("${file.path.excel}")
+    private String excelFilePath;
+
     @Override
     public List<PloggingDto> findPloggins(Long ploggingId) {
         return null;
     }
 
     @Override
-    public Workbook makeExcel(List<PloggingDto> data) throws IOException {
-        System.out.println("들어온 dto!!: " + data.get(0));
-
+    public void makeExcel(List<PloggingDto> data) {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("봉사 플로깅");
 
-        System.out.println("excel 생성됨!");
+        CellStyle dataStyle = workbook.createCellStyle();
+        dataStyle.setAlignment(HorizontalAlignment.CENTER);
+
+        CellStyle headerStyle = workbook.createCellStyle();
+        headerStyle.setAlignment(HorizontalAlignment.CENTER);
+        headerStyle.setFillForegroundColor(IndexedColors.LIME.getIndex());
+        headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
         Cell cell = null;
         Row row = null;
@@ -49,6 +55,7 @@ public class ExcelServiceImpl implements ExcelService {
         row = sheet.createRow(0); // 행 생성
         for (int i = 0; i < excelHeaderList.size(); i++) {
             cell = row.createCell(i); // 열 생성
+            cell.setCellStyle(headerStyle); // cell에 style 지정
             cell.setCellValue(excelHeaderList.get(i)); // 열에 컬럼명을 넣어줌
         }
 
@@ -59,41 +66,68 @@ public class ExcelServiceImpl implements ExcelService {
             row = sheet.createRow(rowCount++);
 
             cell = row.createCell(0);
+            cell.setCellStyle(dataStyle);
             cell.setCellValue(plogging.getId1365());
 
             cell = row.createCell(1);
+            cell.setCellStyle(dataStyle);
             cell.setCellValue(plogging.getName());
 
             cell = row.createCell(2);
+            cell.setCellStyle(dataStyle);
             cell.setCellValue(plogging.getBirth());
 
             cell = row.createCell(3);
+            cell.setCellStyle(dataStyle);
             cell.setCellValue(plogging.getTime());
 
             cell = row.createCell(4);
+            cell.setCellStyle(dataStyle);
             cell.setCellValue(plogging.getDistance());
 
             cell = row.createCell(5);
+            cell.setCellStyle(dataStyle);
             cell.setCellValue(plogging.getStartImage());
 
             cell = row.createCell(6);
+            cell.setCellStyle(dataStyle);
             cell.setCellValue(plogging.getMiddleImage());
 
             cell = row.createCell(7);
+            cell.setCellStyle(dataStyle);
             cell.setCellValue(plogging.getEndImage());
         }
 
-//        File dir = new File("./ploggingservice/src/main/resources");
-//        String path = dir.getAbsolutePath();
-//        String path = new File("C:\\Users\\SSAFY\\Downloads").getAbsolutePath();
-        String path = "C:\\Users\\SSAFY\\Downloads\\";
-        String fileLocation = path.substring(0, path.length() - 1) + "test.xlsx";
+        for(int i = 0; i < excelHeaderList.size(); i++){
+            sheet.autoSizeColumn(i);
+            sheet.setColumnWidth(i, (sheet.getColumnWidth(i))+1024); // 너비 더 넓게
+        }
 
-        FileOutputStream fileOutputStream = new FileOutputStream(fileLocation);
-        workbook.write(fileOutputStream);
-        workbook.close();
+        saveExcel(workbook);
+    }
 
-        return workbook;
+    @Override
+    public void saveExcel(Workbook workbook) {
+        File folder = new File(excelFilePath);
+
+        if(folder != null && !folder.exists()) {
+            folder.mkdirs();
+        }
+
+        String originalFileName = "봉사 플로깅.xlsx";
+        String saveFileName = UUID.randomUUID().toString() + ".xlsx";
+
+        String fileLocation = excelFilePath + "\\" + saveFileName;
+
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(fileLocation);
+            workbook.write(fileOutputStream);
+            workbook.close();
+            fileOutputStream.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // 엑셀 헤더명을 반환해 주는 메소드

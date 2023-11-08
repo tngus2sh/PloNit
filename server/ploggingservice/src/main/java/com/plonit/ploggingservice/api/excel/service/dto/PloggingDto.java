@@ -23,10 +23,10 @@ public class PloggingDto {
     @ExcelColumn(headerName = "생년월일")
     private String birth;
 
-    @ExcelColumn(headerName = "플로깅 총 시간")
+    @ExcelColumn(headerName = "플로깅 시간")
     private Long time;
 
-    @ExcelColumn(headerName = "플로깅 총 거리")
+    @ExcelColumn(headerName = "플로깅 거리")
     private Double distance;
 
     @ExcelColumn(headerName = "플로깅 시작 사진")

@@ -10,5 +10,6 @@ import java.util.List;
 @Transactional
 public interface ExcelService {
     List<PloggingDto> findPloggins(Long ploggingId);
-    Workbook makeExcel(List<PloggingDto> data) throws IOException;
+    void makeExcel(List<PloggingDto> data);
+    void saveExcel(Workbook workbook);
 }
