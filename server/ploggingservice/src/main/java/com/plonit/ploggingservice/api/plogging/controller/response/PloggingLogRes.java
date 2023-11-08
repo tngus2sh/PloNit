@@ -12,7 +12,6 @@ import java.util.List;
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@RequiredArgsConstructor
 public class PloggingLogRes {
     
     private Long id;
