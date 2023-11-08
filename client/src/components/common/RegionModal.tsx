@@ -36,7 +36,6 @@ const RegionModal = ({
       accessToken,
       (res) => {
         console.log("시도 API 연결 성공");
-        console.log(res);
         console.log(res.data.resultBody);
         setsidoData(res.data.resultBody);
       },
@@ -55,7 +54,6 @@ const RegionModal = ({
       item.sidoCode,
       (res) => {
         console.log("구군 API 연결 성공");
-        console.log(res);
         console.log(res.data.resultBody);
         setgugunData(res.data.resultBody);
       },
@@ -72,7 +70,6 @@ const RegionModal = ({
       item.gugunCode,
       (res) => {
         console.log("동 API 연결 성공");
-        console.log(res);
         console.log(res.data.resultBody);
         setdongData(res.data.resultBody);
       },
