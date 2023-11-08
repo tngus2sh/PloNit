@@ -32,14 +32,14 @@ const CrewCreatePage = () => {
     if (!isCrewName) {
       alert("크루 이름을 입력하세요");
       return;
-    } else if (!isCrewIntroduce) {
-      alert("크루 소개를 입력하세요");
-      return;
     } else if (!isCrewImage) {
       alert("크루 이미지를 등록해주세요");
       return;
     } else if (!isCrewRegion) {
       alert("활동 지역을 입력하세요");
+      return;
+    } else if (!isCrewIntroduce) {
+      alert("크루 소개를 입력하세요");
       return;
     }
     const formData = new FormData();
