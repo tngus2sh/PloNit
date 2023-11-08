@@ -18,5 +18,4 @@ public interface FeedRepository extends JpaRepository<Feed, Long> {
     List<Feed> findFeedWithMemberByFetch();
 
     Optional<Feed> findByIdAndMember_Id(Long id, Long memberKey);
-
 }

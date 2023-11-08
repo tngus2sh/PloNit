@@ -50,13 +50,20 @@ public class Crewping extends TimeBaseEntity {
     @Column(length = 500)
     private String introduce;
 
-    @Column(length = 500)
-    private String notice;
-
     @Column(name = "active_time")
     private long activeTime;
 
     @ColumnDefault("'ACTIVE'")
     @Enumerated(EnumType.STRING)
     private Status status;
+
+
+    public void updateCurrentPeople(boolean flag) {
+        if(flag) {
+            this.cntPeople++;
+        }
+        else {
+            this.cntPeople--;
+        }
+    }
 }
