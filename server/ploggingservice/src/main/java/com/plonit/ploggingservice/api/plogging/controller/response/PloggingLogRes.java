@@ -2,14 +2,14 @@ package com.plonit.ploggingservice.api.plogging.controller.response;
 
 import com.plonit.ploggingservice.common.enums.Type;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Data
-@RequiredArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class PloggingLogRes {
     
     private Long id;
