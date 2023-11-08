@@ -50,6 +50,7 @@ const PloggingImagePage = () => {
       }
 
       console.log("이미지 비동기 저장 로직 실행!");
+      dispatch(P.handleIsLoading(1));
       if (isEnd || beforeEnd) {
         navigate("/plogging/complete");
       } else {
@@ -73,6 +74,7 @@ const PloggingImagePage = () => {
               console.log("성공");
               console.log(response);
               dispatch(P.addImage(response.data.resultBody));
+              dispatch(P.handleIsLoading(-1));
             },
             fail: (error) => {
               console.log(error);

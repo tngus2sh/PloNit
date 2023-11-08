@@ -76,6 +76,9 @@ const PloggingComplete = () => {
   const coordinates = useSelector<rootState, Coordinate[]>((state) => {
     return state.plogging.paths;
   });
+  const isLoading = useSelector<rootState, number>((state) => {
+    return state.plogging.isLoading;
+  });
   const [context, setContext] = useState<string>("");
 
   const time = new Date();
@@ -180,14 +183,34 @@ const PloggingComplete = () => {
         text="완료"
         styles={{
           width: `${Math.min(500 - windowHeight * 0.05, windowWidth * 0.9)}px`,
-          backgroundColor: "#2cd261",
+          backgroundColor: `${isLoading > 0 ? "#999999" : "#2cd261"}`,
           position: "fixed",
           bottom: "56px",
           zIndex: "1000",
           boxSizing: "border-box",
           margin: `5px ${windowHeight * 0.025}px`,
+          transition: `all 200ms ease-in-out`,
         }}
         onClick={() => {
+          if (isLoading > 0) {
+            const Toast = Swal.mixin({
+              toast: true,
+              position: "top",
+              showConfirmButton: false,
+              timer: 2500,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.onmouseover = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+              },
+            });
+            Toast.fire({
+              icon: "info",
+              title: "이미지 전송 중입니다...",
+            });
+            return;
+          }
+
           Swal.fire({
             icon: "question",
             text: "작성을 종료하시겠습니까?",
