@@ -1,6 +1,7 @@
 package com.plonit.ploggingservice.api.excel.controller;
 
 import com.plonit.ploggingservice.api.excel.service.ExcelService;
+import com.plonit.ploggingservice.api.excel.service.MailService;
 import com.plonit.ploggingservice.api.excel.service.dto.PloggingDto;
 import com.plonit.ploggingservice.common.CustomApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,7 @@ import java.util.List;
 public class ExcelController {
 
     private final ExcelService excelService;
+    private final MailService mailService;
 
     @GetMapping()
     public CustomApiResponse<Object> makeExcel() throws IOException {
@@ -41,6 +44,15 @@ public class ExcelController {
         data.add(dto);
 
         excelService.makeExcel(data);
+
+        return CustomApiResponse.ok("");
+    }
+
+    @GetMapping("/mail")
+    public CustomApiResponse<Object> sendEmail() throws MessagingException {
+        log.info("SendEmail");
+
+        mailService.sendMail(null);
 
         return CustomApiResponse.ok("");
     }

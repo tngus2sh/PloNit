@@ -15,7 +15,8 @@ import static lombok.AccessLevel.PROTECTED;
 public class MailDto {
 
     private String to;
-    private String subject;
+    private String title;
     private String content;
-    private AttachFileDto attachFileDto;
+    private String filename;
+
 }
