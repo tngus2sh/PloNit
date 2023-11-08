@@ -20,9 +20,6 @@ public class EndPloggingReq {
     @Schema(description = "크루핑 id : 크루핑 생성시에 반환된 id")
     @Positive
     private Long crewpingId;
-
-    @Schema(description = "좌표")
-    private Coordinate[] coordinates;
     
     @Schema(description = "거리")
     @NotNull(message = "거리는 필수 입력값입니다.")
@@ -40,6 +37,8 @@ public class EndPloggingReq {
     @Schema(description = "크루핑시 참여한 사람들 수")
     private Integer people;
 
+    @Schema(description = "좌표")
+    private Coordinate[] coordinates;
     @Data
     @RequiredArgsConstructor
     public static class Coordinate {
