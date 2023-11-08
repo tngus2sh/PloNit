@@ -7,8 +7,9 @@ import Notice from "components/CrewCommunity/Notice";
 import CustomizedTabs from "components/common/CustomTab";
 import CrewFeed from "components/CrewCommunity/CrewFeed";
 import CrewpingList from "components/CrewCommunity/CrewpingList";
+import CommonButton from "components/common/CommonButton";
 import style from "styles/css/CrewCommunityPage.module.css";
-import { getCrewDetail } from "api/lib/crew";
+import { getCrewDetail, getCrewRegister } from "api/lib/crew";
 import { CrewInterface } from "interface/crewInterface";
 
 const CrewCommunityPage = () => {
@@ -30,6 +31,20 @@ const CrewCommunityPage = () => {
   const goCrewpingCreateHandler = () => {
     document.body.style.overflow = "scroll";
     navigate(`/crew/crewping/create/${crewId}`);
+  };
+
+  const JoinCrew = () => {
+    getCrewRegister(
+      accessToken,
+      Number(crewId),
+      (res) => {
+        console.log("크루 가입 요청 성공");
+        console.log(res.data.resultBody);
+      },
+      (err) => {
+        console.log("크루 가입 요청 실패", err);
+      },
+    );
   };
 
   useEffect(() => {
@@ -76,6 +91,14 @@ const CrewCommunityPage = () => {
       <CrewCommunityInfo crew={isCrewDetail} />
       <div className={style.divide}></div>
       <Notice crew={isCrewDetail} />
+      <div className={style.divide}></div>
+      <CommonButton
+        text="크루 생성"
+        styles={{
+          backgroundColor: "#2cd261",
+        }}
+        onClick={JoinCrew}
+      />
       <div className={style.divide}></div>
       <CustomizedTabs tabProps={tabProps} />
 
