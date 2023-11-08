@@ -11,6 +11,7 @@ export interface CrewInterface {
   crewMasterProfileImage?: string;
   crewMasterNickname?: string;
   notice?: string;
+  isCrewMaster?: boolean;
 }
 
 export interface FeedInterface {
@@ -30,6 +31,7 @@ export interface CrewpingInterface {
   id?: number;
   name: string;
   crewpingImage?: string;
+  masterMemberId?: number;
   masterNickname?: string;
   masterImage?: string;
   place: string;
@@ -48,6 +50,12 @@ export interface CommentInterface {
   content?: string;
 }
 
+export interface CrewAllowInterface {
+  crewId?: number;
+  commentId?: number;
+  status?: boolean;
+}
+
 export interface MemberListProps {
   title: string;
   location?: string;
@@ -56,3 +64,4 @@ export interface MemberListProps {
   showApproveButton?: boolean; // 승인 버튼 표시 여부를 위한 prop
   onApprove?: () => void; // 승인 버튼 클릭 시 호출할 함수
 }
+
