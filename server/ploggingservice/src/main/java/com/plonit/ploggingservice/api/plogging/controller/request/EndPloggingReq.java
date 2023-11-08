@@ -6,6 +6,8 @@ import lombok.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @RequiredArgsConstructor
@@ -38,7 +40,7 @@ public class EndPloggingReq {
     private Integer people;
 
     @Schema(description = "좌표")
-    private Coordinate[] coordinates;
+    private List<Coordinate> coordinates = new ArrayList<>();
     @Data
     @RequiredArgsConstructor
     public static class Coordinate {
