@@ -1,0 +1,27 @@
+@import "styles";
+
+// MemberItem.tsx
+.Member_Item {
+  display: flex;
+  margin: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid $darkgray;
+  padding: 0.6rem 1rem;
+  position: relative;
+  img {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    margin-right: 0.7rem;
+  }
+  .nickname {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin: auto 0;
+  }
+  .x_Icon {
+    position: absolute;
+    right: 0.5rem;
+    top: 0.6rem;
+  }
+}
