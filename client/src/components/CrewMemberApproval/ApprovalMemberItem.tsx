@@ -5,7 +5,13 @@ import { MemberInterface } from "interface/crewInterface";
 import style from "styles/css/CrewMemberApprovalPage.module.css";
 import { getCrewAllow } from "api/lib/crew";
 
-const ApprovalMemberItem = ({ member }: { member: MemberInterface }) => {
+const ApprovalMemberItem = ({
+  member,
+  fetchMemberList,
+}: {
+  member: MemberInterface;
+  fetchMemberList: () => void;
+}) => {
   const accessToken = useSelector((state: any) => state.user.accessToken);
   const { crewId } = useParams();
   const onRegisterApproval = (status: boolean) => {
@@ -19,6 +25,7 @@ const ApprovalMemberItem = ({ member }: { member: MemberInterface }) => {
       data,
       (res) => {
         console.log("크루 가입 승인 성공");
+        fetchMemberList();
       },
       (err) => {
         console.log("크루 가입 승인 실패", err);

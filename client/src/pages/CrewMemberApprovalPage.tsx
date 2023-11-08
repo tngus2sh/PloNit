@@ -12,7 +12,8 @@ const CrewMemberApprovalPage = () => {
   const [isApprovalMemberList, setApprovalMemberList] = useState<
     MemberInterface[]
   >([]);
-  useEffect(() => {
+
+  const fetchMemberList = () => {
     getCrewWait(
       accessToken,
       Number(crewId),
@@ -24,13 +25,21 @@ const CrewMemberApprovalPage = () => {
         console.log("크루원 대기 목록 조회 실패", err);
       },
     );
+  };
+
+  useEffect(() => {
+    fetchMemberList();
   }, []);
 
   return (
     <div>
       <BackTopBar text="승인 대기 목록 " />
       {isApprovalMemberList.map((member, index) => (
-        <ApprovalMemberItem key={index} member={member} />
+        <ApprovalMemberItem
+          key={index}
+          member={member}
+          fetchMemberList={fetchMemberList}
+        />
       ))}
     </div>
   );
