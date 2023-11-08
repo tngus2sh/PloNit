@@ -18,6 +18,7 @@ const AddInfoPage = () => {
   const [isSignupGender, setSignupGender] = useState(false);
   const [isSignupBirth, setSignupBirth] = useState("");
   const [isSignupRegion, setSignupRegion] = useState("");
+  const [isRegionCode, setRegionCode] = useState(0);
   const [isnickname, setnickname] = useState(false);
   const [isOpenRegionModal, setOpenRegionModal] = useState(false);
 
@@ -60,7 +61,7 @@ const AddInfoPage = () => {
       nickname: isSignupNickname,
       gender: isSignupGender,
       birth: isSignupBirth,
-      region: isSignupRegion,
+      dongCode: isRegionCode,
     };
     if (!data.name) {
       alert("이름을 입력하세요");
@@ -77,7 +78,7 @@ const AddInfoPage = () => {
     } else if (data.birth.length > 6) {
       alert("생년월일을 다시 입력하세요");
       return;
-    } else if (!data.region) {
+    } else if (!data.dongCode) {
       alert("활동 지역을 입력하세요");
       return;
     }
@@ -174,6 +175,7 @@ const AddInfoPage = () => {
             <RegionModal
               onClose={OpenRegionModal}
               setSignupRegion={setSignupRegion}
+              setRegionCode={setRegionCode}
             />
           </>
         )}
