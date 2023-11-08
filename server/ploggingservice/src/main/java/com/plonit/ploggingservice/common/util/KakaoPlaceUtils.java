@@ -31,7 +31,7 @@ public class KakaoPlaceUtils {
      * @param longitude 경도
      * @return 주소
      */
-    public KakaoAddressRes.RoadAddress getRoadAddress(Double latitude, Double longitude) {
+    public KakaoAddressRes.Address getAddress(Double latitude, Double longitude) {
 
         // webClient 기본 설정
         WebClient webClient = WebClient.builder()
@@ -52,6 +52,6 @@ public class KakaoPlaceUtils {
         // 결과 확인
         log.info(response.toString());
 
-        return response.getDocuments().length >=1 ? response.getDocuments()[0].getRoad_address() : null;
+        return response.getDocuments().length >=1 ? response.getDocuments()[0].getAddress() : null;
     }
 }

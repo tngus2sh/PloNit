@@ -64,8 +64,8 @@ public class PloggingQueryServiceImpl implements PloggingQueryService {
     @Override
     public List<PloggingHelpRes> findPloggingHelp(Double latitude, Double longitude) {
 
-        KakaoAddressRes.RoadAddress roadAddress = kakaoPlaceUtils.getRoadAddress(latitude, longitude);
-        if (roadAddress == null) {
+        KakaoAddressRes.Address address = kakaoPlaceUtils.getAddress(latitude, longitude);
+        if (address == null) {
             throw new CustomException(INVALID_PLACE_REQUEST);
         }
 
@@ -73,7 +73,7 @@ public class PloggingQueryServiceImpl implements PloggingQueryService {
         CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
 
         SidoGugunCodeRes sidoGugunCodeRes = circuitBreaker.run(
-                () -> sidoGugunFeignClient.findSidoGugunCode(roadAddress.getRegion_1depth_name(), roadAddress.getRegion_2depth_name()).getResultBody(), // 통신하는 서비스
+                () -> sidoGugunFeignClient.findSidoGugunCode(address.getRegion_1depth_name(), address.getRegion_2depth_name()).getResultBody(), // 통신하는 서비스
                 throwable -> null // 에러 발생시 null 반환
         );
 

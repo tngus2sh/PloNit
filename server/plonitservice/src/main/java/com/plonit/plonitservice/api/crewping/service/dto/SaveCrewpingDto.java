@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
@@ -38,20 +39,20 @@ public class SaveCrewpingDto {
 
     private String introduce;
 
-    private String notice;
 
+    public static SaveCrewpingDto of(Long memberKey, SaveCrewpingReq request) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    public static SaveCrewpingDto of(Long memberKey, SaveCrewpingReq saveCrewpingReq) {
         return SaveCrewpingDto.builder()
                 .memberKey(memberKey)
-                .name(saveCrewpingReq.getName())
-                .crewpingImage(saveCrewpingReq.getCrewpingImage())
-                .startDate(saveCrewpingReq.getStartDate())
-                .endDate(saveCrewpingReq.getEndDate())
-                .maxPeople(saveCrewpingReq.getMaxPeople())
-                .place(saveCrewpingReq.getPlace())
-                .introduce(saveCrewpingReq.getIntroduce())
-                .notice(saveCrewpingReq.getNotice())
+                .crewId(request.getCrewId())
+                .name(request.getName())
+                .crewpingImage(request.getCrewpingImage())
+                .startDate(LocalDateTime.parse(request.getStartDate(), formatter))
+                .endDate(LocalDateTime.parse(request.getEndDate(), formatter))
+                .maxPeople(request.getMaxPeople())
+                .place(request.getPlace())
+                .introduce(request.getIntroduce())
                 .build();
     }
 
@@ -67,7 +68,6 @@ public class SaveCrewpingDto {
                 .maxPeople(maxPeople)
                 .place(place)
                 .introduce(introduce)
-                .notice(notice)
                 .activeTime(0l)
                 .build();
     }

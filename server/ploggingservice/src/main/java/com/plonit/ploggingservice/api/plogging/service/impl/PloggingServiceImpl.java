@@ -1,6 +1,8 @@
 package com.plonit.ploggingservice.api.plogging.service.impl;
 
+import com.plonit.ploggingservice.api.plogging.controller.CrewpingFeignClient;
 import com.plonit.ploggingservice.api.plogging.controller.SidoGugunFeignClient;
+import com.plonit.ploggingservice.api.plogging.controller.request.CrewpingRecordReq;
 import com.plonit.ploggingservice.api.plogging.controller.response.*;
 import com.plonit.ploggingservice.api.plogging.service.PloggingService;
 import com.plonit.ploggingservice.api.plogging.service.dto.EndPloggingDto;
@@ -50,6 +52,7 @@ import static com.plonit.ploggingservice.common.exception.ErrorCode.*;
 public class PloggingServiceImpl implements PloggingService {
     
     private final SidoGugunFeignClient sidoGugunFeignClient;
+    private final CrewpingFeignClient crewpingFeignClient;
     private final CircuitBreakerFactory circuitBreakerFactory;
     private final KakaoPlaceUtils kakaoPlaceUtils;
     private final AwsS3Uploader awsS3Uploader;
@@ -71,11 +74,11 @@ public class PloggingServiceImpl implements PloggingService {
     public Long saveStartPlogging(StartPloggingDto dto) {
         
         // 위도, 경도로 위치 구하기
-        KakaoAddressRes.RoadAddress roadAddress = kakaoPlaceUtils.getRoadAddress(dto.getLatitude(), dto.getLongitude());
-        if (roadAddress == null) {
+        KakaoAddressRes.Address address = kakaoPlaceUtils.getAddress(dto.getLatitude(), dto.getLongitude());
+        if (address == null) {
             throw new CustomException(INVALID_PLACE_REQUEST);
         }
-        String place = roadAddress.getAddress_name();
+        String place = address.getAddress_name();
 
         // 시작 시간 구하기
         LocalDateTime startTime = LocalDateTime.now(ZoneId.of(Time.SEOUL.getText()));
@@ -125,7 +128,25 @@ public class PloggingServiceImpl implements PloggingService {
         latLongRepository.saveAll(latLongs);
 
         /* 크루핑시에 크루핑 테이블에 내용 저장 */
-
+        if (plogging.getType().equals(Type.CREWPING)) {
+            CrewpingRecordReq crewpingRecordReq = CrewpingRecordReq.builder()
+                    .startDate(plogging.getStartTime())
+                    .endDate(endTime)
+                    .place(plogging.getPlace())
+                    .activeTime(totalTime)
+                    .build();
+            CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
+    
+            Long crewpingId = circuitBreaker.run(
+                    () -> crewpingFeignClient.saveCrewpingRecord(crewpingRecordReq)
+                            .getResultBody(),
+                    throwable -> null // 에러 발생시 null 반환
+            );
+    
+            if (crewpingId == null) {
+                throw new CustomException(INVALID_CREWPINGID_REQUEST);
+            }
+        }
 
         /* 랭킹*/
         // 기존에 존재하는 랭킹 파악하기 -> 없다면 새로운 랭킹 생성, 랭킹 있다면 값 업데이트
@@ -178,8 +199,8 @@ public class PloggingServiceImpl implements PloggingService {
             }
         }
 
-        KakaoAddressRes.RoadAddress roadAddress = kakaoPlaceUtils.getRoadAddress(dto.getLatitude(), dto.getLongitude());
-        if (roadAddress == null) {
+        KakaoAddressRes.Address address = kakaoPlaceUtils.getAddress(dto.getLatitude(), dto.getLongitude());
+        if (address == null) {
             throw new CustomException(INVALID_PLACE_REQUEST);
         }
         
@@ -187,7 +208,7 @@ public class PloggingServiceImpl implements PloggingService {
         CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
 
         SidoGugunCodeRes sidoGugunCodeRes = circuitBreaker.run(
-                () -> sidoGugunFeignClient.findSidoGugunCode(roadAddress.getRegion_1depth_name(), roadAddress.getRegion_2depth_name())
+                () -> sidoGugunFeignClient.findSidoGugunCode(address.getRegion_1depth_name(), address.getRegion_2depth_name())
                         .getResultBody(), // 통신하는 서비스
                 throwable -> null // 에러 발생시 null 반환
         );
@@ -196,7 +217,7 @@ public class PloggingServiceImpl implements PloggingService {
             throw new CustomException(INVALID_PLACE_REQUEST);
         }
         
-        PloggingHelp ploggingHelp = HelpPloggingDto.toEntity(dto, sidoGugunCodeRes.getGugunCode(), roadAddress.getAddress_name(), imageUrl);
+        PloggingHelp ploggingHelp = HelpPloggingDto.toEntity(dto, sidoGugunCodeRes.getGugunCode(), address.getAddress_name(), imageUrl);
         return ploggingHelpRepository.save(ploggingHelp).getId();
     }
     
