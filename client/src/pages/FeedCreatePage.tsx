@@ -48,7 +48,7 @@ const FeedCreatePage = () => {
         formData.append("feedPictures", image);
       });
     }
-    if (!isFeedImages) {
+    if (isFeedImages.length < 1) {
       alert("피드 이미지를 등록하세요");
       return;
     } else if (!isFeedIntroduce) {
