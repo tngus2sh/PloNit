@@ -28,7 +28,7 @@ public class EndPloggingReq {
     @Positive
     private Double distance;
     
-    @Schema(description = "칼로리")
+    @Schema(description = "칼로리")                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
     @NotNull(message = "칼로리는 필수 입력값입니다.")
     @Positive
     private Double calorie;
