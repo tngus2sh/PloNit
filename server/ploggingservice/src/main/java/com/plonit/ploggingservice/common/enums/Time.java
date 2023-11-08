@@ -5,14 +5,9 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum Type {
+public enum Time {
+    SEOUL("Asia/Seoul");
     
-    CREWPING("크루핑"),
-    IND("개인"),
-    VOL("자원봉사");
-    
-    
-    private final String text;
-    
+    public final String text;
     
 }
