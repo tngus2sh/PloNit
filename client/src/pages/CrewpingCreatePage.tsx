@@ -59,11 +59,14 @@ const CrewpingCreatePage = () => {
     } else if (!isCrewpingEndDate) {
       alert("크루핑 종료시간을 입력하세요");
       return;
-    } else if (!isCrewpingMaxPeople) {
-      alert("크루핑 참여인원을 입력하세요");
-      return;
     } else if (!isCrewpingPlace) {
       alert("크루핑 장소를 입력하세요");
+      return;
+    } else if (isCrewpingMaxPeople < 0) {
+      alert("크루핑 참여인원을 입력하세요");
+      return;
+    } else if (isCrewpingMaxPeople > 10) {
+      alert("참여 인원이 초과되었습니다");
       return;
     } else if (!isCrewpingIntroduce) {
       alert("크루핑 소개를 입력하세요");

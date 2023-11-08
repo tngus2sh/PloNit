@@ -33,17 +33,18 @@ const FeedCreatePage = () => {
   const handleImageUpload = (event: any) => {
     const files = Array.from(event.target.files) as File[];
     setFeedImages([...isFeedImages, ...files]);
-    if (isFeedImages.length > 5) {
-      const newImages = isFeedImages.slice(0, 5 - isFeedImages.length);
-      const newUrls = newImages.map((file) => URL.createObjectURL(file));
-      setPreviewUrls([...previewUrls, ...newUrls]);
-    } else {
-      const newUrls = files.map((file) => URL.createObjectURL(file));
-      setPreviewUrls([...previewUrls, ...newUrls]);
-    }
+    const newUrls = files.map((file) => URL.createObjectURL(file));
+    setPreviewUrls([...previewUrls, ...newUrls]);
   };
 
   const feedCreateHandler = () => {
+    if (isFeedImages.length < 1) {
+      alert("피드 이미지를 등록하세요");
+      return;
+    } else if (!isFeedIntroduce) {
+      alert("피드 내용을 입력하세요");
+      return;
+    }
     const formData = new FormData();
     formData.append("content", isFeedIntroduce);
     if (crewId) {
@@ -54,13 +55,7 @@ const FeedCreatePage = () => {
         formData.append("feedPictures", image);
       });
     }
-    if (!isFeedImages) {
-      alert("피드 이미지를 등록하세요");
-      return;
-    } else if (!isFeedIntroduce) {
-      alert("피드 내용을 입력하세요");
-      return;
-    }
+
     getFeedCreate(
       accessToken,
       formData,
@@ -106,7 +101,7 @@ const FeedCreatePage = () => {
             />
           </SwiperSlide>
         )}
-        {previewUrls.map((url, id) => (
+        {previewUrls.slice(0, 5).map((url, id) => (
           <SwiperSlide
             key={id}
             style={{

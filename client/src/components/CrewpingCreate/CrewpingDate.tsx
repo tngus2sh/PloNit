@@ -16,8 +16,8 @@ const formattedDate = (date: any) => {
 };
 
 const CrewpingDate = ({ setCrewpingStartDate, setCrewpingEndDate }: any) => {
-  const [selectedStartDate, setSelectedStartDate] = useState(new Date());
-  const [selectedEndDate, setSelectedEndDate] = useState(new Date());
+  const [selectedStartDate, setSelectedStartDate] = useState(null);
+  const [selectedEndDate, setSelectedEndDate] = useState(null);
   const onChangeStartDate = (date: any) => {
     setSelectedStartDate(date);
     setCrewpingStartDate(formattedDate(date));
