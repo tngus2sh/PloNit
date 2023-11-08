@@ -91,6 +91,7 @@ const BeforeStart = () => {
   const [preventShow, setPreventShow] = useState<boolean>(false);
 
   const dispatch = useDispatch();
+  dispatch(P.setPloggingType("IND"));
   function onClick1() {
     startPlogging({
       accessToken: accessToken,
@@ -102,7 +103,6 @@ const BeforeStart = () => {
         console.log(response);
         dispatch(P.clear());
         dispatch(P.setPloggingId(response.data.resultBody));
-        dispatch(P.setPloggingType("IND"));
       },
       fail: (error) => {
         console.error(error);
@@ -112,6 +112,7 @@ const BeforeStart = () => {
     // dispatch(P.setPloggingType("IND"));
   }
   function onClick2() {
+    dispatch(P.setPloggingType("VOL"));
     startPlogging({
       accessToken: accessToken,
       type: "VOL",
@@ -122,7 +123,6 @@ const BeforeStart = () => {
         console.log(response);
         dispatch(P.clear());
         dispatch(P.setPloggingId(response.data.resultBody));
-        dispatch(P.setPloggingType("VOL"));
       },
       fail: (error) => {
         console.error(error);
