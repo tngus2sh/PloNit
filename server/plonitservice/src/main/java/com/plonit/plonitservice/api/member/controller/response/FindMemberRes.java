@@ -21,13 +21,13 @@ public class FindMemberRes {
 
     private String profileImage;
 
-    private boolean gender;
+    private Boolean gender;
 
     private String region;
 
-    private float height;
+    private Float height;
 
-    private float weight;
+    private Float weight;
 
     private String id1365;
 

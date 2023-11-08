@@ -32,6 +32,7 @@ public class Crew extends TimeBaseEntity {
 
     private String notice;
 
-    private String region;
+    private Long gugunCode;
 
+    private String region;
 }

@@ -4,6 +4,8 @@ import com.plonit.plonitservice.api.region.controller.response.DongRes;
 import com.plonit.plonitservice.api.region.controller.response.GugunRes;
 import com.plonit.plonitservice.api.region.controller.response.SidoGugunCodeRes;
 import com.plonit.plonitservice.api.region.controller.response.SidoRes;
+import com.plonit.plonitservice.domain.region.Dong;
+import com.plonit.plonitservice.domain.region.Gugun;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,6 +64,23 @@ public class RegionQueryRepository {
                         gugun.code))
                 .from(gugun)
                 .where(gugun.name.like(gugunName).and(gugun.sido.name.contains(sidoName)))
+                .fetchOne());
+    }
+
+    public Optional<Dong> findDongFetchJoin(Long dongCode) {
+        return Optional.ofNullable(queryFactory
+                .selectFrom(dong)
+                .leftJoin(dong.gugun, gugun).fetchJoin()
+                .leftJoin(gugun.sido, sido).fetchJoin()
+                .where(dong.code.eq(dongCode))
+                .fetchOne());
+    }
+
+    public Optional<Gugun> findGugunFetchJoin(Long gugunCode) {
+        return Optional.ofNullable(queryFactory
+                .selectFrom(gugun)
+                .leftJoin(gugun.sido, sido).fetchJoin()
+                .where(gugun.code.eq(gugunCode))
                 .fetchOne());
     }
 }

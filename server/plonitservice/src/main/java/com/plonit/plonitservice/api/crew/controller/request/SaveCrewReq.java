@@ -20,6 +20,6 @@ public class SaveCrewReq {
     private String introduce;
 
     @NotBlank(message = "주요 활동 지역은 필수 입력값입니다.")
-    private String region;
+    private String gugunCode;
 
 }

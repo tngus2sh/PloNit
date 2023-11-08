@@ -42,6 +42,7 @@ public class FeedQueryServiceImpl implements FeedQueryService {
         log.info(logCurrent(getClassName(), getMethodName(), START));
 
         List<FindFeedRes> findFeedRes = feedQueryRepository.findFeedsWithPictureAndComment(memberKey, crewId);
+        // todo : likeCount, isLike
 
         if (findFeedRes.isEmpty())
             return Collections.emptyList();
