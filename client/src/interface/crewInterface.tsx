@@ -55,3 +55,13 @@ export interface CrewAllowInterface {
   commentId?: number;
   status?: boolean;
 }
+
+export interface MemberListProps {
+  title: string;
+  location?: string;
+  memberCount?: string;
+  imageUrl: string; // 이미지 URL 추가
+  showApproveButton?: boolean; // 승인 버튼 표시 여부를 위한 prop
+  onApprove?: () => void; // 승인 버튼 클릭 시 호출할 함수
+}
+
