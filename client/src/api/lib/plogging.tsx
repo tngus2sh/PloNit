@@ -24,7 +24,7 @@ const savePlogging = ({
   distance: number;
   calorie: number;
   review: string;
-  people?: number;
+  people?: number | null;
   coordinate: Coordinate[];
   success: (response: AxiosResponse<any, any>) => void | undefined;
   fail: (error: any) => void | undefined;

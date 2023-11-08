@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 import DefaultPathMap from "../DefaultPathMap";
 import { BasicTopBar } from "components/common/TopBar";
 import CommonButton from "components/common/CommonButton";
 import PloggingInfo from "../ploggingComps/PloggingInfo";
 import PloggingSwiper from "../ploggingComps/PloggingSwiper";
-import { Coordinate } from "interface/ploggingInterface";
 import useCamera from "../functions/useCamera";
-import Swal from "sweetalert2";
+import { Coordinate } from "interface/ploggingInterface";
+import { ploggingType } from "types/ploggingTypes";
 import style from "styles/css/PloggingPage/PloggingComplete.module.css";
 
 import { useNavigate } from "react-router-dom";
@@ -14,6 +15,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
 import * as camera from "store/camera-slice";
 import * as P from "store/plogging-slice";
+
+import { savePlogging, startPlogging } from "api/lib/plogging";
 
 function formatNumber(n: number): string {
   if (n < 10) {
@@ -54,7 +57,27 @@ const PloggingComplete = () => {
   const images = useSelector<rootState, string[]>((state) => {
     return state.plogging.images;
   });
+
+  const accessToken = useSelector<rootState, string>((state) => {
+    return state.user.accessToken;
+  });
+  const nowType = useSelector<rootState, ploggingType>((state) => {
+    return state.plogging.ploggingType;
+  });
+  const ploggingId = useSelector<rootState, number>((state) => {
+    return state.plogging.ploggingId;
+  });
+  const crewpingId = useSelector<rootState, number>((state) => {
+    return state.plogging.crewpingId;
+  });
+  const people = useSelector<rootState, number | null>((state) => {
+    return state.plogging.people;
+  });
+  const coordinate = useSelector<rootState, Coordinate[]>((state) => {
+    return state.plogging.paths;
+  });
   const [context, setContext] = useState<string>("");
+
   const time = new Date();
   const year = time.getFullYear();
   const month = time.getMonth() + 1;
@@ -175,10 +198,44 @@ const PloggingComplete = () => {
             cancelButtonColor: "#FF2953",
           }).then((result) => {
             if (result.isConfirmed) {
-              // axios 요청
-              dispatch(camera.clear());
-              dispatch(P.clear());
-              navigate("/");
+              if (nowType === "CREWPING") {
+                savePlogging({
+                  accessToken: accessToken,
+                  crewpingId: crewpingId,
+                  distance: distance,
+                  calorie: calorie,
+                  review: context,
+                  people: people,
+                  coordinate: coordinate,
+                  success: (response) => {
+                    console.log(response);
+                    dispatch(camera.clear());
+                    dispatch(P.clear());
+                    navigate("/");
+                  },
+                  fail: (error) => {
+                    console.error(error);
+                  },
+                });
+              } else if (nowType === "IND" || nowType === "VOL") {
+                savePlogging({
+                  accessToken: accessToken,
+                  ploggingId: ploggingId,
+                  distance: distance,
+                  calorie: calorie,
+                  review: context,
+                  coordinate: coordinate,
+                  success: (response) => {
+                    console.log(response);
+                    dispatch(camera.clear());
+                    dispatch(P.clear());
+                    navigate("/");
+                  },
+                  fail: (error) => {
+                    console.error(error);
+                  },
+                });
+              }
             }
           });
         }}
