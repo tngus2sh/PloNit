@@ -22,8 +22,8 @@ const CrewpingCreatePage = () => {
   const [isCrewpingStartDate, setCrewpingStartDate] = useState("");
   const [isCrewpingEndDate, setCrewpingEndDate] = useState("");
   const [isCrewpingMaxPeople, setCrewpingMaxPeople] = useState<number>(0);
-  const [isCrewpingNotice, setCrewpingNotice] = useState("");
 
+  console.log(isCrewpingStartDate, isCrewpingEndDate);
   const onChangeName = (event: any) => {
     setCrewpingName(event.target.value);
   };
@@ -45,9 +45,31 @@ const CrewpingCreatePage = () => {
     formData.append("maxPeople", isCrewpingMaxPeople.toString());
     formData.append("place", isCrewpingPlace);
     formData.append("introduce", isCrewpingIntroduce);
-    formData.append("notice", isCrewpingNotice);
 
     console.log(formData);
+    if (!isCrewpingName) {
+      alert("크루핑 이름을 입력하세요");
+      return;
+    } else if (!isCrewpingImage) {
+      alert("크루핑 이미지를 입력하세요");
+      return;
+    } else if (!isCrewpingStartDate) {
+      alert("크루핑 시작시간을 입력하세요");
+      return;
+    } else if (!isCrewpingEndDate) {
+      alert("크루핑 종료시간을 입력하세요");
+      return;
+    } else if (!isCrewpingMaxPeople) {
+      alert("크루핑 참여인원을 입력하세요");
+      return;
+    } else if (!isCrewpingPlace) {
+      alert("크루핑 장소를 입력하세요");
+      return;
+    } else if (!isCrewpingIntroduce) {
+      alert("크루핑 소개를 입력하세요");
+      return;
+    }
+
     getCrewpingCreate(
       accessToken,
       formData,
