@@ -5,6 +5,7 @@ import com.plonit.plonitservice.api.feed.service.dto.SaveCommentDto;
 import com.plonit.plonitservice.api.feed.service.dto.SaveFeedDto;
 import com.plonit.plonitservice.common.AwsS3Uploader;
 import com.plonit.plonitservice.common.exception.CustomException;
+import com.plonit.plonitservice.common.util.RequestUtils;
 import com.plonit.plonitservice.domain.crew.Crew;
 import com.plonit.plonitservice.domain.crew.CrewMember;
 import com.plonit.plonitservice.domain.crew.repository.CrewMemberRepository;
@@ -114,5 +115,21 @@ public class FeedServiceImpl implements FeedService {
 
         commentRepository.delete(comment);
         log.info(logCurrent(getClassName(), getMethodName(), END));
+    }
+
+    @Override
+    public boolean saveFeedLike(Long feedId) {
+        Long memberId = RequestUtils.getMemberId();
+
+        Feed feed = feedRepository.findById(feedId)
+                .orElseThrow(() -> new CustomException(FEED_NOT_FOUND));
+
+        String key = "MEMBER_LIKE:" + memberId;
+        String subKey = String.valueOf(feedId);
+
+
+
+
+        return true;
     }
 }

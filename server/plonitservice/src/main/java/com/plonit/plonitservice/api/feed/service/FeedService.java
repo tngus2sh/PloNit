@@ -8,4 +8,5 @@ public interface FeedService {
     void deleteFeed(Long memberKey, Long feedId);
     void saveComment(SaveCommentDto saveCommentDto);
     void deleteComment(Long memberKey, Long commentId);
+    boolean saveFeedLike(Long feedId);
 }

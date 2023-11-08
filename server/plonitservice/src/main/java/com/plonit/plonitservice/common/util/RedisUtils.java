@@ -38,9 +38,9 @@ public class RedisUtils {
         redisTemplate.opsForValue().set(key, serializeObject);
     }
 
-    public void setRedisHash(String key, String memberKey, String question, Long ttl) {
+    public void setRedisHash(String key, String subKey, String value, Long ttl) {
         HashOperations<String, String, String> hashOperations = stringRedisTemplate.opsForHash();
-        hashOperations.put(key, memberKey, question);
+        hashOperations.put(key, subKey, value);
         stringRedisTemplate.expire(key, ttl, TimeUnit.SECONDS);
     }
 
