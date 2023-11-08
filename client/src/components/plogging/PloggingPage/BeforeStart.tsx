@@ -91,7 +91,7 @@ const BeforeStart = () => {
   const [preventShow, setPreventShow] = useState<boolean>(false);
 
   const dispatch = useDispatch();
-  function onClick1() {
+  async function onClick1() {
     dispatch(P.clear());
     dispatch(P.setPloggingType("IND"));
     startPlogging({
@@ -111,7 +111,7 @@ const BeforeStart = () => {
     // dispatch(P.clear());
     // dispatch(P.setPloggingType("IND"));
   }
-  function onClick2() {
+  async function onClick2() {
     dispatch(P.clear());
     dispatch(P.setPloggingType("VOL"));
     startPlogging({
