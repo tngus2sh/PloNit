@@ -292,7 +292,8 @@ const DefaultMap: React.FC<IDefaultMap> = ({
             latitude: latitude,
             longitude: longitude,
             success: (response) => {
-              console.log(response.data);
+              console.log(response.data.resultBody);
+              setBins(response.data.resultBody);
             },
             fail: (error) => {
               console.error(error);
@@ -304,7 +305,8 @@ const DefaultMap: React.FC<IDefaultMap> = ({
             latitude: latitude,
             longitude: longitude,
             success: (response) => {
-              console.log(response.data);
+              console.log(response.data.resultBody);
+              setToilets(response.data.resultBody);
             },
             fail: (error) => {
               console.error(error);
