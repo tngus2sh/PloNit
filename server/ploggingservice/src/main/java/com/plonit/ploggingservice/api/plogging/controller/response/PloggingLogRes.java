@@ -35,6 +35,7 @@ public class PloggingLogRes {
 
     private List<Coordinate> coordinates;
     
+    @Data
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor
     @Builder
