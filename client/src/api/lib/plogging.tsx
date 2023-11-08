@@ -98,7 +98,7 @@ const searchPloggingUsingDay = ({
 }) => {
   const api = ploggingApi;
   api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
-  api.get(`/period/${start_day}-${end_day}`).then(success).catch(fail);
+  api.get(`/period/${start_day}/${end_day}`).then(success).catch(fail);
 };
 
 // 플로깅 기록 상세 조회
@@ -165,7 +165,7 @@ const searchHelpUsingLatLng = ({
 }) => {
   const api = ploggingApi;
   api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
-  api.get(`/help/${latitude}-${longitude}`).then(success).catch(fail);
+  api.get(`/help/${latitude}/${longitude}`).then(success).catch(fail);
 };
 
 const savePloggingImage = ({
@@ -206,7 +206,7 @@ const searchNeighbor = ({
 }) => {
   const api = ploggingApi;
   api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
-  api.get(`/users/${latitude}-${longitude}`).then(success).catch(fail);
+  api.get(`/users/${latitude}/${longitude}`).then(success).catch(fail);
 };
 
 // --- 미완성 인 것들 ---
