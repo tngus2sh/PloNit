@@ -27,6 +27,7 @@ public class LatLongQueryRepository {
                         latLong.longitude))
                 .from(latLong)
                 .where(latLong.plogging.id.eq(ploggingId))
+                .orderBy(latLong.id.asc())
                 .fetch();
     } 
 }
