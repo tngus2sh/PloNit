@@ -6,16 +6,25 @@ import getYear from "date-fns/getYear";
 import getMonth from "date-fns/getMonth";
 import "custom_css/CrewCreateDatePicker.css";
 
+const formattedDate = (date: any) => {
+  const year = date.getFullYear();
+  const month = ("0" + (date.getMonth() + 1)).slice(-2);
+  const day = ("0" + date.getDate()).slice(-2);
+  const hours = ("0" + date.getHours()).slice(-2);
+  const minutes = ("0" + date.getMinutes()).slice(-2);
+  return `${year}-${month}-${day} ${hours}:${minutes}`;
+};
+
 const CrewpingDate = ({ setCrewpingStartDate, setCrewpingEndDate }: any) => {
-  const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(null);
-  const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(null);
+  const [selectedStartDate, setSelectedStartDate] = useState(new Date());
+  const [selectedEndDate, setSelectedEndDate] = useState(new Date());
   const onChangeStartDate = (date: any) => {
     setSelectedStartDate(date);
-    setCrewpingStartDate(date);
+    setCrewpingStartDate(formattedDate(date));
   };
   const onChangeEndDate = (date: any) => {
     setSelectedEndDate(date);
-    setCrewpingEndDate(date);
+    setCrewpingEndDate(formattedDate(date));
   };
   return (
     <div className={style.date_time}>

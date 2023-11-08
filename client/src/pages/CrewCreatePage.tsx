@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Input from "components/common/Input";
 import { BackTopBar } from "components/common/TopBar";
 import CommonButton from "components/common/CommonButton";
+import RegionModal from "components/common/RegionModal";
 import { getCrewCreate } from "api/lib/crew";
 import { Icon } from "@iconify/react";
 import style from "styles/css/CrewCreatePage.module.css";
@@ -15,12 +16,13 @@ const CrewCreatePage = () => {
   const [isCrewRegion, setCrewRegion] = useState("");
   const [isCrewIntroduce, setCrewIntroduce] = useState("");
   const [isCrewImage, setCrewImage] = useState(null);
+  const [isOpenRegionModal, setOpenRegionModal] = useState(false);
 
   const onChangeName = (event: any) => {
     setCrewName(event.target.value);
   };
-  const onChangeRegion = (event: any) => {
-    setCrewRegion(event.target.value);
+  const OpenRegionModal = () => {
+    setOpenRegionModal(!isOpenRegionModal);
   };
   const onChangeIntroduce = (event: any) => {
     setCrewIntroduce(event.target.value);
@@ -29,8 +31,16 @@ const CrewCreatePage = () => {
   const crewCreateHandler = () => {
     if (!isCrewName) {
       alert("크루 이름을 입력하세요");
+      return;
     } else if (!isCrewIntroduce) {
       alert("크루 소개를 입력하세요");
+      return;
+    } else if (!isCrewImage) {
+      alert("크루 이미지를 등록해주세요");
+      return;
+    } else if (!isCrewRegion) {
+      alert("활동 지역을 입력하세요");
+      return;
     }
     const formData = new FormData();
     formData.append("name", isCrewName);
@@ -53,26 +63,26 @@ const CrewCreatePage = () => {
       },
     );
   };
-  const handleImageUpload = (event: any) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-
-      reader.onload = (event: any) => {
-        const dataURL = event.target.result;
-        setCrewImage(file);
-      };
-
-      reader.readAsDataURL(file);
-    }
-  };
-
   // const handleImageUpload = (event: any) => {
   //   const file = event.target.files[0];
   //   if (file) {
-  //     setCrewImage(file);
+  //     const reader = new FileReader();
+
+  //     reader.onload = (event: any) => {
+  //       const dataURL = event.target.result;
+  //       setCrewImage(file);
+  //     };
+
+  //     reader.readAsDataURL(file);
   //   }
   // };
+
+  const handleImageUpload = (event: any) => {
+    const file = event.target.files[0];
+    if (file) {
+      setCrewImage(file);
+    }
+  };
 
   return (
     <div className={style.crew_create}>
@@ -104,13 +114,21 @@ const CrewCreatePage = () => {
         value={isCrewName}
         onChange={onChangeName}
       />
-      <Input
-        id="region"
-        labelTitle="주요 활동 지역"
-        type="text"
-        value={isCrewRegion}
-        onChange={onChangeRegion}
-      />
+      <div className={style.region}>
+        <div className={style.title}>활동 지역</div>
+        <div className={style.input_area} onClick={OpenRegionModal}>
+          {isCrewRegion}
+        </div>
+        {isOpenRegionModal && (
+          <>
+            <div className={style.modalbackground}></div>
+            <RegionModal
+              onClose={OpenRegionModal}
+              setSignupRegion={setCrewRegion}
+            />
+          </>
+        )}
+      </div>
       <div className={style.introduce}>
         <label className={style.label} htmlFor="introduce">
           크루 소개

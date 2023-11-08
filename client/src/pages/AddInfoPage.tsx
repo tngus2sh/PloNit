@@ -80,7 +80,7 @@ const AddInfoPage = () => {
       return;
     }
     console.log(data);
-    console.log(accessToken);
+
     addInfo(
       accessToken,
       data,

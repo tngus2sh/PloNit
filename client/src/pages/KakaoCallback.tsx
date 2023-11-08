@@ -19,6 +19,8 @@ const KakaoCallback = () => {
           code,
           (res) => {
             console.log("로그인 api 성공");
+            console.log(res);
+            console.log(res.data);
             const tokens = {
               accessToken: res.headers.accesstoken,
               refreshToken: res.headers.refreshtoken,
