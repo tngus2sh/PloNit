@@ -122,7 +122,7 @@ public class PloggingQueryServiceImpl implements PloggingQueryService {
         }
 
         // 구군 코드로 플로깅 도움 요청 조회
-        LocalDate now = LocalDate.now(ZoneId.of(Time.SEOUL.name()));
+        LocalDate now = LocalDate.now(ZoneId.of(Time.SEOUL.text));
         return ploggingHelpQueryRepository.findPloggingHelp(now, sidoGugunCodeRes.getGugunCode());
     }
 }
