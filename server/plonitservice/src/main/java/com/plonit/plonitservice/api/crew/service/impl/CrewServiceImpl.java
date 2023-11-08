@@ -3,8 +3,11 @@ package com.plonit.plonitservice.api.crew.service.impl;
 import com.plonit.plonitservice.api.crew.service.CrewService;
 import com.plonit.plonitservice.api.crew.service.dto.ApproveCrewDto;
 import com.plonit.plonitservice.api.crew.service.dto.SaveCrewDto;
+import com.plonit.plonitservice.api.crew.service.dto.SaveCrewNoticeDto;
+import com.plonit.plonitservice.api.crew.service.dto.UpdateCrewNoticeDto;
 import com.plonit.plonitservice.common.AwsS3Uploader;
 import com.plonit.plonitservice.common.exception.CustomException;
+import com.plonit.plonitservice.common.util.RequestUtils;
 import com.plonit.plonitservice.domain.crew.Crew;
 import com.plonit.plonitservice.domain.crew.CrewMember;
 import com.plonit.plonitservice.domain.crew.repository.CrewMemberQueryRepository;
@@ -103,6 +106,28 @@ public class CrewServiceImpl implements CrewService {
         // 승인 -> change , 거절 -> delete
         if (approveCrewDto.getStatus()) crewMember.changeIsCrewMember();
         else crewMemberRepository.delete(crewMember);
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+    }
+
+    @Override
+    @Transactional // 공지사항 등록
+    public void saveCrewNotice(SaveCrewNoticeDto saveCrewNoticeDto) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        Long memberId = RequestUtils.getMemberId();
+
+        // 크루장인지 확인
+        if (!crewMemberQueryRepository.isValidCrewMember(memberId, saveCrewNoticeDto.getCrewId(), true))
+            throw new CustomException(CREW_MASTER_NOT_FORBIDDEN);
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+
+        Crew crew = crewRepository.findById(saveCrewNoticeDto.getCrewId())
+                .orElseThrow(() -> new CustomException(CREW_NOT_FOUND));
+
+        // 공지사항 등록
+        crew.changeNotice(saveCrewNoticeDto.getContent());
 
         log.info(logCurrent(getClassName(), getMethodName(), END));
     }

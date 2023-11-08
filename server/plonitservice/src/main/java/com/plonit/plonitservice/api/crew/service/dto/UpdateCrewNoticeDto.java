@@ -6,14 +6,14 @@ import lombok.Data;
 
 @Data
 @Builder
-public class updateCrewNoticeDto {
+public class UpdateCrewNoticeDto {
 
     private Long crewId;
 
     private String content;
 
-    public static updateCrewNoticeDto of(UpdateCrewNoticeReq updateCrewNoticeReq) {
-        return updateCrewNoticeDto.builder()
+    public static UpdateCrewNoticeDto of(UpdateCrewNoticeReq updateCrewNoticeReq) {
+        return UpdateCrewNoticeDto.builder()
                 .crewId(updateCrewNoticeReq.getCrewId())
                 .content(updateCrewNoticeReq.getContent())
                 .build();
