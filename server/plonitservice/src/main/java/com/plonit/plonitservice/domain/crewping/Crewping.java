@@ -50,9 +50,6 @@ public class Crewping extends TimeBaseEntity {
     @Column(length = 500)
     private String introduce;
 
-    @Column(length = 500)
-    private String notice;
-
     @Column(name = "active_time")
     private long activeTime;
 

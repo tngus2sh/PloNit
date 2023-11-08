@@ -39,6 +39,4 @@ public class SaveCrewpingReq {
     @NotBlank(message = "활동 소개는 필수 입력값입니다.")
     private String introduce;
 
-    private String notice;
-
 }
