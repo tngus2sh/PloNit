@@ -9,37 +9,58 @@ const ploggingApiForm = customApiForm(`/plogging-service/v1`);
 const savePlogging = ({
   accessToken,
   ploggingId,
-  coordinates,
+  crewpingId,
   distance,
   calorie,
   review,
+  people,
+  coordinate,
   success,
   fail,
 }: {
   accessToken: string;
-  ploggingId: number;
-  coordinates: Coordinate[];
+  ploggingId?: number;
+  crewpingId?: number;
   distance: number;
   calorie: number;
   review: string;
+  people?: number | null;
+  coordinate: Coordinate[];
   success: (response: AxiosResponse<any, any>) => void | undefined;
   fail: (error: any) => void | undefined;
 }) => {
   const api = ploggingApi;
   api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
-  api
-    .post(
-      ``,
-      JSON.stringify({
-        ploggingId: ploggingId,
-        coordinates: coordinates,
-        distance: distance,
-        calorie: calorie,
-        review: review,
-      }),
-    )
-    .then(success)
-    .catch(fail);
+  if (ploggingId) {
+    api
+      .post(
+        ``,
+        JSON.stringify({
+          plogging_id: ploggingId,
+          distance: distance,
+          calorie: calorie,
+          review: review,
+          coordinate: coordinate,
+        }),
+      )
+      .then(success)
+      .catch(fail);
+  } else if (crewpingId) {
+    api
+      .post(
+        ``,
+        JSON.stringify({
+          crewping_id: crewpingId,
+          distance: distance,
+          calorie: calorie,
+          review: review,
+          people: people ?? null,
+          coordinate: coordinate,
+        }),
+      )
+      .then(success)
+      .catch(fail);
+  }
 };
 
 // 플로깅 시작하기

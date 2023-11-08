@@ -11,6 +11,7 @@ const initialState = {
   beforeCrewping: false as boolean,
   ploggingType: "none" as ploggingType,
   ploggingId: -1 as number,
+  crewpingId: -1 as number,
   paths: [] as Coordinate[],
   pathlen: 0 as number,
   second: 0 as number,
@@ -24,6 +25,7 @@ const initialState = {
   isVolEnd: false as boolean,
   isLoading: 0 as number,
   kg: 65 as number,
+  people: null as number | null,
 };
 
 const intervalTime = 2;
@@ -52,6 +54,9 @@ const ploggingSlice = createSlice({
     },
     setPloggingId: (state, action: PayloadAction<number>) => {
       state.ploggingId = action.payload;
+    },
+    setCrewpingId: (state, action: PayloadAction<number>) => {
+      state.crewpingId = action.payload;
     },
     addPath: (state, action: PayloadAction<Coordinate>) => {
       state.paths = [...state.paths, action.payload];
@@ -96,6 +101,9 @@ const ploggingSlice = createSlice({
     setKg: (state, action: PayloadAction<number>) => {
       state.kg = action.payload;
     },
+    setPeople: (state, action: PayloadAction<number | null>) => {
+      state.people = action.payload;
+    },
   },
 });
 
@@ -107,6 +115,7 @@ export const {
   setBeforeCrewping,
   setPloggingType,
   setPloggingId,
+  setCrewpingId,
   addPath,
   addImage,
   addTime,
@@ -116,5 +125,6 @@ export const {
   setIsVolEnd,
   handleIsLoading,
   setKg,
+  setPeople,
 } = ploggingSlice.actions;
 export default ploggingSlice.reducer;

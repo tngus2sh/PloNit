@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, ReactNode } from "react";
 import style from "styles/css/PloggingPage/DefaultMap.module.css";
-import Swal from "sweetalert2";
 import { GeolocationPosition, Coordinate } from "interface/ploggingInterface";
 import useGPS from "./functions/useGPS";
 import useCluster from "./functions/useCluster";
@@ -11,20 +10,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
 import * as P from "store/plogging-slice";
 import { dummy_location, dummy_helps } from "./dummyData";
-
-// 대략적으로 필요한 기능들
-
-// default useEffect에서 필요한 기능
-// 유저 초기 위치 확인 x
-// 청소된 구역 표시
-// 플로깅 기록
-
-// [latitude, longitude] useEffect에서 필요한 기능
-// 유저 위치 표시 x
-// 주변 유저 위치 표시 x
-// 주변 쓰레기통 표시 x
-// 주변 화장실 위치 표시 x
-// 주변 유저 도움 요청 표시 x
 
 const defaultZoom = 16;
 const neighbor_help_maxZoom = 12;
@@ -155,15 +140,15 @@ const DefaultMap: React.FC<IDefaultMap> = ({
 
           naver.maps.Event.once(map, "init", () => {
             centerBtnIndicator_active.setMap(map);
+            centerBtnRef.current = centerBtnIndicator_active;
             if (!isBefore) {
               arrowBtnIndcator_up.setMap(map);
               arrowBtnRef.current = arrowBtnIndcator_up;
+              binBtnIndicator_inactive.setMap(map);
+              toiletBtnIndicator_inactive.setMap(map);
+              binBtnRef.current = binBtnIndicator_inactive;
+              toiletBtnRef.current = toiletBtnIndicator_inactive;
             }
-            binBtnIndicator_inactive.setMap(map);
-            toiletBtnIndicator_inactive.setMap(map);
-            centerBtnRef.current = centerBtnIndicator_active;
-            binBtnRef.current = binBtnIndicator_inactive;
-            toiletBtnRef.current = toiletBtnIndicator_inactive;
 
             naver.maps.Event.addListener(map, "dragend", () => {
               centerBtnIndicator_active.setMap(null);
@@ -252,36 +237,35 @@ const DefaultMap: React.FC<IDefaultMap> = ({
                 setShowToilet(false);
               },
             );
-            if (!isBefore) {
-              naver.maps.Event.addDOMListener(
-                arrowBtnIndcator_up.getElement(),
-                "click",
-                () => {
-                  setShowBottom(true);
-                  arrowBtnIndcator_up.setMap(null);
-                  toiletBtnRef.current?.setMap(null);
-                  binBtnRef.current?.setMap(null);
-                  arrowBtnIndcator_down.setMap(mapRef.current);
-                  binBtnRef.current?.setMap(mapRef.current);
-                  toiletBtnRef.current?.setMap(mapRef.current);
-                  arrowBtnRef.current = arrowBtnIndcator_down;
-                },
-              );
-              naver.maps.Event.addDOMListener(
-                arrowBtnIndcator_down.getElement(),
-                "click",
-                () => {
-                  setShowBottom(false);
-                  arrowBtnIndcator_down.setMap(null);
-                  toiletBtnRef.current?.setMap(null);
-                  binBtnRef.current?.setMap(null);
-                  arrowBtnIndcator_up.setMap(mapRef.current);
-                  binBtnRef.current?.setMap(mapRef.current);
-                  toiletBtnRef.current?.setMap(mapRef.current);
-                  arrowBtnRef.current = arrowBtnIndcator_up;
-                },
-              );
-            }
+
+            naver.maps.Event.addDOMListener(
+              arrowBtnIndcator_up.getElement(),
+              "click",
+              () => {
+                setShowBottom(true);
+                arrowBtnIndcator_up.setMap(null);
+                toiletBtnRef.current?.setMap(null);
+                binBtnRef.current?.setMap(null);
+                arrowBtnIndcator_down.setMap(mapRef.current);
+                binBtnRef.current?.setMap(mapRef.current);
+                toiletBtnRef.current?.setMap(mapRef.current);
+                arrowBtnRef.current = arrowBtnIndcator_down;
+              },
+            );
+            naver.maps.Event.addDOMListener(
+              arrowBtnIndcator_down.getElement(),
+              "click",
+              () => {
+                setShowBottom(false);
+                arrowBtnIndcator_down.setMap(null);
+                toiletBtnRef.current?.setMap(null);
+                binBtnRef.current?.setMap(null);
+                arrowBtnIndcator_up.setMap(mapRef.current);
+                binBtnRef.current?.setMap(mapRef.current);
+                toiletBtnRef.current?.setMap(mapRef.current);
+                arrowBtnRef.current = arrowBtnIndcator_up;
+              },
+            );
           });
 
           // 플로깅 시작 시 정보창 애니메이션
