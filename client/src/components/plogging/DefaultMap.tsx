@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, ReactNode } from "react";
 import style from "styles/css/PloggingPage/DefaultMap.module.css";
 import { GeolocationPosition, Coordinate } from "interface/ploggingInterface";
-import useGPS from "./functions/useGPS";
+import getGPS from "./functions/getGPS";
 import useCluster from "./functions/useCluster";
 import * as N from "./functions/useNaverMap";
 import { naver } from "components/common/useNaver";
@@ -41,9 +41,9 @@ const DefaultMap: React.FC<IDefaultMap> = ({
   const paths = useSelector<rootState, Coordinate[]>((state) => {
     return state.plogging.paths;
   });
+  const [onCenter, setOnCenter] = useState<boolean>(false);
   const isMapLoaded = useRef<boolean>(false);
   const isBottomLoaded = useRef<boolean>(false);
-  const { latitude, longitude, onCenter, setOnCenter } = useGPS();
   const mapRef = useRef<naver.maps.Map | null>(null);
   const userRef = useRef<naver.maps.Marker | null>(null);
   const centerBtnRef = useRef<naver.maps.CustomControl | null>(null);
@@ -84,11 +84,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
   // 초기맵 생성 및 기초 구조 구성
   useEffect(() => {
     if (!isMapLoaded.current) {
-      const getGPS = new Promise<GeolocationPosition>((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject);
-      });
-
-      getGPS
+      getGPS()
         .then((response) => {
           mapRef.current = null;
           const { latitude, longitude } = response.coords;
@@ -152,11 +148,13 @@ const DefaultMap: React.FC<IDefaultMap> = ({
             toiletBtnRef.current = toiletBtnIndicator_inactive;
 
             naver.maps.Event.addListener(map, "dragend", () => {
+              setOnCenter(false);
               centerBtnIndicator_active.setMap(null);
               centerBtnIndicator_inactive.setMap(map);
               centerBtnRef.current = centerBtnIndicator_inactive;
             });
             naver.maps.Event.addListener(map, "zoom_changed", () => {
+              setOnCenter(false);
               centerBtnIndicator_active.setMap(null);
               centerBtnIndicator_inactive.setMap(map);
               centerBtnRef.current = centerBtnIndicator_inactive;
@@ -188,10 +186,10 @@ const DefaultMap: React.FC<IDefaultMap> = ({
               centerBtnIndicator_inactive.getElement(),
               "click",
               () => {
+                setOnCenter(true);
                 centerBtnIndicator_inactive.setMap(null);
                 centerBtnIndicator_active.setMap(map);
                 centerBtnRef.current = centerBtnIndicator_active;
-                setOnCenter(true);
               },
             );
             naver.maps.Event.addDOMListener(
@@ -337,13 +335,18 @@ const DefaultMap: React.FC<IDefaultMap> = ({
 
   // 사용자의 위치 가운데로 갱신 시
   useEffect(() => {
-    if (!onCenter) {
-      if (typeof latitude === "number" && typeof longitude === "number") {
-        mapRef.current?.setCenter(new naver.maps.LatLng(latitude, longitude));
-        userRef.current?.setPosition(
-          new naver.maps.LatLng(latitude, longitude),
-        );
-      }
+    if (onCenter) {
+      getGPS()
+        .then((response) => {
+          const { latitude, longitude } = response.coords;
+          mapRef.current?.setCenter(new naver.maps.LatLng(latitude, longitude));
+          userRef.current?.setPosition(
+            new naver.maps.LatLng(latitude, longitude),
+          );
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
   }, [onCenter]);
 

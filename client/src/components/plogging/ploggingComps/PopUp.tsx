@@ -1,5 +1,5 @@
 import React from "react";
-import useGPS from "../functions/useGPS";
+import getGPS from "../functions/getGPS";
 import useImageCompress from "../functions/useImageCompress";
 import CommonButton from "components/common/CommonButton";
 import style from "styles/css/PloggingPage/PopUp.module.css";
@@ -35,7 +35,6 @@ const PopUp: React.FC<IPopUP> = ({
     return state.user.accessToken;
   });
 
-  const { longitude, latitude } = useGPS();
   const { compressImage } = useImageCompress();
 
   return (
@@ -159,33 +158,43 @@ const PopUp: React.FC<IPopUP> = ({
                   type: "image/jpeg",
                 });
                 const compressedImage = await compressImage(jpgFile);
+                getGPS()
+                  .then((response) => {
+                    const { latitude, longitude } = response.coords;
+                    saveHelp({
+                      accessToken: accessToken,
+                      latitude: latitude,
+                      longitude: longitude,
+                      image: compressedImage,
+                      context: payloadContext,
+                      success: (response) => {
+                        console.log(response);
+                        dispatch(P.handleIsLoading(-1));
+                      },
+                      fail: (error) => {
+                        console.error(error);
+                      },
+                    });
+                  })
+                  .catch((error) => {
+                    console.error(error);
+                  });
+              }
+            } else {
+              getGPS().then((response) => {
+                const { latitude, longitude } = response.coords;
                 saveHelp({
                   accessToken: accessToken,
                   latitude: latitude,
                   longitude: longitude,
-                  image: compressedImage,
                   context: payloadContext,
                   success: (response) => {
                     console.log(response);
-                    dispatch(P.handleIsLoading(-1));
                   },
                   fail: (error) => {
                     console.error(error);
                   },
                 });
-              }
-            } else {
-              saveHelp({
-                accessToken: accessToken,
-                latitude: latitude,
-                longitude: longitude,
-                context: payloadContext,
-                success: (response) => {
-                  console.log(response);
-                },
-                fail: (error) => {
-                  console.error(error);
-                },
               });
             }
           }
