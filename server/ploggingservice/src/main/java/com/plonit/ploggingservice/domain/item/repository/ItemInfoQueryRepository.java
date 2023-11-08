@@ -1,6 +1,6 @@
 package com.plonit.ploggingservice.domain.item.repository;
 
-import com.plonit.ploggingservice.api.item.controller.response.FindTrashcanRes;
+import com.plonit.ploggingservice.api.item.controller.response.FindItemRes;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
@@ -19,9 +19,9 @@ public class ItemInfoQueryRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<FindTrashcanRes> findTrashcan(Long gugunCode, boolean flag) {
+    public List<FindItemRes> findTrashcan(Long gugunCode, boolean flag) {
         return queryFactory
-                .select(Projections.constructor(FindTrashcanRes.class,
+                .select(Projections.constructor(FindItemRes.class,
                         itemInfo.latitude,
                         itemInfo.longitude))
                 .from(itemInfo)

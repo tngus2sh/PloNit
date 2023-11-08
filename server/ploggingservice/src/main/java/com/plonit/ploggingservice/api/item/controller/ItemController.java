@@ -1,6 +1,6 @@
 package com.plonit.ploggingservice.api.item.controller;
 
-import com.plonit.ploggingservice.api.item.controller.response.FindTrashcanRes;
+import com.plonit.ploggingservice.api.item.controller.response.FindItemRes;
 import com.plonit.ploggingservice.api.item.service.ItemService;
 import com.plonit.ploggingservice.common.CustomApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,12 +25,22 @@ public class ItemController {
     private final ItemService itemService;
 
     @GetMapping("/trashcan/{latitude}/{longitude}")
-    public CustomApiResponse<List<FindTrashcanRes>> findTrashcan(@PathVariable("latitude") Double latitude, @PathVariable("longitude") Double longitude) {
+    public CustomApiResponse<List<FindItemRes>> findTrashcan(@PathVariable("latitude") Double latitude, @PathVariable("longitude") Double longitude) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
         log.info("FindTrashcan={}, {}", latitude, longitude);
 
-        List<FindTrashcanRes> response = itemService.findTrashcan(latitude, longitude);
+        List<FindItemRes> response = itemService.findTrashcan(latitude, longitude);
 
         return CustomApiResponse.ok(response, "쓰레기통을 조회했습니다.");
+    }
+
+    @GetMapping("/toilet/{latitude}/{longitude}")
+    public CustomApiResponse<List<FindItemRes>> findToilet(@PathVariable("latitude") Double latitude, @PathVariable("longitude") Double longitude) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+        log.info("FindToilet={}, {}", latitude, longitude);
+
+        List<FindItemRes> response = itemService.findToilet(latitude, longitude);
+
+        return CustomApiResponse.ok(response, "화장실을 조회했습니다.");
     }
 }

@@ -12,7 +12,7 @@ import static lombok.AccessLevel.PROTECTED;
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
 @Builder(access = PRIVATE)
-public class FindTrashcanRes {
+public class FindItemRes {
 
     private Double latitude;
     private Double longitude;
