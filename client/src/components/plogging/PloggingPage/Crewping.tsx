@@ -34,6 +34,11 @@ const Crewping = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { image, handleImageCapture, fileInputRef } = useCamera();
   const check1 = useRef<boolean>(false);
+  const check2 = useRef<boolean>(false);
+
+  const accessToken = useSelector<rootState, string>((state) => {
+    return state.user.accessToken;
+  });
 
   useEffect(() => {
     if (!check1.current) {
@@ -42,9 +47,9 @@ const Crewping = () => {
         setShow(true);
         dispatch(camera.setIsOnWrite(false));
       }
-    }
-    if (beforeCrewping) {
-      // 모달이 나와야 하며, 그를 비롯한 정보들이 나와야 한다.
+      if (beforeCrewping) {
+        // 모달이 나와야 하며, 그를 비롯한 정보들이 나와야 한다.
+      }
     }
 
     return () => {
@@ -63,7 +68,24 @@ const Crewping = () => {
   }, [image]);
 
   return (
-    <div>
+    <>
+      <DefaultMap subHeight={infoDivHeight} isBefore={false}>
+        <InfoDiv
+          infoDivHeight={infoDivHeight}
+          setShow={setShow}
+          setPreventShow={setPreventShow}
+          handleImageCapture={handleImageCapture}
+        />
+      </DefaultMap>
+      {preventShow && (
+        <BottomUpModal show={show} setShow={setShow}>
+          <PopUp
+            CameraDivHeight={infoDivHeight}
+            handleImageCapture={handleImageCapture}
+            setShow={setShow}
+          />
+        </BottomUpModal>
+      )}
       <input
         type="file"
         accept="image/*"
@@ -72,7 +94,7 @@ const Crewping = () => {
         ref={fileInputRef}
         style={{ display: "none" }}
       />
-    </div>
+    </>
   );
 };
 

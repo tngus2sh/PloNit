@@ -16,7 +16,7 @@ import { rootState } from "store/store";
 import * as camera from "store/camera-slice";
 import * as P from "store/plogging-slice";
 
-import { savePlogging, startPlogging } from "api/lib/plogging";
+import { savePlogging } from "api/lib/plogging";
 
 function formatNumber(n: number): string {
   if (n < 10) {
