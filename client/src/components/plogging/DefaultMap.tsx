@@ -193,6 +193,13 @@ const DefaultMap: React.FC<IDefaultMap> = ({
               },
             );
             naver.maps.Event.addDOMListener(
+              centerBtnIndicator_active.getElement(),
+              "click",
+              () => {
+                setOnCenter(true);
+              },
+            );
+            naver.maps.Event.addDOMListener(
               binBtnIndicator_inactive.getElement(),
               "click",
               () => {
@@ -338,6 +345,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
     if (onCenter) {
       getGPS()
         .then((response) => {
+          setOnCenter(false);
           const { latitude, longitude } = response.coords;
           mapRef.current?.setCenter(new naver.maps.LatLng(latitude, longitude));
           userRef.current?.setPosition(
