@@ -1,9 +1,6 @@
 package com.plonit.plonitservice.api.crew.service.impl;
 
-import com.plonit.plonitservice.api.crew.controller.response.FindCrewMasterMemberRes;
-import com.plonit.plonitservice.api.crew.controller.response.FindCrewMemberRes;
-import com.plonit.plonitservice.api.crew.controller.response.FindCrewRes;
-import com.plonit.plonitservice.api.crew.controller.response.FindCrewsRes;
+import com.plonit.plonitservice.api.crew.controller.response.*;
 import com.plonit.plonitservice.api.crew.service.CrewQueryService;
 import com.plonit.plonitservice.common.AwsS3Uploader;
 import com.plonit.plonitservice.common.exception.CustomException;
@@ -56,7 +53,7 @@ public class CrewQueryServiceImpl implements CrewQueryService {
     }
 
     @Override // 크루 상세 조회
-    public FindCrewRes findCrew(long crewId) {
+    public FindCrewRes findCrew(Long crewId) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
 
         FindCrewRes findCrewRes = crewQueryRepository.findCrewWithCrewMember(crewId)
@@ -67,7 +64,7 @@ public class CrewQueryServiceImpl implements CrewQueryService {
     }
 
     @Override // 크루원 조회
-    public List<FindCrewMemberRes> findCrewMember(long crewId) {
+    public List<FindCrewMemberRes> findCrewMember(Long crewId) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
 
         List<CrewMember> crewMemberList = crewMemberQueryRepository.findByCrewId(crewId);
@@ -81,15 +78,27 @@ public class CrewQueryServiceImpl implements CrewQueryService {
     }
 
     @Override // 크루원 조회(크루장)
-    public List<FindCrewMasterMemberRes> findCrewMasterMember(long memberId, long crewId) {
+    public List<FindCrewMasterMemberRes> findCrewMasterMember(Long memberId, Long crewId) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
 
-        if(!crewMemberQueryRepository.isValidCrewMaster(memberId, crewId))
+        if(!crewMemberQueryRepository.isValidCrewMember(memberId, crewId, true))
             throw new CustomException(CREW_MASTER_NOT_FORBIDDEN);
 
         List<CrewMember> crewMemberList = crewMemberQueryRepository.findByCrewId(crewId);
         log.info(logCurrent(getClassName(), getMethodName(), END));
         return crewMemberList.stream().map(FindCrewMasterMemberRes::of).collect(Collectors.toList());
+    }
+
+    @Override // 크루 가입 대기 조회
+    public List<FindWaitingCrewMemberRes> findWaitingCrewMember(Long memberId, Long crewId) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        if(!crewMemberQueryRepository.isValidCrewMember(memberId, crewId, true))
+            throw new CustomException(CREW_MASTER_NOT_FORBIDDEN);
+
+        List<CrewMember> crewMemberList = crewMemberQueryRepository.findByWaitingCrewId(crewId);
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+        return crewMemberList.stream().map(FindWaitingCrewMemberRes::of).collect(Collectors.toList());
     }
 
 }
