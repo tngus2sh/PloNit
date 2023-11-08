@@ -16,21 +16,17 @@ public class EndPloggingReq {
 
     @Schema(description = "플로깅 id : 플로깅 시작시에 반환된 id")
     @NotNull(message = "플로깅 id는 필수 입력값입니다.")
-    @Positive
     private Long ploggingId;
 
     @Schema(description = "크루핑 id : 크루핑 생성시에 반환된 id")
-    @Positive
     private Long crewpingId;
     
     @Schema(description = "거리")
     @NotNull(message = "거리는 필수 입력값입니다.")
-    @Positive
     private Double distance;
     
     @Schema(description = "칼로리")                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
     @NotNull(message = "칼로리는 필수 입력값입니다.")
-    @Positive
     private Double calorie;
 
     @Schema(description = "한줄평")
