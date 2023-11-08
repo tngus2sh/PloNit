@@ -31,36 +31,21 @@ const savePlogging = ({
 }) => {
   const api = ploggingApi;
   api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
-  if (ploggingId) {
-    api
-      .post(
-        ``,
-        JSON.stringify({
-          ploggingId: ploggingId,
-          distance: distance,
-          calorie: calorie,
-          review: review,
-          coordinates: coordinates,
-        }),
-      )
-      .then(success)
-      .catch(fail);
-  } else if (crewpingId) {
-    api
-      .post(
-        ``,
-        JSON.stringify({
-          crewpingId: crewpingId,
-          distance: distance,
-          calorie: calorie,
-          review: review,
-          people: people ?? null,
-          coordinates: coordinates,
-        }),
-      )
-      .then(success)
-      .catch(fail);
-  }
+  api
+    .post(
+      ``,
+      JSON.stringify({
+        ploggingId: ploggingId ?? null,
+        crewpingId: crewpingId ?? null,
+        distance: distance,
+        calorie: calorie,
+        review: review,
+        people: people ?? null,
+        coordinates: coordinates,
+      }),
+    )
+    .then(success)
+    .catch(fail);
 };
 
 // 플로깅 시작하기
