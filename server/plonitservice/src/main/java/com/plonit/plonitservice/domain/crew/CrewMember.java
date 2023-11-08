@@ -3,6 +3,8 @@ package com.plonit.plonitservice.domain.crew;
 import com.plonit.plonitservice.domain.member.Member;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
@@ -13,6 +15,8 @@ import static javax.persistence.FetchType.LAZY;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicInsert
+@DynamicUpdate
 @Table(name = "crew_member")
 public class CrewMember {
     @Id
@@ -28,12 +32,29 @@ public class CrewMember {
     @JoinColumn(name = "crew_id")
     private Crew crew;
 
+    @ColumnDefault("false")
     private Boolean isCrewMaster;
 
+    @ColumnDefault("false")
     private Boolean isCrewMember;
-    @PrePersist
-    public void prePersist() {
-        this.isCrewMaster = this.isCrewMaster != null;
-        this.isCrewMember = this.isCrewMember != null;
+
+    public static CrewMember toEntity (Crew crew, Member member) {
+        return CrewMember.builder()
+                .member(member)
+                .isCrewMaster(true)
+                .isCrewMember(true)
+                .crew(crew)
+                .build();
+    }
+
+    public static CrewMember memberToEntity (Crew crew, Member member) {
+        return CrewMember.builder()
+                .member(member)
+                .crew(crew)
+                .build();
+    }
+
+    public void changeIsCrewMember() {
+        this.isCrewMember = true;
     }
 }
