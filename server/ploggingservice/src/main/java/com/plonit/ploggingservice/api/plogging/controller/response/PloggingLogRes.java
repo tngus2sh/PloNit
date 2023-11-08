@@ -6,10 +6,13 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@RequiredArgsConstructor
 public class PloggingLogRes {
     
     private Long id;
@@ -28,12 +31,13 @@ public class PloggingLogRes {
     
     private Double calorie;
     
-    private String image;
+    private List<String> images;
 
-    private Coordinate[] coordinates;
+    private List<Coordinate> coordinates;
     
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @AllArgsConstructor
+    @Builder
     public static class Coordinate {
         private Double latitude;
 

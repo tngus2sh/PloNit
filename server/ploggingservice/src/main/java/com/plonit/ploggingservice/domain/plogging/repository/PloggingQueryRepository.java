@@ -42,7 +42,14 @@ public class PloggingQueryRepository {
     @Transactional(readOnly = true)
     public Optional<PloggingLogRes> findPloggingLogDetail(Long ploggingId, Long memberKey) {
         return Optional.ofNullable(queryFactory.select(constructor(PloggingLogRes.class,
-                        plogging.id))
+                        plogging.id,
+                        plogging.type,
+                        plogging.place,
+                        plogging.startTime,
+                        plogging.endTime,
+                        plogging.totalTime,
+                        plogging.distance,
+                        plogging.calorie))
                 .from(plogging)
                 .leftJoin(latLong).on(latLong.plogging.id.eq(ploggingId))
                 .where(plogging.id.eq(ploggingId).and(plogging.memberKey.eq(memberKey)))
