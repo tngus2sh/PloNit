@@ -72,6 +72,7 @@ public class PloggingQueryServiceImpl implements PloggingQueryService {
                 .totalTime(findPloggingLogRes.getTotalTime())
                 .distance(findPloggingLogRes.getDistance())
                 .calorie(findPloggingLogRes.getCalorie())
+                .review(findPloggingLogRes.getReview())
                 .build();
 
         // 이미지 넣기
