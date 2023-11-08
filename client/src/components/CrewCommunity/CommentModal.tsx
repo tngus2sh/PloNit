@@ -35,6 +35,7 @@ const CommentModal = ({
       (res) => {
         console.log("댓글 생성 성공");
         fetchFeedList();
+        setComment("");
       },
       (err) => {
         console.log("댓글 생성 실패", err);

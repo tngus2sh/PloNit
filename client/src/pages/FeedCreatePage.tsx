@@ -33,9 +33,14 @@ const FeedCreatePage = () => {
   const handleImageUpload = (event: any) => {
     const files = Array.from(event.target.files) as File[];
     setFeedImages([...isFeedImages, ...files]);
-
-    const newUrls = files.map((file) => URL.createObjectURL(file));
-    setPreviewUrls([...previewUrls, ...newUrls]);
+    if (isFeedImages.length > 5) {
+      const newImages = isFeedImages.slice(0, 5 - isFeedImages.length);
+      const newUrls = newImages.map((file) => URL.createObjectURL(file));
+      setPreviewUrls([...previewUrls, ...newUrls]);
+    } else {
+      const newUrls = files.map((file) => URL.createObjectURL(file));
+      setPreviewUrls([...previewUrls, ...newUrls]);
+    }
   };
 
   const feedCreateHandler = () => {
@@ -49,7 +54,13 @@ const FeedCreatePage = () => {
         formData.append("feedPictures", image);
       });
     }
-
+    if (!isFeedImages) {
+      alert("피드 이미지를 등록하세요");
+      return;
+    } else if (!isFeedIntroduce) {
+      alert("피드 내용을 입력하세요");
+      return;
+    }
     getFeedCreate(
       accessToken,
       formData,
