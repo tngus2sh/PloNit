@@ -45,7 +45,7 @@ const CrewCreatePage = () => {
     }
     const formData = new FormData();
     formData.append("name", isCrewName);
-    formData.append("gugunCode", isRegionCode);
+    formData.append("dongCode", isRegionCode);
     formData.append("introduce", isCrewIntroduce);
     if (isCrewImage) {
       formData.append("crewImage", isCrewImage);
