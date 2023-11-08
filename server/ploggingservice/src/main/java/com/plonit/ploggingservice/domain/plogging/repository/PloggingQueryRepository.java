@@ -49,7 +49,9 @@ public class PloggingQueryRepository {
                         plogging.endTime,
                         plogging.totalTime,
                         plogging.distance,
-                        plogging.calorie))
+                        plogging.calorie,
+                        null,
+                        null))
                 .from(plogging)
                 .leftJoin(latLong).on(latLong.plogging.id.eq(ploggingId))
                 .where(plogging.id.eq(ploggingId).and(plogging.memberKey.eq(memberKey)))
