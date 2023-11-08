@@ -1,10 +1,11 @@
 package com.plonit.plonitservice.api.crew.controller;
 
+import com.plonit.plonitservice.api.crew.controller.request.ApproveCrewReq;
 import com.plonit.plonitservice.api.crew.controller.request.SaveCrewReq;
-import com.plonit.plonitservice.api.crew.controller.response.FindCrewRes;
-import com.plonit.plonitservice.api.crew.controller.response.FindCrewsRes;
+import com.plonit.plonitservice.api.crew.controller.response.*;
 import com.plonit.plonitservice.api.crew.service.CrewQueryService;
 import com.plonit.plonitservice.api.crew.service.CrewService;
+import com.plonit.plonitservice.api.crew.service.dto.ApproveCrewDto;
 import com.plonit.plonitservice.api.crew.service.dto.SaveCrewDto;
 import com.plonit.plonitservice.common.CustomApiResponse;
 import com.plonit.plonitservice.common.exception.CustomException;
@@ -83,4 +84,64 @@ public class CrewController {
         log.info(logCurrent(getClassName(), getMethodName(), END));
         return CustomApiResponse.ok(findCrewRes, "크루 상세 조회에 성공했습니다.");
     }
+
+    @Operation(summary = "크루원 조회(크루원)", description = "크루원을 조회한다.")
+    @GetMapping ("/member/{crew-id}")
+    public CustomApiResponse<Object> findCrewMember(@PathVariable("crew-id") long crewId, HttpServletRequest request) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        List<FindCrewMemberRes> findCrewMemberResList = crewQueryService.findCrewMember(crewId);
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+        return CustomApiResponse.ok(findCrewMemberResList, "크루원 조회에 성공했습니다.");
+    }
+
+    @Operation(summary = "크루원 조회(크루장)", description = "크루원을 조회한다.")
+    @GetMapping ("/master-member/{crew-id}")
+    public CustomApiResponse<Object> findCrewMasterMember(@PathVariable("crew-id") long crewId, HttpServletRequest request) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        Long memberKey = RequestUtils.getMemberKey(request);
+        List<FindCrewMasterMemberRes> findCrewMasterMemberResList = crewQueryService.findCrewMasterMember(memberKey, crewId);
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+        return CustomApiResponse.ok(findCrewMasterMemberResList, "크루원 조회에 성공했습니다.");
+    }
+
+    @Operation(summary = "크루 가입 요청", description = "크루 가입을 요청한다.")
+    @PostMapping ("/join/{crew-id}")
+    public CustomApiResponse<Object> joinCrewMember(@PathVariable("crew-id") long crewId, HttpServletRequest request) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        Long memberKey = RequestUtils.getMemberKey(request);
+        crewService.joinCrewMember(memberKey, crewId);
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+        return CustomApiResponse.ok("", "크루 가입 요청에 성공했습니다.");
+    }
+
+    @Operation(summary = "크루 가입 대기 조회", description = "크루 가입 대기 멤버를 조회한다.")
+    @GetMapping ("/join/{crew-id}")
+    public CustomApiResponse<Object> findWaitingCrewMember(@PathVariable("crew-id") long crewId, HttpServletRequest request) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        Long memberKey = RequestUtils.getMemberKey(request);
+        List<FindWaitingCrewMemberRes> findWaitingCrewMemberResList = crewQueryService.findWaitingCrewMember(memberKey, crewId);
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+        return CustomApiResponse.ok(findWaitingCrewMemberResList, "크루 가입 대기 조회에 성공했습니다.");
+    }
+
+    @Operation(summary = "크루 가입 승인/거절", description = "크루 가입을 승인/거절한다.")
+    @PatchMapping ("/approve")
+    public CustomApiResponse<Object> approveCrewMember(@Validated @RequestBody ApproveCrewReq approveCrewReq, HttpServletRequest request) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        Long memberKey = RequestUtils.getMemberKey(request);
+        crewService.approveCrewMember(ApproveCrewDto.of(memberKey, approveCrewReq));
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+        return CustomApiResponse.ok("", "크루 가입 승인/거절에 성공했습니다.");
+    }
+
 }

@@ -2,6 +2,7 @@ package com.plonit.plonitservice.domain.region.repository;
 
 import com.plonit.plonitservice.api.region.controller.response.DongRes;
 import com.plonit.plonitservice.api.region.controller.response.GugunRes;
+import com.plonit.plonitservice.api.region.controller.response.SidoGugunCodeRes;
 import com.plonit.plonitservice.api.region.controller.response.SidoRes;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 
 import static com.plonit.plonitservice.domain.region.QDong.dong;
 import static com.plonit.plonitservice.domain.region.QGugun.gugun;
@@ -51,5 +53,15 @@ public class RegionQueryRepository {
                 .from(dong)
                 .where(dong.gugun.code.eq(gugunCode))
                 .fetch();
+    }
+
+    /* 시도 이름, 구군 이름으로 시도 코드와 구군 코드 찾기 */
+    public Optional<SidoGugunCodeRes> findSidoGugunCode(String sidoName, String gugunName) {
+        return Optional.ofNullable(queryFactory.select(constructor(SidoGugunCodeRes.class,
+                        gugun.sido.code,
+                        gugun.code))
+                .from(gugun)
+                .where(gugun.name.like(gugunName).and(gugun.sido.name.contains(sidoName)))
+                .fetchOne());
     }
 }
