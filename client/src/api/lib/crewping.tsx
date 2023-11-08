@@ -20,3 +20,21 @@ export async function getCrewpingCreate(
   api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
   await api.post("", formData).then(success).catch(fail);
 }
+
+// 크루 목록 조회
+export async function getCrewpingInfo(
+  accessToken: string,
+  success: (
+    res: AxiosResponse<any, any>,
+  ) =>
+    | AxiosResponse<any, any>
+    | PromiseLike<AxiosResponse<any, any>>
+    | null
+    | undefined
+    | void,
+  fail: (err: any) => PromiseLike<never> | null | undefined | void,
+) {
+  const api = customApi("/plonit-service/v1/crewping/detail/{crewping-id}");
+  api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
+  await api.get("").then(success).catch(fail);
+}

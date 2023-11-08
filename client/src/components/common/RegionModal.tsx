@@ -8,9 +8,14 @@ import { RegionInterface } from "interface/regionInterface";
 interface RegionModalProps {
   onClose: () => void;
   setSignupRegion: any;
+  setRegionCode: any;
 }
 
-const RegionModal = ({ onClose, setSignupRegion }: RegionModalProps) => {
+const RegionModal = ({
+  onClose,
+  setSignupRegion,
+  setRegionCode,
+}: RegionModalProps) => {
   const accessToken = useSelector((state: any) => state.user.accessToken);
   const [sidoData, setsidoData] = useState<RegionInterface[]>([]);
   const [selectedSidoCode, setSelectedSidoCode] = useState<number | null>(null);
@@ -31,7 +36,6 @@ const RegionModal = ({ onClose, setSignupRegion }: RegionModalProps) => {
       accessToken,
       (res) => {
         console.log("시도 API 연결 성공");
-        console.log(res);
         console.log(res.data.resultBody);
         setsidoData(res.data.resultBody);
       },
@@ -50,7 +54,6 @@ const RegionModal = ({ onClose, setSignupRegion }: RegionModalProps) => {
       item.sidoCode,
       (res) => {
         console.log("구군 API 연결 성공");
-        console.log(res);
         console.log(res.data.resultBody);
         setgugunData(res.data.resultBody);
       },
@@ -67,7 +70,6 @@ const RegionModal = ({ onClose, setSignupRegion }: RegionModalProps) => {
       item.gugunCode,
       (res) => {
         console.log("동 API 연결 성공");
-        console.log(res);
         console.log(res.data.resultBody);
         setdongData(res.data.resultBody);
       },
@@ -83,6 +85,7 @@ const RegionModal = ({ onClose, setSignupRegion }: RegionModalProps) => {
     setSignupRegion(
       `${selectedSidoName} ${selectedGugunName} ${item.dongName}`,
     );
+    setRegionCode(item.dongCode);
   };
 
   return (

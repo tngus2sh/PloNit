@@ -14,6 +14,7 @@ const CrewCreatePage = () => {
   const accessToken = useSelector((state: any) => state.user.accessToken);
   const [isCrewName, setCrewName] = useState("");
   const [isCrewRegion, setCrewRegion] = useState("");
+  const [isRegionCode, setRegionCode] = useState("");
   const [isCrewIntroduce, setCrewIntroduce] = useState("");
   const [isCrewImage, setCrewImage] = useState(null);
   const [isOpenRegionModal, setOpenRegionModal] = useState(false);
@@ -44,7 +45,7 @@ const CrewCreatePage = () => {
     }
     const formData = new FormData();
     formData.append("name", isCrewName);
-    formData.append("region", isCrewRegion);
+    formData.append("dongCode", isRegionCode);
     formData.append("introduce", isCrewIntroduce);
     if (isCrewImage) {
       formData.append("crewImage", isCrewImage);
@@ -63,19 +64,6 @@ const CrewCreatePage = () => {
       },
     );
   };
-  // const handleImageUpload = (event: any) => {
-  //   const file = event.target.files[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-
-  //     reader.onload = (event: any) => {
-  //       const dataURL = event.target.result;
-  //       setCrewImage(file);
-  //     };
-
-  //     reader.readAsDataURL(file);
-  //   }
-  // };
 
   const handleImageUpload = (event: any) => {
     const file = event.target.files[0];
@@ -125,6 +113,7 @@ const CrewCreatePage = () => {
             <RegionModal
               onClose={OpenRegionModal}
               setSignupRegion={setCrewRegion}
+              setRegionCode={setRegionCode}
             />
           </>
         )}

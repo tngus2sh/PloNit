@@ -11,7 +11,7 @@ const initialState = {
   name: "",
   gender: 0,
   birthday: "",
-  region: "",
+  dongCode: 0,
   height: 0,
   weight: 0,
   id_1365: "",
@@ -36,7 +36,7 @@ const userSlice = createSlice({
       state.nickname = action.payload.nickname;
       state.gender = action.payload.gender;
       state.birthday = action.payload.birth;
-      state.region = action.payload.region;
+      state.dongCode = action.payload.region;
     },
   },
 });

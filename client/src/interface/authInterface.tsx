@@ -5,7 +5,7 @@ export interface UserInterface {
   name: string;
   gender: boolean;
   birth: string;
-  region: string;
+  dongCode: number;
   height?: number;
   weight?: number;
   id_1365?: string;

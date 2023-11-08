@@ -56,7 +56,7 @@ const TotalCrewList = () => {
       imageUrl: "your-image-url-2.jpg",
     },
     {
-      title: "다른 크루 이름",
+      title: "무슨 페이지",
       imageUrl: "your-image-url-2.jpg",
     },
     // ... 추가적으로 더 많은 아이템들을 넣을 수 있습니다.
