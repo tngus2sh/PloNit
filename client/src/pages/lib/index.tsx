@@ -27,6 +27,7 @@ import ProfilePage from "pages/ProfilePage";
 import RankingPage from "pages/RankingPage";
 import VolunteerRegisterPage from "pages/VolunteerRegisterPage";
 import FeedCreatePage from "pages/FeedCreatePage";
+import CrewNoticePage from "pages/CrewNoticePage";
 
 import PloggingImagePage from "pages/PloggingImagePage";
 
@@ -79,6 +80,10 @@ const RouteComponent = () => {
         element={<CrewMemberApprovalPage />}
       ></Route>
       <Route
+        path="/crew/community/notice/:crewId"
+        element={<CrewNoticePage />}
+      ></Route>
+      <Route
         path="/crew/crewping/create/:crewId"
         element={<CrewpingCreatePage />}
       ></Route>
@@ -87,6 +92,7 @@ const RouteComponent = () => {
         element={<CrewpingDetailPage />}
       ></Route>
       <Route path="/feed/create/:crewId" element={<FeedCreatePage />}></Route>
+
       <Route path="/*" element={<PageNotFound404 />}></Route>
     </Routes>
   );

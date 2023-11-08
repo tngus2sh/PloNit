@@ -32,6 +32,10 @@ const CrewCommunityPage = () => {
     document.body.style.overflow = "scroll";
     navigate(`/crew/crewping/create/${crewId}`);
   };
+  const goNoticeHandler = () => {
+    document.body.style.overflow = "scroll";
+    navigate(`/crew/community/notice/${crewId}`);
+  };
 
   const JoinCrew = () => {
     getCrewRegister(
@@ -137,6 +141,21 @@ const CrewCommunityPage = () => {
                 />
               </div>
             </div>
+            {isCrewDetail.isCrewMaster && (
+              <div className={style.create} style={{ bottom: "14.5rem" }}>
+                <div className={style.title}>공지사항</div>
+                <div className={style.open_button} onClick={goNoticeHandler}>
+                  <Icon
+                    icon="bi:pencil"
+                    style={{
+                      width: "2rem",
+                      height: "2rem",
+                      marginTop: "0.5rem",
+                    }}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </>
       )}
