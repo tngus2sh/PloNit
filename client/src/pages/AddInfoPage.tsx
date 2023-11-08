@@ -153,15 +153,16 @@ const AddInfoPage = () => {
           여
         </div>
       </div>
-      <Input
-        id="birth"
-        labelTitle="생년월일"
-        type="number"
-        value={isSignupBirth}
-        placeholder="900101"
-        onChange={onChangeBirth}
-        maxLength={6}
-      />
+      <div className={style.birthday}>
+        <Input
+          id="birth"
+          labelTitle="생년월일"
+          type="number"
+          value={isSignupBirth}
+          placeholder="900101"
+          onChange={onChangeBirth}
+        />
+      </div>
       <div className={style.region}>
         <div className={style.title}>활동지역</div>
         <div className={style.input_area} onClick={OpenRegionModal}>
