@@ -1,6 +1,5 @@
 package com.plonit.plonitservice.api.member.service.impl;
 
-import com.plonit.plonitservice.api.member.controller.request.UpdateMemberReq;
 import com.plonit.plonitservice.api.member.controller.response.FindMemberRes;
 import com.plonit.plonitservice.api.member.service.MemberService;
 import com.plonit.plonitservice.api.member.service.dto.UpdateMemberDto;
