@@ -12,6 +12,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Builder
 public class PloggingLogRes {
     
     private Long id;
@@ -41,16 +42,5 @@ public class PloggingLogRes {
         private Double latitude;
 
         private Double longitude;
-    }
-    
-    public PloggingLogRes(Long id, Type type, String place, LocalDateTime startTime, LocalDateTime endTime, LocalTime totalTime, Double distance, Double calorie) {
-        this.id = id;
-        this.type = type;
-        this.place = place;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.totalTime = totalTime;
-        this.distance = distance;
-        this.calorie = calorie;
     }
 }

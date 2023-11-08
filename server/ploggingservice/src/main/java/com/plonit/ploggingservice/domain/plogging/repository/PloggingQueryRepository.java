@@ -1,5 +1,6 @@
 package com.plonit.ploggingservice.domain.plogging.repository;
 
+import com.plonit.ploggingservice.api.plogging.controller.response.FindPloggingLogRes;
 import com.plonit.ploggingservice.api.plogging.controller.response.PloggingLogRes;
 import com.plonit.ploggingservice.api.plogging.controller.response.PloggingPeriodRes;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -40,8 +41,8 @@ public class PloggingQueryRepository {
     }
     
     @Transactional(readOnly = true)
-    public Optional<PloggingLogRes> findPloggingLogDetail(Long ploggingId, Long memberKey) {
-        return Optional.ofNullable(queryFactory.select(constructor(PloggingLogRes.class,
+    public Optional<FindPloggingLogRes> findPloggingLogDetail(Long ploggingId, Long memberKey) {
+        return Optional.ofNullable(queryFactory.select(constructor(FindPloggingLogRes.class,
                         plogging.id,
                         plogging.type,
                         plogging.place,

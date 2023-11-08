@@ -58,9 +58,21 @@ public class PloggingQueryServiceImpl implements PloggingQueryService {
 
     @Override
     public PloggingLogRes findPloggingLogDetail(Long ploggingId, Long memberKey) {
+        
         // ploggingId와 memberKey로 플로깅 정보 가져오기
-        PloggingLogRes ploggingLogRes = ploggingQueryRepository.findPloggingLogDetail(ploggingId, memberKey)
+        FindPloggingLogRes findPloggingLogRes = ploggingQueryRepository.findPloggingLogDetail(ploggingId, memberKey)
                 .orElseThrow(() -> new CustomException(PLOGGING_BAD_REQUEST));
+        
+        PloggingLogRes ploggingLogRes = PloggingLogRes.builder()
+                .id(findPloggingLogRes.getId())
+                .type(findPloggingLogRes.getType())
+                .place(findPloggingLogRes.getPlace())
+                .startTime(findPloggingLogRes.getStartTime())
+                .endTime(findPloggingLogRes.getEndTime())
+                .totalTime(findPloggingLogRes.getTotalTime())
+                .distance(findPloggingLogRes.getDistance())
+                .calorie(findPloggingLogRes.getCalorie())
+                .build();
 
         // 이미지 넣기
         List<FindPloggingImagesRes> imagesByPloggingId = ploggingPictureQueryRepository.findImagesByPloggingId(ploggingId);
