@@ -28,8 +28,10 @@ public class FindPloggingLogRes {
     private Double distance;
 
     private Double calorie;
+    
+    private String review;
 
-    public FindPloggingLogRes(Long id, Type type, String place, LocalDateTime startTime, LocalDateTime endTime, Long totalTime, Double distance, Double calorie) {
+    public FindPloggingLogRes(Long id, Type type, String place, LocalDateTime startTime, LocalDateTime endTime, Long totalTime, Double distance, Double calorie, String review) {
         this.id = id;
         this.type = type;
         this.place = place;
@@ -38,5 +40,6 @@ public class FindPloggingLogRes {
         this.totalTime = totalTime;
         this.distance = distance;
         this.calorie = calorie;
+        this.review = review;
     }
 }

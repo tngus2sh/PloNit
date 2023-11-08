@@ -31,6 +31,8 @@ public class PloggingLogRes {
     
     private Double calorie;
     
+    private String review;
+    
     private List<String> images;
 
     private List<Coordinate> coordinates;

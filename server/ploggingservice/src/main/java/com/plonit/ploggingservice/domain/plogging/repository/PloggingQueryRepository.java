@@ -50,7 +50,8 @@ public class PloggingQueryRepository {
                         plogging.endTime,
                         plogging.totalTime,
                         plogging.distance,
-                        plogging.calorie))
+                        plogging.calorie,
+                        plogging.review))
                 .from(plogging)
                 .where(plogging.id.eq(ploggingId).and(plogging.memberKey.eq(memberKey)))
                 .fetchOne());
