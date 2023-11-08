@@ -33,14 +33,8 @@ const FeedCreatePage = () => {
   const handleImageUpload = (event: any) => {
     const files = Array.from(event.target.files) as File[];
     setFeedImages([...isFeedImages, ...files]);
-    if (isFeedImages.length > 5) {
-      const newImages = isFeedImages.slice(0, 5 - isFeedImages.length);
-      const newUrls = newImages.map((file) => URL.createObjectURL(file));
-      setPreviewUrls([...previewUrls, ...newUrls]);
-    } else {
-      const newUrls = files.map((file) => URL.createObjectURL(file));
-      setPreviewUrls([...previewUrls, ...newUrls]);
-    }
+    const newUrls = files.map((file) => URL.createObjectURL(file));
+    setPreviewUrls([...previewUrls, ...newUrls]);
   };
 
   const feedCreateHandler = () => {
@@ -106,7 +100,7 @@ const FeedCreatePage = () => {
             />
           </SwiperSlide>
         )}
-        {previewUrls.map((url, id) => (
+        {previewUrls.slice(0, 5).map((url, id) => (
           <SwiperSlide
             key={id}
             style={{
