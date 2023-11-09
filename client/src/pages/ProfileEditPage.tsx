@@ -89,7 +89,15 @@ const ProfileEditPage = () => {
       <div className={style.profile_edit}>
         <div className={style.img_text}>
           <div className={style.profile_img}>
-            <img src={isProfileImage} alt="프로필 이미지" />
+            <img
+              src={
+                isProfileImage === User.profileImg
+                  ? isProfileImage
+                  : URL.createObjectURL(isProfileImage)
+              }
+              alt="프로필 이미지"
+            />
+            {/* <img src={isProfileImage} alt="프로필 이미지" /> */}
             <label className={style.img_edit_icon} htmlFor="input_file">
               <Icon
                 icon="bi:pencil"
@@ -108,7 +116,11 @@ const ProfileEditPage = () => {
           <div className={style.non_edit}>
             <div className={style.top_section}>
               <div className={style.name}>{User.name}</div>
-              <div className={style.gender}>{User.gender}</div>
+              {User.gender ? (
+                <div className={style.gender_woman}>여</div>
+              ) : (
+                <div className={style.gender_man}>남</div>
+              )}
             </div>
             <div className={style.birth}>{User.birthday}</div>
           </div>
@@ -122,7 +134,7 @@ const ProfileEditPage = () => {
           placeholder="20자 이내로 입력해주세요"
           maxLength={20}
         />
-        {isNickname ? (
+        {isNickname !== User.nickname ? (
           isAllowNickname ? (
             <div className={style.nickname_true}>사용가능한 닉네임입니다.</div>
           ) : (
@@ -147,7 +159,7 @@ const ProfileEditPage = () => {
         </div>
         <Input
           id="weight"
-          labelTitle="체중"
+          labelTitle="체중(kg)"
           type="number"
           value={isWeight}
           onChange={onChangeWeight}
