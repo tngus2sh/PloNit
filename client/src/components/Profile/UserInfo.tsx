@@ -5,6 +5,7 @@ import { UserInterface } from "interface/authInterface";
 
 const UserInfo = ({ user }: { user: UserInterface }) => {
   const navigate = useNavigate();
+  console.log(user);
 
   const goProfileEdit = () => {
     navigate("/profile/edit");
@@ -14,7 +15,7 @@ const UserInfo = ({ user }: { user: UserInterface }) => {
     <div className={style.user_info}>
       <div className={style.my_name}>
         <div className={style.left_area}>
-          <img src={user.profileImg} alt="몽" />
+          <img src={user.profileImg} alt="프로필" />
           <div className={style.text}>
             <div>
               <span className={style.large}>{user.nickname}</span> 님
