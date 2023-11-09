@@ -15,7 +15,7 @@ interface makeMarkerClustering {
   markers: naver.maps.Marker[];
 }
 
-const maxZoom = 15;
+const maxZoom = 18;
 
 function useCluster() {
   function htmlMarker(className: string): htmlMarker {
