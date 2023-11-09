@@ -8,12 +8,11 @@ import { CrewpingInterface } from "interface/crewInterface"; // 경로는 실제
 
 const CrewpingItem = ({ crewping }: { crewping: CrewpingInterface }) => {
   const navigate = useNavigate();
-
   const goCrewpingDetailHandler = () => {
     // id가 선택적 프로퍼티이므로, 존재하는 경우에만 내비게이션을 수행합니다.
-    if (crewping.id) {
-      navigate(`/crew/crewping/detail/${crewping.id}`);
-    }
+    console.log("crewping:", crewping);
+    console.log("crewping id: ", crewping.id);
+    navigate(`/crew/crewping/detail/${crewping.id}`);
   };
 
   // cntPeople과 maxPeople이 숫자 또는 문자열일 수 있으므로, 적절히 표시합니다.
