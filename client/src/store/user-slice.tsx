@@ -31,7 +31,7 @@ const userSlice = createSlice({
     },
     logout: (state) => {
       localStorage.removeItem("persist:root");
-      return { ...initialState };
+      return { ...state, isLogin: false };
     },
     addInfoHandler: (state, action) => {
       return {
