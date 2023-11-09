@@ -63,7 +63,7 @@ const TotalCrewList = () => {
           id="search"
           className={style.inputBox}
           value={isSearchWord}
-          onChange={handleSearchInputChange}
+          onKeyUp={handleSearchInputChange}
         />
       </div>
       {totalCrewList ? (
