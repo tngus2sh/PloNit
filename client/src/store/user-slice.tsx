@@ -30,23 +30,30 @@ const userSlice = createSlice({
       state.nickname = action.payload.nickname;
     },
     logout: (state) => {
-      state.isLogin = false;
+      localStorage.removeItem("persist:root");
+      return { ...initialState };
     },
     addInfoHandler: (state, action) => {
-      state.name = action.payload.name;
-      state.nickname = action.payload.nickname;
-      state.gender = action.payload.gender;
-      state.birthday = action.payload.birth;
-      state.dongCode = action.payload.dongCode;
-      state.region = action.payload.region;
+      return {
+        ...state,
+        name: action.payload.name,
+        nickname: action.payload.nickname,
+        gender: action.payload.gender,
+        birthday: action.payload.birth,
+        dongCode: action.payload.dongCode,
+        region: action.payload.region,
+      };
     },
     EditHandler: (state, action) => {
-      state.profileImg = action.payload.profileImg;
-      state.nickname = action.payload.nickname;
-      state.weight = action.payload.weight;
-      state.dongCode = action.payload.dongCode;
-      state.region = action.payload.region;
-      state.id_1365 = action.payload.id_1365;
+      return {
+        ...state,
+        profileImg: action.payload.profileImg,
+        nickname: action.payload.nickname,
+        weight: action.payload.weight,
+        dongCode: action.payload.dongCode,
+        region: action.payload.region,
+        id_1365: action.payload.id_1365,
+      };
     },
   },
 });
