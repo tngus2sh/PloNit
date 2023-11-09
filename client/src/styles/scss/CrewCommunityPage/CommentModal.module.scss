@@ -19,6 +19,7 @@
     input {
       font-size: 0.9rem;
       border: none;
+      width: calc(100% - 5rem);
     }
     input:focus {
       outline: none;
