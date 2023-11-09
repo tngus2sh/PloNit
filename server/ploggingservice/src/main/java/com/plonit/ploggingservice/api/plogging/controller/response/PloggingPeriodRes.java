@@ -1,16 +1,15 @@
 package com.plonit.ploggingservice.api.plogging.controller.response;
 
 import com.plonit.ploggingservice.common.enums.Type;
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 @Data
-@RequiredArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class PloggingPeriodRes {
     
     private Long id;
