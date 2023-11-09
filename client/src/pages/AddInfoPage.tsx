@@ -62,6 +62,7 @@ const AddInfoPage = () => {
       gender: isSignupGender,
       birth: isSignupBirth,
       dongCode: isRegionCode,
+      region: isSignupRegion,
     };
     if (!data.name) {
       alert("이름을 입력하세요");
