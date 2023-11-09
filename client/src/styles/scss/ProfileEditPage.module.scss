@@ -36,7 +36,13 @@
           flex-direction: column;
           justify-content: center;
         }
-        .gender {
+        .gender_woman {
+          background-color: $red;
+          color: white;
+          border-radius: 50%;
+          padding: 0.3rem 0.4rem;
+        }
+        .gender_man {
           background-color: $blue;
           color: white;
           border-radius: 50%;
