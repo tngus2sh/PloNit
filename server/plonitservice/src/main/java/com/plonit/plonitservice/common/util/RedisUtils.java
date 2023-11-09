@@ -44,6 +44,16 @@ public class RedisUtils {
         stringRedisTemplate.expire(key, ttl, TimeUnit.SECONDS);
     }
 
+    public void setRedisHash(String key, String subKey, String value) {
+        HashOperations<String, String, String> hashOperations = stringRedisTemplate.opsForHash();
+        hashOperations.put(key, subKey, value);
+    }
+
+    public void setRedisSet(String key, String value) {
+        SetOperations<String, String> setOperations = stringRedisTemplate.opsForSet();
+        setOperations.add(key, value);
+    }
+
     /**
      * Redis의 Sorted Set에 랭킹 추가
      * @param key
@@ -69,9 +79,19 @@ public class RedisUtils {
         return serializer.deserialize(decode, classType);
     }
 
-    public Map<String, String> getRedisHash(String key) { // redis DB 정보 가져오기
+    public Map<String, String> getRedisHash(String key) {
         HashOperations<String, String, String> hashOperations = stringRedisTemplate.opsForHash();
         return hashOperations.entries(key);
+    }
+
+    public String getRedisHash(String key, String subKey) {
+        HashOperations<String, String, String> hashOperations = stringRedisTemplate.opsForHash();
+        return hashOperations.entries(key).get(subKey);
+    }
+
+    public Set<String> getRedisSet(String key) {
+        SetOperations<String, String> setOperations = stringRedisTemplate.opsForSet();
+        return setOperations.members(key);
     }
 
     public Set<ZSetOperations.TypedTuple<String>> getSortedSetRangeWithScores(String key, long start, long end) {

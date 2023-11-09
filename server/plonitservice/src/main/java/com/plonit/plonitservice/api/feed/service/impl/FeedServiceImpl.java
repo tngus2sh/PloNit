@@ -1,10 +1,12 @@
 package com.plonit.plonitservice.api.feed.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.plonit.plonitservice.api.feed.service.FeedService;
 import com.plonit.plonitservice.api.feed.service.dto.SaveCommentDto;
 import com.plonit.plonitservice.api.feed.service.dto.SaveFeedDto;
 import com.plonit.plonitservice.common.AwsS3Uploader;
 import com.plonit.plonitservice.common.exception.CustomException;
+import com.plonit.plonitservice.common.util.RedisUtils;
 import com.plonit.plonitservice.common.util.RequestUtils;
 import com.plonit.plonitservice.domain.crew.Crew;
 import com.plonit.plonitservice.domain.crew.CrewMember;
@@ -14,10 +16,7 @@ import com.plonit.plonitservice.domain.crew.repository.CrewRepository;
 import com.plonit.plonitservice.domain.feed.Comment;
 import com.plonit.plonitservice.domain.feed.Feed;
 import com.plonit.plonitservice.domain.feed.FeedPicture;
-import com.plonit.plonitservice.domain.feed.repository.CommentRepository;
-import com.plonit.plonitservice.domain.feed.repository.FeedPictureRepository;
-import com.plonit.plonitservice.domain.feed.repository.FeedQueryRepository;
-import com.plonit.plonitservice.domain.feed.repository.FeedRepository;
+import com.plonit.plonitservice.domain.feed.repository.*;
 import com.plonit.plonitservice.domain.member.Member;
 import com.plonit.plonitservice.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -50,6 +49,8 @@ public class FeedServiceImpl implements FeedService {
     private final CommentRepository commentRepository;
     private final MemberRepository memberRepository;
     private final AwsS3Uploader awsS3Uploader;
+    private final RedisUtils redisUtils;
+    private final LikeQueryRepository likeQueryRepository;
 
     @Transactional // 피드 등록
     public void saveFeed(SaveFeedDto saveFeedDto) {
@@ -118,18 +119,65 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public boolean saveFeedLike(Long feedId) {
+    public boolean saveFeedLike(Long feedId) throws JsonProcessingException {
         Long memberId = RequestUtils.getMemberId();
 
         Feed feed = feedRepository.findById(feedId)
                 .orElseThrow(() -> new CustomException(FEED_NOT_FOUND));
 
         String key = "MEMBER_LIKE:" + memberId;
-        String subKey = String.valueOf(feedId);
+        String value = redisUtils.getRedisHash(key, String.valueOf(feedId));
+        System.out.println("redis 검색 결과: " + value);
 
+        boolean flag = false;
+        if(value == null) {
+            // 좋아요 취소가 이루어짐
+            if(likeQueryRepository.isLikedMember(memberId, feedId)) {
+                dislikeFeed(memberId, feedId, false);
+            }
+            // 좋아요 등록이 이루어짐
+            else {
+                likeFeed(memberId, feedId);
+                flag = true;
+            }
+        }
+        // 좋아요 취소가 이루어짐
+        else {
+            dislikeFeed(memberId, feedId, true);
+        }
 
-
-
-        return true;
+        return flag;
     }
+
+    @Override
+    public void likeFeed(Long memberId, Long feedId) throws JsonProcessingException {
+        System.out.println("좋아요 등록 메소드 시작");
+        
+        String memberKey = "MEMBER_LIKE:" + memberId;
+        redisUtils.setRedisHash(memberKey, String.valueOf(feedId), "true");
+
+        String feedKey = "FEED_LIKE:" + feedId;
+        Integer likeCount = redisUtils.getRedisValue(feedKey, Integer.class);
+
+        if(likeCount == null) {
+            Feed feed = feedRepository.findById(feedId)
+                    .orElseThrow(() -> new CustomException(FEED_NOT_FOUND));
+
+            // Feed 테이블에 있는 count 값 가져와서 갱신
+
+            redisUtils.setRedisValue(feedKey, 1);
+        }
+    }
+
+    @Override
+    public void dislikeFeed(Long memberId, Long feedId, Boolean isRedis) {
+        if(isRedis) {
+
+        }
+        else {
+
+        }
+    }
+
+
 }
