@@ -9,7 +9,7 @@ import RegionModal from "components/common/RegionModal";
 import { Icon } from "@iconify/react";
 import style from "styles/css/ProfileEditPage.module.css";
 import { nicknameCheck } from "api/lib/auth";
-import { addInfo } from "api/lib/members";
+import { EditProfile } from "api/lib/members";
 
 const ProfileEditPage = () => {
   const dispatch = useDispatch();
@@ -69,7 +69,7 @@ const ProfileEditPage = () => {
     if (isProfileImage) {
       formData.append("profileImg", isProfileImage);
     }
-    addInfo(
+    EditProfile(
       accessToken,
       formData,
       (res) => {
