@@ -51,7 +51,7 @@ const CrewpingCreatePage = () => {
       alert("크루핑 이름을 입력하세요");
       return;
     } else if (!isCrewpingImage) {
-      alert("크루핑 이미지를 입력하세요");
+      alert("크루핑 이미지를 등록하세요");
       return;
     } else if (!isCrewpingStartDate) {
       alert("크루핑 시작시간을 입력하세요");
@@ -62,7 +62,7 @@ const CrewpingCreatePage = () => {
     } else if (!isCrewpingPlace) {
       alert("크루핑 장소를 입력하세요");
       return;
-    } else if (isCrewpingMaxPeople < 0) {
+    } else if (isCrewpingMaxPeople < 2) {
       alert("크루핑 참여인원을 입력하세요");
       return;
     } else if (isCrewpingMaxPeople > 10) {

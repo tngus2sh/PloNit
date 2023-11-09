@@ -18,21 +18,27 @@ const CrewpingList = () => {
       accessToken,
       Number(crewId),
       (res) => {
-        console.log("크루 조회 성공");
+        console.log("크루핑 조회 성공");
         console.log(res.data);
         setCrewpingList(res.data.resultBody);
       },
       (err) => {
-        console.log("크루 조회 실패", err);
+        console.log("크루핑 조회 실패", err);
       },
     );
   }, []);
 
   return (
     <div>
-      {isCrewpingList.map((crewping, index) => (
-        <CrewpingItem key={index} crewping={crewping} />
-      ))}
+      {isCrewpingList ? (
+        <>
+          {isCrewpingList.map((crewping, index) => (
+            <CrewpingItem key={index} crewping={crewping} />
+          ))}
+        </>
+      ) : (
+        <div>크루핑이 존재하지 않습니다.</div>
+      )}
       <div style={{ height: "4rem" }}></div>
     </div>
   );
