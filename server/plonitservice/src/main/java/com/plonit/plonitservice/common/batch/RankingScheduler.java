@@ -24,7 +24,7 @@ public class RankingScheduler {
     private final RankingPeriodRepository rankingPeriodRepository;
 
     //    @Scheduled(cron = "0 0 1,15 * * ?") // 매월 1일과 15일에 실행
-    @Scheduled(cron = "0 0/1 * * * ?")
+//    @Scheduled(cron = "0 0/1 * * * ?")
     public void runBatchJob() throws Exception {
         /* 랭킹 기간 생성 */
         LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
