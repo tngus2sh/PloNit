@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import style from "styles/css/CrewList/CrewListItem.module.css";
-import { Icon } from "@iconify/react";
-import Input from "components/common/Input";
+import style from "styles/css/CrewList/TotalCrewList.module.css";
 import CrewItem from "./CrewItem";
 import { CrewInterface } from "interface/crewInterface";
 import { getCrewList } from "api/lib/crew";
@@ -10,7 +8,12 @@ import { getCrewList } from "api/lib/crew";
 const TotalCrewList = () => {
   const accessToken = useSelector((state: any) => state.user.accessToken);
   const [totalCrewList, setTotalCrewList] = useState<CrewInterface[]>([]);
-  const [inputValue, setInputValue] = useState<string>("");
+  const [isSelectedType, setSelectedType] = useState("1");
+  const [isSearchWord, setSearchWord] = useState("");
+
+  const handleSearchInputChange = (event: any) => {
+    setSearchWord(event.target.value);
+  };
 
   useEffect(() => {
     getCrewList(
@@ -28,14 +31,28 @@ const TotalCrewList = () => {
 
   return (
     <div>
-      {/* {진짜 검색창으로 바꿀것} */}
-      <Input
-        id="crew_name"
-        type="text"
-        value={inputValue}
-        placeholder="크루명, 지역으로 검색"
-      />
-
+      <div className={style.search}>
+        <select
+          className={style.select}
+          value={isSelectedType}
+          onChange={(e) => setSelectedType(e.target.value)}
+        >
+          <option value="1" key="name">
+            이름
+          </option>
+          <option value="2" key="region">
+            지역
+          </option>
+        </select>
+        <input
+          type="text"
+          name="search"
+          id="search"
+          className={style.inputBox}
+          value={isSearchWord}
+          onChange={handleSearchInputChange}
+        />
+      </div>
       {totalCrewList.map((crew, index) => (
         <CrewItem key={index} crew={crew} />
       ))}

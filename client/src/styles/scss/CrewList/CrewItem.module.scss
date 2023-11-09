@@ -1,0 +1,39 @@
+@import "../styles";
+
+.crew_Item {
+  margin: 1rem;
+  padding: 0.7rem 1rem;
+  border: 1px solid $darkgray;
+  border-radius: 0.5rem;
+  display: flex;
+  img {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+  }
+
+  .crew_content {
+    text-align: left;
+    margin-left: 0.5rem;
+    width: 100%;
+    .crew_title {
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+    .first {
+      margin-top: 0.3rem;
+      display: flex;
+      font-size: 0.9rem;
+      color: $darkgray;
+
+      .place {
+        flex: 4;
+        display: flex;
+      }
+      .people {
+        flex: 2;
+        display: flex;
+      }
+    }
+  }
+}

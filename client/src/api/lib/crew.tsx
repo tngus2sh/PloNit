@@ -153,7 +153,7 @@ export async function getCrewAllow(
   await api.patch(`/approve`, data).then(success).catch(fail);
 }
 
-// 크루 가입 승인
+// 크루 공지사항
 export async function getNotice(
   accessToken: string,
   data: Interfaces.NoticeInterface,
@@ -170,4 +170,24 @@ export async function getNotice(
   const api = customApi("/plonit-service/v1/crew");
   api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
   await api.patch(`/notice`, data).then(success).catch(fail);
+}
+
+// 크루 검색
+export async function getCrewSearch(
+  accessToken: string,
+  type: number,
+  word: string,
+  success: (
+    res: AxiosResponse<any, any>,
+  ) =>
+    | AxiosResponse<any, any>
+    | PromiseLike<AxiosResponse<any, any>>
+    | null
+    | undefined
+    | void,
+  fail: (err: any) => PromiseLike<never> | null | undefined | void,
+) {
+  const api = customApi("/plonit-service/v1/crew");
+  api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
+  await api.get(`/search/${type}/${word}`).then(success).catch(fail);
 }
