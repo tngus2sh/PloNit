@@ -67,9 +67,7 @@ const ProfileEditPage = () => {
     formData.append("dongCode", isRegionCode);
     formData.append("region", isRegion);
     formData.append("id_1365", isId_1365);
-    if (isProfileImage) {
-      formData.append("profileImg", isProfileImage);
-    }
+    formData.append("profileImg", isProfileImage);
 
     const editedData = {
       profileImg: isProfileImage,

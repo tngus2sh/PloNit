@@ -53,4 +53,10 @@
       right: calc((100% - 500px) / 2 + 0.8rem);
     }
   }
+  .register_btn {
+    position: fixed;
+    bottom: 3rem;
+    width: 100%;
+    max-width: 500px;
+  }
 }
