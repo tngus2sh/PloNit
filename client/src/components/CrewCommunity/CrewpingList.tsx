@@ -33,7 +33,6 @@ const CrewpingList = () => {
       {isCrewpingList.map((crewping, index) => (
         <CrewpingItem key={index} crewping={crewping} />
       ))}
-
       <div style={{ height: "4rem" }}></div>
     </div>
   );
