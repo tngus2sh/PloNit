@@ -145,10 +145,7 @@ const PloggingVolunteerInput = () => {
           value={email}
         />
         <div onClick={handleIsOpen}>
-          <label
-            className={style.label}
-            htmlFor="vol-region"
-          >{`활동지역`}</label>
+          <label className={style.label}>{`활동지역`}</label>
           <div
             className={style.input_area}
             style={{ marginLeft: 0, marginRight: 0 }}
