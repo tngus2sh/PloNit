@@ -10,4 +10,5 @@ public interface CrewQueryService {
     List<FindCrewMemberRes> findCrewMember(Long crewId);
     List<FindCrewMasterMemberRes> findCrewMasterMember(Long memberId, Long crewId);
     List<FindWaitingCrewMemberRes> findWaitingCrewMember(Long memberId, Long crewId);
+    List<SearchCrewsRes> searchCrew(int type, String word);
 }

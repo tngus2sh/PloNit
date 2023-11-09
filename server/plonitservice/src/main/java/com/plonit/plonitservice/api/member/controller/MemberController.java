@@ -1,6 +1,7 @@
 package com.plonit.plonitservice.api.member.controller;
 
 import com.plonit.plonitservice.api.member.controller.request.UpdateMemberReq;
+import com.plonit.plonitservice.api.member.controller.response.FindMemberInfoRes;
 import com.plonit.plonitservice.api.member.controller.response.FindMemberRes;
 import com.plonit.plonitservice.api.member.service.MemberService;
 import com.plonit.plonitservice.api.member.service.dto.UpdateMemberDto;
@@ -48,6 +49,16 @@ public class MemberController {
         FindMemberRes findMemberRes = memberService.updateMember(UpdateMemberDto.of(memberKey, updateMemberReq));
         log.info(logCurrent(getClassName(), getMethodName(), END));
         return CustomApiResponse.ok(findMemberRes);
+    }
+
+    @GetMapping()
+    public CustomApiResponse<FindMemberInfoRes> findMemberInfo() {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+        log.info("FindMemberInfo");
+
+        FindMemberInfoRes response = memberService.findMemberInfo();
+
+        return CustomApiResponse.ok(response, "내 정보 조회에 성공했습니다.");
     }
 }
 

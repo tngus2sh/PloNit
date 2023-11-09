@@ -104,4 +104,17 @@ public class CrewQueryServiceImpl implements CrewQueryService {
         return crewMemberList.stream().map(FindWaitingCrewMemberRes::of).collect(Collectors.toList());
     }
 
+    @Override // 크루 검색
+    public List<SearchCrewsRes> searchCrew(int type, String word) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        List<SearchCrewsRes> searchCrewsResList = crewQueryRepository.SearchCrew(type, word);
+
+        if(searchCrewsResList.isEmpty())
+            return Collections.emptyList();
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+        return searchCrewsResList;
+    }
+
 }
