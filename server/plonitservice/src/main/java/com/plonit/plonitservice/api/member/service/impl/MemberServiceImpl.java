@@ -1,10 +1,12 @@
 package com.plonit.plonitservice.api.member.service.impl;
 
+import com.plonit.plonitservice.api.member.controller.response.FindMemberInfoRes;
 import com.plonit.plonitservice.api.member.controller.response.FindMemberRes;
 import com.plonit.plonitservice.api.member.service.MemberService;
 import com.plonit.plonitservice.api.member.service.dto.UpdateMemberDto;
 import com.plonit.plonitservice.common.AwsS3Uploader;
 import com.plonit.plonitservice.common.exception.CustomException;
+import com.plonit.plonitservice.common.util.RequestUtils;
 import com.plonit.plonitservice.domain.member.Member;
 import com.plonit.plonitservice.domain.member.repository.MemberQueryRepository;
 import com.plonit.plonitservice.domain.member.repository.MemberRepository;
@@ -26,11 +28,13 @@ import static com.plonit.plonitservice.common.util.LogCurrent.START;
 @RequiredArgsConstructor
 @Service
 public class MemberServiceImpl implements MemberService {
+
     private final MemberQueryRepository memberQueryRepository;
     private final MemberRepository memberRepository;
     private final AwsS3Uploader awsS3Uploader;
     private final DongRepository dongRepository;
     private final RegionQueryRepository regionQueryRepository;
+
     @Transactional
     public FindMemberRes updateMember(UpdateMemberDto updateMemberDto) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
@@ -54,5 +58,15 @@ public class MemberServiceImpl implements MemberService {
 
         log.info(logCurrent(getClassName(), getMethodName(), END));
         return FindMemberRes.of(member);
+    }
+
+    @Override
+    public FindMemberInfoRes findMemberInfo() {
+        Long memberId = RequestUtils.getMemberId();
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(USER_BAD_REQUEST));
+
+        return FindMemberInfoRes.of(member);
     }
 }
