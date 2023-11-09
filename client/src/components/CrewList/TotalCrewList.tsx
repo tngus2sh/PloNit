@@ -16,7 +16,7 @@ const TotalCrewList = () => {
     getCrewSearch(
       accessToken,
       Number(isSelectedType),
-      isSearchWord,
+      event.target.value,
       (res) => {
         console.log(res.data);
         setTotalCrewList(res.data.resultBody);
@@ -63,7 +63,7 @@ const TotalCrewList = () => {
           id="search"
           className={style.inputBox}
           value={isSearchWord}
-          onKeyUp={handleSearchInputChange}
+          onChange={handleSearchInputChange}
         />
       </div>
       {totalCrewList ? (
