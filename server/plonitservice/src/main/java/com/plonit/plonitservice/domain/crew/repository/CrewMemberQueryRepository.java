@@ -35,7 +35,7 @@ public class CrewMemberQueryRepository {
                 .fetchFirst());
     }
 
-    // 크루원 유효 체크 (크루장, 승인 대기)
+    // 크루원 유효 체크 (크루장)
     public Boolean isValidCrewMember(Long memberId, Long crewId, Boolean isCrewMaster) {
         Integer fetchOne = queryFactory
                 .selectOne()
