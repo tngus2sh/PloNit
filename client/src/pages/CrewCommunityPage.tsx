@@ -99,14 +99,6 @@ const CrewCommunityPage = () => {
       <div className={style.divide}></div>
       <Notice crew={isCrewDetail} />
       <div className={style.divide}></div>
-      <CommonButton
-        text="크루 가입"
-        styles={{
-          backgroundColor: "#2cd261",
-        }}
-        onClick={JoinCrew}
-      />
-      <div className={style.divide}></div>
       <CustomizedTabs tabProps={tabProps} />
 
       {isVisibleButton && (
@@ -159,18 +151,29 @@ const CrewCommunityPage = () => {
           </div>
         </>
       )}
-
-      <div className={style.plus} onClick={toggleButton}>
-        <Icon
-          icon="bi:plus-lg"
-          style={{
-            width: "2.5rem",
-            height: "2.5rem",
-            color: "white",
-            marginTop: "0.25rem",
-          }}
-        />
-      </div>
+      {isCrewDetail.isMyCrew ? (
+        <div className={style.plus} onClick={toggleButton}>
+          <Icon
+            icon="bi:plus-lg"
+            style={{
+              width: "2.5rem",
+              height: "2.5rem",
+              color: "white",
+              marginTop: "0.25rem",
+            }}
+          />
+        </div>
+      ) : (
+        <div className={style.register_btn}>
+          <CommonButton
+            text="크루 가입"
+            styles={{
+              backgroundColor: "#2cd261",
+            }}
+            onClick={JoinCrew}
+          />
+        </div>
+      )}
     </div>
   );
 };

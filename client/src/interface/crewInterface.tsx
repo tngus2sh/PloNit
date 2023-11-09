@@ -12,6 +12,7 @@ export interface CrewInterface {
   crewMasterNickname?: string;
   notice?: string;
   isCrewMaster?: boolean;
+  isMyCrew?: boolean;
 }
 
 export interface FeedInterface {

@@ -22,7 +22,7 @@ const CrewCommunityInfo = ({
     navigate(`/crew/community/approval/${crew.id}`);
   };
   const crewImageStyle = {
-    backgroundImage: `url("${crew.crewImage}")`,
+    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.4)), url(${crew.crewImage})`,
   };
   return (
     <div className={style.crew_info}>
