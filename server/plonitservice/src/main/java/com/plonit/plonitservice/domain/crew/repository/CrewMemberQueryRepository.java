@@ -35,23 +35,28 @@ public class CrewMemberQueryRepository {
                 .fetchFirst());
     }
 
-    // 크루원 유효 체크 (크루장인지도 확인 가능)
-    public Boolean isValidCrewMember(Long memberId, Long crewId, Boolean crewMaster) {
+    // 크루원 유효 체크 (크루장, 승인 대기)
+    public Boolean isValidCrewMember(Long memberId, Long crewId, Boolean isCrewMaster) {
         Integer fetchOne = queryFactory
                 .selectOne()
                 .from(crewMember)
                 .where(crewMember.crew.id.eq(crewId)
                         .and(crewMember.member.id.eq(memberId))
-                        .and(eqMaster(crewMaster)))
+                        .and(eqMaster(isCrewMaster)))
                 .fetchFirst();
         return fetchOne != null;
     }
-    private BooleanExpression eqMaster(Boolean crewMaster) {
-        if(!crewMaster) return null; // null 반환시 자동으로 조건절에서 제거 됨
+    private BooleanExpression eqMaster(Boolean isCrewMaster) {
+        if(!isCrewMaster) return null; // null 반환시 자동으로 조건절에서 제거 됨
         return crewMember.isCrewMaster.isTrue();
     }
 
-    // 크루 조회 (크루 멤버, 크루, 멤버)
+    private BooleanExpression eqWaiting(Boolean isWaiting) {
+        if(!isWaiting) return null;
+        return crewMember.isCrewMember.isFalse();
+    }
+
+    // 크루 조회 (fetchJoin : 크루 멤버, 크루, 멤버)
     public List<CrewMember> findByCrewId(Long crewId) {
         return queryFactory
                 .selectFrom(crewMember)
@@ -61,7 +66,7 @@ public class CrewMemberQueryRepository {
                 .fetch();
     }
 
-    // 승인 대기 중인 크루원 조회
+    // 승인 대기 중인 크루원 모두 조회
     public List<CrewMember> findByWaitingCrewId(Long crewId) {
         return queryFactory
                 .selectFrom(crewMember)
@@ -72,7 +77,8 @@ public class CrewMemberQueryRepository {
                 .fetch();
     }
 
-    // 크루 멤버 조회
+
+    // 크루 멤버 조회 (대기 or 승인)
     public Optional<CrewMember> findByMemberIdAndCrewId(Long memberId, Long crewId) {
         return Optional.ofNullable(queryFactory
                 .selectFrom(crewMember)

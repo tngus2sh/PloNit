@@ -105,4 +105,13 @@ public class CrewQueryRepository {
         else return null;
     }
 
+    public Boolean isValidCrew(Long crewId) {
+        Integer fetchOne = queryFactory
+                .selectOne()
+                .from(crew)
+                .where(crew.id.eq(crewId))
+                .fetchFirst();
+        return fetchOne != null;
+    }
+
 }
