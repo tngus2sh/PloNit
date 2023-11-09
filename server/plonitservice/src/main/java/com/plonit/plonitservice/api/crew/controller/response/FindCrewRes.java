@@ -12,23 +12,25 @@ import lombok.RequiredArgsConstructor;
 public class FindCrewRes {
     private long id;
     private String name;
-    private int cntPeople;
+    private long cntPeople;
     private String crewImage;
     private String region;
     private String introduce;
+    private String notice;
+
+    private String crewMasterProfileImage;
+    private String crewMasterNickname;
+    private Boolean isCrewMaster;
+    private Boolean isMyCrew;
 
     // todo : ranking 추가
     private String rankingInfo;
     private int totalRanking;
     private int avgRanking;
 
-    private String crewMasterProfileImage;
-    private String crewMasterNickname;
-    private Boolean isCrewMaster;
-    private String notice;
-    public FindCrewRes (Long id, String name, Integer cntPeople, String crewImage,
+    public FindCrewRes (Long id, String name, Long cntPeople, String crewImage,
                        String region, String introduce, String notice,
-                       String crewMasterProfileImage, String crewMasterNickname, Boolean isCrewMaster) {
+                       String crewMasterProfileImage, String crewMasterNickname, Boolean isCrewMaster, Boolean isMyCrew) {
         this.id = id;
         this.name = name;
         this.cntPeople = cntPeople;
@@ -39,5 +41,6 @@ public class FindCrewRes {
         this.crewMasterProfileImage = crewMasterProfileImage;
         this.crewMasterNickname = crewMasterNickname;
         this.isCrewMaster = isCrewMaster;
+        this.isMyCrew = isMyCrew;
     }
 }
