@@ -4,7 +4,7 @@ import * as Interfaces from "interface/authInterface";
 
 export async function addInfo(
   accessToken: string,
-  data: Interfaces.UserInterface,
+  data: FormData,
   success: (
     res: AxiosResponse<any, any>,
   ) =>
