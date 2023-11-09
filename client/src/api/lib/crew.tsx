@@ -191,3 +191,42 @@ export async function getCrewSearch(
   api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
   await api.get(`/search/${type}/${word}`).then(success).catch(fail);
 }
+
+// 크루 탈퇴
+export async function getCrewQuit(
+  accessToken: string,
+  crewId: number,
+  success: (
+    res: AxiosResponse<any, any>,
+  ) =>
+    | AxiosResponse<any, any>
+    | PromiseLike<AxiosResponse<any, any>>
+    | null
+    | undefined
+    | void,
+  fail: (err: any) => PromiseLike<never> | null | undefined | void,
+) {
+  const api = customApi("/plonit-service/v1/crew");
+  api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
+  await api.delete(`/quit/${crewId}`).then(success).catch(fail);
+}
+
+// 크루 강퇴
+export async function getCrewKickOut(
+  accessToken: string,
+  crewId: number,
+  memberId: number,
+  success: (
+    res: AxiosResponse<any, any>,
+  ) =>
+    | AxiosResponse<any, any>
+    | PromiseLike<AxiosResponse<any, any>>
+    | null
+    | undefined
+    | void,
+  fail: (err: any) => PromiseLike<never> | null | undefined | void,
+) {
+  const api = customApi("/plonit-service/v1/crew");
+  api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
+  await api.delete(`/kick-out/${crewId}/${memberId}`).then(success).catch(fail);
+}

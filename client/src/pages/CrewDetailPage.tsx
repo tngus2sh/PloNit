@@ -7,7 +7,7 @@ import CrewInfo from "components/CrewDetail/CrewInfo";
 import CrewRanking from "components/CrewDetail/CrewRanking";
 import CrewIntroduce from "components/CrewDetail/CrewIntroduce";
 import CommonButton from "components/common/CommonButton";
-import { getCrewDetail } from "api/lib/crew";
+import { getCrewDetail, getCrewQuit } from "api/lib/crew";
 import { CrewInterface } from "interface/crewInterface";
 
 const CrewDetailPage = () => {
@@ -35,6 +35,20 @@ const CrewDetailPage = () => {
     );
   }, []);
 
+  const CrewQuit = () => {
+    getCrewQuit(
+      accessToken,
+      Number(crewId),
+      (res) => {
+        console.log("크루 탈퇴 요청 성공");
+        console.log(res.data.resultBody);
+      },
+      (err) => {
+        console.log("크루 탈퇴 요청 실패", err);
+      },
+    );
+  };
+
   return (
     <div>
       <BackTopBar text="장덕동 플로깅" />
@@ -44,12 +58,15 @@ const CrewDetailPage = () => {
         <CrewRanking crew={isCrewDetail} />
         <CrewIntroduce crew={isCrewDetail} />
       </div>
-      <CommonButton
-        text="크루 탈퇴"
-        styles={{
-          backgroundColor: "gray",
-        }}
-      />
+      {isCrewDetail.isMyCrew ? (
+        <CommonButton
+          text="크루 탈퇴"
+          styles={{
+            backgroundColor: "gray",
+          }}
+          onClick={CrewQuit}
+        />
+      ) : null}
     </div>
   );
 };
