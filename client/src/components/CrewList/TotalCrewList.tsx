@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import style from "styles/css/CrewList/TotalCrewList.module.css";
 import CrewItem from "./CrewItem";
 import { CrewInterface } from "interface/crewInterface";
-import { getCrewList } from "api/lib/crew";
+import { getCrewList, getCrewSearch } from "api/lib/crew";
 
 const TotalCrewList = () => {
   const accessToken = useSelector((state: any) => state.user.accessToken);
@@ -13,6 +13,19 @@ const TotalCrewList = () => {
 
   const handleSearchInputChange = (event: any) => {
     setSearchWord(event.target.value);
+    getCrewSearch(
+      accessToken,
+      Number(isSelectedType),
+      isSearchWord,
+      (res) => {
+        console.log(res.data);
+        setTotalCrewList(res.data.resultBody);
+        console.error("크루 검색 성공");
+      },
+      (err) => {
+        console.error("크루 검색 실패", err);
+      },
+    );
   };
 
   useEffect(() => {
