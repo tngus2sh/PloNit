@@ -112,11 +112,15 @@ const FeedItem = ({
         <div>{feed.content}</div>
       </div>
       <div className={style.comment_area}>
-        <div className={style.comment_count}>댓글 10개 모두 보기</div>
-        <div className={style.comment_content}>
+        {feed.comments.length ? (
+          <div className={style.comment_count} onClick={toggleCommentModal}>
+            댓글 {feed.comments.length}개 모두 보기
+          </div>
+        ) : null}
+        {/* <div className={style.comment_content}>
           <div>HAMSTER</div>
           <div>나도 가고 싶다</div>
-        </div>
+        </div> */}
       </div>
       <div className={style.date}>10월 15일</div>
       {isCommentModalOpen && (
