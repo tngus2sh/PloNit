@@ -1,7 +1,5 @@
 package com.plonit.plonitservice.api.rank.service;
 
-import com.plonit.plonitservice.domain.rank.Ranking;
-
 import javax.batch.api.chunk.ItemWriter;
 import java.io.Serializable;
 import java.util.List;

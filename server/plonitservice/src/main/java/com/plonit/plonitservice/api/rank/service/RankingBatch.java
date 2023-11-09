@@ -1,6 +1,5 @@
 package com.plonit.plonitservice.api.rank.service;
 
-import com.plonit.plonitservice.domain.rank.Ranking;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
