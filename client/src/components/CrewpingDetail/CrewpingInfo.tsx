@@ -11,19 +11,6 @@ const CrewpingInfo = () => {
   //const [totalCrewList, setTotalCrewList] = useState<CrewInterface[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
 
-  useEffect(() => {
-    getCrewpingInfo(
-      accessToken,
-      (res) => {
-        console.log(res.data);
-        console.error("그룹 목록 조회 성공");
-      },
-      (err) => {
-        console.log("그룹 목록 조회 실패", err);
-      },
-    );
-  }, []);
-
   return (
     <div className={style.crewping_info}>
       <div className={style.title}>활동 내용</div>
