@@ -13,6 +13,8 @@ import { rootState } from "store/store";
 import * as P from "store/plogging-slice";
 import * as camera from "store/camera-slice";
 
+import { registerVolInfo } from "api/lib/plogging";
+
 const PloggingVolunteerInput = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -31,11 +33,11 @@ const PloggingVolunteerInput = () => {
   const reduxId1365 = useSelector<rootState, string>((state) => {
     return state.user.id_1365;
   });
-  const reduxRegion = useSelector<rootState, string>((state) => {
-    return state.user.region;
-  });
   const isVolEnd = useSelector<rootState, boolean>((state) => {
     return state.plogging.isVolEnd;
+  });
+  const acessToken = useSelector<rootState, string>((state) => {
+    return state.user.accessToken;
   });
 
   const { image, handleImageCapture, fileInputRef } = useCamera();
@@ -43,18 +45,19 @@ const PloggingVolunteerInput = () => {
   const [name, setName] = useState<string>(reduxName);
   const [id_1365, setId_1365] = useState<string>(reduxId1365);
   const [email, setEmail] = useState<string>(reduxEmail);
-  const [region, setRegion] = useState<string>(reduxRegion);
+  const [region, setRegion] = useState<string>("");
   const [regionCode, setRegionCode] = useState<string>("");
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   function handleIsOpen() {
     setIsOpen((current) => !current);
-    console.log("works");
   }
 
   useEffect(() => {
-    if (!check.current && !isVolEnd) {
-      handleImageCapture();
+    if (!check.current) {
+      if (!isVolEnd) {
+        handleImageCapture();
+      }
     }
 
     return () => {
@@ -193,7 +196,6 @@ const PloggingVolunteerInput = () => {
               cancelButtonColor: "#FF2953",
             }).then((result) => {
               if (result.isConfirmed) {
-                console.log(`axios 성공?`);
                 dispatch(P.setIsEnd(true));
               }
             });
