@@ -6,6 +6,7 @@ import com.plonit.ploggingservice.api.plogging.service.PloggingQueryService;
 import com.plonit.ploggingservice.common.enums.Time;
 import com.plonit.ploggingservice.common.exception.CustomException;
 import com.plonit.ploggingservice.common.util.KakaoPlaceUtils;
+import com.plonit.ploggingservice.common.util.RequestUtils;
 import com.plonit.ploggingservice.domain.plogging.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -125,5 +126,14 @@ public class PloggingQueryServiceImpl implements PloggingQueryService {
         // 구군 코드로 플로깅 도움 요청 조회
         LocalDate now = LocalDate.now(ZoneId.of(Time.SEOUL.text));
         return ploggingHelpQueryRepository.findPloggingHelp(now, sidoGugunCodeRes.getGugunCode());
+    }
+
+    @Override
+    public Integer countMemberPlogging() {
+        Long memberId = RequestUtils.getMemberId();
+
+        Integer response = ploggingQueryRepository.countPloggingByMemberId(memberId);
+
+        return response;
     }
 }

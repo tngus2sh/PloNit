@@ -56,5 +56,14 @@ public class PloggingQueryRepository {
                 .where(plogging.id.eq(ploggingId).and(plogging.memberKey.eq(memberKey)))
                 .fetchOne());
     }
+
+    @Transactional(readOnly = true)
+    public Integer countPloggingByMemberId(Long memberId) {
+        return Math.toIntExact(queryFactory
+                .select(plogging.count())
+                .from(plogging)
+                .where(plogging.memberKey.eq(memberId))
+                .fetchOne());
+    }
     
 }

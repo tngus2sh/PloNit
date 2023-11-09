@@ -30,6 +30,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 import static com.plonit.ploggingservice.common.exception.ErrorCode.INVALID_FIELDS_REQUEST;
+import static com.plonit.ploggingservice.common.util.LogCurrent.*;
 
 
 @Tag(name = "Plogging API Controller", description = "플로깅 API Document")
@@ -201,4 +202,16 @@ public class PloggingApiController {
         
         return null;
     }
+
+    @Operation(summary = "유저별 플로깅 참여 횟수 조회", description = "유저 아이디를 가지고 플로깅에 참여한 횟수를 조회한다.")
+    @GetMapping("/count")
+    public CustomApiResponse<Integer> countMemberPlogging() {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+        log.info("CountMemberPlogging");
+
+        Integer response = ploggingQueryService.countMemberPlogging();
+
+        return CustomApiResponse.ok(response, "크루핑 참여 횟수 조회에 성공했습니다.");
+    }
+
 }
