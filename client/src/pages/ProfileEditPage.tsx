@@ -65,15 +65,26 @@ const ProfileEditPage = () => {
     formData.append("nickname", isNickname);
     formData.append("weight", isWeight);
     formData.append("dongCode", isRegionCode);
+    formData.append("region", isRegion);
     formData.append("id_1365", isId_1365);
     if (isProfileImage) {
       formData.append("profileImg", isProfileImage);
     }
+
+    const editedData = {
+      profileImg: isProfileImage,
+      nickname: isNickname,
+      weight: isWeight,
+      dongCode: isRegionCode,
+      region: isRegion,
+      id_1365: isId_1365,
+    };
+
     EditProfile(
       accessToken,
       formData,
       (res) => {
-        dispatch(userActions.EditHandler(formData));
+        dispatch(userActions.EditHandler(editedData));
         console.log("회원 정보 수정 성공");
         navigate("/profile");
       },
@@ -135,11 +146,15 @@ const ProfileEditPage = () => {
           maxLength={20}
         />
         {isNickname !== User.nickname ? (
-          isAllowNickname ? (
-            <div className={style.nickname_true}>사용가능한 닉네임입니다.</div>
-          ) : (
-            <div className={style.nickname_false}>중복된 닉네임입니다.</div>
-          )
+          isNickname ? (
+            isAllowNickname ? (
+              <div className={style.nickname_true}>
+                사용가능한 닉네임입니다.
+              </div>
+            ) : (
+              <div className={style.nickname_false}>중복된 닉네임입니다.</div>
+            )
+          ) : null
         ) : null}
         <div className={style.region}>
           <div className={style.title}>활동지역</div>
