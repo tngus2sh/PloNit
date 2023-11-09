@@ -1,15 +1,18 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { BasicTopBar } from "components/common/TopBar";
 import UserInfo from "components/Profile/UserInfo";
 import { Icon } from "@iconify/react";
 import style from "styles/css/ProfilePage.module.css";
+import { UserInterface } from "interface/authInterface";
 import { logout } from "api/lib/auth";
+import { getProfile } from "api/lib/members";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
   const accessToken = useSelector((state: any) => state.user.accessToken);
+  const [isMyData, setMyData] = useState<UserInterface>({} as UserInterface);
 
   const goMyCrew = () => {
     navigate("/profile/crew");
@@ -39,11 +42,24 @@ const ProfilePage = () => {
       },
     );
   };
+  useEffect(() => {
+    getProfile(
+      accessToken,
+      (res) => {
+        console.log("내 정보 조회 성공");
+        console.log(res.data.resultBody);
+        setMyData(res.data.resultBody);
+      },
+      (err) => {
+        console.log("내 정보 조회 실패", err);
+      },
+    );
+  }, []);
 
   return (
     <div>
       <BasicTopBar text="마이페이지" />
-      <UserInfo />
+      <UserInfo user={isMyData} />
       <div className={style.move}>
         <div className={style.part} onClick={goMyCrew}>
           <div>나의 크루</div>
