@@ -5,3 +5,32 @@
   color: $blue;
   margin: 3rem 0;
 }
+
+.input_area {
+  border-radius: 0.5rem;
+  border: 1px solid $darkgray;
+  padding: 0.5rem 1rem;
+  font-size: 1.2em;
+  background-color: transparent;
+  height: 2rem;
+  color: $darkgray;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.label {
+  font-size: 1.2rem;
+  display: flex;
+  margin-bottom: 0.5rem;
+  margin-left: 0.2rem;
+}
+
+.modalbackground {
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: max(100vh, 100%);
+}

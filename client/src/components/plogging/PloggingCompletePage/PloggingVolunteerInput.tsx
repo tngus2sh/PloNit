@@ -4,6 +4,7 @@ import CommonButton from "components/common/CommonButton";
 import Input from "components/common/Input";
 import { BasicTopBar } from "components/common/TopBar";
 import Swal from "sweetalert2";
+import RegionModal from "components/common/RegionModal";
 import style from "styles/css/PloggingPage/PloggingVolunteerInput.module.css";
 
 import { useNavigate } from "react-router-dom";
@@ -30,6 +31,9 @@ const PloggingVolunteerInput = () => {
   const reduxId1365 = useSelector<rootState, string>((state) => {
     return state.user.id_1365;
   });
+  const reduxRegion = useSelector<rootState, string>((state) => {
+    return state.user.region;
+  });
   const isVolEnd = useSelector<rootState, boolean>((state) => {
     return state.plogging.isVolEnd;
   });
@@ -39,7 +43,14 @@ const PloggingVolunteerInput = () => {
   const [name, setName] = useState<string>(reduxName);
   const [id_1365, setId_1365] = useState<string>(reduxId1365);
   const [email, setEmail] = useState<string>(reduxEmail);
-  const [region, setRegion] = useState<string>("");
+  const [region, setRegion] = useState<string>(reduxRegion);
+  const [regionCode, setRegionCode] = useState<string>("");
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  function handleIsOpen() {
+    setIsOpen((current) => !current);
+    console.log("works");
+  }
 
   useEffect(() => {
     if (!check.current && !isVolEnd) {
@@ -69,7 +80,6 @@ const PloggingVolunteerInput = () => {
       style={{
         width: "100%",
         height: `${windowHeight - 56}px`,
-        // overflowY: "hidden",
       }}
     >
       <input
@@ -131,19 +141,33 @@ const PloggingVolunteerInput = () => {
           disabled={true}
           value={email}
         />
-        <Input
-          type="string"
-          labelTitle="공간 차지용 임시"
-          id="vol-temp"
-          styles={{
-            marginLeft: "0",
-            marginRight: "0",
-          }}
-        />
+        <div onClick={handleIsOpen}>
+          <label
+            className={style.label}
+            htmlFor="vol-region"
+          >{`활동지역`}</label>
+          <div
+            className={style.input_area}
+            style={{ marginLeft: 0, marginRight: 0 }}
+            id="vol-region"
+          >
+            {region ? region : "눌러서 거주지역을 선택하세요."}
+          </div>
+        </div>
+        {isOpen && (
+          <div className={style.modalbackground}>
+            <RegionModal
+              onClose={handleIsOpen}
+              setSignupRegion={setRegion}
+              setRegionCode={setRegionCode}
+            />
+          </div>
+        )}
         <div className={style.permit_text}>
           <div>{`※ 위 정보들은 봉사활동 인증에 ※`}</div>
           <div>{`필요한 정보들입니다.`}</div>
         </div>
+
         <CommonButton
           text="다음으로"
           styles={{
@@ -154,7 +178,7 @@ const PloggingVolunteerInput = () => {
             backgroundColor: "#2CD261",
             position: "fixed",
             bottom: "56px",
-            zIndex: "1000",
+            zIndex: `${isOpen ? -1 : 1000}`,
             boxSizing: "border-box",
             margin: `1.25rem 0`,
           }}
