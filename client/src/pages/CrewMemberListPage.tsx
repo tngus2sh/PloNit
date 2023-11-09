@@ -28,10 +28,10 @@ const CrewMemberListPage = () => {
             (res) => {
               console.log(res.data);
               setMemberList(res.data.resultBody);
-              console.error("크루원 목록조회 성공");
+              console.log("크루원 목록조회 성공");
             },
             (err) => {
-              console.error("크루원 목록조회 실패", err);
+              console.log("크루원 목록조회 실패", err);
             },
           );
         } else {
@@ -41,10 +41,10 @@ const CrewMemberListPage = () => {
             (res) => {
               console.log(res.data);
               setMemberList(res.data.resultBody);
-              console.error("크루장 목록조회 성공");
+              console.log("크루장 목록조회 성공");
             },
             (err) => {
-              console.error("크루장 목록조회 실패", err);
+              console.log("크루장 목록조회 실패", err);
             },
           );
         }

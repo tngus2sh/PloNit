@@ -1,21 +1,54 @@
 @import "styles";
 
 .profile_edit {
-  .profile_img {
+  .img_text {
+    display: flex;
     margin: 2rem 1rem 1rem;
-    position: relative;
-    img {
-      border-radius: 50%;
-      width: 10rem;
-      height: 10rem;
+    .profile_img {
+      position: relative;
+      margin-right: 1rem;
+      img {
+        border-radius: 50%;
+        width: 7rem;
+        height: 7rem;
+      }
+      .img_edit_icon {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background-color: $darkgray;
+        border-radius: 50%;
+        padding: 0.5rem 0.5rem 0.4rem;
+      }
     }
-    .img_edit_icon {
-      position: absolute;
-      background-color: $darkgray;
-      border-radius: 50%;
-      padding: 0.5rem 0.5rem 0.4rem;
-      bottom: 1rem;
-      left: calc(50% + 2.5rem);
+    .non_edit {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      .top_section {
+        display: flex;
+        margin-bottom: 0.1rem;
+        .name {
+          margin-right: 0.5rem;
+          font-size: 1.5rem;
+          font-weight: 600;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+        .gender {
+          background-color: $blue;
+          color: white;
+          border-radius: 50%;
+          padding: 0.3rem 0.4rem;
+        }
+      }
+      .birth {
+        text-align: left;
+        font-size: 1.2rem;
+        color: $darkgray;
+        margin-left: 0.2rem;
+      }
     }
   }
 }

@@ -20,10 +20,10 @@ const TotalCrewList = () => {
       (res) => {
         console.log(res.data);
         setTotalCrewList(res.data.resultBody);
-        console.error("크루 검색 성공");
+        console.log("크루 검색 성공");
       },
       (err) => {
-        console.error("크루 검색 실패", err);
+        console.log("크루 검색 실패", err);
       },
     );
   };
@@ -34,10 +34,10 @@ const TotalCrewList = () => {
       (res) => {
         console.log(res.data);
         setTotalCrewList(res.data.resultBody);
-        console.error("크루 목록조회 성공");
+        console.log("크루 목록조회 성공");
       },
       (err) => {
-        console.error("크루 목록조회 실패", err);
+        console.log("크루 목록조회 실패", err);
       },
     );
   }, []);
