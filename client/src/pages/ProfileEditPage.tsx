@@ -89,14 +89,7 @@ const ProfileEditPage = () => {
       <div className={style.profile_edit}>
         <div className={style.img_text}>
           <div className={style.profile_img}>
-            <img
-              src={
-                isProfileImage
-                  ? URL.createObjectURL(isProfileImage)
-                  : `/metamong.png`
-              }
-              alt="프로필 이미지"
-            />
+            <img src={isProfileImage} alt="프로필 이미지" />
             <label className={style.img_edit_icon} htmlFor="input_file">
               <Icon
                 icon="bi:pencil"
