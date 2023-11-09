@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.plonit.plonitservice.common.exception.ErrorCode.*;
@@ -125,12 +126,12 @@ public class FeedServiceImpl implements FeedService {
         Feed feed = feedRepository.findById(feedId)
                 .orElseThrow(() -> new CustomException(FEED_NOT_FOUND));
 
-        String key = "MEMBER_LIKE:" + memberId;
-        String value = redisUtils.getRedisHash(key, String.valueOf(feedId));
-        System.out.println("redis 검색 결과: " + value);
+        String key = "FEED_LIKE:" + feedId;
+        Set<String> feedMembers = redisUtils.getRedisSet(key);
+        System.out.println("redis 피드 검색 결과: " + feedMembers);
 
         boolean flag = false;
-        if(value == null) {
+        if(feedMembers == null || !feedMembers.contains(String.valueOf(memberId))) {
             // 좋아요 취소가 이루어짐
             if(likeQueryRepository.isLikedMember(memberId, feedId)) {
                 dislikeFeed(memberId, feedId, false);
@@ -153,11 +154,22 @@ public class FeedServiceImpl implements FeedService {
     public void likeFeed(Long memberId, Long feedId) throws JsonProcessingException {
         System.out.println("좋아요 등록 메소드 시작");
         
-        String memberKey = "MEMBER_LIKE:" + memberId;
-        redisUtils.setRedisHash(memberKey, String.valueOf(feedId), "true");
+//        String memberKey = "MEMBER_LIKE:" + memberId;
+//        redisUtils.setRedisHash(memberKey, String.valueOf(feedId), "true");
 
         String feedKey = "FEED_LIKE:" + feedId;
-        Integer likeCount = redisUtils.getRedisValue(feedKey, Integer.class);
+        redisUtils.setRedisSet(feedKey, String.valueOf(memberId));
+
+        String countKey = "FEED_COUNT:" + feedId;
+        Integer likeCount = redisUtils.getRedisValue(countKey, Integer.class);
+
+        if(likeCount == null) {
+            Feed feed = feedRepository.findById(feedId)
+                    .orElseThrow(() -> new CustomException(FEED_NOT_FOUND));
+
+
+        }
+
 
         if(likeCount == null) {
             Feed feed = feedRepository.findById(feedId)
