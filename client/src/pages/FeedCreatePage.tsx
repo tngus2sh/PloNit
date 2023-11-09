@@ -51,7 +51,7 @@ const FeedCreatePage = () => {
       formData.append("crewId", crewId);
     }
     if (isFeedImages) {
-      isFeedImages.forEach((image) => {
+      isFeedImages.slice(0, 5).forEach((image) => {
         formData.append("feedPictures", image);
       });
     }

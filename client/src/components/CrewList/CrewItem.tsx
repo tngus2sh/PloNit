@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import style from "styles/css/CrewList/CrewListItem.module.css";
+import style from "styles/css/CrewList/CrewItem.module.css";
 import { CrewInterface } from "interface/crewInterface";
 
 const CrewItem = ({ crew }: { crew: CrewInterface }) => {
@@ -11,9 +11,7 @@ const CrewItem = ({ crew }: { crew: CrewInterface }) => {
 
   return (
     <div className={style.crew_Item} onClick={goCommunity}>
-      <div className={style.crew_img}>
-        <img src={crew.crewImage} alt="Crew Image" />
-      </div>
+      <img src={crew.crewImage} alt="Crew Image" />
       <div className={style.crew_content}>
         <div className={style.crew_title}>{crew.name}</div>
         <div className={style.first}>

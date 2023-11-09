@@ -7,6 +7,7 @@ import style from "styles/css/CrewNoticePage.module.css";
 import { getNotice, getCrewDetail } from "api/lib/crew";
 
 const CrewNoticePage = () => {
+  const navigate = useNavigate();
   const accessToken = useSelector((state: any) => state.user.accessToken);
   const { crewId } = useParams();
   const [isNotice, setNotice] = useState("");
@@ -41,6 +42,7 @@ const CrewNoticePage = () => {
       (res) => {
         console.log("공지사항 변경 성공");
         console.log(res.data.resultBody);
+        navigate(`/crew/community/${crewId}`);
       },
       (err) => {
         console.log("공지사항 변경 실패", err);
