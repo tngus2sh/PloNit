@@ -2,9 +2,9 @@ export interface UserInterface {
   profileImg?: string;
   email?: string;
   nickname: string;
-  name: string;
-  gender: boolean;
-  birth: string;
+  name?: string;
+  gender?: boolean;
+  birth?: string;
   region?: string;
   dongCode?: number;
   height?: number;

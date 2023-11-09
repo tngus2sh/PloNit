@@ -12,6 +12,7 @@ const initialState = {
   gender: 0,
   birthday: "",
   dongCode: 0,
+  region: "",
   height: 0,
   weight: 0,
   id_1365: "",
@@ -36,7 +37,16 @@ const userSlice = createSlice({
       state.nickname = action.payload.nickname;
       state.gender = action.payload.gender;
       state.birthday = action.payload.birth;
-      state.dongCode = action.payload.region;
+      state.dongCode = action.payload.dongCode;
+      state.region = action.payload.region;
+    },
+    EditHandler: (state, action) => {
+      state.profileImg = action.payload.profileImg;
+      state.nickname = action.payload.nickname;
+      state.weight = action.payload.weight;
+      state.dongCode = action.payload.dongCode;
+      state.region = action.payload.region;
+      state.id_1365 = action.payload.id_1365;
     },
   },
 });
