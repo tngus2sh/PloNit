@@ -66,9 +66,15 @@ const TotalCrewList = () => {
           onChange={handleSearchInputChange}
         />
       </div>
-      {totalCrewList.map((crew, index) => (
-        <CrewItem key={index} crew={crew} />
-      ))}
+      {totalCrewList ? (
+        <>
+          {totalCrewList.map((crew, index) => (
+            <CrewItem key={index} crew={crew} />
+          ))}
+        </>
+      ) : (
+        <div>검색결과가 존재하지 않습니다.</div>
+      )}
     </div>
   );
 };
