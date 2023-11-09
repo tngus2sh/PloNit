@@ -9,7 +9,7 @@ const initialState = {
   email: "",
   nickname: "",
   name: "",
-  gender: 0,
+  gender: false,
   birthday: "",
   dongCode: 0,
   region: "",
