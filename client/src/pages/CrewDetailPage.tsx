@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { BackTopBar } from "components/common/TopBar";
 import CrewLeader from "components/CrewDetail/CrewLeader";
 import CrewInfo from "components/CrewDetail/CrewInfo";
@@ -11,6 +11,7 @@ import { getCrewDetail, getCrewQuit } from "api/lib/crew";
 import { CrewInterface } from "interface/crewInterface";
 
 const CrewDetailPage = () => {
+  const navigate = useNavigate();
   const accessToken = useSelector((state: any) => state.user.accessToken);
   const { crewId } = useParams();
   console.log(crewId);
@@ -42,6 +43,7 @@ const CrewDetailPage = () => {
       (res) => {
         console.log("크루 탈퇴 요청 성공");
         console.log(res.data.resultBody);
+        navigate(`/crew/community/${crewId}`);
       },
       (err) => {
         console.log("크루 탈퇴 요청 실패", err);

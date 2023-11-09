@@ -11,3 +11,13 @@ export interface Coordinate {
   image?: string;
   context?: string;
 }
+
+export interface PloggingLog {
+  id: number;
+  type: string;
+  place: string;
+  start_time?: string;
+  end_time?: string;
+  total_time?: string;
+  distance?: string;
+}
