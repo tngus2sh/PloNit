@@ -134,7 +134,7 @@ const ProfileEditPage = () => {
           placeholder="20자 이내로 입력해주세요"
           maxLength={20}
         />
-        {isNickname !== User.nickname ? (
+        {isNickname !== User.nickname || isNickname ? (
           isAllowNickname ? (
             <div className={style.nickname_true}>사용가능한 닉네임입니다.</div>
           ) : (
