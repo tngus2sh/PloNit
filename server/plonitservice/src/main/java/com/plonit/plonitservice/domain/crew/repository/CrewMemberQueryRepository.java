@@ -62,7 +62,8 @@ public class CrewMemberQueryRepository {
                 .selectFrom(crewMember)
                 .join(crewMember.crew, crew)
                 .join(crewMember.member, member).fetchJoin()
-                .where(crewMember.crew.id.eq(crewId))
+                .where(crewMember.crew.id.eq(crewId)
+                        .and(crewMember.isCrewMember.isTrue()))
                 .fetch();
     }
 
