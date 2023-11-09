@@ -1,5 +1,6 @@
 package com.plonit.plonitservice.api.member.service.impl;
 
+import com.plonit.plonitservice.api.member.controller.PloggingFeignClient;
 import com.plonit.plonitservice.api.member.controller.response.FindMemberInfoRes;
 import com.plonit.plonitservice.api.member.controller.response.FindMemberRes;
 import com.plonit.plonitservice.api.member.service.MemberService;
@@ -7,6 +8,8 @@ import com.plonit.plonitservice.api.member.service.dto.UpdateMemberDto;
 import com.plonit.plonitservice.common.AwsS3Uploader;
 import com.plonit.plonitservice.common.exception.CustomException;
 import com.plonit.plonitservice.common.util.RequestUtils;
+import com.plonit.plonitservice.domain.badge.repository.MemberBadgeQueryRepository;
+import com.plonit.plonitservice.domain.crew.repository.CrewMemberQueryRepository;
 import com.plonit.plonitservice.domain.member.Member;
 import com.plonit.plonitservice.domain.member.repository.MemberQueryRepository;
 import com.plonit.plonitservice.domain.member.repository.MemberRepository;
@@ -34,6 +37,9 @@ public class MemberServiceImpl implements MemberService {
     private final AwsS3Uploader awsS3Uploader;
     private final DongRepository dongRepository;
     private final RegionQueryRepository regionQueryRepository;
+    private final PloggingFeignClient ploggingFeignClient;
+    private final CrewMemberQueryRepository crewMemberQueryRepository;
+    private final MemberBadgeQueryRepository memberBadgeQueryRepository;
 
     @Transactional
     public FindMemberRes updateMember(UpdateMemberDto updateMemberDto) {
@@ -67,6 +73,10 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(USER_BAD_REQUEST));
 
-        return FindMemberInfoRes.of(member);
+        Integer ploggingCount = ploggingFeignClient.countPlogging().getResultBody();
+        Integer crewCount = crewMemberQueryRepository.countByCrewMemberByMemberId(memberId);
+        Integer badgeCount = memberBadgeQueryRepository.countByMemberBadgeByMemberId(memberId);
+
+        return FindMemberInfoRes.of(member, ploggingCount, crewCount, badgeCount);
     }
 }

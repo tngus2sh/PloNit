@@ -80,4 +80,13 @@ public class CrewMemberQueryRepository {
                         .and(crewMember.member.id.eq(memberId)))
                 .fetchOne());
     }
+
+    // 사용자가 속한 크루의 개수 조회
+    public Integer countByCrewMemberByMemberId(Long memberId) {
+        return Math.toIntExact(queryFactory
+                .select(crewMember.count())
+                .from(crewMember)
+                .where(crewMember.member.id.eq(memberId))
+                .fetchOne());
+    }
 }
