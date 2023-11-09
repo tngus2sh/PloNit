@@ -88,7 +88,7 @@ const RouteComponent = () => {
         element={<CrewpingCreatePage />}
       ></Route>
       <Route
-        path="/crew/crewping/detail"
+        path="/crew/crewping/detail/:crewId"
         element={<CrewpingDetailPage />}
       ></Route>
       <Route path="/feed/create/:crewId" element={<FeedCreatePage />}></Route>

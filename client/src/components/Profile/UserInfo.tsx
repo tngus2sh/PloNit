@@ -1,8 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import style from "styles/css/ProfilePage.module.css";
+import { UserInterface } from "interface/authInterface";
 
-const UserInfo = () => {
+const UserInfo = ({ user }: { user: UserInterface }) => {
   const navigate = useNavigate();
 
   const goProfileEdit = () => {
@@ -13,12 +14,12 @@ const UserInfo = () => {
     <div className={style.user_info}>
       <div className={style.my_name}>
         <div className={style.left_area}>
-          <img src="/metamong.png" alt="몽" />
+          <img src={user.profileImg} alt="몽" />
           <div className={style.text}>
             <div>
-              <span className={style.large}>메타몽</span> 님
+              <span className={style.large}>{user.nickname}</span> 님
             </div>
-            <div className={style.email}>abcd1234@naver.com</div>
+            <div className={style.email}>{user.email}</div>
           </div>
         </div>
         <div className={style.right_area} onClick={goProfileEdit}>
