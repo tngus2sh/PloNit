@@ -61,20 +61,19 @@ const ProfileEditPage = () => {
   };
 
   const SendEdit = () => {
-    const data = {
-      profileImg: isProfileImage,
-      nickname: isNickname,
-      weight: isWeight,
-      dongCode: isRegionCode,
-      region: isRegion,
-      id_1365: isId_1365,
-    };
-
+    const formData = new FormData();
+    formData.append("nickname", isNickname);
+    formData.append("weight", isWeight);
+    formData.append("dongCode", isRegionCode);
+    formData.append("id_1365", isId_1365);
+    if (isProfileImage) {
+      formData.append("profileImg", isProfileImage);
+    }
     addInfo(
       accessToken,
-      data,
+      formData,
       (res) => {
-        dispatch(userActions.EditHandler(data));
+        dispatch(userActions.EditHandler(formData));
         console.log("회원 정보 수정 성공");
         navigate("/profile");
       },
