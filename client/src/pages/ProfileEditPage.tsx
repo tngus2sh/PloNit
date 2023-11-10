@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { userActions } from "store/user-slice";
@@ -9,21 +9,36 @@ import RegionModal from "components/common/RegionModal";
 import { Icon } from "@iconify/react";
 import style from "styles/css/ProfileEditPage.module.css";
 import { nicknameCheck } from "api/lib/auth";
-import { EditProfile } from "api/lib/members";
+import { getProfile, EditProfile } from "api/lib/members";
+import { UserInterface } from "interface/authInterface";
 
 const ProfileEditPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const accessToken = useSelector((state: any) => state.user.accessToken);
-  const User = useSelector((state: any) => state.user);
-  const [isProfileImage, setProfileImage] = useState(User.profileImg);
-  const [isNickname, setNickname] = useState(User.nickname);
+  const [isMyData, setMyData] = useState<UserInterface>({} as UserInterface);
+  const [isProfileImage, setProfileImage] = useState(isMyData.profileImage);
+  const [isNickname, setNickname] = useState(isMyData.nickname);
   const [isAllowNickname, setAllowNickname] = useState(false);
-  const [isRegion, setRegion] = useState(User.region);
-  const [isRegionCode, setRegionCode] = useState(User.dongCode);
+  const [isRegion, setRegion] = useState(isMyData.region);
+  const [isRegionCode, setRegionCode] = useState(isMyData.dongCode);
   const [isOpenRegionModal, setOpenRegionModal] = useState(false);
-  const [isWeight, setWeight] = useState(User.weight);
-  const [isId_1365, setId_1365] = useState(User.id_1365);
+  const [isWeight, setWeight] = useState(isMyData.weight);
+  const [isId_1365, setId_1365] = useState(isMyData.id_1365);
+
+  useEffect(() => {
+    getProfile(
+      accessToken,
+      (res) => {
+        console.log("내 정보 조회 성공");
+        console.log(res.data.resultBody);
+        setMyData(res.data.resultBody);
+      },
+      (err) => {
+        console.log("내 정보 조회 실패", err);
+      },
+    );
+  }, []);
 
   const handleImageUpload = (event: any) => {
     const file = event.target.files[0];
@@ -63,26 +78,17 @@ const ProfileEditPage = () => {
   const SendEdit = () => {
     const formData = new FormData();
     formData.append("nickname", isNickname);
-    formData.append("weight", isWeight);
-    formData.append("dongCode", isRegionCode);
-    formData.append("region", isRegion);
-    formData.append("id_1365", isId_1365);
-    formData.append("profileImg", isProfileImage);
-
-    const editedData = {
-      profileImg: isProfileImage,
-      nickname: isNickname,
-      weight: isWeight,
-      dongCode: isRegionCode,
-      region: isRegion,
-      id_1365: isId_1365,
-    };
+    formData.append("weight", String(isWeight));
+    formData.append("dongCode", String(isRegionCode));
+    formData.append("region", String(isRegion));
+    formData.append("id_1365", String(isId_1365));
+    formData.append("profileImg", String(isProfileImage));
 
     EditProfile(
       accessToken,
       formData,
       (res) => {
-        dispatch(userActions.EditHandler(editedData));
+        dispatch(userActions.EditHandler(formData));
         console.log("회원 정보 수정 성공");
         navigate("/profile");
       },
@@ -98,15 +104,15 @@ const ProfileEditPage = () => {
       <div className={style.profile_edit}>
         <div className={style.img_text}>
           <div className={style.profile_img}>
-            <img
+            {/* <img
               src={
-                isProfileImage === User.profileImg
+                isProfileImage === isMyData.profileImage
                   ? isProfileImage
                   : URL.createObjectURL(isProfileImage)
               }
               alt="프로필 이미지"
-            />
-            {/* <img src={isProfileImage} alt="프로필 이미지" /> */}
+            /> */}
+            <img src={isProfileImage} alt="프로필 이미지" />
             <label className={style.img_edit_icon} htmlFor="input_file">
               <Icon
                 icon="bi:pencil"
@@ -124,14 +130,14 @@ const ProfileEditPage = () => {
           </div>
           <div className={style.non_edit}>
             <div className={style.top_section}>
-              <div className={style.name}>{User.name}</div>
-              {User.gender ? (
+              <div className={style.name}>{isMyData.name}</div>
+              {isMyData.gender ? (
                 <div className={style.gender_woman}>여</div>
               ) : (
                 <div className={style.gender_man}>남</div>
               )}
             </div>
-            <div className={style.birth}>{User.birthday}</div>
+            <div className={style.birth}>{isMyData.birth}</div>
           </div>
         </div>
         <Input
@@ -143,7 +149,7 @@ const ProfileEditPage = () => {
           placeholder="20자 이내로 입력해주세요"
           maxLength={20}
         />
-        {isNickname !== User.nickname ? (
+        {isNickname !== isMyData.nickname ? (
           isNickname ? (
             isAllowNickname ? (
               <div className={style.nickname_true}>
@@ -174,7 +180,7 @@ const ProfileEditPage = () => {
           id="weight"
           labelTitle="체중(kg)"
           type="number"
-          value={isWeight}
+          value={String(isWeight)}
           onChange={onChangeWeight}
         />
         <Input
