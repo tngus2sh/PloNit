@@ -31,7 +31,7 @@ export interface FeedInterface {
 }
 
 export interface CrewpingInterface {
-  crewpingId?: number;
+  id?: number;
   name: string;
   crewpingImage?: string;
   masterMemberId?: number;
@@ -61,6 +61,7 @@ export interface CrewAllowInterface {
 }
 
 export interface MemberInterface {
+  id?: number | undefined;
   crewMemberId: number;
   profileImage: string;
   nickname: string;

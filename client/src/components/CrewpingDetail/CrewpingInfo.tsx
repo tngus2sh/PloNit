@@ -3,13 +3,10 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { Icon } from "@iconify/react";
 import style from "styles/css/CrewpingDetailPage/CrewpingInfo.module.css";
-import { CrewpingInterface } from "interface/crewInterface"; // 경로는 실제 경로에 맞게 조정해주세요.
+import { CrewpingInterface } from "interface/crewInterface";
+import CrewpingMemberList from "./CrewpingMemberList";
 
-interface CrewpingInfoProps {
-  crewping: CrewpingInterface;
-}
-
-const CrewpingInfo = ({ crewping }: CrewpingInfoProps) => {
+const CrewpingInfo = ({ crewping }: { crewping: CrewpingInterface }) => {
   return (
     <div className={style.crewping_info}>
       <div className={style.title}>활동 내용</div>
@@ -28,6 +25,7 @@ const CrewpingInfo = ({ crewping }: CrewpingInfoProps) => {
         <div>
           {crewping.cntPeople}/{crewping.maxPeople} 명
         </div>
+        <CrewpingMemberList crewping={crewping} />
       </div>
     </div>
   );

@@ -25,9 +25,7 @@ const CrewDetailPage = () => {
       Number(crewId),
       (res) => {
         console.log("크루 상세 조회 성공");
-        console.log(res);
         console.log(res.data);
-        console.log(res.data.resultBody);
         setCrewDetail(res.data.resultBody);
       },
       (err) => {
@@ -42,7 +40,7 @@ const CrewDetailPage = () => {
       Number(crewId),
       (res) => {
         console.log("크루 탈퇴 요청 성공");
-        console.log(res.data.resultBody);
+        console.log(res.data);
         navigate(`/crew/community/${crewId}`);
       },
       (err) => {
