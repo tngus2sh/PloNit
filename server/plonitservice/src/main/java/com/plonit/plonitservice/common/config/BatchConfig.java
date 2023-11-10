@@ -1,6 +1,7 @@
 package com.plonit.plonitservice.common.config;
 
 import com.plonit.plonitservice.common.batch.*;
+import com.plonit.plonitservice.domain.rank.CrewAvgRanking;
 import com.plonit.plonitservice.domain.rank.CrewRanking;
 import com.plonit.plonitservice.domain.rank.MemberRanking;
 import lombok.RequiredArgsConstructor;
@@ -75,7 +76,7 @@ public class BatchConfig {
     public Step crewAvgStep() {
         log.info("[STEP] crewAvgStep");
         return stepBuilderFactory.get("crewAvgStep")
-                .<Ranking, CrewRanking>chunk(100)
+                .<Ranking, CrewAvgRanking>chunk(100)
                 .reader(crewAvgItemReader)
                 .processor(crewAvgItemProcessor)
                 .writer(crewAvgItemWriter)
