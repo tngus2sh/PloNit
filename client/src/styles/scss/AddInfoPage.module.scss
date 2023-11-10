@@ -1,7 +1,8 @@
 @import "styles";
 
 .add_info {
-  height: max(100%, 100vh);
+  position: relative;
+  // height: max(100%, 100vh);
   z-index: 200;
   background-color: #fff;
   img {

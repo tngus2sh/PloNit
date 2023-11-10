@@ -29,7 +29,7 @@ export interface FeedInterface {
 }
 
 export interface CrewpingInterface {
-  id?: number;
+  crewpingId?: number;
   name: string;
   crewpingImage?: string;
   masterMemberId?: number;

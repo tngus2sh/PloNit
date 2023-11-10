@@ -15,7 +15,7 @@ const UserInfo = ({ user }: { user: UserInterface }) => {
     <div className={style.user_info}>
       <div className={style.my_name}>
         <div className={style.left_area}>
-          <img src={user.profileImg} alt="프로필" />
+          <img src={user.profileImage} alt="" />
           <div className={style.text}>
             <div>
               <span className={style.large}>{user.nickname}</span> 님
