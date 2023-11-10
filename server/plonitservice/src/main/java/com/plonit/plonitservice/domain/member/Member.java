@@ -55,6 +55,8 @@ public class Member extends TimeBaseEntity {
 
     private String birth;
 
+    private String fcmToken;
+
     public void changeInfo(UpdateMemberDto updateMemberDto, Dong dong) {
         StringBuilder sb = new StringBuilder();
 
@@ -72,5 +74,9 @@ public class Member extends TimeBaseEntity {
         if(updateMemberDto.getId1365() != null) this.id1365 = updateMemberDto.getId1365();
         if(updateMemberDto.getHeight() != null) this.height = Float.parseFloat(updateMemberDto.getHeight());
         if(updateMemberDto.getWeight() != null) this.weight = Float.parseFloat(updateMemberDto.getWeight());
+    }
+
+    public void changeFCMToken(String fcmToken) {
+        this.fcmToken = fcmToken;
     }
 }

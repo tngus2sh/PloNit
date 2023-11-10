@@ -5,6 +5,7 @@ import com.plonit.plonitservice.api.auth.service.AuthService;
 import com.plonit.plonitservice.api.auth.service.dto.KakaoToken;
 import com.plonit.plonitservice.common.exception.CustomException;
 import com.plonit.plonitservice.common.security.JwtTokenProvider;
+import com.plonit.plonitservice.common.util.RequestUtils;
 import com.plonit.plonitservice.domain.member.Member;
 import com.plonit.plonitservice.domain.member.repository.MemberQueryRepository;
 import com.plonit.plonitservice.domain.member.repository.MemberRepository;
@@ -162,6 +163,8 @@ public class AuthServiceImpl implements AuthService {
 
         // 4. user find
         Optional<Member> member = memberRepository.findByKakaoId(kakaoId);
+        String fcmToken = RequestUtils.getFCMToken();
+        // todo : fcmToken -> member Entity update
 
         if (member.isPresent()) {  // 5.1 기존 유저
             TokenInfoRes tokenInfoRes = generateToken(member.get().getId(), kakaoToken, false);
