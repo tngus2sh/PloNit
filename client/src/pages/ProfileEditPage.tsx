@@ -25,6 +25,7 @@ const ProfileEditPage = () => {
   const [isOpenRegionModal, setOpenRegionModal] = useState(false);
   const [isWeight, setWeight] = useState(isProfile.weight);
   const [isId_1365, setId_1365] = useState(isProfile.id_1365);
+  console.log(isProfile);
 
   useEffect(() => {
     getProfile(
