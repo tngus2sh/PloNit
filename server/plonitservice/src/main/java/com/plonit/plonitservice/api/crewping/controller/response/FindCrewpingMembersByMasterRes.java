@@ -8,14 +8,16 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Data
 @NoArgsConstructor(access = PROTECTED)
-public class FindCrewpingMembersRes {
+public class FindCrewpingMembersByMasterRes {
 
+    private Long id;
     private String profileImage;
     private String nickname;
 
 
     @Builder
-    public FindCrewpingMembersRes(String profileImage, String nickname) {
+    public FindCrewpingMembersByMasterRes(Long id, String profileImage, String nickname) {
+        this.id = id;
         this.profileImage = profileImage;
         this.nickname = nickname;
     }
