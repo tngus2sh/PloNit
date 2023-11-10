@@ -49,7 +49,7 @@ function useSocket({ roomId, senderId }: IuseSocket) {
 
     stompClient.current.onConnect = () => {
       stompClient.current?.subscribe(
-        `topic/chat/room/${roomId}`,
+        `/topic/chat/room/${roomId}`,
         onMessageReceived,
       );
     };
