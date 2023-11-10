@@ -120,6 +120,7 @@ public class PloggingServiceImpl implements PloggingService {
         // 위도 경도 값 넣기
         for (EndPloggingDto.Coordinate coord : dto.getCoordinates()) {
             latLongs.add(LatLong.builder()
+                            .plogging(plogging)
                             .latitude(coord.getLatitude())
                             .longitude(coord.getLongitude())
                     .build());
@@ -193,7 +194,7 @@ public class PloggingServiceImpl implements PloggingService {
         String imageUrl = null;
         if (dto.getImage() != null) {
             try {
-                imageUrl = awsS3Uploader.uploadFile(dto.getImage(), "help/image");
+                imageUrl = awsS3Uploader.uploadFile(dto.getImage(), "plogging/help/image");
             } catch (IOException e) {
                 throw new CustomException(INVALID_FIELDS_REQUEST);
             }
@@ -233,7 +234,7 @@ public class PloggingServiceImpl implements PloggingService {
         String imageUrl = null;
         if (dto.getImage() != null) {
             try {
-                imageUrl = awsS3Uploader.uploadFile(dto.getImage(), "picture/image");
+                imageUrl = awsS3Uploader.uploadFile(dto.getImage(), "plogging/picture/image");
             } catch (IOException e) {
                 throw new CustomException(INVALID_FIELDS_REQUEST);
             }

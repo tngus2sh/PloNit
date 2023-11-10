@@ -54,6 +54,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final static String KAKAO_AUTH_URI = "https://kauth.kakao.com";
     private final static String KAKAO_API_URI = "https://kapi.kakao.com";
+    private final static String DEFAULT_PROFILE_URL = "https://plonitbucket.s3.ap-northeast-2.amazonaws.com/plonit/plonit_%ED%94%84%EB%A1%9C%ED%95%84.png";
 
     public AuthServiceImpl(RedisTemplate redisTemplate, Environment env, MemberQueryRepository memberQueryRepository, MemberRepository memberRepository, JwtTokenProvider jwtTokenProvider) {
         this.redisTemplate = redisTemplate;
@@ -120,8 +121,6 @@ public class AuthServiceImpl implements AuthService {
         refreshToken = (String) jsonObj.get("refresh_token");
         accessTokenExpiresIn = (long) jsonObj.get("expires_in");
         refreshTokenExpiresIn = (long) jsonObj.get("refresh_token_expires_in");
-//            System.out.println("kakao accessToken :" + accessToken);
-//            System.out.println("kakao refreshToken :" + refreshToken);
         kakaoToken = KakaoToken.of(accessToken, refreshToken, accessTokenExpiresIn, refreshTokenExpiresIn);
 
         // 4. kakao token 발행 -> user 정보 찾기 -> token update
@@ -157,7 +156,7 @@ public class AuthServiceImpl implements AuthService {
             throw new CustomException(KAKAO_INFO_CONNECTED_FAIL);
         }
         JSONObject account = (JSONObject) jsonObj.get("kakao_account");
-        JSONObject profile = (JSONObject) account.get("profile");
+//        JSONObject profile = (JSONObject) account.get("profile");
 
         long kakaoId = (long) jsonObj.get("id");
 
@@ -171,11 +170,13 @@ public class AuthServiceImpl implements AuthService {
             return LogInRes.builder()
                     .id(member.get().getId())
                     .registeredMember(true)
+                    .nickname(member.get().getNickname())
+                    .profileImage(member.get().getProfileImage())
                     .build();
 
         } else { // 5.2 신규 유저
             String email = String.valueOf(account.get("email"));
-            String profileImage = String.valueOf(profile.get("profile_image_url"));
+            String profileImage = DEFAULT_PROFILE_URL;
             Member newMember = memberRepository.save(Member.builder().kakaoId(kakaoId).email(email).profileImage(profileImage).build());
             TokenInfoRes tokenInfoRes = generateToken(newMember.getId(), kakaoToken, false);
             setHeader(httpServletResponse, tokenInfoRes);
@@ -183,6 +184,8 @@ public class AuthServiceImpl implements AuthService {
             return LogInRes.builder()
                     .id(newMember.getId())
                     .registeredMember(false)
+                    .nickname(newMember.getNickname())
+                    .profileImage(newMember.getProfileImage())
                     .build();
         }
     }

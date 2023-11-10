@@ -2,6 +2,8 @@ package com.plonit.plonitservice.api.crew.service.dto;
 
 import com.plonit.plonitservice.api.crew.controller.request.SaveCrewReq;
 import com.plonit.plonitservice.domain.crew.Crew;
+import com.plonit.plonitservice.domain.region.Dong;
+import com.plonit.plonitservice.domain.region.Gugun;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Builder
 public class SaveCrewDto {
 
-    private long memberKey;
+    private Long memberKey;
 
     private String name;
 
@@ -18,7 +20,7 @@ public class SaveCrewDto {
 
     private String introduce;
 
-    private String region;
+    private Long dongCode;
 
     public static SaveCrewDto of (Long memberKey, SaveCrewReq saveCrewReq) {
         return SaveCrewDto.builder()
@@ -26,16 +28,21 @@ public class SaveCrewDto {
                 .name(saveCrewReq.getName())
                 .crewImage(saveCrewReq.getCrewImage())
                 .introduce(saveCrewReq.getIntroduce())
-                .region(saveCrewReq.getRegion())
+                .dongCode(Long.parseLong(saveCrewReq.getDongCode()))
                 .build();
     }
 
-    public static Crew toEntity (SaveCrewDto saveCrewDTO, String imageUrl) {
+    public static Crew toEntity (SaveCrewDto saveCrewDTO, String imageUrl, Dong dong) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(dong.getGugun().getSido().getName() + " " +
+                dong.getGugun().getName());
+
         return Crew.builder()
                 .name(saveCrewDTO.getName())
                 .crewImage(imageUrl)
                 .introduce(saveCrewDTO.getIntroduce())
-                .region(saveCrewDTO.getRegion())
+                .gugunCode(dong.getGugun().getCode())
+                .region(sb.toString())
                 .build();
     }
 

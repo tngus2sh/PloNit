@@ -26,9 +26,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 
 import static com.plonit.ploggingservice.common.exception.ErrorCode.INVALID_FIELDS_REQUEST;
+import static com.plonit.ploggingservice.common.util.LogCurrent.*;
 
 
 @Tag(name = "Plogging API Controller", description = "플로깅 API Document")
@@ -36,6 +38,7 @@ import static com.plonit.ploggingservice.common.exception.ErrorCode.INVALID_FIEL
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/plogging-service/v1")
+@Validated
 public class PloggingApiController {
     
     private final PloggingService ploggingService;
@@ -44,7 +47,7 @@ public class PloggingApiController {
     @Operation(summary = "플로깅 시작하기", description = "플로깅을 시작할 때 초기 플로깅 정보들을 저장합니다.")
     @PostMapping("/start")
     public CustomApiResponse<Long> saveStartPlogging(
-            @Validated @RequestBody StartPloggingReq request,
+            @Valid @RequestBody StartPloggingReq request,
             HttpServletRequest servletRequest,
             Errors errors
             ) {
@@ -70,7 +73,7 @@ public class PloggingApiController {
     @Operation(summary = "플로깅 종료시 기록 저장", description = "플로깅 종료시에 해당하는 플로깅 id에 추가 정보들을 넣는다.")
     @PostMapping
     public CustomApiResponse<Long> saveEndPlogging(
-            @Validated @RequestBody EndPloggingReq request,
+            @Valid @RequestBody EndPloggingReq request,
             HttpServletRequest servletRequest,
             Errors errors
             ) {
@@ -127,7 +130,7 @@ public class PloggingApiController {
     @Operation(summary = "플로깅 도움 요청 저장", description = "플로깅 도움 요청을 보낼 때 해당 정보들을 저장한다.")
     @PostMapping("/help")
     public CustomApiResponse<Long> savePloggingHelp(
-            @Validated @ModelAttribute HelpPloggingReq request,
+            @Valid @ModelAttribute HelpPloggingReq request,
             HttpServletRequest servletRequest,
             Errors errors
             ) {
@@ -168,7 +171,7 @@ public class PloggingApiController {
     @Operation(summary = "플로깅 중간에 이미지 전송", description = "플로깅 중간에 이미지를 전송하고자 할때 이미지 정보를 넣는다.")
     @PostMapping("/image")
     public CustomApiResponse<String> savePloggingImage(
-            @Validated @ModelAttribute ImagePloggingReq request,
+            @Valid @ModelAttribute ImagePloggingReq request,
             Errors errors
             ) {
 
@@ -199,4 +202,16 @@ public class PloggingApiController {
         
         return null;
     }
+
+    @Operation(summary = "유저별 플로깅 참여 횟수 조회", description = "유저 아이디를 가지고 플로깅에 참여한 횟수를 조회한다.")
+    @GetMapping("/count")
+    public CustomApiResponse<Integer> countMemberPlogging() {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+        log.info("CountMemberPlogging");
+
+        Integer response = ploggingQueryService.countMemberPlogging();
+
+        return CustomApiResponse.ok(response, "크루핑 참여 횟수 조회에 성공했습니다.");
+    }
+
 }

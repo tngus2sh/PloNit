@@ -8,11 +8,12 @@ import java.util.List;
 
 public interface PloggingQueryService {
 
+    List<PloggingPeriodRes> findPloggingLogByDay(String startDay, String endDay, Long memberKey);
 
-    public List<PloggingPeriodRes> findPloggingLogByDay(String startDay, String endDay, Long memberKey);
+    PloggingLogRes findPloggingLogDetail(Long ploggingId, Long memberKey);
 
-    public PloggingLogRes findPloggingLogDetail(Long ploggingId, Long memberKey);
+    List<PloggingHelpRes> findPloggingHelp(Double latitude, Double longitude);
 
-    public List<PloggingHelpRes> findPloggingHelp(Double latitude, Double longitude);
+    Integer countMemberPlogging();
     
 }

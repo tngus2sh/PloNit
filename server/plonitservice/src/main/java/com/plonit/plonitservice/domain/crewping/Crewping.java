@@ -1,5 +1,6 @@
 package com.plonit.plonitservice.domain.crewping;
 
+import com.plonit.plonitservice.api.crewping.service.dto.SaveCrewpingRecordDto;
 import com.plonit.plonitservice.common.enums.Status;
 import com.plonit.plonitservice.domain.TimeBaseEntity;
 import com.plonit.plonitservice.domain.crew.Crew;
@@ -65,5 +66,12 @@ public class Crewping extends TimeBaseEntity {
         else {
             this.cntPeople--;
         }
+    }
+
+    public void updateRecord(SaveCrewpingRecordDto dto) {
+        this.startDate = dto.getStartDate();
+        this.endDate = dto.getEndDate();
+        this.place = dto.getPlace();
+        this.activeTime = dto.getActiveTime();
     }
 }
