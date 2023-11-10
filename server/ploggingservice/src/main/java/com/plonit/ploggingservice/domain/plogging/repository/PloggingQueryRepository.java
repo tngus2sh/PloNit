@@ -36,7 +36,7 @@ public class PloggingQueryRepository {
                         plogging.totalTime,
                         plogging.distance))
                 .from(plogging)
-                .where(plogging.id.eq(memberKey).and(plogging.date.between(startDate, endDate)))
+                .where(plogging.memberKey.eq(memberKey).and(plogging.date.between(startDate, endDate)))
                 .fetch();
     }
     
