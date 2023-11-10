@@ -1,6 +1,9 @@
 @import "styles";
 
 .add_info {
+  height: max(100%, 100vh);
+  z-index: 200;
+  background-color: #fff;
   img {
     margin-top: 2rem;
     width: 60%;
