@@ -30,15 +30,15 @@ const UserInfo = ({ user }: { user: UserInterface }) => {
       <div className={style.my_situation}>
         <div className={style.my_content}>
           <div className={style.title}>참여한 플로깅</div>
-          <div className={style.count}>5</div>
+          <div className={style.count}>{user.ploggingCount}</div>
         </div>
         <div className={style.my_content}>
           <div className={style.title}>나의 크루</div>
-          <div className={style.count}>2</div>
+          <div className={style.count}>{user.crewCount}</div>
         </div>
         <div className={style.my_content}>
           <div className={style.title}>수집한 뱃지</div>
-          <div className={style.count}>3</div>
+          <div className={style.count}>{user.badgeCount}</div>
         </div>
       </div>
     </div>
