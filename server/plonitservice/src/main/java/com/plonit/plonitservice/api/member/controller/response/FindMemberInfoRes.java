@@ -10,6 +10,7 @@ import lombok.ToString;
 @ToString
 public class FindMemberInfoRes {
 
+    private Long memberId;
     private String email;
     private String name;
     private String nickname;
@@ -20,10 +21,14 @@ public class FindMemberInfoRes {
     private Float height;
     private Float weight;
     private String id1365;
+    private Integer ploggingCount;
+    private Integer crewCount;
+    private Integer badgeCount;
 
 
-    public static FindMemberInfoRes of(Member member) {
+    public static FindMemberInfoRes of(Member member, Integer ploggingCount, Integer crewCount, Integer badgeCount) {
         return FindMemberInfoRes.builder()
+                .memberId(member.getId())
                 .email(member.getEmail())
                 .name(member.getName())
                 .nickname(member.getNickname())
@@ -34,6 +39,9 @@ public class FindMemberInfoRes {
                 .height(member.getHeight())
                 .weight(member.getWeight())
                 .id1365(member.getId1365())
+                .ploggingCount(ploggingCount)
+                .crewCount(crewCount)
+                .badgeCount(badgeCount)
                 .build();
     }
 

@@ -6,8 +6,8 @@ import com.plonit.ploggingservice.api.plogging.service.PloggingQueryService;
 import com.plonit.ploggingservice.common.enums.Time;
 import com.plonit.ploggingservice.common.exception.CustomException;
 import com.plonit.ploggingservice.common.util.KakaoPlaceUtils;
-import com.plonit.ploggingservice.domain.plogging.repository.PloggingHelpQueryRepository;
-import com.plonit.ploggingservice.domain.plogging.repository.PloggingQueryRepository;
+import com.plonit.ploggingservice.common.util.RequestUtils;
+import com.plonit.ploggingservice.domain.plogging.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.plonit.ploggingservice.common.exception.ErrorCode.INVALID_PLACE_REQUEST;
@@ -34,6 +35,8 @@ public class PloggingQueryServiceImpl implements PloggingQueryService {
     private final KakaoPlaceUtils kakaoPlaceUtils;
     private final PloggingQueryRepository ploggingQueryRepository;
     private final PloggingHelpQueryRepository ploggingHelpQueryRepository;
+    private final PloggingPictureQueryRepository ploggingPictureQueryRepository;
+    private final LatLongQueryRepository latLongQueryRepository;
 
     /**
      * 플로깅 기록 일별 조회
@@ -56,9 +59,48 @@ public class PloggingQueryServiceImpl implements PloggingQueryService {
 
     @Override
     public PloggingLogRes findPloggingLogDetail(Long ploggingId, Long memberKey) {
+        
         // ploggingId와 memberKey로 플로깅 정보 가져오기
-        return ploggingQueryRepository.findPloggingLogDetail(ploggingId, memberKey)
+        FindPloggingLogRes findPloggingLogRes = ploggingQueryRepository.findPloggingLogDetail(ploggingId, memberKey)
                 .orElseThrow(() -> new CustomException(PLOGGING_BAD_REQUEST));
+        
+        PloggingLogRes ploggingLogRes = PloggingLogRes.builder()
+                .id(findPloggingLogRes.getId())
+                .type(findPloggingLogRes.getType())
+                .place(findPloggingLogRes.getPlace())
+                .startTime(findPloggingLogRes.getStartTime())
+                .endTime(findPloggingLogRes.getEndTime())
+                .totalTime(findPloggingLogRes.getTotalTime())
+                .distance(findPloggingLogRes.getDistance())
+                .calorie(findPloggingLogRes.getCalorie())
+                .review(findPloggingLogRes.getReview())
+                .build();
+
+        // 이미지 넣기
+        List<FindPloggingImagesRes> imagesByPloggingId = ploggingPictureQueryRepository.findImagesByPloggingId(ploggingId);
+
+        List<String> images = ploggingLogRes.getImages();
+        images = new ArrayList<>();
+        for (FindPloggingImagesRes findPloggingImagesRes : imagesByPloggingId) {
+            images.add(findPloggingImagesRes.getImage());
+        }
+        ploggingLogRes.setImages(images);
+        
+        // 위도, 경도 넣기
+        List<FindLatLongRes> latLongByPloggingId = latLongQueryRepository.findLatLongByPloggingId(ploggingId);
+
+        List<PloggingLogRes.Coordinate> coordinates = ploggingLogRes.getCoordinates();
+        coordinates = new ArrayList<>();
+        
+        for (FindLatLongRes findLatLongRes : latLongByPloggingId) {
+            coordinates.add(PloggingLogRes.Coordinate.builder()
+                    .latitude(findLatLongRes.getLatitude())
+                    .longitude(findLatLongRes.getLongitude())
+                    .build());
+        }
+        ploggingLogRes.setCoordinates(coordinates);
+
+        return ploggingLogRes;
     }
 
     @Override
@@ -82,7 +124,16 @@ public class PloggingQueryServiceImpl implements PloggingQueryService {
         }
 
         // 구군 코드로 플로깅 도움 요청 조회
-        LocalDate now = LocalDate.now(ZoneId.of(Time.SEOUL.name()));
+        LocalDate now = LocalDate.now(ZoneId.of(Time.SEOUL.text));
         return ploggingHelpQueryRepository.findPloggingHelp(now, sidoGugunCodeRes.getGugunCode());
+    }
+
+    @Override
+    public Integer countMemberPlogging() {
+        Long memberId = RequestUtils.getMemberId();
+
+        Integer response = ploggingQueryRepository.countPloggingByMemberId(memberId);
+
+        return response;
     }
 }
