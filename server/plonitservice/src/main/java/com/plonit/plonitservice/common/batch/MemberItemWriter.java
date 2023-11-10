@@ -1,5 +1,7 @@
 package com.plonit.plonitservice.common.batch;
 
+import com.plonit.plonitservice.common.enums.Rank;
+import com.plonit.plonitservice.common.util.RedisUtils;
 import com.plonit.plonitservice.domain.rank.MemberRanking;
 import com.plonit.plonitservice.domain.rank.repository.MemberRankingRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,17 +17,16 @@ import java.util.List;
 public class MemberItemWriter implements ItemWriter<MemberRanking> {
 
     private final MemberRankingRepository memberRankingRepository;
+    private final RedisUtils redisUtils;
 
     @Override
     public void write(List<? extends MemberRanking> items) throws Exception {
         log.info("[ITEMS] = {}", items.toString());
-        // 랭킹 기간 저장
-        
-        
+        /* 멤버 랭킹 DB에 저장 */
         List<? extends MemberRanking> memberRankings = memberRankingRepository.saveAll(items);
 
-        // Redis 지우기
-//                redisTemplate.delete("RANK");
+        /* Redis 지우기 */
+//        redisUtils.deleteRedisKey(Rank.MEMBER.getDescription());
         log.info("[BATCH] = {}", memberRankings.toString());
     }
 }

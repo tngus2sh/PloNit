@@ -27,13 +27,7 @@ public class MemberRanking {
     @ManyToOne
     private RankingPeriod rankingPeriod;
     
-    private Integer count;
-    
     private Double distance;
-    
-    private Long time;
-    
-    private Double calorie;
     
     private Integer rank;
     

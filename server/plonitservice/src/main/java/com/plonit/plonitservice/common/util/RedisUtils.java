@@ -90,8 +90,12 @@ public class RedisUtils {
         return redisTemplate.opsForZSet().size(key);
     }
 
-    public void deleteRedisKey(String key, String loginId) {
+    public void deleteRedisHashKey(String key, String loginId) {
         HashOperations<String, String, String> hashOperations = stringRedisTemplate.opsForHash();
         hashOperations.delete(key, loginId);
+    }
+
+    public void deleteRedisKey(String key) {
+        redisTemplate.delete(key);
     }
 }

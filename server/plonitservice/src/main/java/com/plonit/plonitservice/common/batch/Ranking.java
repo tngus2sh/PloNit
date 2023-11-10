@@ -1,5 +1,6 @@
 package com.plonit.plonitservice.common.batch;
 
+import com.plonit.plonitservice.domain.rank.RankingPeriod;
 import lombok.*;
 
 @Data
@@ -13,5 +14,7 @@ public class Ranking {
     private Long memberKey;
     
     private Double distance;
+
+    private RankingPeriod rankingPeriod;
     
 }

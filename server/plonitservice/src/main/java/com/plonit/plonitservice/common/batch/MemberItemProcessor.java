@@ -20,7 +20,8 @@ public class MemberItemProcessor implements ItemProcessor<Ranking, MemberRanking
     @Override
     public MemberRanking process(Ranking item) throws Exception {
         log.info("[ITEM -> BATCH] = {}", item);
-        // memberKey로 member 불러오기
+
+        /* memberKey로 member 불러오기 */
         Member member = null;
         Optional<Member> memberId = memberRepository.findById(item.getMemberKey());
         if (memberId.isPresent()) {
@@ -29,11 +30,10 @@ public class MemberItemProcessor implements ItemProcessor<Ranking, MemberRanking
 
         return MemberRanking.builder()
                 .member(member)
+                .rankingPeriod(item.getRankingPeriod())
                 .distance(item.getDistance())
                 .rank(item.getRanking())
                 .build();
     }
-
-
 }
 
