@@ -13,6 +13,7 @@ export interface CrewInterface {
   notice?: string;
   isCrewMaster?: boolean;
   isMyCrew?: boolean;
+  isWaiting?: boolean;
 }
 
 export interface FeedInterface {
@@ -26,10 +27,11 @@ export interface FeedInterface {
   islike?: boolean;
   isMine?: boolean;
   comments?: any;
+  createdDate?: string;
 }
 
 export interface CrewpingInterface {
-  crewpingId?: number;
+  id?: number;
   name: string;
   crewpingImage?: string;
   masterMemberId?: number;
@@ -49,6 +51,7 @@ export interface CommentInterface {
   nickname?: string;
   profileImage?: string;
   content?: string;
+  isMine?: boolean;
 }
 
 export interface CrewAllowInterface {
@@ -58,6 +61,7 @@ export interface CrewAllowInterface {
 }
 
 export interface MemberInterface {
+  id?: number | undefined;
   crewMemberId: number;
   profileImage: string;
   nickname: string;

@@ -166,13 +166,22 @@ const CrewCommunityPage = () => {
         </div>
       ) : (
         <div className={style.register_btn}>
-          <CommonButton
-            text="크루 가입"
-            styles={{
-              backgroundColor: "#2cd261",
-            }}
-            onClick={JoinCrew}
-          />
+          {isCrewDetail.isWaiting ? (
+            <CommonButton
+              text="승인 대기"
+              styles={{
+                backgroundColor: "#999999",
+              }}
+            />
+          ) : (
+            <CommonButton
+              text="크루 가입"
+              styles={{
+                backgroundColor: "#2cd261",
+              }}
+              onClick={JoinCrew}
+            />
+          )}
         </div>
       )}
     </div>

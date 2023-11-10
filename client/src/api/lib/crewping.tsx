@@ -79,9 +79,28 @@ export async function getCrewpingJoin(
 }
 
 // 크루핑 멤버 조회 (크루장)
-export async function getCrewpingMember(
+export async function getCrewpingMemberListMaster(
   accessToken: string,
   crewpingId: number,
+  success: (
+    res: AxiosResponse<any, any>,
+  ) =>
+    | AxiosResponse<any, any>
+    | PromiseLike<AxiosResponse<any, any>>
+    | null
+    | undefined
+    | void,
+  fail: (err: any) => PromiseLike<never> | null | undefined | void,
+) {
+  const api = customApi("/plonit-service/v1/crewping");
+  api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
+  await api.get(`/master-member/${crewpingId}`).then(success).catch(fail);
+}
+
+// 크루핑 멤버 조회 (크루원)
+export async function getCrewpingMemberList(
+  accessToken: string,
+  crewpingId: number | undefined,
   success: (
     res: AxiosResponse<any, any>,
   ) =>
