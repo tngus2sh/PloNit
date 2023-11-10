@@ -6,6 +6,7 @@ import com.plonit.plonitservice.api.feed.service.dto.SaveCommentDto;
 import com.plonit.plonitservice.api.feed.service.dto.SaveFeedDto;
 import com.plonit.plonitservice.common.AwsS3Uploader;
 import com.plonit.plonitservice.common.exception.CustomException;
+import com.plonit.plonitservice.common.exception.ErrorCode;
 import com.plonit.plonitservice.common.util.RedisUtils;
 import com.plonit.plonitservice.common.util.RequestUtils;
 import com.plonit.plonitservice.domain.crew.Crew;
@@ -16,6 +17,7 @@ import com.plonit.plonitservice.domain.crew.repository.CrewRepository;
 import com.plonit.plonitservice.domain.feed.Comment;
 import com.plonit.plonitservice.domain.feed.Feed;
 import com.plonit.plonitservice.domain.feed.FeedPicture;
+import com.plonit.plonitservice.domain.feed.Like;
 import com.plonit.plonitservice.domain.feed.repository.*;
 import com.plonit.plonitservice.domain.member.Member;
 import com.plonit.plonitservice.domain.member.repository.MemberRepository;
@@ -51,6 +53,7 @@ public class FeedServiceImpl implements FeedService {
     private final MemberRepository memberRepository;
     private final AwsS3Uploader awsS3Uploader;
     private final RedisUtils redisUtils;
+    private final LikeRepository likeRepository;
     private final LikeQueryRepository likeQueryRepository;
 
     @Transactional // 피드 등록
@@ -120,21 +123,23 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public boolean saveFeedLike(Long feedId) throws JsonProcessingException {
+    public boolean saveFeedLike(Long feedId) {
         Long memberId = RequestUtils.getMemberId();
 
         Feed feed = feedRepository.findById(feedId)
                 .orElseThrow(() -> new CustomException(FEED_NOT_FOUND));
 
         String key = "FEED_LIKE:" + feedId;
-        Set<String> feedMembers = redisUtils.getRedisSet(key);
-        System.out.println("redis 피드 검색 결과: " + feedMembers);
+        Boolean isValue = redisUtils.isRedisSetValue(key, String.valueOf(memberId));
+        System.out.println("redis 검색 결과: " + isValue);
 
         boolean flag = false;
-        if(feedMembers == null || !feedMembers.contains(String.valueOf(memberId))) {
+        if(!isValue) {
+            Like like = likeQueryRepository.findLikeByMemberAndFeed(memberId, feedId);
+
             // 좋아요 취소가 이루어짐
-            if(likeQueryRepository.isLikedMember(memberId, feedId)) {
-                dislikeFeed(memberId, feedId, false);
+            if(like != null) {
+                dislikeFeed(memberId, feedId, false, like);
             }
             // 좋아요 등록이 이루어짐
             else {
@@ -144,52 +149,98 @@ public class FeedServiceImpl implements FeedService {
         }
         // 좋아요 취소가 이루어짐
         else {
-            dislikeFeed(memberId, feedId, true);
+            dislikeFeed(memberId, feedId, true, null);
         }
 
         return flag;
     }
 
     @Override
-    public void likeFeed(Long memberId, Long feedId) throws JsonProcessingException {
+    public void likeFeed(Long memberId, Long feedId)  {
         System.out.println("좋아요 등록 메소드 시작");
-        
-//        String memberKey = "MEMBER_LIKE:" + memberId;
-//        redisUtils.setRedisHash(memberKey, String.valueOf(feedId), "true");
 
         String feedKey = "FEED_LIKE:" + feedId;
         redisUtils.setRedisSet(feedKey, String.valueOf(memberId));
 
         String countKey = "FEED_COUNT:" + feedId;
-        Integer likeCount = redisUtils.getRedisValue(countKey, Integer.class);
+        Integer likeCount = null;
 
-        if(likeCount == null) {
-            Feed feed = feedRepository.findById(feedId)
-                    .orElseThrow(() -> new CustomException(FEED_NOT_FOUND));
-
-
+        try {
+            likeCount = redisUtils.getRedisValue(countKey, Integer.class);
+        } catch (JsonProcessingException e) {
+            throw new CustomException(FEED_LIKE_SERVER_ERROR);
         }
 
-
         if(likeCount == null) {
             Feed feed = feedRepository.findById(feedId)
                     .orElseThrow(() -> new CustomException(FEED_NOT_FOUND));
 
-            // Feed 테이블에 있는 count 값 가져와서 갱신
+            likeCount = feed.getLikeCount() + 1;
 
-            redisUtils.setRedisValue(feedKey, 1);
+            redisUtils.setRedisValue(countKey, likeCount);
+        }
+        else {
+            redisUtils.setRedisValue(countKey, likeCount + 1);
         }
     }
 
     @Override
-    public void dislikeFeed(Long memberId, Long feedId, Boolean isRedis) {
+    public void dislikeFeed(Long memberId, Long feedId, Boolean isRedis, Like like) {
         if(isRedis) {
-
+            String feedKey = "FEED_LIKE:" + feedId;
+            redisUtils.deleteRedisSet(feedKey, String.valueOf(memberId));
         }
         else {
+            likeRepository.delete(like);
+        }
 
+        String countKey = "FEED_COUNT:" + feedId;
+        Integer likeCount = null;
+
+        try {
+            likeCount = redisUtils.getRedisValue(countKey, Integer.class);
+        } catch (JsonProcessingException e) {
+            throw new CustomException(FEED_LIKE_SERVER_ERROR);
+        }
+
+        if(likeCount == null) {
+            Feed feed = feedRepository.findById(feedId)
+                    .orElseThrow(() -> new CustomException(FEED_NOT_FOUND));
+
+            likeCount = feed.getLikeCount() - 1;
+
+            redisUtils.setRedisValue(countKey, likeCount);
+        }
+        else {
+            redisUtils.setRedisValue(countKey, likeCount - 1);
         }
     }
+
+//    @Override
+//    public void dislikeFeed(Long memberId, Long feedId, Boolean isRedis, Like like) throws JsonProcessingException {
+//        if(isRedis) {
+//            String feedKey = "FEED_LIKE:" + feedId;
+//            redisUtils.deleteRedisSet(feedKey, String.valueOf(memberId));
+//        }
+//        else {
+//            likeRepository.delete(like);
+//        }
+//
+//        String countKey = "FEED_COUNT:" + feedId;
+//        Integer likeCount = redisUtils.getRedisValue(countKey, Integer.class);
+//
+//        if(likeCount == null) {
+//            Feed feed = feedRepository.findById(feedId)
+//                    .orElseThrow(() -> new CustomException(FEED_NOT_FOUND));
+//
+//            likeCount = feed.getLikeCount() - 1;
+//
+//            redisUtils.setRedisValue(countKey, likeCount);
+//        }
+//        else {
+//            redisUtils.setRedisValue(countKey, likeCount - 1);
+//        }
+//    }
 
 
 }

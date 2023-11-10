@@ -1,5 +1,6 @@
 package com.plonit.plonitservice.api.feed.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.plonit.plonitservice.api.feed.controller.request.SaveCommentReq;
 import com.plonit.plonitservice.api.feed.controller.request.SaveFeedReq;
 import com.plonit.plonitservice.api.feed.controller.response.FindFeedRes;
@@ -9,6 +10,7 @@ import com.plonit.plonitservice.api.feed.service.dto.SaveCommentDto;
 import com.plonit.plonitservice.api.feed.service.dto.SaveFeedDto;
 import com.plonit.plonitservice.common.CustomApiResponse;
 import com.plonit.plonitservice.common.exception.CustomException;
+import com.plonit.plonitservice.common.exception.ErrorCode;
 import com.plonit.plonitservice.common.util.RequestUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

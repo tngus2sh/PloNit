@@ -94,6 +94,11 @@ public class RedisUtils {
         return setOperations.members(key);
     }
 
+    public Boolean isRedisSetValue(String key, String value) {
+        SetOperations<String, String> setOperations = stringRedisTemplate.opsForSet();
+        return setOperations.isMember(key, value);
+    }
+
     public Set<ZSetOperations.TypedTuple<String>> getSortedSetRangeWithScores(String key, long start, long end) {
         Set<ZSetOperations.TypedTuple<String>> membersWithScores = redisTemplate.opsForZSet().rangeWithScores(key, start, end);
 
@@ -113,5 +118,10 @@ public class RedisUtils {
     public void deleteRedisKey(String key, String loginId) {
         HashOperations<String, String, String> hashOperations = stringRedisTemplate.opsForHash();
         hashOperations.delete(key, loginId);
+    }
+
+    public void deleteRedisSet(String key, String value) {
+        SetOperations<String, String> setOperations = stringRedisTemplate.opsForSet();
+        setOperations.remove(key, value);
     }
 }

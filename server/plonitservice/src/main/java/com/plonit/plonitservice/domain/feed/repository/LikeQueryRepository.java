@@ -17,12 +17,12 @@ public class LikeQueryRepository {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public boolean isLikedMember(Long memberId, Long feedId) {
+    public Like findLikeByMemberAndFeed(Long memberId, Long feedId) {
         return queryFactory
                 .select(like)
                 .from(like)
                 .where(like.feed.id.eq(feedId), like.member.id.eq(memberId))
-                .fetchOne() != null;
+                .fetchOne();
     }
 
 }
