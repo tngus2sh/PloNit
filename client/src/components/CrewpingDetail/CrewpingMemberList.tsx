@@ -10,18 +10,20 @@ const CrewpingMemberList = ({ crewping }: { crewping: CrewpingInterface }) => {
   );
   console.log(crewping);
   useEffect(() => {
-    getCrewpingMemberList(
-      accessToken,
-      crewping.crewpingId,
-      (res) => {
-        console.log("크루핑멤버 상세 조회 성공");
-        console.log(res.data);
-        setCrewpingMember(res.data.resultBody);
-      },
-      (err) => {
-        console.log("크루핑멤버 상세 조회 실패", err);
-      },
-    );
+    if (crewping.crewpingId) {
+      getCrewpingMemberList(
+        accessToken,
+        crewping.crewpingId,
+        (res) => {
+          console.log("크루핑멤버 상세 조회 성공");
+          console.log(res.data);
+          setCrewpingMember(res.data.resultBody);
+        },
+        (err) => {
+          console.log("크루핑멤버 상세 조회 실패", err);
+        },
+      );
+    }
   }, []);
   console.log(isCrewpingMember);
   return (
