@@ -35,6 +35,7 @@ const CrewDetailPage = () => {
   }, []);
 
   const CrewQuit = () => {
+    alert("크루를 탈퇴하시겠습니까");
     getCrewQuit(
       accessToken,
       Number(crewId),
