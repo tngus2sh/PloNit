@@ -100,7 +100,7 @@ export async function getCrewpingMemberListMaster(
 // 크루핑 멤버 조회 (크루원)
 export async function getCrewpingMemberList(
   accessToken: string,
-  crewpingId: number | undefined,
+  crewpingId: number,
   success: (
     res: AxiosResponse<any, any>,
   ) =>
