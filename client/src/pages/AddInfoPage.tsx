@@ -189,7 +189,7 @@ const AddInfoPage = () => {
         onClick={SendInfo}
       />
 
-      <div style={{ height: "4rem" }}></div>
+      {/* <div style={{ height: "4rem" }}></div> */}
     </div>
   );
 };
