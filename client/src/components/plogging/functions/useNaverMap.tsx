@@ -3,7 +3,6 @@ import { naver } from "components/common/useNaver";
 import { Coordinate } from "interface/ploggingInterface";
 import Swal from "sweetalert2";
 import { renderToString } from "react-dom/server";
-import zIndex from "@mui/material/styles/zIndex";
 
 interface IcreateMarker {
   latlng: naver.maps.Coord | naver.maps.CoordLiteral;
