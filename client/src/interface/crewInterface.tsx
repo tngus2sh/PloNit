@@ -31,7 +31,8 @@ export interface FeedInterface {
 }
 
 export interface CrewpingInterface {
-  id?: number;
+  crewpingId?: number;
+  // id?: number;
   name: string;
   crewpingImage?: string;
   masterMemberId?: number;
@@ -43,6 +44,7 @@ export interface CrewpingInterface {
   cntPeople?: number;
   maxPeople?: number | string;
   introduce?: string;
+  isJoined?: boolean;
 }
 
 export interface CommentInterface {

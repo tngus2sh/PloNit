@@ -11,7 +11,7 @@ const CrewpingMemberList = ({ crewping }: { crewping: CrewpingInterface }) => {
   useEffect(() => {
     getCrewpingMemberList(
       accessToken,
-      crewping.id,
+      crewping.crewpingId,
       (res) => {
         console.log("크루핑멤버 상세 조회 성공");
         console.log(res.data);

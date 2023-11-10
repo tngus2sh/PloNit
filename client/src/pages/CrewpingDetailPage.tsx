@@ -78,7 +78,7 @@ const CrewpingDetailPage = () => {
       <CrewpingLeader crewping={isCrewpingInfo} />
       <CrewpingInfo crewping={isCrewpingInfo} />
       <CrewpingIntroduce crewping={isCrewpingInfo} />
-      {isCrewpingInfo ? (
+      {isCrewpingInfo.isJoined ? (
         <CommonButton
           text="크루핑 취소"
           styles={{
