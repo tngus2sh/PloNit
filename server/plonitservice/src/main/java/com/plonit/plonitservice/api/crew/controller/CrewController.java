@@ -1,12 +1,15 @@
 package com.plonit.plonitservice.api.crew.controller;
 
 import com.plonit.plonitservice.api.crew.controller.request.ApproveCrewReq;
+import com.plonit.plonitservice.api.crew.controller.request.SaveCrewNoticeReq;
 import com.plonit.plonitservice.api.crew.controller.request.SaveCrewReq;
+import com.plonit.plonitservice.api.crew.controller.request.UpdateCrewNoticeReq;
 import com.plonit.plonitservice.api.crew.controller.response.*;
 import com.plonit.plonitservice.api.crew.service.CrewQueryService;
 import com.plonit.plonitservice.api.crew.service.CrewService;
 import com.plonit.plonitservice.api.crew.service.dto.ApproveCrewDto;
 import com.plonit.plonitservice.api.crew.service.dto.SaveCrewDto;
+import com.plonit.plonitservice.api.crew.service.dto.SaveCrewNoticeDto;
 import com.plonit.plonitservice.common.CustomApiResponse;
 import com.plonit.plonitservice.common.exception.CustomException;
 import com.plonit.plonitservice.common.util.RequestUtils;
@@ -142,6 +145,55 @@ public class CrewController {
 
         log.info(logCurrent(getClassName(), getMethodName(), END));
         return CustomApiResponse.ok("", "크루 가입 승인/거절에 성공했습니다.");
+    }
+
+    @Operation(summary = "크루 공지사항 등록", description = "크루 공지사항을 등록한다.")
+    @PatchMapping ("/notice")
+    public CustomApiResponse<Object> saveCrewNotice(@Validated @RequestBody SaveCrewNoticeReq saveCrewNoticeReq) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        crewService.saveCrewNotice(SaveCrewNoticeDto.of(saveCrewNoticeReq));
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+        return CustomApiResponse.ok("", "크루 공지사항 등록에 성공했습니다.");
+    }
+
+    @Operation(summary = "크루 검색", description = "크루를 검색한다.")
+    @GetMapping ("/search/{type}/{word}")
+    public CustomApiResponse<Object> searchCrew(@PathVariable("type") int type, @PathVariable("word") String word) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        List<SearchCrewsRes> searchCrewsResList = crewQueryService.searchCrew(type, word);
+
+        if (searchCrewsResList.isEmpty()) {
+            log.info(logCurrent(getClassName(), getMethodName(), END));
+            return CustomApiResponse.of(0, HttpStatus.NO_CONTENT, "크루 검색에 성공했습니다.");
+        }
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+        return CustomApiResponse.ok(searchCrewsResList, "크루 검색에 성공했습니다.");
+    }
+
+    @Operation(summary = "크루 탈퇴", description = "크루를 탈퇴한다.")
+    @DeleteMapping("/quit/{crew-id}")
+    public CustomApiResponse<Object> quitCrew(@PathVariable("crew-id") Long crewId) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        crewService.quitCrew(crewId);
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+        return CustomApiResponse.ok("", "크루 탈퇴에 성공했습니다.");
+    }
+
+    @Operation(summary = "크루원 강퇴", description = "크루에서 크루원을 강퇴시킨다.")
+    @DeleteMapping("/kick-out/{crew-id}/{member-id}")
+    public CustomApiResponse<Object> kickOutCrew(@PathVariable("crew-id") Long crewId, @PathVariable("member-id") Long memberId) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        crewService.kickOutCrew(memberId, crewId);
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+        return CustomApiResponse.ok("", "크루원 강퇴에 성공했습니다.");
     }
 
 }

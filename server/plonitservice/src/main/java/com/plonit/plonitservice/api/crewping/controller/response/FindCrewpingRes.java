@@ -16,6 +16,7 @@ public class FindCrewpingRes {
     private Long crewpingId;
     private String name;
     private String crewpingImage;
+    private Long masterMemberId;
     private String masterNickname;
     private String masterImage;
     private String place;
@@ -30,6 +31,7 @@ public class FindCrewpingRes {
                 .crewpingId(crewping.getId())
                 .name(crewping.getName())
                 .crewpingImage(crewping.getCrewpingImage())
+                .masterMemberId(master.getMember().getId())
                 .masterNickname(master.getMember().getNickname())
                 .masterImage(master.getMember().getProfileImage())
                 .place(crewping.getPlace())
