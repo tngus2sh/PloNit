@@ -11,6 +11,7 @@ import { rootState } from "store/store";
 import * as P from "store/plogging-slice";
 
 import { getBins, getToilets } from "api/lib/items";
+import { searchHelpUsingLatLng } from "api/lib/plogging";
 
 const defaultZoom = 16;
 const neighbor_help_maxZoom = 12;
@@ -312,6 +313,19 @@ const DefaultMap: React.FC<IDefaultMap> = ({
             success: (response) => {
               console.log(response.data.resultBody);
               setToilets(response.data.resultBody);
+            },
+            fail: (error) => {
+              console.error(error);
+            },
+          });
+
+          searchHelpUsingLatLng({
+            accessToken: accessToken,
+            latitude: latitude,
+            longitude: longitude,
+            success: (response) => {
+              console.log(response.data.resultBody);
+              setHelps(response.data.resultBody);
             },
             fail: (error) => {
               console.error(error);
