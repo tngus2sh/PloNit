@@ -11,11 +11,11 @@ const CrewpingItem = ({ crewping }: { crewping: CrewpingInterface }) => {
   const goCrewpingDetailHandler = () => {
     // id가 선택적 프로퍼티이므로, 존재하는 경우에만 내비게이션을 수행합니다.
     console.log("crewping:", crewping);
-    console.log("crewping id: ", crewping.crewpingId);
-    if (crewping && crewping.crewpingId) {
+    console.log("crewping id: ", crewping.id);
+    if (crewping && crewping.id) {
       // crewping과 crewping.id가 존재하는지 확인합니다.
-      navigate(`/crew/crewping/detail/${crewping.crewpingId}`, {
-        state: { crewpingId: crewping.crewpingId },
+      navigate(`/crew/crewping/detail/${crewping.id}`, {
+        state: { crewpingId: crewping.id },
       });
     }
   };

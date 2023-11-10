@@ -37,7 +37,7 @@ const CrewpingList = () => {
           ))}
         </>
       ) : (
-        <div>크루핑이 존재하지 않습니다.</div>
+        <div style={{ marginTop: "2rem" }}>크루핑이 존재하지 않습니다.</div>
       )}
       <div style={{ height: "4rem" }}></div>
     </div>
