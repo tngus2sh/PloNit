@@ -9,6 +9,7 @@ interface IcreateMarker {
   map: naver.maps.Map | undefined;
   url: string;
   cursor?: string;
+  zIndex?: number;
 }
 
 interface IcreateCustomControl {
@@ -46,6 +47,7 @@ function createMarker({
   map,
   url,
   cursor = "pointer",
+  zIndex,
 }: IcreateMarker): naver.maps.Marker {
   const marker = new naver.maps.Marker({
     position: latlng,
@@ -58,6 +60,7 @@ function createMarker({
       anchor: new naver.maps.Point(17.5, 17.5),
     },
     cursor: cursor,
+    zIndex: zIndex,
   });
 
   return marker;

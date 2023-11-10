@@ -100,6 +100,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
             map: map,
             url: `/images/PloggingPage/myLocation.svg`,
             cursor: "default",
+            zIndex: 1001,
           });
           userRef.current = user;
 
