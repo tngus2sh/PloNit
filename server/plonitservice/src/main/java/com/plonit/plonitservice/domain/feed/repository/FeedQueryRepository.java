@@ -36,7 +36,7 @@ public class FeedQueryRepository {
                 .selectFrom(feed)
                 .join(feed.crew, crew)
                 .join(feed.member, member).fetchJoin()
-                .orderBy(feed.createdDate.asc())
+                .orderBy(feed.createdDate.desc())
                 .where(feed.isDelete.eq(false), feed.crew.id.eq(crewId))
                 .fetch();
 
