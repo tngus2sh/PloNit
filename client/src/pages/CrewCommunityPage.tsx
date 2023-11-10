@@ -44,6 +44,7 @@ const CrewCommunityPage = () => {
       (res) => {
         console.log("크루 가입 요청 성공");
         console.log(res.data.resultBody);
+        alert("크루 가입 요청을 보냈습니다.");
       },
       (err) => {
         console.log("크루 가입 요청 실패", err);

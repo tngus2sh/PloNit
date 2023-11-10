@@ -24,7 +24,7 @@ const KakaoCallback = () => {
             const data = {
               accessToken: res.headers.accesstoken,
               refreshToken: res.headers.refreshtoken,
-              profileImg: res.data.resultBody.profileImage,
+              // profileImg: res.data.resultBody.profileImage,
               nickname: res.data.resultBody.nickname,
             };
             console.log(data);
