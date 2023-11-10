@@ -43,6 +43,7 @@ export interface CrewpingInterface {
   cntPeople?: number;
   maxPeople?: number | string;
   introduce?: string;
+  isJoined?: boolean;
 }
 
 export interface CommentInterface {
