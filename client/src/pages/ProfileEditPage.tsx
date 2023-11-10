@@ -16,15 +16,15 @@ const ProfileEditPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const accessToken = useSelector((state: any) => state.user.accessToken);
-  const [isMyData, setMyData] = useState<UserInterface>({} as UserInterface);
-  const [isProfileImage, setProfileImage] = useState(isMyData.profileImage);
-  const [isNickname, setNickname] = useState(isMyData.nickname);
+  const [isProfile, setProfile] = useState<UserInterface>({} as UserInterface);
+  const [isProfileImage, setProfileImage] = useState(isProfile.profileImage);
+  const [isNickname, setNickname] = useState(isProfile.nickname);
   const [isAllowNickname, setAllowNickname] = useState(false);
-  const [isRegion, setRegion] = useState(isMyData.region);
-  const [isRegionCode, setRegionCode] = useState(isMyData.dongCode);
+  const [isRegion, setRegion] = useState(isProfile.region);
+  const [isRegionCode, setRegionCode] = useState(isProfile.dongCode);
   const [isOpenRegionModal, setOpenRegionModal] = useState(false);
-  const [isWeight, setWeight] = useState(isMyData.weight);
-  const [isId_1365, setId_1365] = useState(isMyData.id_1365);
+  const [isWeight, setWeight] = useState(isProfile.weight);
+  const [isId_1365, setId_1365] = useState(isProfile.id_1365);
 
   useEffect(() => {
     getProfile(
@@ -32,7 +32,7 @@ const ProfileEditPage = () => {
       (res) => {
         console.log("내 정보 조회 성공");
         console.log(res.data.resultBody);
-        setMyData(res.data.resultBody);
+        setProfile(res.data.resultBody);
       },
       (err) => {
         console.log("내 정보 조회 실패", err);
@@ -88,7 +88,7 @@ const ProfileEditPage = () => {
       accessToken,
       formData,
       (res) => {
-        dispatch(userActions.EditHandler(formData));
+        // dispatch(userActions.EditHandler(formData));
         console.log("회원 정보 수정 성공");
         navigate("/profile");
       },
@@ -130,14 +130,14 @@ const ProfileEditPage = () => {
           </div>
           <div className={style.non_edit}>
             <div className={style.top_section}>
-              <div className={style.name}>{isMyData.name}</div>
-              {isMyData.gender ? (
+              <div className={style.name}>{isProfile.name}</div>
+              {isProfile.gender ? (
                 <div className={style.gender_woman}>여</div>
               ) : (
                 <div className={style.gender_man}>남</div>
               )}
             </div>
-            <div className={style.birth}>{isMyData.birth}</div>
+            <div className={style.birth}>{isProfile.birth}</div>
           </div>
         </div>
         <Input
@@ -149,7 +149,7 @@ const ProfileEditPage = () => {
           placeholder="20자 이내로 입력해주세요"
           maxLength={20}
         />
-        {isNickname !== isMyData.nickname ? (
+        {isNickname !== isProfile.nickname ? (
           isNickname ? (
             isAllowNickname ? (
               <div className={style.nickname_true}>
