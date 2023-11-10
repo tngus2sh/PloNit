@@ -94,7 +94,7 @@ public class CrewpingServiceImpl implements CrewpingService {
         CrewpingMember masterCrewpingMember = crewpingMemberRepository.findMasterCrewpingMemberWitMemberJoinFetch(crewpingId)
                 .orElseThrow(() -> new CustomException(ErrorCode.CREWPINGMEMBER_NOT_FOUND));
 
-        FindCrewpingRes result = FindCrewpingRes.of(crewping, masterCrewpingMember);
+        FindCrewpingRes result = FindCrewpingRes.of(crewping, masterCrewpingMember, crewpingMemberQueryRepository.isCrewpingMember(memberId, crewpingId));
 
         return result;
     }
