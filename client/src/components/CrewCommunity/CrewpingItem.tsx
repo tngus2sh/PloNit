@@ -15,7 +15,7 @@ const CrewpingItem = ({ crewping }: { crewping: CrewpingInterface }) => {
     if (crewping && crewping.crewpingId) {
       // crewping과 crewping.id가 존재하는지 확인합니다.
       navigate(`/crew/crewping/detail/${crewping.crewpingId}`, {
-        state: { crewping: crewping },
+        state: { crewpingId: crewping.crewpingId },
       });
     }
   };
