@@ -7,7 +7,7 @@ import CrewpingIntroduce from "components/CrewpingDetail/CrewpingIntroduce";
 import CommonButton from "components/common/CommonButton";
 import { CrewpingInterface } from "interface/crewInterface"; // 경로는 실제 경로에 맞게 조정해주세요.
 import { useSelector, useDispatch } from "react-redux";
-import { getCrewpingInfo } from "api/lib/crewping";
+import { getCrewpingInfo, getCrewpingJoin } from "api/lib/crewping";
 
 const CrewpingDetailPage = () => {
   const accessToken = useSelector((state: any) => state.user.accessToken);
@@ -30,6 +30,20 @@ const CrewpingDetailPage = () => {
     );
   }, []);
 
+  const crewpingJoinHandler = () => {
+    getCrewpingJoin(
+      accessToken,
+      crewpingId,
+      (res) => {
+        console.log(res.data);
+        console.log("크루핑 참가 요청 성공");
+      },
+      (err) => {
+        console.log("크루핑 참가 요청 에러", err);
+      },
+    );
+  };
+
   return (
     <div>
       {isCrewpingInfo && <BackTopBar text={isCrewpingInfo.name} />}
@@ -41,6 +55,7 @@ const CrewpingDetailPage = () => {
         styles={{
           backgroundColor: "#2cd261",
         }}
+        onClick={crewpingJoinHandler}
       />
       <CommonButton
         text="크루핑 취소"
