@@ -29,6 +29,6 @@ public class MemberRanking {
     
     private Double distance;
     
-    private Integer rank;
+    private Integer ranking;
     
 }

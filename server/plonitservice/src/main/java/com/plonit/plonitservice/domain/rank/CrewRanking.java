@@ -3,6 +3,7 @@ package com.plonit.plonitservice.domain.rank;
 import com.plonit.plonitservice.domain.crew.Crew;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Builder
 public class CrewRanking {
     
     @Id
@@ -25,16 +27,8 @@ public class CrewRanking {
     @ManyToOne
     private Crew crew;
     
-    private Integer count;
-    
     private Double distance;
     
-    private Long time;
-    
-    private Double calorie;
-    
-    private Integer totalRanking;
-    
-    private Integer avgRanking;
+    private Integer ranking;
     
 }

@@ -23,7 +23,7 @@ public class MemberItemProcessor implements ItemProcessor<Ranking, MemberRanking
 
         /* memberKey로 member 불러오기 */
         Member member = null;
-        Optional<Member> memberId = memberRepository.findById(item.getMemberKey());
+        Optional<Member> memberId = memberRepository.findById(item.getId());
         if (memberId.isPresent()) {
             member = memberId.get();
         }
@@ -32,7 +32,7 @@ public class MemberItemProcessor implements ItemProcessor<Ranking, MemberRanking
                 .member(member)
                 .rankingPeriod(item.getRankingPeriod())
                 .distance(item.getDistance())
-                .rank(item.getRanking())
+                .ranking(item.getRanking())
                 .build();
     }
 }

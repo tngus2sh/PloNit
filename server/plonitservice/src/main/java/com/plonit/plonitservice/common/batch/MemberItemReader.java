@@ -45,7 +45,7 @@ public class MemberItemReader implements ItemReader<Ranking> {
             
             return Ranking.builder()
                     .ranking(currentIndex)
-                    .memberKey(Long.valueOf(nextItem.getValue()))
+                    .id(Long.valueOf(nextItem.getValue()))
                     .distance(nextItem.getScore())
                     .rankingPeriod(rankingPeriod)
                     .build();

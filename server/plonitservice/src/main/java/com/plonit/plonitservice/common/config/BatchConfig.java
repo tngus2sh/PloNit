@@ -63,7 +63,7 @@ public class BatchConfig {
     public Step crewStep() {
         log.info("[STEP] crewStep");
         return stepBuilderFactory.get("crewStep")
-                .<String, CrewRanking>chunk(100)
+                .<Ranking, CrewRanking>chunk(100)
                 .reader(crewItemReader)
                 .processor(crewItemProcessor)
                 .writer(crewItemWriter)
@@ -75,7 +75,7 @@ public class BatchConfig {
     public Step crewAvgStep() {
         log.info("[STEP] crewAvgStep");
         return stepBuilderFactory.get("crewAvgStep")
-                .<String, CrewRanking>chunk(100)
+                .<Ranking, CrewRanking>chunk(100)
                 .reader(crewAvgItemReader)
                 .processor(crewAvgItemProcessor)
                 .writer(crewAvgItemWriter)

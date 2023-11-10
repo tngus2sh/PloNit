@@ -11,7 +11,7 @@ public class Ranking {
     
     private Integer ranking;
     
-    private Long memberKey;
+    private Long id;
     
     private Double distance;
 
