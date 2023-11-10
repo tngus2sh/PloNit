@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { LogoTopBar } from "components/common/TopBar";
 import HomeBanner from "components/Home/HomeBanner";
 import Carousel from "components/Home/Carousel";
@@ -17,6 +19,14 @@ const cardList: Card[] = [
 ];
 
 const HomePage = () => {
+  const navigate = useNavigate();
+  const isLogined = useSelector((state: any) => state.user.isLogin);
+
+  useEffect(() => {
+    if (!isLogined) {
+      navigate("/login");
+    }
+  }, []);
   return (
     <div>
       <LogoTopBar />

@@ -30,8 +30,7 @@ const userSlice = createSlice({
       state.nickname = action.payload.nickname;
     },
     logout: (state) => {
-      localStorage.removeItem("persist:root");
-      return { ...state, isLogin: false };
+      localStorage.removeItem("persist:PloNit");
     },
     addInfoHandler: (state, action) => {
       return {

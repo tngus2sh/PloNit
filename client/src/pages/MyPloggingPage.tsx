@@ -71,6 +71,7 @@ const MyPloggingPage = () => {
       />
 
       <MyPloggingList dateRange={dateRange} />
+      <div style={{ height: "4rem" }}></div>
     </div>
   );
 };

@@ -10,4 +10,7 @@ export interface UserInterface {
   height?: number;
   weight?: number;
   id_1365?: string;
+  ploggingCount: number;
+  crewCount: number;
+  badgeCount: number;
 }
