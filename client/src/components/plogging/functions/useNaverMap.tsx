@@ -3,12 +3,14 @@ import { naver } from "components/common/useNaver";
 import { Coordinate } from "interface/ploggingInterface";
 import Swal from "sweetalert2";
 import { renderToString } from "react-dom/server";
+import zIndex from "@mui/material/styles/zIndex";
 
 interface IcreateMarker {
   latlng: naver.maps.Coord | naver.maps.CoordLiteral;
   map: naver.maps.Map | undefined;
   url: string;
   cursor?: string;
+  zIndex?: number;
 }
 
 interface IcreateCustomControl {
@@ -46,6 +48,7 @@ function createMarker({
   map,
   url,
   cursor = "pointer",
+  zIndex,
 }: IcreateMarker): naver.maps.Marker {
   const marker = new naver.maps.Marker({
     position: latlng,
@@ -58,6 +61,7 @@ function createMarker({
       anchor: new naver.maps.Point(17.5, 17.5),
     },
     cursor: cursor,
+    zIndex: zIndex,
   });
 
   return marker;
