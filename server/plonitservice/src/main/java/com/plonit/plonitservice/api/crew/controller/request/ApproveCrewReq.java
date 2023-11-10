@@ -2,16 +2,17 @@ package com.plonit.plonitservice.api.crew.controller.request;
 
 import lombok.Data;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
 public class ApproveCrewReq {
 
-    @NotBlank(message = "크루 식별키는 필수 입력값입니다.")
-    private long crewId;
+    @NotNull(message = "크루 식별키는 필수 입력값입니다.")
+    private Long crewId;
 
-    @NotBlank(message = "크루원 식별키는 필수 입력값입니다.")
-    private long memberId;
+    @NotNull(message = "크루원 식별키는 필수 입력값입니다.")
+    private Long memberId;
 
-    @NotBlank(message = "승인 상태는 필수 입력값입니다.")
-    private String status;
+    @NotNull(message = "승인 상태는 필수 입력값입니다.")
+    private Boolean status;
 }

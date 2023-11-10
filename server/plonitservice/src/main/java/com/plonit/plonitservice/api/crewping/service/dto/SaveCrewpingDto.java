@@ -39,8 +39,6 @@ public class SaveCrewpingDto {
 
     private String introduce;
 
-    private String notice;
-
 
     public static SaveCrewpingDto of(Long memberKey, SaveCrewpingReq request) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -55,7 +53,6 @@ public class SaveCrewpingDto {
                 .maxPeople(request.getMaxPeople())
                 .place(request.getPlace())
                 .introduce(request.getIntroduce())
-                .notice(request.getNotice())
                 .build();
     }
 
@@ -71,7 +68,6 @@ public class SaveCrewpingDto {
                 .maxPeople(maxPeople)
                 .place(place)
                 .introduce(introduce)
-                .notice(notice)
                 .activeTime(0l)
                 .build();
     }

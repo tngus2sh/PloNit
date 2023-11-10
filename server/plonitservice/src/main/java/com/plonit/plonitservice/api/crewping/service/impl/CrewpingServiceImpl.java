@@ -5,6 +5,7 @@ import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingRes
 import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingsRes;
 import com.plonit.plonitservice.api.crewping.service.dto.SaveCrewpingDto;
 import com.plonit.plonitservice.api.crewping.service.CrewpingService;
+import com.plonit.plonitservice.api.crewping.service.dto.SaveCrewpingRecordDto;
 import com.plonit.plonitservice.common.AwsS3Uploader;
 import com.plonit.plonitservice.common.exception.CustomException;
 import com.plonit.plonitservice.common.exception.ErrorCode;
@@ -187,6 +188,22 @@ public class CrewpingServiceImpl implements CrewpingService {
         CrewpingMember crewpingMember = crewpingMemberRepository.findCrewpingMemberByJoinFetch(targetId, crewpingId).get();
         crewpingMemberRepository.delete(crewpingMember);
         crewping.updateCurrentPeople(false);
+    }
+
+    @Override
+    public void saveCrewpingRecord(SaveCrewpingRecordDto dto) {
+        Member member = memberRepository.findById(dto.getMemberId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        Crewping crewping = crewpingRepository.findById(dto.getCrewpingId())
+                .orElseThrow(() -> new CustomException(ErrorCode.CREWPING_NOT_FOUND));
+
+        CrewpingMember masterCrewpingMember = crewpingMemberRepository.findMasterCrewpingMemberWitMemberJoinFetch(dto.getCrewpingId()).get();
+        if(masterCrewpingMember.getMember().getId() != dto.getMemberId()) {
+            throw new CustomException(ErrorCode.CREWPING_BAD_REQUEST);
+        }
+
+        crewping.updateRecord(dto);
     }
 
 }

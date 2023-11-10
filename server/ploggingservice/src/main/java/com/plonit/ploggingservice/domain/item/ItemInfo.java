@@ -1,4 +1,4 @@
-package com.plonit.ploggingservice.domain.plogging;
+package com.plonit.ploggingservice.domain.item;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -13,25 +13,24 @@ public class ItemInfo {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "itemInfo_id")
+    @Column(name = "item_info_id")
     private Long id;
     
     @Column
-    private Long gugunkey;
+    private Long gugunCode;
     
     @Column
-    private boolean contentType; // 0 : 화장실, 1 : 쓰레기통
+    private Boolean contentType; // 0 : 화장실, 1 : 쓰레기통
     
     @Column
-    private double latitude;
+    private Double latitude;
     
     @Column
-    private double longitude;
+    private Double longitude;
 
     @Builder
-    public ItemInfo(Long id, Long gugunkey, boolean contentType, double latitude, double longitude) {
-        this.id = id;
-        this.gugunkey = gugunkey;
+    public ItemInfo(Long gugunCode, Boolean contentType, Double latitude, Double longitude) {
+        this.gugunCode = gugunCode;
         this.contentType = contentType;
         this.latitude = latitude;
         this.longitude = longitude;

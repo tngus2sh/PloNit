@@ -2,7 +2,9 @@ package com.plonit.plonitservice.domain.member;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.plonit.plonitservice.api.member.controller.request.UpdateMemberReq;
+import com.plonit.plonitservice.api.member.service.dto.UpdateMemberDto;
 import com.plonit.plonitservice.domain.TimeBaseEntity;
+import com.plonit.plonitservice.domain.region.Dong;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
@@ -41,6 +43,8 @@ public class Member extends TimeBaseEntity {
     @ColumnDefault("false")
     private Boolean gender; // 0 : 남자 / 1 : 여자
 
+    private Long dongCode;
+
     private String region;
 
     private float height;
@@ -51,14 +55,22 @@ public class Member extends TimeBaseEntity {
 
     private String birth;
 
-    public void changeInfo(UpdateMemberReq updateMemberReq) {
-        this.name = updateMemberReq.getName();
-        this.nickname = updateMemberReq.getNickname();
-        this.gender = Boolean.parseBoolean(updateMemberReq.getGender());
-        this.birth = updateMemberReq.getBirth();
-        this.region = updateMemberReq.getRegion();
-        if(updateMemberReq.getId1365() != null) this.id1365 = updateMemberReq.getId1365();
-        if(updateMemberReq.getHeight() != null) this.height = Float.parseFloat(updateMemberReq.getHeight());
-        if(updateMemberReq.getWeight() != null) this.weight = Float.parseFloat(updateMemberReq.getWeight());
+    public void changeInfo(UpdateMemberDto updateMemberDto, Dong dong) {
+        StringBuilder sb = new StringBuilder();
+
+        this.name = updateMemberDto.getName();
+        this.nickname = updateMemberDto.getNickname();
+        this.gender = updateMemberDto.getGender();
+        this.birth = updateMemberDto.getBirth();
+        this.dongCode = updateMemberDto.getDongCode();
+
+        sb.append(dong.getGugun().getSido().getName() + " " +
+                dong.getGugun().getName() + " " +
+                dong.getName());
+        this.region = sb.toString();
+
+        if(updateMemberDto.getId1365() != null) this.id1365 = updateMemberDto.getId1365();
+        if(updateMemberDto.getHeight() != null) this.height = Float.parseFloat(updateMemberDto.getHeight());
+        if(updateMemberDto.getWeight() != null) this.weight = Float.parseFloat(updateMemberDto.getWeight());
     }
 }

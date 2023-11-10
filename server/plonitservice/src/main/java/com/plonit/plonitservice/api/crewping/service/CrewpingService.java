@@ -4,6 +4,7 @@ import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingMem
 import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingRes;
 import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingsRes;
 import com.plonit.plonitservice.api.crewping.service.dto.SaveCrewpingDto;
+import com.plonit.plonitservice.api.crewping.service.dto.SaveCrewpingRecordDto;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -18,4 +19,5 @@ public interface CrewpingService {
     void quitCrewping(Long memberId, Long crewpingId);
     List<FindCrewpingMembersRes> findCrewpingMembers(Long memberId, Long crewpingId);
     void kickoutCrewpingMember(Long memberId, Long crewpingId, Long targetId);
+    void saveCrewpingRecord(SaveCrewpingRecordDto dto);
 }
