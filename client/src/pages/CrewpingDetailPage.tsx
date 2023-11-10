@@ -31,6 +31,7 @@ const CrewpingDetailPage = () => {
   }, []);
 
   const crewpingJoinHandler = () => {
+    console.log("크루핑 참가 요청 버튼");
     getCrewpingJoin(
       accessToken,
       crewpingId,
