@@ -10,6 +10,7 @@
     "@mui/material": "^5.14.14",
     "@react-spring/web": "^9.7.3",
     "@reduxjs/toolkit": "^1.9.7",
+    "@stomp/stompjs": "^7.0.0",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.5.0",
@@ -40,6 +41,7 @@
     "react-router-dom": "^6.17.0",
     "react-scripts": "5.0.1",
     "redux-persist": "^6.0.0",
+    "sockjs-client": "^1.6.1",
     "styled-components": "^6.1.0",
     "sweetalert2": "^11.7.32",
     "swiper": "^10.3.1",
@@ -93,6 +95,7 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@types/navermaps": "^3.7.1",
     "@types/react-datepicker": "^4.19.1",
+    "@types/sockjs-client": "^1.5.4",
     "sass": "^1.69.4"
   }
 }
