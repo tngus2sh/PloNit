@@ -129,6 +129,7 @@ function createMarkers({
     return (
       <div>
         <div>{place}</div>
+        <br />
         <div>{context}</div>
       </div>
     );
@@ -140,8 +141,8 @@ function createMarkers({
       naver.maps.Event.addListener(marker, "click", () => {
         Swal.fire({
           imageUrl: items[index].image,
-          imageWidth: `70vw`,
-          imageHeight: `auto`,
+          // imageWidth: `70vw`,
+          // imageHeight: `auto`,
           imageAlt: `helpImage`,
           // text: items[index].context,
           html: renderToString(
