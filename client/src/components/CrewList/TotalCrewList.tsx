@@ -13,19 +13,33 @@ const TotalCrewList = () => {
 
   const handleSearchInputChange = (event: any) => {
     setSearchWord(event.target.value);
-    getCrewSearch(
-      accessToken,
-      Number(isSelectedType),
-      event.target.value,
-      (res) => {
-        console.log(res.data);
-        setTotalCrewList(res.data.resultBody);
-        console.log("크루 검색 성공");
-      },
-      (err) => {
-        console.log("크루 검색 실패", err);
-      },
-    );
+    if (event.target.value === "") {
+      getCrewList(
+        accessToken,
+        (res) => {
+          console.log(res.data);
+          setTotalCrewList(res.data.resultBody);
+          console.log("크루 목록조회 성공");
+        },
+        (err) => {
+          console.log("크루 목록조회 실패", err);
+        },
+      );
+    } else {
+      getCrewSearch(
+        accessToken,
+        Number(isSelectedType),
+        event.target.value,
+        (res) => {
+          console.log(res.data);
+          setTotalCrewList(res.data.resultBody);
+          console.log("크루 검색 성공");
+        },
+        (err) => {
+          console.log("크루 검색 실패", err);
+        },
+      );
+    }
   };
 
   useEffect(() => {

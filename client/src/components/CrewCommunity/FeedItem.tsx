@@ -124,7 +124,7 @@ const FeedItem = ({
           <div>나도 가고 싶다</div>
         </div> */}
       </div>
-      <div className={style.date}>10월 15일</div>
+      <div className={style.date}>{feed.createdDate}</div>
       {isCommentModalOpen && (
         <>
           <CustomSheet

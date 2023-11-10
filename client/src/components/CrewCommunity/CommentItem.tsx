@@ -40,12 +40,14 @@ const CommentItem = ({
           <div className={style.content}>{comment.content}</div>
         </div>
       </div>
-      <Icon
-        icon="bi:x"
-        style={{ width: "1.8rem", height: "1.8rem" }}
-        className={style.x_icon}
-        onClick={handleDeleteComment}
-      />
+      {comment.isMine ? (
+        <Icon
+          icon="bi:x"
+          style={{ width: "1.8rem", height: "1.8rem" }}
+          className={style.x_icon}
+          onClick={handleDeleteComment}
+        />
+      ) : null}
     </div>
   );
 };
