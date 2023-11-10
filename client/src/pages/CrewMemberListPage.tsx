@@ -66,6 +66,7 @@ const CrewMemberListPage = () => {
           master={isCrewDetail.isCrewMaster || false}
         />
       ))}
+      <div style={{ height: "4rem" }}></div>
     </div>
   );
 };
