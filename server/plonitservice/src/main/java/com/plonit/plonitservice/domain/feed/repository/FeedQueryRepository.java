@@ -9,6 +9,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +67,9 @@ public class FeedQueryRepository {
                                 comment -> FeedCommentDto.builder().nickname(comment.getMember().getNickname())
                                         .commentId(comment.getId())
                                         .profileImage(comment.getMember().getProfileImage())
-                                        .content(comment.getContent()).build(),
+                                        .content(comment.getContent())
+                                        .isMine(comment.getMember().getId().equals(memberKey))
+                                        .build(),
                                 Collectors.toList()
                         )
                 ));
@@ -86,6 +89,7 @@ public class FeedQueryRepository {
                     .profileImage(feedEntity.getMember().getProfileImage())
                     .feedPictures(feedPictureDtos)
                     .comments(feedCommentDtos)
+                    .createdDate(feedEntity.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                     .build();
             // todo : likeCount, isLike
 
