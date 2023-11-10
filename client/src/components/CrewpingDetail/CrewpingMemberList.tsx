@@ -8,6 +8,7 @@ const CrewpingMemberList = ({ crewping }: { crewping: CrewpingInterface }) => {
   const [isCrewpingMember, setCrewpingMember] = useState<MemberInterface>(
     {} as MemberInterface,
   );
+  console.log(crewping);
   useEffect(() => {
     getCrewpingMemberList(
       accessToken,
