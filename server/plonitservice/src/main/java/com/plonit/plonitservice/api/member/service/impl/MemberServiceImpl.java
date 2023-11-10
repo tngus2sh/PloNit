@@ -73,7 +73,7 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(USER_BAD_REQUEST));
 
-        Integer ploggingCount = ploggingFeignClient.countPlogging().getResultBody();
+        Integer ploggingCount = ploggingFeignClient.countPlogging(RequestUtils.getToken()).getResultBody();
         Integer crewCount = crewMemberQueryRepository.countByCrewMemberByMemberId(memberId);
         Integer badgeCount = memberBadgeQueryRepository.countByMemberBadgeByMemberId(memberId);
 
