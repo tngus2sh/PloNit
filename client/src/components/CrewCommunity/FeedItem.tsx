@@ -75,11 +75,13 @@ const FeedItem = ({
           <div className={style.nickname}>{feed.nickname}</div>
         </div>
         <div className={style.right}>
-          <Icon
-            icon="bi:trash"
-            style={{ width: "1.5rem", height: "1.5rem" }}
-            onClick={handleDeleteFeed}
-          />
+          {feed.isMine ? (
+            <Icon
+              icon="bi:trash"
+              style={{ width: "1.5rem", height: "1.5rem" }}
+              onClick={handleDeleteFeed}
+            />
+          ) : null}
         </div>
       </div>
 
