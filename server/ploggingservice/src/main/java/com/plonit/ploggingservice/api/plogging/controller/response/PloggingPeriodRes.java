@@ -9,7 +9,6 @@ import java.time.format.DateTimeFormatter;
 
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class PloggingPeriodRes {
     
     private Long id;
