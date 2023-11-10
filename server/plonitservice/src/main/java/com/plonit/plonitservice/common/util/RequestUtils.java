@@ -30,4 +30,11 @@ public class RequestUtils {
         }
         return memberId;
     }
+
+    public static String getToken() {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder
+                .getRequestAttributes();
+
+        return attributes.getRequest().getHeader("accessToken");
+    }
 }
