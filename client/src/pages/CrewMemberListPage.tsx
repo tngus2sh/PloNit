@@ -21,6 +21,7 @@ const CrewMemberListPage = () => {
       (res) => {
         console.log("크루 상세 조회 성공");
         setCrewDetail(res.data.resultBody);
+        console.log(isCrewDetail.isCrewMaster);
         if (!isCrewDetail.isCrewMaster) {
           getCrewMember(
             accessToken,
@@ -34,7 +35,7 @@ const CrewMemberListPage = () => {
               console.log("크루원 목록조회 실패", err);
             },
           );
-        } else {
+        } else if (isCrewDetail.isCrewMaster) {
           getCrewMaster(
             accessToken,
             Number(crewId),

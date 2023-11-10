@@ -75,6 +75,7 @@ const TotalCrewList = () => {
       ) : (
         <div>검색결과가 존재하지 않습니다.</div>
       )}
+      <div style={{ height: "4rem" }}></div>
     </div>
   );
 };
