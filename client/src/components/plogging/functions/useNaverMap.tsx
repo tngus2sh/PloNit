@@ -1,8 +1,8 @@
-import zIndex from "@mui/material/styles/zIndex";
+import React from "react";
 import { naver } from "components/common/useNaver";
 import { Coordinate } from "interface/ploggingInterface";
-import { NavigateProps } from "react-router-dom";
 import Swal from "sweetalert2";
+import { renderToString } from "react-dom/server";
 
 interface IcreateMarker {
   latlng: naver.maps.Coord | naver.maps.CoordLiteral;
@@ -119,8 +119,23 @@ function createMarkers({
     markers.push(marker);
   });
 
+  const InnerComponent = ({
+    place,
+    context,
+  }: {
+    place: string;
+    context: string;
+  }) => {
+    return (
+      <div>
+        <div>{place}</div>
+        <div>{context}</div>
+      </div>
+    );
+  };
+
   // Help의 경우
-  if (items[0]?.image) {
+  if (items[0]?.image || items[0]?.place || items[0]?.context) {
     markers.forEach((marker, index) => {
       naver.maps.Event.addListener(marker, "click", () => {
         Swal.fire({
@@ -128,7 +143,13 @@ function createMarkers({
           imageWidth: `70vw`,
           imageHeight: `auto`,
           imageAlt: `helpImage`,
-          text: items[index].context,
+          // text: items[index].context,
+          html: renderToString(
+            InnerComponent({
+              place: items[index].place ?? "",
+              context: items[index].context ?? "",
+            }),
+          ),
           showConfirmButton: false,
           showCloseButton: true,
         });
