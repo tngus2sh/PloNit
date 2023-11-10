@@ -1,5 +1,6 @@
 package com.plonit.plonitservice.api.crewping.service.impl;
 
+import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingMembersByMasterRes;
 import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingMembersRes;
 import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingRes;
 import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingsRes;
@@ -148,7 +149,7 @@ public class CrewpingServiceImpl implements CrewpingService {
     }
 
     @Override
-    public List<FindCrewpingMembersRes> findCrewpingMembers(Long memberId, Long crewpingId) {
+    public List<FindCrewpingMembersByMasterRes> findCrewpingMembersByMaster(Long memberId, Long crewpingId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
@@ -157,6 +158,23 @@ public class CrewpingServiceImpl implements CrewpingService {
 
         CrewpingMember masterCrewpingMember = crewpingMemberRepository.findMasterCrewpingMemberWitMemberJoinFetch(crewpingId).get();
         if(masterCrewpingMember.getMember().getId() != memberId) {
+            throw new CustomException(ErrorCode.CREWPING_BAD_REQUEST);
+        }
+
+        List<FindCrewpingMembersByMasterRes> result = crewpingMemberQueryRepository.findCrewpingMembersByMaster(crewpingId);
+
+        return result;
+    }
+
+    @Override
+    public List<FindCrewpingMembersRes> findCrewpingMembers(Long memberId, Long crewpingId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        Crewping crewping = crewpingRepository.findById(crewpingId)
+                .orElseThrow(() -> new CustomException(ErrorCode.CREWPING_NOT_FOUND));
+
+        if(!crewpingMemberQueryRepository.isCrewpingMember(memberId, crewpingId)) {
             throw new CustomException(ErrorCode.CREWPING_BAD_REQUEST);
         }
 
