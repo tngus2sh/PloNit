@@ -26,8 +26,6 @@ const userSlice = createSlice({
       state.isLogin = true;
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload.refreshToken;
-      state.profileImg = action.payload.profileImg;
-      state.nickname = action.payload.nickname;
     },
     logout: (state) => {
       localStorage.removeItem("persist:PloNit");
