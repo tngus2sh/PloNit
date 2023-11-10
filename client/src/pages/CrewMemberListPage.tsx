@@ -21,6 +21,7 @@ const CrewMemberListPage = () => {
       (res) => {
         console.log("크루 상세 조회 성공");
         setCrewDetail(res.data.resultBody);
+        console.log(isCrewDetail);
       },
       (err) => {
         console.log("크루 상세 조회 실패", err);
@@ -59,48 +60,7 @@ const CrewMemberListPage = () => {
       }
     }
   }, []);
-  // useEffect(() => {
-  //   getCrewDetail(
-  //     accessToken,
-  //     Number(crewId),
-  //     (res) => {
-  //       console.log("크루 상세 조회 성공");
-  //       setCrewDetail(res.data.resultBody);
-  //       console.log(isCrewDetail.isCrewMaster);
-  //       if (!isCrewDetail.isCrewMaster) {
-  //         getCrewMember(
-  //           accessToken,
-  //           Number(crewId),
-  //           (res) => {
-  //             console.log(res.data);
-  //             setMemberList(res.data.resultBody);
-  //             console.log("크루원 목록조회 성공");
-  //           },
-  //           (err) => {
-  //             console.log("크루원 목록조회 실패", err);
-  //           },
-  //         );
-  //       } else if (isCrewDetail.isCrewMaster) {
-  //         getCrewMaster(
-  //           accessToken,
-  //           Number(crewId),
-  //           (res) => {
-  //             console.log(res.data);
-  //             setMemberList(res.data.resultBody);
-  //             console.log("크루장 목록조회 성공");
-  //           },
-  //           (err) => {
-  //             console.log("크루장 목록조회 실패", err);
-  //           },
-  //         );
-  //       }
-  //     },
-  //     (err) => {
-  //       console.log("크루 상세 조회 실패", err);
-  //     },
-  //   );
-  // }, []);
-
+  console.log(isCrewDetail);
   return (
     <div>
       <BackTopBar text="멤버 목록 " />
