@@ -9,11 +9,13 @@ import { getCrewDetail, getCrewMember, getCrewMaster } from "api/lib/crew";
 const CrewMemberListPage = () => {
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const { crewId } = useParams();
+  // 크루장 여부 확인을 위해 필요
   const [isCrewDetail, setCrewDetail] = useState<CrewInterface>(
     {} as CrewInterface,
   );
   const [isMemberList, setMemberList] = useState<MemberInterface[]>([]);
-
+  const Crewmaster =
+    isCrewDetail.isCrewMaster === undefined ? false : isCrewDetail.isCrewMaster;
   useEffect(() => {
     getCrewDetail(
       accessToken,
@@ -21,7 +23,33 @@ const CrewMemberListPage = () => {
       (res) => {
         console.log("크루 상세 조회 성공");
         setCrewDetail(res.data.resultBody);
-        console.log(isCrewDetail);
+        if (!isCrewDetail.isCrewMaster) {
+          getCrewMember(
+            accessToken,
+            Number(crewId),
+            (res) => {
+              console.log(res.data);
+              setMemberList(res.data.resultBody);
+              console.log("크루원 목록조회 성공");
+            },
+            (err) => {
+              console.log("크루원 목록조회 실패", err);
+            },
+          );
+        } else {
+          getCrewMaster(
+            accessToken,
+            Number(crewId),
+            (res) => {
+              console.log(res.data);
+              setMemberList(res.data.resultBody);
+              console.log("크루장 목록조회 성공");
+            },
+            (err) => {
+              console.log("크루장 목록조회 실패", err);
+            },
+          );
+        }
       },
       (err) => {
         console.log("크루 상세 조회 실패", err);
@@ -29,47 +57,17 @@ const CrewMemberListPage = () => {
     );
   }, []);
 
-  useEffect(() => {
-    if (isCrewDetail.isCrewMaster !== undefined) {
-      if (!isCrewDetail.isCrewMaster) {
-        getCrewMember(
-          accessToken,
-          Number(crewId),
-          (res) => {
-            console.log(res.data);
-            setMemberList(res.data.resultBody);
-            console.log("크루원 목록조회 성공");
-          },
-          (err) => {
-            console.log("크루원 목록조회 실패", err);
-          },
-        );
-      } else {
-        getCrewMaster(
-          accessToken,
-          Number(crewId),
-          (res) => {
-            console.log(res.data);
-            setMemberList(res.data.resultBody);
-            console.log("크루장 목록조회 성공");
-          },
-          (err) => {
-            console.log("크루장 목록조회 실패", err);
-          },
-        );
-      }
-    }
-  }, []);
-  console.log(isCrewDetail);
+  // useEffect(() => {
+  //   if (isCrewDetail.isCrewMaster !== undefined) {
+
+  //   }
+  // }, []);
+  // console.log(isCrewDetail);
   return (
     <div>
       <BackTopBar text="멤버 목록 " />
       {isMemberList.map((member, index) => (
-        <MemberItem
-          key={index}
-          member={member}
-          master={isCrewDetail.isCrewMaster || false}
-        />
+        <MemberItem key={index} member={member} master={Crewmaster} />
       ))}
       <div style={{ height: "4rem" }}></div>
     </div>

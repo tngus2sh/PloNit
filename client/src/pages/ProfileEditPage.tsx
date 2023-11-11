@@ -63,11 +63,7 @@ const ProfileEditPage = () => {
 
   const SendEdit = () => {
     const formData = new FormData();
-    if (isRegionCode !== undefined) {
-      formData.append("dongCode", User.dongCode);
-    } else {
-      formData.append("dongCode", isRegionCode);
-    }
+    formData.append("dongCode", isRegionCode);
     formData.append("nickname", isNickname);
     formData.append("weight", isWeight);
     formData.append("region", isRegion);
