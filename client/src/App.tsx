@@ -84,7 +84,7 @@ function App() {
               });
           }
 
-          if (false) {
+          if (window.Worker) {
             setWorkerNA(false);
             worker.postMessage("start");
             worker.postMessage("start2");
