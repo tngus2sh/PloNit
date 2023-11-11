@@ -18,7 +18,7 @@ const initialState = {
     region: "",
     height: 0,
     weight: 0,
-    id_1365: "",
+    id1365: "",
   },
 };
 
