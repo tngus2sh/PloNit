@@ -43,9 +43,7 @@ const userSlice = createSlice({
       return { ...state, info: action.payload };
     },
     myCrewHandler(state, action) {
-      state.crewinfo.isMyCrew = action.payload.isMyCrew;
-      state.crewinfo.isCrewMaster = action.payload.isCrewMaster;
-      state.crewinfo.isCrewwpingMaster = action.payload.isCrewwpingMaster;
+      return { ...state, crewinfo: action.payload };
     },
   },
 });
