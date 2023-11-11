@@ -10,6 +10,9 @@ import java.time.LocalDateTime;
 @Builder
 public class CrewpingRecordReq {
     
+    // 크루핑 id
+    private Long crewpingId;
+    
     // 시작 시간
     private LocalDateTime startDate;
     

@@ -81,3 +81,6 @@ lerna-debug.log*
 
 ### keys ###
 keystore/
+
+### firebase ###
+firebase/
