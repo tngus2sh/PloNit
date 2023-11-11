@@ -23,6 +23,7 @@ const MemberItem = ({
         Number(crewId),
         member.crewMemberId,
         (res) => {
+          alert("강퇴시키시겠습니까?");
           console.log("크루 강퇴 요청 성공");
           console.log(res.data);
           fetchMemberList();

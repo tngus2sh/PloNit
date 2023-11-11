@@ -24,7 +24,7 @@ const ProfileEditPage = () => {
   const [isRegionCode, setRegionCode] = useState(User.dongCode);
   const [isOpenRegionModal, setOpenRegionModal] = useState(false);
   const [isWeight, setWeight] = useState(User.weight);
-  const [isId_1365, setId_1365] = useState(User.id_1365);
+  const [isId_1365, setId_1365] = useState(User.id1365);
 
   const handleImageUpload = (event: any) => {
     const file = event.target.files[0];
