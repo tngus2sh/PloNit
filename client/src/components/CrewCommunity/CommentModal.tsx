@@ -51,7 +51,7 @@ const CommentModal = ({
     <div className={style.comment_modal}>
       <CommentList feed={feed} fetchFeedList={fetchFeedList} />
       <div className={style.modal_bottom}>
-        <img src={User.info.profileImg} alt="프로필" />
+        <img src={User.info.profileImage} alt="프로필" />
         {User.crewinfo.isMyCrew ? (
           <>
             <input
