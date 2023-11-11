@@ -37,7 +37,7 @@ const Crewping = () => {
   const check2 = useRef<boolean>(false);
 
   const accessToken = useSelector<rootState, string>((state) => {
-    return state.user.accessToken;
+    return state.user.auth.accessToken;
   });
 
   useEffect(() => {

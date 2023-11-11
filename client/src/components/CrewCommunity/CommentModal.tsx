@@ -13,8 +13,8 @@ const CommentModal = ({
   feed: FeedInterface;
   fetchFeedList: () => void;
 }) => {
-  const accessToken = useSelector((state: any) => state.user.accessToken);
-  const profileImage = useSelector((state: any) => state.user.profileImg);
+  const accessToken = useSelector((state: any) => state.user.auth.accessToken);
+  const profileImage = useSelector((state: any) => state.user.info.profileImg);
   const user = useSelector((state: any) => state.user);
   console.log(user);
   const [isComment, setComment] = useState("");

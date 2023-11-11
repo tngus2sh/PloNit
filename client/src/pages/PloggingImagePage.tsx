@@ -26,7 +26,7 @@ const PloggingImagePage = () => {
     return state.plogging.beforeEnd;
   });
   const accessToken = useSelector<rootState, string>((state) => {
-    return state.user.accessToken;
+    return state.user.auth.accessToken;
   });
   const ploggingId = useSelector<rootState, number>((state) => {
     return state.plogging.ploggingId;

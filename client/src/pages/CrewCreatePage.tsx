@@ -11,7 +11,7 @@ import style from "styles/css/CrewCreatePage.module.css";
 
 const CrewCreatePage = () => {
   const navigate = useNavigate();
-  const accessToken = useSelector((state: any) => state.user.accessToken);
+  const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const [isCrewName, setCrewName] = useState("");
   const [isCrewRegion, setCrewRegion] = useState("");
   const [isRegionCode, setRegionCode] = useState("");

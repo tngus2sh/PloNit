@@ -15,7 +15,7 @@ import { UserInterface } from "interface/authInterface";
 const ProfileEditPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const accessToken = useSelector((state: any) => state.user.accessToken);
+  const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const [isProfile, setProfile] = useState<UserInterface>({} as UserInterface);
   const [isProfileImage, setProfileImage] = useState(isProfile.profileImage);
   const [isNickname, setNickname] = useState(isProfile.nickname);

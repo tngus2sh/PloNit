@@ -12,7 +12,7 @@ const CommentItem = ({
   comment: CommentInterface;
   fetchFeedList: () => void;
 }) => {
-  const accessToken = useSelector((state: any) => state.user.accessToken);
+  const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const handleDeleteComment = () => {
     if (comment.commentId) {
       getCommentDelete(

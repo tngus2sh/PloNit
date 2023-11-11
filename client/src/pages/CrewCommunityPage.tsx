@@ -14,7 +14,7 @@ import { CrewInterface } from "interface/crewInterface";
 
 const CrewCommunityPage = () => {
   const navigate = useNavigate();
-  const accessToken = useSelector((state: any) => state.user.accessToken);
+  const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const { crewId } = useParams();
   const [isVisibleButton, setVisibleButton] = useState(false);
   const [isCrewDetail, setCrewDetail] = useState<CrewInterface>(

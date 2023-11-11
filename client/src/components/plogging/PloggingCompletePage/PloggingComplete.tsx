@@ -59,7 +59,7 @@ const PloggingComplete = () => {
   });
 
   const accessToken = useSelector<rootState, string>((state) => {
-    return state.user.accessToken;
+    return state.user.auth.accessToken;
   });
   const nowType = useSelector<rootState, ploggingType>((state) => {
     return state.plogging.ploggingType;

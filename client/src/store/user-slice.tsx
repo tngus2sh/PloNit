@@ -2,20 +2,24 @@ import { createSlice } from "@reduxjs/toolkit";
 import { act } from "react-dom/test-utils";
 
 const initialState = {
-  isLogin: false,
-  accessToken: "",
-  refreshToken: "",
-  profileImg: "",
-  email: "",
-  nickname: "",
-  name: "",
-  gender: false,
-  birthday: "",
-  dongCode: 0,
-  region: "",
-  height: 0,
-  weight: 0,
-  id_1365: "",
+  auth: {
+    isLogin: false,
+    accessToken: "",
+    refreshToken: "",
+  },
+  info: {
+    profileImg: "",
+    email: "",
+    nickname: "",
+    name: "",
+    gender: false,
+    birthday: "",
+    dongCode: 0,
+    region: "",
+    height: 0,
+    weight: 0,
+    id_1365: "",
+  },
 };
 
 const userSlice = createSlice({
@@ -23,15 +27,15 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     loginHandler: (state, action) => {
-      state.isLogin = true;
-      state.accessToken = action.payload.accessToken;
-      state.refreshToken = action.payload.refreshToken;
+      state.auth.isLogin = true;
+      state.auth.accessToken = action.payload.accessToken;
+      state.auth.refreshToken = action.payload.refreshToken;
     },
     logout: (state) => {
       localStorage.removeItem("persist:PloNit");
     },
     saveMemberInfo(state, action) {
-      return action.payload;
+      return { ...state, info: action.payload };
     },
     addInfoHandler: (state, action) => {
       return {

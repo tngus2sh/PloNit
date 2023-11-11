@@ -15,7 +15,7 @@ import {
 
 const CrewpingDetailPage = () => {
   const navigate = useNavigate();
-  const accessToken = useSelector((state: any) => state.user.accessToken);
+  const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const { crewpingId } = useParams();
   // const location = useLocation();
   // const { crewpingId } = location.state || {}; // state가 없는 경우를 대비해 기본값 설정

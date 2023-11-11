@@ -8,7 +8,7 @@ import { RankInterface } from "interface/rankInterface";
 import { getCrewTotalRank } from "api/lib/rank";
 
 const CrewTotalRanking = () => {
-  const accessToken = useSelector((state: any) => state.user.accessToken);
+  const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const [isCrewTotalRank, setCrewTotalRank] = useState<RankInterface>(
     {} as RankInterface,
   );
