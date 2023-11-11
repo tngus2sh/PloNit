@@ -12,10 +12,15 @@ interface Locations {
   [key: string]: Location;
 }
 
+interface UserImages {
+  [key: string]: string;
+}
+
 interface Message {
   type: string;
   senderId: string;
-  location: Location;
+  location?: Location;
+  userImage?: string;
   roomId: string;
 }
 
@@ -25,9 +30,23 @@ interface IuseSocket {
 }
 
 function useSocket({ roomId, senderId }: IuseSocket) {
+  const [startRequest, setStartRequest] = useState<boolean>(false);
+  const [crewpingStart, setCrewpingStart] = useState<boolean>(false);
+  const [endRequest, setEndRequest] = useState<boolean>(false);
+  const [crewpingEnd, setCrewpingEnd] = useState<boolean>(false);
   const [locations, setLocations] = useState<Locations>({});
+  const [userImage, setUserImage] = useState<string>("");
+  const [userImages, setUserImages] = useState<UserImages>({});
   const [getLocation, setGetLocation] = useState<boolean>(false);
   const stompClient = useRef<Client | null>(null);
+
+  function handleStartRequest() {
+    setStartRequest(true);
+  }
+
+  function handleEndRequest() {
+    setEndRequest(true);
+  }
 
   function handleLocation() {
     setGetLocation(true);
@@ -35,10 +54,28 @@ function useSocket({ roomId, senderId }: IuseSocket) {
 
   function onMessageReceived(message: IMessage) {
     const newMessage: Message = JSON.parse(message.body);
-    setLocations((current) => {
-      // 기존 locations를 복사하여 새 객체에 기존 내용을 유지합니다.
-      return { ...current, [newMessage.senderId]: newMessage.location };
-    });
+    if (newMessage.type === "start") {
+      setCrewpingStart(true);
+    }
+    if (newMessage.type === "end") {
+      setCrewpingEnd(true);
+    }
+    if (newMessage.type === "location") {
+      setLocations((current) => {
+        if (newMessage.location) {
+          return { ...current, [newMessage.senderId]: newMessage.location };
+        }
+        return current;
+      });
+    }
+    if (newMessage.type === "image") {
+      setUserImages((current) => {
+        if (newMessage.userImage) {
+          return { ...current, [newMessage.senderId]: newMessage.userImage };
+        }
+        return current;
+      });
+    }
   }
 
   function connectToSocket() {
@@ -57,8 +94,50 @@ function useSocket({ roomId, senderId }: IuseSocket) {
     stompClient.current?.activate();
   }
 
-  async function sendMessage() {
-    console.log("[roomId]:", roomId);
+  function sendStartRequest() {
+    console.log(`[roomId]: ${roomId} - sendStartRequest`);
+    if (stompClient.current?.connected) {
+      const newMessage: Message = {
+        type: "start",
+        senderId: senderId,
+        roomId: roomId,
+      };
+      console.log("[SEND]", newMessage);
+
+      stompClient.current?.publish({
+        destination: `/app/chat/message`,
+        body: JSON.stringify(newMessage),
+      });
+    } else {
+      console.error(
+        "STOMP client is not connected or room is not selected. Cannot send message.",
+      );
+    }
+  }
+
+  function sendEndRequest() {
+    console.log(`[roomId]: ${roomId} - sendEndRequest`);
+    if (stompClient.current?.connected) {
+      const newMessage: Message = {
+        type: "end",
+        senderId: senderId,
+        roomId: roomId,
+      };
+      console.log("[SEND]", newMessage);
+
+      stompClient.current?.publish({
+        destination: `/app/chat/message`,
+        body: JSON.stringify(newMessage),
+      });
+    } else {
+      console.error(
+        "STOMP client is not connected or room is not selected. Cannot send message.",
+      );
+    }
+  }
+
+  async function sendLocation() {
+    console.log(`[roomId]: ${roomId} - sendLocation`);
     if (stompClient.current?.connected) {
       getGPS()
         .then((response) => {
@@ -86,6 +165,28 @@ function useSocket({ roomId, senderId }: IuseSocket) {
     }
   }
 
+  function sendImage() {
+    console.log(`[roomId]: ${roomId} - sendImage`);
+    if (stompClient.current?.connected) {
+      const newMessage: Message = {
+        type: "image",
+        senderId: senderId,
+        userImage: userImage,
+        roomId: roomId,
+      };
+      console.log("[SEND]", newMessage);
+
+      stompClient.current?.publish({
+        destination: `/app/chat/message`,
+        body: JSON.stringify(newMessage),
+      });
+    } else {
+      console.error(
+        "STOMP client is not connected or room is not selected. Cannot send message.",
+      );
+    }
+  }
+
   useEffect(() => {
     connectToSocket();
     return () => {
@@ -96,13 +197,41 @@ function useSocket({ roomId, senderId }: IuseSocket) {
   }, []);
 
   useEffect(() => {
+    if (startRequest) {
+      sendStartRequest();
+    }
+  }, [startRequest]);
+
+  useEffect(() => {
+    if (endRequest) {
+      sendEndRequest();
+    }
+  }, [endRequest]);
+
+  useEffect(() => {
     if (getLocation) {
-      sendMessage();
+      sendLocation();
       setGetLocation(false);
     }
   }, [getLocation]);
 
-  return { locations, handleLocation };
+  useEffect(() => {
+    if (userImage) {
+      sendImage();
+    }
+  }, [userImage]);
+
+  return {
+    crewpingStart, // true 시 크루핑 시작
+    handleStartRequest, // 크루핑장이 크루핑을 시작하자는 요청 보내는 함수
+    crewpingEnd, // true 시 크루핑 끝
+    setCrewpingEnd, // 개인이 크루핑을 끝내는 함수
+    handleEndRequest, // 크루핑장이 크루핑을 끝내자는 요청을 보내는 함수
+    locations, // 자신을 포함한 다른 유저들의 위치를 가지는 obj
+    handleLocation, // 현재 유저의 위치를 소켓으로 보내는 함수
+    userImages, // 자신을 포함한 다른 유저들의 프로필 이미지는 가지는 obj
+    setUserImage, // 현재 유저의 프로필 이미지를 보내는 함수
+  };
 }
 
 export default useSocket;
