@@ -4,6 +4,7 @@ import { login } from "api/lib/auth";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { userActions } from "store/user-slice";
+import { getProfile } from "api/lib/members";
 
 const KakaoCallback = () => {
   const dispatch = useDispatch();
@@ -11,7 +12,7 @@ const KakaoCallback = () => {
 
   const code = new URL(window.location.href).searchParams.get("code");
   const Ref = useRef(false);
-  console.log(code);
+
   useEffect(() => {
     if (!Ref.current) {
       if (code) {
@@ -26,8 +27,18 @@ const KakaoCallback = () => {
             };
             console.log(data);
             dispatch(userActions.loginHandler(data));
-            console.log(res.data);
             if (res.data.resultBody.registeredMember) {
+              getProfile(
+                data.accessToken,
+                (res) => {
+                  console.log("내 정보 조회 성공");
+                  console.log(res.data.resultBody);
+                  dispatch(userActions.saveMemberInfo(res.data.resultBody));
+                },
+                (err) => {
+                  console.log("내 정보 조회 실패", err);
+                },
+              );
               navigate("/");
             } else {
               navigate("/login/addinfo");

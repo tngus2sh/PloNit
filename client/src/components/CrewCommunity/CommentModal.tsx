@@ -43,6 +43,13 @@ const CommentModal = ({
       },
     );
   };
+
+  const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      SendComment();
+    }
+  };
+
   return (
     <div className={style.comment_modal}>
       <CommentList feed={feed} fetchFeedList={fetchFeedList} />
@@ -51,9 +58,11 @@ const CommentModal = ({
         <input
           type="text"
           id="comment"
-          placeholder="댓글을 작성해주세요"
+          placeholder="댓글을 작성해주세요(50자 이내)"
           value={isComment}
           onChange={onChangeComment}
+          onKeyDown={onKeyDown}
+          maxLength={50}
         />
         <Icon
           icon="bi:arrow-up"
