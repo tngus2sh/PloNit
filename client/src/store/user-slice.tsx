@@ -8,7 +8,7 @@ const initialState = {
     refreshToken: "",
   },
   info: {
-    profileImg: "",
+    profileImage: "",
     email: "",
     nickname: "",
     name: "",

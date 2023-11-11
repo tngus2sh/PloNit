@@ -14,15 +14,12 @@ const CommentModal = ({
   fetchFeedList: () => void;
 }) => {
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
-  const profileImage = useSelector((state: any) => state.user.info.profileImg);
-  const user = useSelector((state: any) => state.user);
-  console.log(user);
+  const User = useSelector((state: any) => state.user);
   const [isComment, setComment] = useState("");
   const onChangeComment = (event: any) => {
     setComment(event.target.value);
   };
   console.log(isComment);
-  console.log(profileImage);
   const SendComment = () => {
     const data = {
       feedId: feed.id,
@@ -54,22 +51,33 @@ const CommentModal = ({
     <div className={style.comment_modal}>
       <CommentList feed={feed} fetchFeedList={fetchFeedList} />
       <div className={style.modal_bottom}>
-        <img src={profileImage} alt="프로필" />
-        <input
-          type="text"
-          id="comment"
-          placeholder="댓글을 작성해주세요(50자 이내)"
-          value={isComment}
-          onChange={onChangeComment}
-          onKeyDown={onKeyDown}
-          maxLength={50}
-        />
-        <Icon
-          icon="bi:arrow-up"
-          style={{ width: "1.5rem", height: "1.5rem" }}
-          className={style.upload_icon}
-          onClick={SendComment}
-        />
+        <img src={User.info.profileImg} alt="프로필" />
+        {User.crewinfo.isMyCrew ? (
+          <>
+            <input
+              type="text"
+              id="comment"
+              placeholder="댓글을 작성해주세요(50자 이내)"
+              value={isComment}
+              onChange={onChangeComment}
+              onKeyDown={onKeyDown}
+              maxLength={50}
+            />
+            <Icon
+              icon="bi:arrow-up"
+              style={{ width: "1.5rem", height: "1.5rem" }}
+              className={style.upload_icon}
+              onClick={SendComment}
+            />
+          </>
+        ) : (
+          <input
+            type="text"
+            id="comment"
+            placeholder="크루원만 댓글 작성이 가능합니다."
+            readOnly={true}
+          />
+        )}
       </div>
       <div style={{ height: "3rem" }}></div>
     </div>
