@@ -23,7 +23,7 @@ const initialState = {
   crewinfo: {
     isMyCrew: false,
     isCrewMaster: false,
-    isCrewwpingMaster: false,
+    isCrewwpingMaster: "",
   },
 };
 
