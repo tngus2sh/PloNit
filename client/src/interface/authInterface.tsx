@@ -9,7 +9,7 @@ export interface UserInterface {
   dongCode?: number;
   height?: number;
   weight?: number;
-  id_1365?: string;
+  id1365?: string;
   ploggingCount?: number;
   crewCount?: number;
   badgeCount?: number;

@@ -31,7 +31,7 @@ const PloggingVolunteerInput = () => {
     return state.user.info.email;
   });
   const reduxId1365 = useSelector<rootState, string>((state) => {
-    return state.user.info.id_1365;
+    return state.user.info.id1365;
   });
   const isVolEnd = useSelector<rootState, boolean>((state) => {
     return state.plogging.isVolEnd;
