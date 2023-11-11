@@ -6,7 +6,13 @@ import style from "styles/css/CrewMemberListPage.module.css";
 import { MemberInterface } from "interface/crewInterface";
 import { getCrewKickOut } from "api/lib/crew";
 
-const MemberItem = ({ member }: { member: MemberInterface }) => {
+const MemberItem = ({
+  member,
+  fetchMemberList,
+}: {
+  member: MemberInterface;
+  fetchMemberList: () => void;
+}) => {
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const User = useSelector((state: any) => state.user);
   const { crewId } = useParams();
@@ -19,6 +25,7 @@ const MemberItem = ({ member }: { member: MemberInterface }) => {
         (res) => {
           console.log("크루 강퇴 요청 성공");
           console.log(res.data);
+          fetchMemberList();
         },
         (err) => {
           console.log("크루 강퇴 요청 실패", err);

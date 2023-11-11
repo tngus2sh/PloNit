@@ -68,7 +68,7 @@ const ProfileEditPage = () => {
     formData.append("weight", isWeight);
     formData.append("region", isRegion);
     formData.append("id1365", isId_1365);
-    formData.append("profileImg", isProfileImage);
+    formData.append("profileImage", isProfileImage);
     formData.append("birth", User.birth);
     formData.append("gender", User.gender);
     formData.append("name", User.name);
