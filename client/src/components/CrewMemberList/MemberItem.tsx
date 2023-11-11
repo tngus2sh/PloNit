@@ -13,7 +13,7 @@ const MemberItem = ({
   member: MemberInterface;
   master: boolean;
 }) => {
-  const accessToken = useSelector((state: any) => state.user.accessToken);
+  const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const { crewId } = useParams();
   const CrewKickOut = () => {
     if (member.id !== undefined) {

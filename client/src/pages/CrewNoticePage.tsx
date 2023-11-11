@@ -8,7 +8,7 @@ import { getNotice, getCrewDetail } from "api/lib/crew";
 
 const CrewNoticePage = () => {
   const navigate = useNavigate();
-  const accessToken = useSelector((state: any) => state.user.accessToken);
+  const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const { crewId } = useParams();
   const [isNotice, setNotice] = useState("");
 

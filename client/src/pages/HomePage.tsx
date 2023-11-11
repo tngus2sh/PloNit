@@ -20,7 +20,7 @@ const cardList: Card[] = [
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const isLogined = useSelector((state: any) => state.user.isLogin);
+  const isLogined = useSelector((state: any) => state.user.auth.isLogin);
 
   useEffect(() => {
     if (!isLogined) {

@@ -13,7 +13,7 @@ import { getCrewpingCreate } from "api/lib/crewping";
 
 const CrewpingCreatePage = () => {
   const navigate = useNavigate();
-  const accessToken = useSelector((state: any) => state.user.accessToken);
+  const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const { crewId } = useParams();
   const [isCrewpingName, setCrewpingName] = useState("");
   const [isCrewpingPlace, setCrewpingPlace] = useState("");

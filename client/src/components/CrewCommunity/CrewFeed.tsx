@@ -6,7 +6,7 @@ import { FeedInterface } from "interface/crewInterface";
 import { getFeedList } from "api/lib/feed";
 
 const CrewFeed = () => {
-  const accessToken = useSelector((state: any) => state.user.accessToken);
+  const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const { crewId } = useParams();
   const [isFeedList, setFeedList] = useState<FeedInterface[]>([]);
 

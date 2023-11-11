@@ -81,13 +81,13 @@ const BeforeStart = () => {
     return windowHeight * 0.1;
   });
   const nickname = useSelector<rootState, string>((state) => {
-    return state.user.nickname;
+    return state.user.info.nickname;
   });
   const accessToken = useSelector<rootState, string>((state) => {
-    return state.user.accessToken;
+    return state.user.auth.accessToken;
   });
   const weight = useSelector<rootState, number>((state) => {
-    return state.user.weight;
+    return state.user.info.weight;
   });
   const [show, setShow] = useState<boolean>(false);
   const [preventShow, setPreventShow] = useState<boolean>(false);

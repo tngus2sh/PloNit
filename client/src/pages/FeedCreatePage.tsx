@@ -21,7 +21,7 @@ const StyledSwiper = styled(Swiper)`
 
 const FeedCreatePage = () => {
   const navigate = useNavigate();
-  const accessToken = useSelector((state: any) => state.user.accessToken);
+  const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const { crewId } = useParams();
   const [isFeedIntroduce, setFeedIntroduce] = useState("");
   const [isFeedImages, setFeedImages] = useState<File[]>([]);
@@ -128,7 +128,7 @@ const FeedCreatePage = () => {
           className={style.inputBox}
           name="feed_introduce"
           id="feed_introduce"
-          placeholder="내용을 작성해주세요"
+          placeholder="내용을 작성해주세요(100자 이내)"
           value={isFeedIntroduce}
           onChange={onChangeFeedIntroduce}
           maxLength={100}

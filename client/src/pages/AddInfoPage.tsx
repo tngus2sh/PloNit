@@ -12,7 +12,7 @@ import style from "styles/css/AddInfoPage.module.css";
 const AddInfoPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const accessToken = useSelector((state: any) => state.user.accessToken);
+  const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const [isSignupName, setSignupName] = useState("");
   const [isSignupNickname, setSignupNickname] = useState("");
   const [isSignupGender, setSignupGender] = useState(false);

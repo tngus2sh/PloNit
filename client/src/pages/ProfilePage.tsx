@@ -11,7 +11,7 @@ import { getProfile } from "api/lib/members";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
-  const accessToken = useSelector((state: any) => state.user.accessToken);
+  const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const User = useSelector((state: any) => state.user);
   console.log(User);
   const [isMyData, setMyData] = useState<UserInterface>({} as UserInterface);

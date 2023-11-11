@@ -6,7 +6,7 @@ import { CrewInterface } from "interface/crewInterface";
 import { getCrewList, getCrewSearch } from "api/lib/crew";
 
 const TotalCrewList = () => {
-  const accessToken = useSelector((state: any) => state.user.accessToken);
+  const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const [totalCrewList, setTotalCrewList] = useState<CrewInterface[]>([]);
   const [isSelectedType, setSelectedType] = useState("1");
   const [isSearchWord, setSearchWord] = useState("");

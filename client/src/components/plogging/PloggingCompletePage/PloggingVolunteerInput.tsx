@@ -25,19 +25,19 @@ const PloggingVolunteerInput = () => {
     return state.window.width;
   });
   const reduxName = useSelector<rootState, string>((state) => {
-    return state.user.name;
+    return state.user.info.name;
   });
   const reduxEmail = useSelector<rootState, string>((state) => {
-    return state.user.email;
+    return state.user.info.email;
   });
   const reduxId1365 = useSelector<rootState, string>((state) => {
-    return state.user.id_1365;
+    return state.user.info.id_1365;
   });
   const isVolEnd = useSelector<rootState, boolean>((state) => {
     return state.plogging.isVolEnd;
   });
   const acessToken = useSelector<rootState, string>((state) => {
-    return state.user.accessToken;
+    return state.user.auth.accessToken;
   });
 
   const { image, handleImageCapture, fileInputRef } = useCamera();

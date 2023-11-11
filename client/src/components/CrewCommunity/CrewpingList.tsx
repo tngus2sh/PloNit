@@ -9,7 +9,7 @@ import { CrewpingInterface } from "interface/crewInterface";
 import { getCrewpingList } from "api/lib/crewping";
 
 const CrewpingList = () => {
-  const accessToken = useSelector((state: any) => state.user.accessToken);
+  const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const { crewId } = useParams();
   const [isCrewpingList, setCrewpingList] = useState<CrewpingInterface[]>([]);
 
