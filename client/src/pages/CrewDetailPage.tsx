@@ -12,7 +12,7 @@ import { CrewInterface } from "interface/crewInterface";
 
 const CrewDetailPage = () => {
   const navigate = useNavigate();
-  const accessToken = useSelector((state: any) => state.user.accessToken);
+  const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const { crewId } = useParams();
   console.log(crewId);
   const [isCrewDetail, setCrewDetail] = useState<CrewInterface>(

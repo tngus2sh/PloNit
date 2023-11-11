@@ -16,7 +16,7 @@ const RegionModal = ({
   setSignupRegion,
   setRegionCode,
 }: RegionModalProps) => {
-  const accessToken = useSelector((state: any) => state.user.accessToken);
+  const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const [sidoData, setsidoData] = useState<RegionInterface[]>([]);
   const [selectedSidoCode, setSelectedSidoCode] = useState<number | null>(null);
   const [selectedSidoName, setSelectedSidoName] = useState<string | null>(null);

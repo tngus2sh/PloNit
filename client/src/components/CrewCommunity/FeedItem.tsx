@@ -51,7 +51,7 @@ const FeedItem = ({
   feed: FeedInterface;
   fetchFeedList: () => void;
 }) => {
-  const accessToken = useSelector((state: any) => state.user.accessToken);
+  const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const [isCommentModalOpen, setCommentModalOpen] = useState(false);
   const feed_create_date = feed.createdDate
     ? new Date(feed.createdDate)

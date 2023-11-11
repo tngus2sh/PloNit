@@ -66,7 +66,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
   const [showBottom, setShowBottom] = useState<boolean>(isBefore);
 
   const accessToken = useSelector<rootState, string>((state) => {
-    return state.user.accessToken;
+    return state.user.auth.accessToken;
   });
 
   const centerBtn_inactive = `<div class="${style.btn_white_margin_inc}" style="background-image:url('/images/PloggingPage/location-cross-black.svg')"></div>`;

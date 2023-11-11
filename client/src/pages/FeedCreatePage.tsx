@@ -21,7 +21,7 @@ const StyledSwiper = styled(Swiper)`
 
 const FeedCreatePage = () => {
   const navigate = useNavigate();
-  const accessToken = useSelector((state: any) => state.user.accessToken);
+  const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const { crewId } = useParams();
   const [isFeedIntroduce, setFeedIntroduce] = useState("");
   const [isFeedImages, setFeedImages] = useState<File[]>([]);

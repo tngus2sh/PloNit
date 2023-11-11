@@ -8,7 +8,7 @@ import { RankInterface, MemberRankInterface } from "interface/rankInterface";
 import { getMemberRank } from "api/lib/rank";
 
 const PersonalRanking = () => {
-  const accessToken = useSelector((state: any) => state.user.accessToken);
+  const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const [isMemberRank, setMemberRank] = useState<RankInterface>(
     {} as RankInterface,
   );

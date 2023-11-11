@@ -7,7 +7,7 @@ import { CrewInterface, MemberInterface } from "interface/crewInterface";
 import { getCrewDetail, getCrewMember, getCrewMaster } from "api/lib/crew";
 
 const CrewMemberListPage = () => {
-  const accessToken = useSelector((state: any) => state.user.accessToken);
+  const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const { crewId } = useParams();
   const [isCrewDetail, setCrewDetail] = useState<CrewInterface>(
     {} as CrewInterface,

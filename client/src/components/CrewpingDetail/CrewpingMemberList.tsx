@@ -4,7 +4,7 @@ import { CrewpingInterface, MemberInterface } from "interface/crewInterface";
 import { getCrewpingMemberList } from "api/lib/crewping";
 
 const CrewpingMemberList = ({ crewping }: { crewping: CrewpingInterface }) => {
-  const accessToken = useSelector((state: any) => state.user.accessToken);
+  const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const [isCrewpingMember, setCrewpingMember] = useState<MemberInterface>(
     {} as MemberInterface,
   );

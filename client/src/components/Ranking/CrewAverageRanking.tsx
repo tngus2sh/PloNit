@@ -8,7 +8,7 @@ import { RankInterface } from "interface/rankInterface";
 import { getCrewAVGRank } from "api/lib/rank";
 
 const CrewAverageRanking = () => {
-  const accessToken = useSelector((state: any) => state.user.accessToken);
+  const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const [isCrewAvgRank, setCrewAvgRank] = useState<RankInterface>(
     {} as RankInterface,
   );

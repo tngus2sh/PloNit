@@ -7,7 +7,7 @@ import { MemberInterface } from "interface/crewInterface";
 import { getCrewWait } from "api/lib/crew";
 
 const CrewMemberApprovalPage = () => {
-  const accessToken = useSelector((state: any) => state.user.accessToken);
+  const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const { crewId } = useParams();
   const [isApprovalMemberList, setApprovalMemberList] = useState<
     MemberInterface[]

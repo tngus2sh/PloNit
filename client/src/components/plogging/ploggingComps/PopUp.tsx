@@ -32,7 +32,7 @@ const PopUp: React.FC<IPopUP> = ({
     return state.camera.helpContext;
   });
   const accessToken = useSelector<rootState, string>((state) => {
-    return state.user.accessToken;
+    return state.user.auth.accessToken;
   });
 
   const { compressImage } = useImageCompress();
