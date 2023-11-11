@@ -50,7 +50,7 @@ const CrewpingDetailPage = () => {
         console.log(res.data);
         console.log("크루핑 참가 요청 성공");
         alert("크루핑 참가 완료");
-        // navigate("/crew/community/");
+        fetchCrewpingDetailList();
       },
       (err) => {
         console.log("크루핑 참가 요청 에러", err);
@@ -65,6 +65,8 @@ const CrewpingDetailPage = () => {
       (res) => {
         console.log(res.data);
         console.log("크루핑 참가 취소 성공");
+        alert("크루핑 취소 완료");
+        fetchCrewpingDetailList();
       },
       (err) => {
         console.log("크루핑 참가 취소 에러", err);

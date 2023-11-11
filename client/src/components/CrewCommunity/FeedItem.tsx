@@ -38,6 +38,12 @@ const CustomSheet = styled(Sheet)`
   }
 `;
 
+const formattedDate = (date: any) => {
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  return `${month}월 ${day}일`;
+};
+
 const FeedItem = ({
   feed,
   fetchFeedList,
@@ -47,18 +53,23 @@ const FeedItem = ({
 }) => {
   const accessToken = useSelector((state: any) => state.user.accessToken);
   const [isCommentModalOpen, setCommentModalOpen] = useState(false);
+  const feed_create_date = feed.createdDate
+    ? new Date(feed.createdDate)
+    : new Date();
   const isfeedImages = feed.feedPictures;
   const toggleCommentModal = () => {
     setCommentModalOpen(!isCommentModalOpen);
   };
 
   const handleDeleteFeed = () => {
+    alert("피드를 삭제하시겠습니까");
     getFeedDelete(
       accessToken,
       feed.id,
       (res) => {
         console.log(res.data);
         console.log("피드 삭제 성공");
+
         fetchFeedList();
       },
       (err) => {
@@ -124,7 +135,7 @@ const FeedItem = ({
           <div>나도 가고 싶다</div>
         </div> */}
       </div>
-      <div className={style.date}>{feed.createdDate}</div>
+      <div className={style.date}>{formattedDate(feed_create_date)}</div>
       {isCommentModalOpen && (
         <>
           <CustomSheet

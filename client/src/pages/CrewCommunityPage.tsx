@@ -45,6 +45,7 @@ const CrewCommunityPage = () => {
         console.log("크루 가입 요청 성공");
         console.log(res.data.resultBody);
         alert("크루 가입 요청을 보냈습니다.");
+        fetchCrewDetail();
       },
       (err) => {
         console.log("크루 가입 요청 실패", err);
@@ -53,6 +54,10 @@ const CrewCommunityPage = () => {
   };
 
   useEffect(() => {
+    fetchCrewDetail();
+  }, []);
+
+  const fetchCrewDetail = () => {
     getCrewDetail(
       accessToken,
       Number(crewId),
@@ -65,7 +70,7 @@ const CrewCommunityPage = () => {
         console.log("크루 상세 조회 실패", err);
       },
     );
-  }, []);
+  };
 
   const tabProps = {
     피드: <CrewFeed />,
@@ -165,24 +170,27 @@ const CrewCommunityPage = () => {
           />
         </div>
       ) : (
-        <div className={style.register_btn}>
-          {isCrewDetail.isWaiting ? (
-            <CommonButton
-              text="승인 대기"
-              styles={{
-                backgroundColor: "#999999",
-              }}
-            />
-          ) : (
-            <CommonButton
-              text="크루 가입"
-              styles={{
-                backgroundColor: "#2cd261",
-              }}
-              onClick={JoinCrew}
-            />
-          )}
-        </div>
+        <>
+          <div className={style.register_btn}>
+            {isCrewDetail.isWaiting ? (
+              <CommonButton
+                text="승인 대기"
+                styles={{
+                  backgroundColor: "#999999",
+                }}
+              />
+            ) : (
+              <CommonButton
+                text="크루 가입"
+                styles={{
+                  backgroundColor: "#2cd261",
+                }}
+                onClick={JoinCrew}
+              />
+            )}
+          </div>
+          <div style={{ height: "4rem" }}></div>
+        </>
       )}
     </div>
   );
