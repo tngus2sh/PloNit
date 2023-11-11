@@ -8,22 +8,24 @@ import { getCrewKickOut } from "api/lib/crew";
 
 const MemberItem = ({
   member,
-  master,
+  fetchMemberList,
 }: {
   member: MemberInterface;
-  master: boolean;
+  fetchMemberList: () => void;
 }) => {
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
+  const User = useSelector((state: any) => state.user);
   const { crewId } = useParams();
   const CrewKickOut = () => {
-    if (member.id !== undefined) {
+    if (member.crewMemberId !== undefined) {
       getCrewKickOut(
         accessToken,
         Number(crewId),
-        member.id,
+        member.crewMemberId,
         (res) => {
           console.log("크루 강퇴 요청 성공");
           console.log(res.data);
+          fetchMemberList();
         },
         (err) => {
           console.log("크루 강퇴 요청 실패", err);
@@ -35,7 +37,7 @@ const MemberItem = ({
     <div className={style.Member_Item}>
       <img src={member.profileImage} alt="Crew Image" />
       <div className={style.nickname}>{member.nickname}</div>
-      {master && (
+      {User.crewinfo.isCrewMaster ? (
         <Icon
           icon="bi:x"
           style={{
@@ -45,7 +47,7 @@ const MemberItem = ({
           className={style.x_Icon}
           onClick={CrewKickOut}
         />
-      )}
+      ) : null}
     </div>
   );
 };

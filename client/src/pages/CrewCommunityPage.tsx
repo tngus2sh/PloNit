@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { userActions } from "store/user-slice";
 import { Icon } from "@iconify/react";
 import CrewCommunityInfo from "components/CrewCommunity/CrewCommunityInfo";
 import Notice from "components/CrewCommunity/Notice";
@@ -13,8 +14,10 @@ import { getCrewDetail, getCrewRegister } from "api/lib/crew";
 import { CrewInterface } from "interface/crewInterface";
 
 const CrewCommunityPage = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
+  const User = useSelector((state: any) => state.user);
   const { crewId } = useParams();
   const [isVisibleButton, setVisibleButton] = useState(false);
   const [isCrewDetail, setCrewDetail] = useState<CrewInterface>(
@@ -63,8 +66,15 @@ const CrewCommunityPage = () => {
       Number(crewId),
       (res) => {
         console.log("크루 상세 조회 성공");
-        console.log(res.data.resultBody);
+        console.log(res.data);
         setCrewDetail(res.data.resultBody);
+        const data = {
+          isMyCrew: res.data.resultBody.isMyCrew,
+          isCrewMaster: res.data.resultBody.isCrewMaster,
+          isCrewwpingMaster: User.crewinfo.isCrewwpingMaster,
+        };
+        console.log(data);
+        dispatch(userActions.myCrewHandler(data));
       },
       (err) => {
         console.log("크루 상세 조회 실패", err);

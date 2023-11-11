@@ -77,7 +77,7 @@ const CrewCreatePage = () => {
       <BackTopBar text="크루 생성" />
       <div className={style.crew_img}>
         <img
-          src={isCrewImage ? URL.createObjectURL(isCrewImage) : `/metamong.png`}
+          src={isCrewImage ? URL.createObjectURL(isCrewImage) : `/NoImage.png`}
           alt="프로필 이미지"
         />
         <label className={style.img_edit_icon} htmlFor="input_file">

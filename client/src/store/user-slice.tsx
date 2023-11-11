@@ -8,7 +8,7 @@ const initialState = {
     refreshToken: "",
   },
   info: {
-    profileImg: "",
+    profileImage: "",
     email: "",
     nickname: "",
     name: "",
@@ -19,6 +19,11 @@ const initialState = {
     height: 0,
     weight: 0,
     id1365: "",
+  },
+  crewinfo: {
+    isMyCrew: false,
+    isCrewMaster: false,
+    isCrewwpingMaster: false,
   },
 };
 
@@ -37,16 +42,8 @@ const userSlice = createSlice({
     saveMemberInfo(state, action) {
       return { ...state, info: action.payload };
     },
-    EditHandler: (state, action) => {
-      return {
-        ...state,
-        profileImg: action.payload.profileImg,
-        nickname: action.payload.nickname,
-        weight: action.payload.weight,
-        dongCode: action.payload.dongCode,
-        region: action.payload.region,
-        id_1365: action.payload.id_1365,
-      };
+    myCrewHandler(state, action) {
+      return { ...state, crewinfo: action.payload };
     },
   },
 });
