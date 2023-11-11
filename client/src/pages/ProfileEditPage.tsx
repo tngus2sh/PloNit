@@ -10,14 +10,13 @@ import { Icon } from "@iconify/react";
 import style from "styles/css/ProfileEditPage.module.css";
 import { nicknameCheck } from "api/lib/auth";
 import { getProfile, EditProfile } from "api/lib/members";
-import { UserInterface } from "interface/authInterface";
 
 const ProfileEditPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const User = useSelector((state: any) => state.user.info);
-  // const [isProfile, setProfile] = useState<UserInterface>({} as UserInterface);
+
   const [isProfileImage, setProfileImage] = useState(User.profileImage);
   const [isNickname, setNickname] = useState(User.nickname);
   const [isAllowNickname, setAllowNickname] = useState(false);
@@ -65,11 +64,14 @@ const ProfileEditPage = () => {
   const SendEdit = () => {
     const formData = new FormData();
     formData.append("nickname", isNickname);
-    formData.append("weight", String(isWeight));
-    formData.append("dongCode", String(isRegionCode));
-    formData.append("region", String(isRegion));
-    formData.append("id_1365", String(isId_1365));
-    formData.append("profileImg", String(isProfileImage));
+    formData.append("weight", isWeight);
+    formData.append("dongCode", isRegionCode);
+    formData.append("region", isRegion);
+    formData.append("id_1365", isId_1365);
+    formData.append("profileImg", isProfileImage);
+    formData.append("birth", User.birth);
+    formData.append("gender", User.gender);
+    formData.append("name", User.name);
 
     EditProfile(
       accessToken,
