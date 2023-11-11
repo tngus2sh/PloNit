@@ -6,14 +6,9 @@ import style from "styles/css/CrewMemberListPage.module.css";
 import { MemberInterface } from "interface/crewInterface";
 import { getCrewKickOut } from "api/lib/crew";
 
-const MemberItem = ({
-  member,
-  master,
-}: {
-  member: MemberInterface;
-  master: boolean;
-}) => {
+const MemberItem = ({ member }: { member: MemberInterface }) => {
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
+  const User = useSelector((state: any) => state.user);
   const { crewId } = useParams();
   const CrewKickOut = () => {
     if (member.crewMemberId !== undefined) {
@@ -35,7 +30,7 @@ const MemberItem = ({
     <div className={style.Member_Item}>
       <img src={member.profileImage} alt="Crew Image" />
       <div className={style.nickname}>{member.nickname}</div>
-      {master ? (
+      {User.crewinfo.isCrewMaster ? (
         <Icon
           icon="bi:x"
           style={{

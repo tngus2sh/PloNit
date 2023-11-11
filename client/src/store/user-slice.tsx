@@ -20,6 +20,11 @@ const initialState = {
     weight: 0,
     id1365: "",
   },
+  crewinfo: {
+    isMyCrew: false,
+    isCrewMaster: false,
+    isCrewwpingMaster: false,
+  },
 };
 
 const userSlice = createSlice({
@@ -37,16 +42,10 @@ const userSlice = createSlice({
     saveMemberInfo(state, action) {
       return { ...state, info: action.payload };
     },
-    EditHandler: (state, action) => {
-      return {
-        ...state,
-        profileImg: action.payload.profileImg,
-        nickname: action.payload.nickname,
-        weight: action.payload.weight,
-        dongCode: action.payload.dongCode,
-        region: action.payload.region,
-        id_1365: action.payload.id_1365,
-      };
+    myCrewHandler(state, action) {
+      state.crewinfo.isMyCrew = action.payload.isMyCrew;
+      state.crewinfo.isCrewMaster = action.payload.isCrewMaster;
+      state.crewinfo.isCrewwpingMaster = action.payload.isCrewwpingMaster;
     },
   },
 });
