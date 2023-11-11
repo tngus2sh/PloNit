@@ -34,8 +34,13 @@ public class RedisUtils {
         byte[] serialize = serializer.serialize(o);
 
         String serializeObject = Base64.getEncoder().encodeToString(serialize);
+        System.out.println("직렬화된 결과: " + serializeObject);
 
         redisTemplate.opsForValue().set(key, serializeObject);
+    }
+
+    public void setRedisValue(String key, String value) {
+        redisTemplate.opsForValue().set(key, value);
     }
 
     public void setRedisHash(String key, String subKey, String value, Long ttl) {
@@ -77,6 +82,16 @@ public class RedisUtils {
         byte[] decode = Base64.getDecoder().decode(redisValue);
 
         return serializer.deserialize(decode, classType);
+    }
+
+    public String getRedisValue(String key) {
+        String redisValue = redisTemplate.opsForValue().get(key);
+
+        if(redisValue == null) {
+            return null;
+        }
+
+        return redisValue;
     }
 
     public Map<String, String> getRedisHash(String key) {
