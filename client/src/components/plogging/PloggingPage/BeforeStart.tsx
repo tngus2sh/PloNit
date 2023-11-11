@@ -94,34 +94,34 @@ const BeforeStart = () => {
 
   const dispatch = useDispatch();
   async function onClick1() {
-    dispatch(P.clear());
-    dispatch(P.setPloggingType("IND"));
-    if (weight > 0) {
-      dispatch(P.setKg(weight));
-    }
-    getGPS()
-      .then((response) => {
-        const { latitude, longitude } = response.coords;
-        startPlogging({
-          accessToken: accessToken,
-          type: "IND",
-          latitude: latitude,
-          longitude: longitude,
-          success: (response) => {
-            console.log("개인 플로깅 선택");
-            console.log(response);
-            dispatch(P.setPloggingId(response.data.resultBody));
-          },
-          fail: (error) => {
-            console.error(error);
-          },
-        });
-      })
-      .catch((error) => {
-        console.error(error);
-      });
     // dispatch(P.clear());
     // dispatch(P.setPloggingType("IND"));
+    // if (weight > 0) {
+    //   dispatch(P.setKg(weight));
+    // }
+    // getGPS()
+    //   .then((response) => {
+    //     const { latitude, longitude } = response.coords;
+    //     startPlogging({
+    //       accessToken: accessToken,
+    //       type: "IND",
+    //       latitude: latitude,
+    //       longitude: longitude,
+    //       success: (response) => {
+    //         console.log("개인 플로깅 선택");
+    //         console.log(response);
+    //         dispatch(P.setPloggingId(response.data.resultBody));
+    //       },
+    //       fail: (error) => {
+    //         console.error(error);
+    //       },
+    //     });
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
+    dispatch(P.clear());
+    dispatch(P.setPloggingType("IND"));
   }
   async function onClick2() {
     dispatch(P.clear());
