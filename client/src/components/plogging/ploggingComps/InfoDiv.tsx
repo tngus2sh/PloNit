@@ -85,6 +85,9 @@ const InfoDiv: React.FC<IInfoDiv> = ({
   const isLoading = useSelector<rootState, number>((state) => {
     return state.plogging.isLoading;
   });
+  const imagesLen = useSelector<rootState, number>((state) => {
+    return state.plogging.images.length;
+  });
 
   function helpBtnEvent() {
     dispatch(camera.setTarget("help"));
@@ -133,7 +136,12 @@ const InfoDiv: React.FC<IInfoDiv> = ({
         icon: "question",
         html: renderToString(
           <div>
-            <div>플로깅을 종료하시겠습니까?</div>
+            <div>
+              {imagesLen < 2
+                ? `봉사 인증을 위해선 3장 이상의 사진이 필요합니다.`
+                : `플로깅을 종료하시겠습니까?`}
+            </div>
+            {imagesLen < 2 && <div>현재 촬영된 이미지 수: {imagesLen}</div>}
             <div>종료 시 사진 촬영을 진행합니다.</div>
           </div>,
         ),
@@ -144,7 +152,6 @@ const InfoDiv: React.FC<IInfoDiv> = ({
         cancelButtonColor: "#FF2953",
       }).then((result) => {
         if (result.isConfirmed) {
-          // axios 요청 성공 시
           Swal.close();
           dispatch(P.setBeforeEnd(true));
           dispatch(camera.clear());
