@@ -19,8 +19,6 @@ const CrewpingDetailPage = () => {
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const User = useSelector((state: any) => state.user);
   const { crewpingId } = useParams();
-  // const location = useLocation();
-  // const { crewpingId } = location.state || {}; // state가 없는 경우를 대비해 기본값 설정
   const [isCrewpingInfo, setCrewpingInfo] = useState<CrewpingInterface>(
     {} as CrewpingInterface,
   );
@@ -89,23 +87,25 @@ const CrewpingDetailPage = () => {
       <CrewpingLeader crewping={isCrewpingInfo} />
       <CrewpingInfo crewping={isCrewpingInfo} />
       <CrewpingIntroduce crewping={isCrewpingInfo} />
-      {isCrewpingInfo.isJoined ? (
-        <CommonButton
-          text="크루핑 취소"
-          styles={{
-            backgroundColor: "#999999",
-          }}
-          onClick={crewpingQuitHandler}
-        />
-      ) : (
-        <CommonButton
-          text="크루핑 참여"
-          styles={{
-            backgroundColor: "#2cd261",
-          }}
-          onClick={crewpingJoinHandler}
-        />
-      )}
+      {User.crewinfo.isCrewwpingMaster !== isCrewpingInfo.masterNickname ? (
+        isCrewpingInfo.isJoined ? (
+          <CommonButton
+            text="크루핑 취소"
+            styles={{
+              backgroundColor: "#999999",
+            }}
+            onClick={crewpingQuitHandler}
+          />
+        ) : (
+          <CommonButton
+            text="크루핑 참여"
+            styles={{
+              backgroundColor: "#2cd261",
+            }}
+            onClick={crewpingJoinHandler}
+          />
+        )
+      ) : null}
     </div>
   );
 };

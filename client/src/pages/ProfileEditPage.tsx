@@ -32,7 +32,7 @@ const ProfileEditPage = () => {
       setProfileImage(file);
     }
   };
-
+  console.log(isProfileImage);
   const onChangeNickname = (event: any) => {
     const newNickname = event.target.value;
     setNickname(newNickname);
@@ -110,7 +110,6 @@ const ProfileEditPage = () => {
               }
               alt="프로필 이미지"
             />
-            {/* <img src={isProfileImage} alt="프로필 이미지" /> */}
             <label className={style.img_edit_icon} htmlFor="input_file">
               <Icon
                 icon="bi:pencil"

@@ -38,15 +38,17 @@ const MemberItem = ({
       <img src={member.profileImage} alt="Crew Image" />
       <div className={style.nickname}>{member.nickname}</div>
       {User.crewinfo.isCrewMaster ? (
-        <Icon
-          icon="bi:x"
-          style={{
-            width: "3rem",
-            height: "3rem",
-          }}
-          className={style.x_Icon}
-          onClick={CrewKickOut}
-        />
+        User.info.nickname !== member.nickname ? (
+          <Icon
+            icon="bi:x"
+            style={{
+              width: "3rem",
+              height: "3rem",
+            }}
+            className={style.x_Icon}
+            onClick={CrewKickOut}
+          />
+        ) : null
       ) : null}
     </div>
   );
