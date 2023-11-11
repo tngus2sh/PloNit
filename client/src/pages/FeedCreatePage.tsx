@@ -128,7 +128,7 @@ const FeedCreatePage = () => {
           className={style.inputBox}
           name="feed_introduce"
           id="feed_introduce"
-          placeholder="내용을 작성해주세요"
+          placeholder="내용을 작성해주세요(100자 이내)"
           value={isFeedIntroduce}
           onChange={onChangeFeedIntroduce}
           maxLength={100}
