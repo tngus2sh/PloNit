@@ -35,6 +35,7 @@ const CrewDetailPage = () => {
           isCrewMaster: res.data.resultBody.isCrewMaster,
           isCrewwpingMaster: User.crewinfo.isCrewwpingMaster,
         };
+        console.log(data);
         dispatch(userActions.myCrewHandler(data));
       },
       (err) => {
@@ -58,7 +59,7 @@ const CrewDetailPage = () => {
       },
     );
   };
-
+  console.log(User);
   return (
     <div>
       <BackTopBar text={isCrewDetail.name} />
