@@ -22,6 +22,7 @@ function App() {
   const location = useLocation();
   const dispatch = useDispatch();
   const interval = useRef<NodeJS.Timeout | null>(null);
+  const worker = new Worker(new URL(`workers/worker.js`, import.meta.url));
   const windowHeight = useSelector<rootState, number>((state) => {
     return state.window.height;
   });
@@ -64,9 +65,22 @@ function App() {
         .then((response) => {
           const { latitude, longitude } = response.coords;
           dispatch(P.addPath({ latitude: latitude, longitude: longitude }));
-          interval.current = setInterval(() => {
-            dispatch(P.addTime());
-          }, 1000);
+
+          function addTime() {
+            interval.current = setInterval(() => {
+              dispatch(P.addTime());
+            }, 1000);
+          }
+          if (window.Worker) {
+            worker.postMessage("start");
+            worker.onmessage = (event) => {
+              if (event.data === "tick") {
+                dispatch(P.addTime());
+              }
+            };
+          } else {
+            addTime();
+          }
         })
         .catch((error) => {
           console.error(error);
@@ -75,7 +89,12 @@ function App() {
       if (interval.current) {
         clearInterval(interval.current);
       }
+      worker.terminate();
     }
+
+    return () => {
+      worker.terminate();
+    };
   }, [useTimer]);
 
   useEffect(() => {
