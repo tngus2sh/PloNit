@@ -164,7 +164,7 @@ public class AuthServiceImpl implements AuthService {
         // 4. user find
         Optional<Member> member = memberRepository.findByKakaoId(kakaoId);
         String fcmToken = RequestUtils.getFCMToken();
-        // todo : fcmToken -> member Entity update
+        log.info("FCM : " + fcmToken);
 
         if (member.isPresent()) {  // 5.1 기존 유저
             TokenInfoRes tokenInfoRes = generateToken(member.get().getId(), kakaoToken, false);
@@ -175,6 +175,7 @@ public class AuthServiceImpl implements AuthService {
                     .registeredMember(true)
                     .nickname(member.get().getNickname())
                     .profileImage(member.get().getProfileImage())
+                    .fcmToken(fcmToken)
                     .build();
 
         } else { // 5.2 신규 유저
@@ -189,6 +190,7 @@ public class AuthServiceImpl implements AuthService {
                     .registeredMember(false)
                     .nickname(newMember.getNickname())
                     .profileImage(newMember.getProfileImage())
+                    .fcmToken(fcmToken)
                     .build();
         }
     }
@@ -213,7 +215,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Transactional
-    public boolean kakaoLogout(HttpServletRequest request) {
+    public Long kakaoLogout(HttpServletRequest request) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
 
         // 1. user find
@@ -261,7 +263,7 @@ public class AuthServiceImpl implements AuthService {
             redisTemplate.delete("KAKAO_AT:" + id);
             redisTemplate.delete("KAKAO_RT:" + id);
             log.info(logCurrent(getClassName(), getMethodName(), END));
-            return true;
+            return id;
         } else
             throw new CustomException(UNKNOWN_ERROR);
     }

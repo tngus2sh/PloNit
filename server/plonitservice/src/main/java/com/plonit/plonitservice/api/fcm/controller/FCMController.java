@@ -19,9 +19,9 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequiredArgsConstructor
 public class FCMController {
-    private final FCMService firebaseCloudMessageService;
+    private final FCMService fcmService;
     @PostMapping
     public String sendFcm(@RequestBody FCMReq fcmReq) {
-        return firebaseCloudMessageService.sendNotification(fcmReq);
+        return fcmService.sendNotification(fcmReq);
     }
 }
