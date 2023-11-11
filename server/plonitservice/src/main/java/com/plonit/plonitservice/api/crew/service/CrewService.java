@@ -10,5 +10,6 @@ public interface CrewService {
     void joinCrewMember(Long memberId, Long crewId);
     void approveCrewMember(ApproveCrewDto approveCrewDto);
     void saveCrewNotice(SaveCrewNoticeDto saveCrewNoticeDto);
-
+    void quitCrew(Long crewId);
+    void kickOutCrew(Long crewMemberId, Long crewId);
 }

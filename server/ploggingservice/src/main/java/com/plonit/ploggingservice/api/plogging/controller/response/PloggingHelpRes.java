@@ -1,10 +1,10 @@
 package com.plonit.ploggingservice.api.plogging.controller.response;
 
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Data
-@RequiredArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class PloggingHelpRes {
     
     private Double latitude;

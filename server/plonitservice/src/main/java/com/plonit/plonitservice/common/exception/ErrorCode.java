@@ -29,11 +29,14 @@ public enum ErrorCode {
     FEED_COMMENT_NOT_FORBIDDEN(HttpStatus.FORBIDDEN, "접근할 수 없는 피드 댓글입니다."),
     CREW_NOT_FORBIDDEN(HttpStatus.FORBIDDEN, "접근할 수 없는 크루입니다."),
     CREWPING_JOIN_EXCEED(HttpStatus.FORBIDDEN, "크루핑 최대 참가 인원을 초과했습니다."),
-    CREW_MASTER_NOT_FORBIDDEN(HttpStatus.FORBIDDEN, "접근할 수 없은 크루장이 아닙니다."),
+    CREW_MASTER_NOT_FORBIDDEN(HttpStatus.FORBIDDEN, "크루장만 접근할 수 있습니다."),
+    CREW_MASTER_NOT_QUIT(HttpStatus.FORBIDDEN, "크루장은 탈퇴할 수 없습니다."),
+    CREW_WAITING_FORBIDDEN(HttpStatus.FORBIDDEN, "크루원 승인이 대기 중입니다."),
 
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 회원입니다."),
     CREW_NOT_FOUND(HttpStatus.BAD_REQUEST, "존재하지 않은 크루입니다."),
+    CREW_MEMBER_NOT_FOUND(HttpStatus.BAD_REQUEST, "존재하지 않은 크루원입니다."),
     CREWPING_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않은 크루핑입니다."),
     CREWPINGMEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않은 크루핑 멤버입니다."),
     FEED_NOT_FOUND(HttpStatus.BAD_REQUEST, "존재하지 않는 피드입니다."),

@@ -8,11 +8,12 @@ import com.plonit.ploggingservice.api.plogging.service.dto.StartPloggingDto;
 
 public interface PloggingService {
     
-    public Long saveStartPlogging(StartPloggingDto dto);
+    Long saveStartPlogging(StartPloggingDto dto);
     
-    public Long saveEndPlogging(EndPloggingDto dto);
+    Long saveEndPlogging(EndPloggingDto dto);
 
-    public Long savePloggingHelp(HelpPloggingDto dto);
+    Long savePloggingHelp(HelpPloggingDto dto);
 
-    public String savePloggingImage(ImagePloggingDto dto);
+    String savePloggingImage(ImagePloggingDto dto);
+
 }

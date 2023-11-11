@@ -174,4 +174,26 @@ public class CrewController {
         return CustomApiResponse.ok(searchCrewsResList, "크루 검색에 성공했습니다.");
     }
 
+    @Operation(summary = "크루 탈퇴", description = "크루를 탈퇴한다.")
+    @DeleteMapping("/quit/{crew-id}")
+    public CustomApiResponse<Object> quitCrew(@PathVariable("crew-id") Long crewId) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        crewService.quitCrew(crewId);
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+        return CustomApiResponse.ok("", "크루 탈퇴에 성공했습니다.");
+    }
+
+    @Operation(summary = "크루원 강퇴", description = "크루에서 크루원을 강퇴시킨다.")
+    @DeleteMapping("/kick-out/{crew-id}/{member-id}")
+    public CustomApiResponse<Object> kickOutCrew(@PathVariable("crew-id") Long crewId, @PathVariable("member-id") Long memberId) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        crewService.kickOutCrew(memberId, crewId);
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+        return CustomApiResponse.ok("", "크루원 강퇴에 성공했습니다.");
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.plonit.ploggingservice.domain.plogging.repository;
 
+import com.plonit.ploggingservice.api.plogging.controller.response.FindPloggingLogRes;
 import com.plonit.ploggingservice.api.plogging.controller.response.PloggingLogRes;
 import com.plonit.ploggingservice.api.plogging.controller.response.PloggingPeriodRes;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -35,17 +36,33 @@ public class PloggingQueryRepository {
                         plogging.totalTime,
                         plogging.distance))
                 .from(plogging)
-                .where(plogging.id.eq(memberKey).and(plogging.date.between(startDate, endDate)))
+                .where(plogging.memberKey.eq(memberKey).and(plogging.date.between(startDate, endDate)))
                 .fetch();
     }
     
     @Transactional(readOnly = true)
-    public Optional<PloggingLogRes> findPloggingLogDetail(Long ploggingId, Long memberKey) {
-        return Optional.ofNullable(queryFactory.select(constructor(PloggingLogRes.class,
-                        plogging.id))
+    public Optional<FindPloggingLogRes> findPloggingLogDetail(Long ploggingId, Long memberKey) {
+        return Optional.ofNullable(queryFactory.select(constructor(FindPloggingLogRes.class,
+                        plogging.id,
+                        plogging.type,
+                        plogging.place,
+                        plogging.startTime,
+                        plogging.endTime,
+                        plogging.totalTime,
+                        plogging.distance,
+                        plogging.calorie,
+                        plogging.review))
                 .from(plogging)
-                .leftJoin(latLong).on(latLong.plogging.id.eq(ploggingId))
                 .where(plogging.id.eq(ploggingId).and(plogging.memberKey.eq(memberKey)))
+                .fetchOne());
+    }
+
+    @Transactional(readOnly = true)
+    public Integer countPloggingByMemberId(Long memberId) {
+        return Math.toIntExact(queryFactory
+                .select(plogging.count())
+                .from(plogging)
+                .where(plogging.memberKey.eq(memberId))
                 .fetchOne());
     }
     
