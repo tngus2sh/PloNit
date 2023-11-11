@@ -1,20 +1,15 @@
 package com.plonit.plonitservice.api.fcm.service;
 
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
 import com.plonit.plonitservice.api.auth.controller.response.LogInRes;
 import com.plonit.plonitservice.api.fcm.controller.request.FCMReq;
 import com.plonit.plonitservice.common.util.RequestUtils;
 import com.plonit.plonitservice.domain.fcm.repository.FCMTokenRepository;
-import com.plonit.plonitservice.domain.member.Member;
-import com.plonit.plonitservice.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 import static com.plonit.plonitservice.common.util.LogCurrent.*;
 import static com.plonit.plonitservice.common.util.LogCurrent.START;
@@ -29,7 +24,7 @@ public class FCMService{
     public String sendNotification(FCMReq fcmReq) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
         if (!hasKey(fcmReq.getTargetMemberId())) {
-            return "서버에 해당 유저의 FirebaseToken이 존재하지 않습니다.";
+            return "서버에 해당 유저의 FirebaseToken 이 존재하지 않습니다.";
         }
 
         String token = getFcmToken(fcmReq.getTargetMemberId());
@@ -43,13 +38,8 @@ public class FCMService{
                 .setNotification(notification)
                 .build();
 
-//        Message message = Message.builder()
-//                .putData("title", fcmReq.getTitle())
-//                .putData("content", fcmReq.getBody())
-//                .setToken(token)
-//                .build();
-
         send(message);
+        log.info(logCurrent(getClassName(), getMethodName(), END));
         return "알림을 성공적으로 전송했습니다.";
     }
     public void send(Message message) {
@@ -57,18 +47,37 @@ public class FCMService{
     }
 
     public void saveToken(LogInRes logInRes) {
-        fcmTokenRepository.saveFcmToken(logInRes);
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+        String fcmToken = RequestUtils.getFCMToken();
+
+        if(fcmToken == null) {
+            log.info("FCM TOKEN : NULL");
+            log.info(logCurrent(getClassName(), getMethodName(), END));
+            return;
+        }
+
+        log.info("FCM TOKEN : " + fcmToken);
+        fcmTokenRepository.saveFcmToken(logInRes, fcmToken);
+        log.info(logCurrent(getClassName(), getMethodName(), END));
     }
 
     public void deleteToken(Long memberIdl) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
         fcmTokenRepository.deleteToken(memberIdl);
+        log.info(logCurrent(getClassName(), getMethodName(), END));
     }
 
     private String getFcmToken(Long memberId) {
-        return fcmTokenRepository.getFcmToken(memberId);
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+        String fcmToken = fcmTokenRepository.getFcmToken(memberId);
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+        return fcmToken;
     }
 
     private boolean hasKey(Long memberId) {
-        return fcmTokenRepository.hasKey(memberId);
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+        boolean hasKey = fcmTokenRepository.hasKey(memberId);
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+        return hasKey;
     }
 }

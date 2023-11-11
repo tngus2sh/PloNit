@@ -163,8 +163,6 @@ public class AuthServiceImpl implements AuthService {
 
         // 4. user find
         Optional<Member> member = memberRepository.findByKakaoId(kakaoId);
-        String fcmToken = RequestUtils.getFCMToken();
-        log.info("FCM : " + fcmToken);
 
         if (member.isPresent()) {  // 5.1 기존 유저
             TokenInfoRes tokenInfoRes = generateToken(member.get().getId(), kakaoToken, false);
@@ -175,7 +173,6 @@ public class AuthServiceImpl implements AuthService {
                     .registeredMember(true)
                     .nickname(member.get().getNickname())
                     .profileImage(member.get().getProfileImage())
-                    .fcmToken(fcmToken)
                     .build();
 
         } else { // 5.2 신규 유저
@@ -190,7 +187,6 @@ public class AuthServiceImpl implements AuthService {
                     .registeredMember(false)
                     .nickname(newMember.getNickname())
                     .profileImage(newMember.getProfileImage())
-                    .fcmToken(fcmToken)
                     .build();
         }
     }

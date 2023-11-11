@@ -15,5 +15,4 @@ public class LogInRes {
     private boolean registeredMember;
     private String nickname;
     private String profileImage;
-    private String fcmToken;
 }

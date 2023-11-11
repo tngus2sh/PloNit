@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static com.plonit.plonitservice.common.util.LogCurrent.*;
+import static com.plonit.plonitservice.common.util.LogCurrent.START;
+
 @Tag(name = "FCM", description = "FCM 알림")
 @Slf4j
 @RequestMapping("/api/plonit-service/v1/fcm")
@@ -22,6 +25,12 @@ public class FCMController {
     private final FCMService fcmService;
     @PostMapping
     public String sendFcm(@RequestBody FCMReq fcmReq) {
-        return fcmService.sendNotification(fcmReq);
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+        log.info(fcmReq.toString());
+
+        String message = fcmService.sendNotification(fcmReq);
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+        return message;
     }
 }
