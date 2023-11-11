@@ -45,7 +45,7 @@ function App() {
     return state.plogging.volTakePicture;
   });
 
-  const [onSearch, setOnSearch] = useState<boolean>(false);
+  const [workerNA, setWorkerNA] = useState<boolean>(true);
 
   useEffect(() => {
     function handleResize() {
@@ -71,11 +71,29 @@ function App() {
               dispatch(P.addTime());
             }, 1000);
           }
+          async function sendGPS() {
+            getGPS()
+              .then((response) => {
+                const { latitude, longitude } = response.coords;
+                dispatch(
+                  P.addPath({ latitude: latitude, longitude: longitude }),
+                );
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+          }
+
           if (window.Worker) {
+            setWorkerNA(false);
             worker.postMessage("start");
+            worker.postMessage("start2");
             worker.onmessage = (event) => {
               if (event.data === "tick") {
                 dispatch(P.addTime());
+              }
+              if (event.data === "tick2") {
+                sendGPS();
               }
             };
           } else {
@@ -98,8 +116,19 @@ function App() {
   }, [useTimer]);
 
   useEffect(() => {
-    if (useTimer && second % intervalTime === 0) {
-      setOnSearch(true);
+    if (workerNA && useTimer && second % intervalTime === 0) {
+      async function sendGPS() {
+        getGPS()
+          .then((response) => {
+            const { latitude, longitude } = response.coords;
+            dispatch(P.addPath({ latitude: latitude, longitude: longitude }));
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+
+      sendGPS();
     }
   }, [second]);
 
@@ -120,20 +149,6 @@ function App() {
       });
     }
   }, [minute]);
-
-  useEffect(() => {
-    if (useTimer && onSearch) {
-      getGPS()
-        .then((response) => {
-          const { latitude, longitude } = response.coords;
-          dispatch(P.addPath({ latitude: latitude, longitude: longitude }));
-          setOnSearch(false);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
-  }, [onSearch]);
 
   return (
     <div
