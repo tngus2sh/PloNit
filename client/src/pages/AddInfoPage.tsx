@@ -6,7 +6,7 @@ import Input from "components/common/Input";
 import CommonButton from "components/common/CommonButton";
 import RegionModal from "components/common/RegionModal";
 import { nicknameCheck } from "api/lib/auth";
-import { addInfo } from "api/lib/members";
+import { addInfo, getProfile } from "api/lib/members";
 import style from "styles/css/AddInfoPage.module.css";
 
 const AddInfoPage = () => {
@@ -89,13 +89,21 @@ const AddInfoPage = () => {
       accessToken,
       data,
       (res) => {
-        dispatch(userActions.addInfoHandler(data));
+        getProfile(
+          accessToken,
+          (res) => {
+            console.log("내 정보 조회 성공");
+            dispatch(userActions.saveMemberInfo(res.data.resultBody));
+          },
+          (err) => {
+            console.log("내 정보 조회 실패", err);
+          },
+        );
         console.log("추가정보 입력 성공");
         navigate("/");
       },
       (err) => {
-        console.log(accessToken, "토큰");
-        console.log("추가정보 에러...");
+        console.log("추가정보 에러...", err);
       },
     );
   };
@@ -188,8 +196,6 @@ const AddInfoPage = () => {
         }}
         onClick={SendInfo}
       />
-
-      {/* <div style={{ height: "4rem" }}></div> */}
     </div>
   );
 };
