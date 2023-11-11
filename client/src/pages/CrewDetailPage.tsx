@@ -13,8 +13,8 @@ import { CrewInterface } from "interface/crewInterface";
 const CrewDetailPage = () => {
   const navigate = useNavigate();
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
+  const User = useSelector((state: any) => state.user);
   const { crewId } = useParams();
-  console.log(crewId);
   const [isCrewDetail, setCrewDetail] = useState<CrewInterface>(
     {} as CrewInterface,
   );
@@ -59,14 +59,16 @@ const CrewDetailPage = () => {
         <CrewRanking crew={isCrewDetail} />
         <CrewIntroduce crew={isCrewDetail} />
       </div>
-      {isCrewDetail.isMyCrew ? (
-        <CommonButton
-          text="크루 탈퇴"
-          styles={{
-            backgroundColor: "gray",
-          }}
-          onClick={CrewQuit}
-        />
+      {!User.crewinfo.isCrewMaster ? (
+        isCrewDetail.isMyCrew ? (
+          <CommonButton
+            text="크루 탈퇴"
+            styles={{
+              backgroundColor: "gray",
+            }}
+            onClick={CrewQuit}
+          />
+        ) : null
       ) : null}
     </div>
   );
