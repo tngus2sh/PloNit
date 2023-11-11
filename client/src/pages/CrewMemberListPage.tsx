@@ -14,8 +14,7 @@ const CrewMemberListPage = () => {
     {} as CrewInterface,
   );
   const [isMemberList, setMemberList] = useState<MemberInterface[]>([]);
-  const Crewmaster =
-    isCrewDetail.isCrewMaster === undefined ? false : isCrewDetail.isCrewMaster;
+  const Crewmaster = true;
   useEffect(() => {
     getCrewDetail(
       accessToken,
@@ -24,6 +23,7 @@ const CrewMemberListPage = () => {
         console.log("크루 상세 조회 성공");
         setCrewDetail(res.data.resultBody);
         if (!isCrewDetail.isCrewMaster) {
+          console.log(isCrewDetail.isCrewMaster);
           getCrewMember(
             accessToken,
             Number(crewId),
