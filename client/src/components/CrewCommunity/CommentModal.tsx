@@ -33,6 +33,7 @@ const CommentModal = ({
       accessToken,
       data,
       (res) => {
+        console.log(res.data);
         console.log("댓글 생성 성공");
         fetchFeedList();
         setComment("");

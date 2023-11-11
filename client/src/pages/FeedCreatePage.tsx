@@ -112,7 +112,12 @@ const FeedCreatePage = () => {
             <Icon
               icon="bi:x"
               className={style.icon}
-              style={{ width: "3rem", height: "3rem", color: "white" }}
+              style={{
+                width: "3rem",
+                height: "3rem",
+                color: "white",
+                background: "black",
+              }}
               onClick={() => handleDeleteImage(id)}
             />
           </SwiperSlide>
@@ -126,6 +131,7 @@ const FeedCreatePage = () => {
           placeholder="내용을 작성해주세요"
           value={isFeedIntroduce}
           onChange={onChangeFeedIntroduce}
+          maxLength={100}
         ></textarea>
       </div>
       <CommonButton
