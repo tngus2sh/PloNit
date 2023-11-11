@@ -1,13 +1,13 @@
 import React from "react";
 import style from "styles/css/CrewpingDetailPage/CrewpingLeader.module.css";
-import { CrewpingInterface } from "interface/crewInterface"; // 경로는 실제 경로에 맞게 조정해주세요.
+import { CrewpingInterface } from "interface/crewInterface";
 
 interface CrewpingInfoProps {
   crewping: CrewpingInterface;
 }
 
 const CrewpingLeader = ({ crewping }: CrewpingInfoProps) => {
-  const imageUrl = crewping.crewpingImage || "/metamong.png"; // crewpingImage가 없는 경우 기본 이미지로 대체합니다.
+  const imageUrl = crewping.crewpingImage || "/NoImage.png";
 
   return (
     <div className={style.crewping_leader}>

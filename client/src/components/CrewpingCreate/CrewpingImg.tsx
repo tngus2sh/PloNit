@@ -23,7 +23,7 @@ const CrewpingImg = ({ setCrewpingImage, isCrewpingImage }: any) => {
         src={
           isCrewpingImage
             ? URL.createObjectURL(isCrewpingImage)
-            : `/metamong.png`
+            : `/NoImage.png`
         }
         alt="프로필 이미지"
       />

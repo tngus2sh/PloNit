@@ -61,6 +61,7 @@ const RegionModal = ({
         console.log("구군 API 연결 실패", err);
       },
     );
+    window.scrollTo(0, 0);
   };
   const SelectedGugun = (item: any) => {
     setSelectedGugunCode(item.gugunCode);
@@ -77,6 +78,7 @@ const RegionModal = ({
         console.log("동 API 연결 실패", err);
       },
     );
+    window.scrollTo(0, 0);
   };
 
   const SelectedDong = (item: any) => {

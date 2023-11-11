@@ -63,8 +63,7 @@ export interface CrewAllowInterface {
 }
 
 export interface MemberInterface {
-  id?: number | undefined;
-  crewMemberId: number;
+  crewMemberId?: number;
   profileImage: string;
   nickname: string;
 }
