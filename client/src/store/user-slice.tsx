@@ -37,17 +37,6 @@ const userSlice = createSlice({
     saveMemberInfo(state, action) {
       return { ...state, info: action.payload };
     },
-    addInfoHandler: (state, action) => {
-      return {
-        ...state,
-        name: action.payload.name,
-        nickname: action.payload.nickname,
-        gender: action.payload.gender,
-        birthday: action.payload.birth,
-        dongCode: action.payload.dongCode,
-        region: action.payload.region,
-      };
-    },
     EditHandler: (state, action) => {
       return {
         ...state,
