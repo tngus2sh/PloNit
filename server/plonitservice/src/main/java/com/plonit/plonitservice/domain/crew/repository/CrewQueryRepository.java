@@ -87,6 +87,13 @@ public class CrewQueryRepository {
                         .and(crewMember.member.id.eq(memberId))
                         .and(crewMember.crew.id.eq(crewId)));
 
+        JPQLQuery<Boolean> isWaitingSubQuery = JPAExpressions
+                .select(crewMember.id.count().gt(0L))
+                .from(crewMember)
+                .where(crewMember.isCrewMember.isFalse()
+                        .and(crewMember.member.id.eq(memberId))
+                        .and(crewMember.crew.id.eq(crewId)));
+
         return Optional.ofNullable(queryFactory
                 .select(Projections.constructor(FindCrewRes.class,
                         crew.id,
@@ -104,7 +111,8 @@ public class CrewQueryRepository {
                                 .then(true)
                                 .otherwise(false)
                                 .as("isCrewMaster"),
-                        isMyCrewSubQuery))
+                        isMyCrewSubQuery,
+                        isWaitingSubQuery))
                 .from(crew)
                 .join(crewMember).on(crewMember.crew.eq(crew)).fetchJoin()
                 .where(crewMember.crew.id.eq(crewId), crewMember.isCrewMaster.isTrue())
