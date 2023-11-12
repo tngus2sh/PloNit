@@ -1,5 +1,6 @@
 package com.plonit.plonitservice.api.feed.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.plonit.plonitservice.api.feed.controller.request.SaveCommentReq;
 import com.plonit.plonitservice.api.feed.controller.request.SaveFeedReq;
 import com.plonit.plonitservice.api.feed.controller.response.FindFeedRes;
@@ -9,6 +10,7 @@ import com.plonit.plonitservice.api.feed.service.dto.SaveCommentDto;
 import com.plonit.plonitservice.api.feed.service.dto.SaveFeedDto;
 import com.plonit.plonitservice.common.CustomApiResponse;
 import com.plonit.plonitservice.common.exception.CustomException;
+import com.plonit.plonitservice.common.exception.ErrorCode;
 import com.plonit.plonitservice.common.util.RequestUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -105,16 +107,20 @@ public class FeedController {
         return CustomApiResponse.ok("", "피드 댓글 삭제에 성공했습니다.");
     }
 
-    @Operation(summary = "피드 좋아요 등록", description = "피드 좋아요를 등록한다.")
+    @Operation(summary = "피드 좋아요", description = "피드 좋아요를 등록하거나, 좋아요를 취소한다.")
     @PostMapping("/like/{feed-id}")
-    public CustomApiResponse<Object> saveFeedLike(@PathVariable("feed-id") long feedId, HttpServletRequest request) {
+    public CustomApiResponse<Object> saveFeedLike(@PathVariable("feed-id") long feedId) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
+        log.info("saveFeedLike = {}", feedId);
 
-        Long memberKey = RequestUtils.getMemberKey(request);
-        //todo : 피드 좋아요 등록
+        boolean flag = feedService.saveFeedLike(feedId);
 
-        log.info(logCurrent(getClassName(), getMethodName(), END));
-        return CustomApiResponse.ok("", "피드 좋아요 등록에 성공했습니다.");
+        if(flag) {
+            return CustomApiResponse.ok(null, "피드 좋아요 등록에 성공했습니다.");
+        }
+        else {
+            return CustomApiResponse.ok(null, "피드 좋아요 등록을 취소했습니다.");
+        }
     }
 
     @Operation(summary = "피드 좋아요 삭제", description = "피드 좋아요를 삭제한다.")
