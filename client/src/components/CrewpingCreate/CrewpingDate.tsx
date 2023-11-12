@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
-// import "styles/CrewCreateDatePicker.css";
+import "react-datepicker/dist/react-datepicker.css";
 import style from "styles/css/CrewpingCreatePage.module.css";
-import getYear from "date-fns/getYear";
-import getMonth from "date-fns/getMonth";
-import "custom_css/CrewCreateDatePicker.css";
 
 const formattedDate = (date: any) => {
   const year = date.getFullYear();
