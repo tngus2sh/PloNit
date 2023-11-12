@@ -4,6 +4,22 @@ import { useSelector, useDispatch } from "react-redux";
 import style from "styles/css/MyPloggingPage/MyPloggingItem.module.css";
 import { PloggingLog } from "interface/ploggingInterface";
 
+const formattedDateTime = (datestr: any) => {
+  const days = ["일", "월", "화", "수", "목", "금", "토"];
+  const date = new Date(datestr);
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const dayName = days[date.getDay()];
+  const hour = date.getHours();
+  const minute = date.getMinutes();
+  const formattedDate = `${year}년 ${month}월 ${day}일(${dayName}) ${hour}:${
+    minute < 10 ? "0" : ""
+  }${minute}`;
+
+  return formattedDate;
+};
+
 const MyPloggingItem = ({ plogging }: { plogging: PloggingLog }) => {
   const navigate = useNavigate();
   const User = useSelector((state: any) => state.user);
@@ -29,7 +45,7 @@ const MyPloggingItem = ({ plogging }: { plogging: PloggingLog }) => {
             <div className={style.divide_CREWPING}>크루</div>
           ) : null}
           <div className={style.date_place}>
-            {plogging.start_time} {plogging.place}
+            {formattedDateTime(plogging.startTime)} {plogging.place}
           </div>
         </div>
         <div className={style.second_area}>
@@ -39,7 +55,7 @@ const MyPloggingItem = ({ plogging }: { plogging: PloggingLog }) => {
           </div>
           <div className={style.time}>
             시간
-            <span className={style.largeNumber}>{plogging.total_time}</span>
+            <span className={style.largeNumber}>{plogging.totalTime}</span>
           </div>
         </div>
       </div>
