@@ -21,4 +21,8 @@ public class CustomApiResponse<T> {
     public static <T> CustomApiResponse<T> ok(T data) {
         return new CustomApiResponse<>(new DataHeader(0, "", ""), data);
     }
+
+    public static <T> CustomApiResponse<T> ok(T data, String resultMessage)  {
+        return new CustomApiResponse<>(new DataHeader(0, "", resultMessage), data);
+    }
 }

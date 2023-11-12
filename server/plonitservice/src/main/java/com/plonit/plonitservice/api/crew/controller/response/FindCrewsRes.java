@@ -5,12 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
-@AllArgsConstructor
 public class FindCrewsRes {
     private long id;
     private String name;
-    private Integer cntPeople;
     private String crewImage;
     private String region;
+    private long cntPeople;
+
+    public FindCrewsRes(Long id, String name, String crewImage, String region, Long cntPeople) {
+        this.id = id;
+        this.name = name;
+        this.crewImage = crewImage;
+        this.region = region;
+        this.cntPeople = cntPeople;
+    }
 }

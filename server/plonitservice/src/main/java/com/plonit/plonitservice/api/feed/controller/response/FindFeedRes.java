@@ -18,11 +18,12 @@ public class FindFeedRes {
 
     private String nickname;
     private String profileImage;
+    private Boolean isMine;
+    private String createdDate;
 
     private List<FeedPictureDto> feedPictures;
 
     private int likeCount;
-
     private Boolean isLike;
 
     private List<FeedCommentDto> comments;

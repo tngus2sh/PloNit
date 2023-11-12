@@ -10,4 +10,5 @@ public class FeedCommentDto {
     String nickname;
     String profileImage;
     String content;
+    Boolean isMine;
 }

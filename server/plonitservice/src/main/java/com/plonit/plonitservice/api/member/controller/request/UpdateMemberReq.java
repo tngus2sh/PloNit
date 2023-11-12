@@ -25,7 +25,7 @@ public class UpdateMemberReq {
     private String birth;
 
     @NotEmpty(message = "활동지역은 필수 입력값입니다.")
-    private String region;
+    private String dongCode;
 
     @Size(min = 1, max = 3)
     private String height;

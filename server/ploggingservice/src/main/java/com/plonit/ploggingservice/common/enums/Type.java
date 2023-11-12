@@ -1,5 +1,10 @@
 package com.plonit.ploggingservice.common.enums;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
+@Getter
 public enum Type {
     
     CREWPING("크루핑"),
@@ -8,10 +13,6 @@ public enum Type {
     
     
     private final String text;
-    
-    Type(String text) {
-        this.text = text;
-    }
     
     
 }

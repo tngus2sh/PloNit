@@ -1,5 +1,6 @@
 package com.plonit.plonitservice.domain.crewping;
 
+import com.plonit.plonitservice.api.crewping.service.dto.SaveCrewpingRecordDto;
 import com.plonit.plonitservice.common.enums.Status;
 import com.plonit.plonitservice.domain.TimeBaseEntity;
 import com.plonit.plonitservice.domain.crew.Crew;
@@ -50,13 +51,27 @@ public class Crewping extends TimeBaseEntity {
     @Column(length = 500)
     private String introduce;
 
-    @Column(length = 500)
-    private String notice;
-
     @Column(name = "active_time")
     private long activeTime;
 
     @ColumnDefault("'ACTIVE'")
     @Enumerated(EnumType.STRING)
     private Status status;
+
+
+    public void updateCurrentPeople(boolean flag) {
+        if(flag) {
+            this.cntPeople++;
+        }
+        else {
+            this.cntPeople--;
+        }
+    }
+
+    public void updateRecord(SaveCrewpingRecordDto dto) {
+        this.startDate = dto.getStartDate();
+        this.endDate = dto.getEndDate();
+        this.place = dto.getPlace();
+        this.activeTime = dto.getActiveTime();
+    }
 }

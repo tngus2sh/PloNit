@@ -3,9 +3,7 @@ package com.plonit.ploggingservice.domain.plogging;
 
 import com.plonit.ploggingservice.common.enums.Finished;
 import com.plonit.ploggingservice.common.enums.Type;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -13,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Plogging extends TimeBaseEntity{
     
     @Id
@@ -22,7 +20,7 @@ public class Plogging extends TimeBaseEntity{
     private Long id;
     
     @Column(name = "member_key")
-    private String memberKey;
+    private Long memberKey;
     
     @Column
     @Enumerated(EnumType.STRING)
@@ -38,13 +36,13 @@ public class Plogging extends TimeBaseEntity{
     private LocalDateTime endTime;
     
     @Column
-    private double totalTime;
+    private Long totalTime; // 초 단위
     
     @Column
-    private double distance;
+    private Double distance;
     
     @Column
-    private double calorie;
+    private Double calorie;
     
     @Column
     private String review;
@@ -57,8 +55,7 @@ public class Plogging extends TimeBaseEntity{
     private LocalDate date;
 
     @Builder
-    public Plogging(Long id, String memberKey, Type type, String place, LocalDateTime startTime, LocalDateTime endTime, double totalTime, double distance, double calorie, String review, Finished finished, LocalDate date) {
-        this.id = id;
+    public Plogging(Long memberKey, Type type, String place, LocalDateTime startTime, LocalDateTime endTime, Long totalTime, Double distance, Double calorie, String review, Finished finished, LocalDate date) {
         this.memberKey = memberKey;
         this.type = type;
         this.place = place;
@@ -72,5 +69,14 @@ public class Plogging extends TimeBaseEntity{
         this.date = date;
     }
     
+
+    public void saveEndPlogging(LocalDateTime endTime, Long totalTime, Double distance, Double calorie, String review, Finished finished) {
+        this.endTime = endTime;
+        this.totalTime = totalTime;
+        this.distance = distance;
+        this.calorie = calorie;
+        this.review = review;
+        this.finished = finished;
+    }
     
 }

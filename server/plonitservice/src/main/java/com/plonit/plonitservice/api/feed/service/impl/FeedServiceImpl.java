@@ -56,8 +56,8 @@ public class FeedServiceImpl implements FeedService {
         Member member = memberRepository.findById(saveFeedDto.getMemberKey())
                 .orElseThrow(() -> new CustomException(USER_BAD_REQUEST));
 
-        Crew crew = crewQueryRepository.findCrew(saveFeedDto.getMemberKey(), saveFeedDto.getCrewId())
-                .orElseThrow(() -> new CustomException(CREW_NOT_FOUND));
+        Crew crew = crewQueryRepository.findCrewWithMember(saveFeedDto.getMemberKey(), saveFeedDto.getCrewId())
+                .orElseThrow(() -> new CustomException(CREW_NOT_FORBIDDEN));
 
         Feed feed = feedRepository.save(SaveFeedDto.toEntity(member, crew, saveFeedDto));
 
@@ -73,10 +73,8 @@ public class FeedServiceImpl implements FeedService {
             }
         }
 
-        List<FeedPicture> feedPictures = feedImageUrl.stream().map(url -> FeedPicture.builder()
-                .feed(feed)
-                .image(url)
-                .build()).collect(Collectors.toList());
+        List<FeedPicture> feedPictures = feedImageUrl.stream().map(url -> FeedPicture.toEntity(feed, url))
+                .collect(Collectors.toList());
         feedPictureRepository.saveAll(feedPictures);
         log.info(logCurrent(getClassName(), getMethodName(), END));
     }
@@ -85,7 +83,7 @@ public class FeedServiceImpl implements FeedService {
         log.info(logCurrent(getClassName(), getMethodName(), START));
 
         Feed feed = feedRepository.findByIdAndMember_Id(feedId, memberKey)
-                .orElseThrow(() -> new CustomException(FEED_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(FEED_NOT_FORBIDDEN));
         feed.changeDelete();
 
         log.info(logCurrent(getClassName(), getMethodName(), END));
@@ -98,8 +96,9 @@ public class FeedServiceImpl implements FeedService {
         Member member = memberRepository.findById(saveCommentDto.getMemberKey())
                 .orElseThrow(() -> new CustomException(USER_BAD_REQUEST));
 
-        Feed feed = feedRepository.findById(saveCommentDto.getFeedId())
-                .orElseThrow(() -> new CustomException(FEED_NOT_FOUND));
+        // 해당 피드를 등록한 크루에 가입되어 있다면 댓글 등록 가능
+        Feed feed = feedQueryRepository.findFeedWithCrewMember(saveCommentDto.getFeedId(), saveCommentDto.getMemberKey())
+                .orElseThrow(() -> new CustomException(FEED_NOT_FORBIDDEN));
 
         commentRepository.save(SaveCommentDto.toEntity(member, feed, saveCommentDto));
 
@@ -111,7 +110,7 @@ public class FeedServiceImpl implements FeedService {
         log.info(logCurrent(getClassName(), getMethodName(), START));
 
         Comment comment = commentRepository.findByIdAndMember_Id(commentId, memberKey)
-                .orElseThrow(() -> new CustomException(COMMENT_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(FEED_COMMENT_NOT_FORBIDDEN));
 
         commentRepository.delete(comment);
         log.info(logCurrent(getClassName(), getMethodName(), END));
