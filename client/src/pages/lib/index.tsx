@@ -64,7 +64,7 @@ const RouteComponent = () => {
       <Route path="/crew/create" element={<CrewCreatePage />}></Route>
       {/* 아래 페이지는 수정할 수도 있음 */}
       <Route
-        path="/profile/plogging/detail"
+        path="/profile/plogging/detail/:ploggingId"
         element={<MyPloggingDetailPage />}
       ></Route>
       <Route
