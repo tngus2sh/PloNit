@@ -25,7 +25,7 @@ const formattedDate = (date: any) => {
 };
 
 const MyPloggingPage = () => {
-  const accessToken = useSelector((state: any) => state.user.accessToken);
+  const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   // 선택한 날짜
   const [dateRange, setDateRange] = useState<[Date, Date]>([
     new Date(),
