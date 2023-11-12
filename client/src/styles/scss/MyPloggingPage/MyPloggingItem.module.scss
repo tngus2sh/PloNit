@@ -4,7 +4,8 @@
   display: flex;
   margin: 0.5rem 0;
   padding: 0.8rem 1rem;
-  border: 1px solid black;
+  border: 1px solid $darkgray;
+  border-radius: 0.5rem;
   .left_area img {
     width: 3rem;
     height: 3rem;
@@ -14,8 +15,22 @@
   .right_area {
     .first_area {
       display: flex;
-      .divide {
+      .divide_IND {
         background-color: $green;
+        color: white;
+        border-radius: 2rem;
+        padding: 0.1rem 0.4rem;
+        margin-right: 0.5rem;
+      }
+      .divide_VOL {
+        background-color: $red;
+        color: white;
+        border-radius: 2rem;
+        padding: 0.1rem 0.4rem;
+        margin-right: 0.5rem;
+      }
+      .divide_CREWPING {
+        background-color: $blue;
         color: white;
         border-radius: 2rem;
         padding: 0.1rem 0.4rem;

@@ -17,9 +17,9 @@ export interface PloggingLog {
   id: number;
   type: string;
   place: string;
-  start_time?: string;
-  end_time?: string;
-  total_time?: string;
+  startTime?: string;
+  endTime?: string;
+  totalTime?: string;
   distance?: string;
 }
 

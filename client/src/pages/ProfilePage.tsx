@@ -16,6 +16,10 @@ const ProfilePage = () => {
   console.log(User);
   const [isMyData, setMyData] = useState<UserInterface>({} as UserInterface);
 
+  const goMyAlarm = () => {
+    navigate("/notification");
+  };
+
   const goMyCrew = () => {
     navigate("/profile/crew");
   };
@@ -60,7 +64,15 @@ const ProfilePage = () => {
 
   return (
     <div>
-      <BasicTopBar text="마이페이지" />
+      <div className={style.topbar}>
+        <BasicTopBar text="마이페이지" />
+        <Icon
+          icon="bi:bell"
+          style={{ width: "1.7rem", height: "1.7rem" }}
+          className={style.Alarm_Icon}
+          onClick={goMyAlarm}
+        />
+      </div>
       <UserInfo user={isMyData} />
       <div className={style.move}>
         <div className={style.part} onClick={goMyCrew}>

@@ -25,7 +25,7 @@ const formattedDate = (date: any) => {
 };
 
 const MyPloggingPage = () => {
-  const accessToken = useSelector((state: any) => state.user.accessToken);
+  const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   // 선택한 날짜
   const [dateRange, setDateRange] = useState<[Date, Date]>([
     new Date(),
@@ -81,14 +81,14 @@ const MyPloggingPage = () => {
       end_day: formattedDate(dateRange[1]),
       success: (res) => {
         console.log("플로깅 일별기록 조회 성공");
-        console.log(res);
+        console.log(res.data);
         setPloggingList(res.data.resultBody);
       },
       fail: (error) => {
         console.error("플로깅 일별기록 조회 실패", error);
       },
     });
-  }, []);
+  }, [dateRange]);
   console.log(isPloggingList);
 
   return (
@@ -103,7 +103,7 @@ const MyPloggingPage = () => {
         tileContent={tileContent}
         calendarType="US"
       />
-      <MyPloggingList dateRange={dateRange} />
+      <MyPloggingList dateRange={dateRange} PloggingList={isPloggingList} />
       <div style={{ height: "4rem" }}></div>
     </div>
   );

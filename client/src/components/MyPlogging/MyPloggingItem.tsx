@@ -1,31 +1,61 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import style from "styles/css/MyPloggingPage/MyPloggingItem.module.css";
 import { PloggingLog } from "interface/ploggingInterface";
 
-const MyPloggingItem = () => {
+const formattedDateTime = (datestr: any) => {
+  const days = ["일", "월", "화", "수", "목", "금", "토"];
+  const date = new Date(datestr);
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const dayName = days[date.getDay()];
+  const hour = date.getHours();
+  const minute = date.getMinutes();
+  const formattedDate = `${year}년 ${month}월 ${day}일(${dayName}) ${hour}:${
+    minute < 10 ? "0" : ""
+  }${minute}`;
+
+  return formattedDate;
+};
+
+const MyPloggingItem = ({ plogging }: { plogging: PloggingLog }) => {
   const navigate = useNavigate();
-  // console.log(plogging);
+  const User = useSelector((state: any) => state.user);
+  console.log(plogging);
 
   const goPloggingDetailHandler = () => {
-    navigate("/profile/plogging/detail");
+    navigate(`/profile/plogging/detail/${plogging.id}`);
   };
   return (
     <div className={style.myplogging_item} onClick={goPloggingDetailHandler}>
       <div className={style.left_area}>
-        <img src="/metamong.png" alt="몽" />
+        <img src={User.info.profileImage} alt="프로필" />
       </div>
       <div className={style.right_area}>
         <div className={style.first_area}>
-          <div className={style.divide}>크루</div>
-          <div className={style.date_place}>2023.10.15 14:55 수완동, 광주</div>
+          {plogging.type === "IND" ? (
+            <div className={style.divide_IND}>개인</div>
+          ) : null}
+          {plogging.type === "VOL" ? (
+            <div className={style.divide_VOL}>봉사</div>
+          ) : null}
+          {plogging.type === "CREWPING" ? (
+            <div className={style.divide_CREWPING}>크루</div>
+          ) : null}
+          <div className={style.date_place}>
+            {formattedDateTime(plogging.startTime)} {plogging.place}
+          </div>
         </div>
         <div className={style.second_area}>
           <div className={style.dist}>
-            거리 <span className={style.largeNumber}>2.12</span>km
+            거리 <span className={style.largeNumber}>{plogging.distance}</span>
+            km
           </div>
           <div className={style.time}>
-            시간 <span className={style.largeNumber}>42:35</span>
+            시간
+            <span className={style.largeNumber}>{plogging.totalTime}</span>
           </div>
         </div>
       </div>
