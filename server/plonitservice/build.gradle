@@ -94,6 +94,9 @@ dependencies {
 	// quartz
 	implementation 'org.springframework.boot:spring-boot-starter-quartz'
 
+	// fcm
+	implementation group: 'com.google.firebase', name: 'firebase-admin', version: '9.1.1'
+
 }
 
 dependencyManagement {
