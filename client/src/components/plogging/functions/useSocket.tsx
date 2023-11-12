@@ -2,79 +2,46 @@ import React, { useState, useEffect, useRef } from "react";
 import SockJS from "sockjs-client";
 import { Client, IMessage } from "@stomp/stompjs";
 import getGPS from "./getGPS";
+import { Message } from "interface/ploggingInterface";
 
-interface Location {
-  latitude: number;
-  longitude: number;
-}
-
-interface Locations {
-  [key: string]: Location;
-}
-
-interface UserImages {
-  [key: string]: string;
-}
-
-interface Message {
-  type: string;
-  senderId: string;
-  location?: Location;
-  userImage?: string;
-  roomId: string;
-}
+import { useDispatch, useSelector } from "react-redux";
+import { rootState } from "store/store";
+import * as Crewping from "store/crewping-slice";
 
 interface IuseSocket {
+  stompClient: React.MutableRefObject<Client | null>;
   roomId: string;
   senderId: string;
 }
 
-function useSocket({ roomId, senderId }: IuseSocket) {
-  const [startRequest, setStartRequest] = useState<boolean>(false);
-  const [crewpingStart, setCrewpingStart] = useState<boolean>(false);
-  const [endRequest, setEndRequest] = useState<boolean>(false);
-  const [crewpingEnd, setCrewpingEnd] = useState<boolean>(false);
-  const [locations, setLocations] = useState<Locations>({});
-  const [userImage, setUserImage] = useState<string>("");
-  const [userImages, setUserImages] = useState<UserImages>({});
-  const [getLocation, setGetLocation] = useState<boolean>(false);
-  const stompClient = useRef<Client | null>(null);
-
-  function handleStartRequest() {
-    setStartRequest(true);
-  }
-
-  function handleEndRequest() {
-    setEndRequest(true);
-  }
-
-  function handleLocation() {
-    setGetLocation(true);
-  }
+function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
+  const dispatch = useDispatch();
+  const startRequest = useSelector<rootState, boolean>((state) => {
+    return state.crewping.startRequest;
+  });
+  const endRequest = useSelector<rootState, boolean>((state) => {
+    return state.crewping.endRequest;
+  });
+  const getLocation = useSelector<rootState, boolean>((state) => {
+    return state.crewping.getLocation;
+  });
+  const userImage = useSelector<rootState, string>((state) => {
+    return state.crewping.userImage;
+  });
 
   function onMessageReceived(message: IMessage) {
     const newMessage: Message = JSON.parse(message.body);
     if (newMessage.type === "start") {
-      setCrewpingStart(true);
+      dispatch(Crewping.setCrewpingStart(true));
     }
     if (newMessage.type === "end") {
-      setCrewpingEnd(true);
+      dispatch(Crewping.setCrewpingEnd(true));
     }
     if (newMessage.type === "location") {
-      setLocations((current) => {
-        if (newMessage.location) {
-          return { ...current, [newMessage.senderId]: newMessage.location };
-        }
-        return current;
-      });
+      dispatch(Crewping.setLocations(newMessage));
     }
     if (newMessage.type === "image") {
-      setUserImages((current) => {
-        if (newMessage.userImage) {
-          return { ...current, [newMessage.senderId]: newMessage.userImage };
-        }
-        return current;
-      });
+      dispatch(Crewping.setUserImages(newMessage));
     }
   }
 
@@ -211,7 +178,7 @@ function useSocket({ roomId, senderId }: IuseSocket) {
   useEffect(() => {
     if (getLocation) {
       sendLocation();
-      setGetLocation(false);
+      dispatch(Crewping.setGetLocation(false));
     }
   }, [getLocation]);
 
@@ -220,18 +187,6 @@ function useSocket({ roomId, senderId }: IuseSocket) {
       sendImage();
     }
   }, [userImage]);
-
-  return {
-    crewpingStart, // true 시 크루핑 시작
-    handleStartRequest, // 크루핑장이 크루핑을 시작하자는 요청 보내는 함수
-    crewpingEnd, // true 시 크루핑 끝
-    setCrewpingEnd, // 개인이 크루핑을 끝내는 함수
-    handleEndRequest, // 크루핑장이 크루핑을 끝내자는 요청을 보내는 함수
-    locations, // 자신을 포함한 다른 유저들의 위치를 가지는 obj
-    handleLocation, // 현재 유저의 위치를 소켓으로 보내는 함수
-    userImages, // 자신을 포함한 다른 유저들의 프로필 이미지는 가지는 obj
-    setUserImage, // 현재 유저의 프로필 이미지를 보내는 함수
-  };
 }
 
 export default useSocket;

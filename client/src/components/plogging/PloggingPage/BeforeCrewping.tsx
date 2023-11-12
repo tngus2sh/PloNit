@@ -106,9 +106,6 @@ const BeforeCrewping = () => {
     const windowHeight = state.window.height;
     return windowHeight * 0.1;
   });
-  const roomId = useSelector<rootState, string>((state) => {
-    return state.crewping.roomId;
-  });
   const nickname = useSelector<rootState, string>((state) => {
     return state.user.info.nickname;
   });
@@ -116,7 +113,7 @@ const BeforeCrewping = () => {
 
   function onClick() {
     dispatch(Crewping.setIsLoading(true));
-    dispatch(Crewping.setRoomId(roomId));
+    dispatch(Crewping.setRoomId("roomId"));
     dispatch(Crewping.setSenderId(nickname));
     setShow(true);
   }
