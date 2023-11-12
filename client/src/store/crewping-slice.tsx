@@ -18,7 +18,10 @@ const initialState = {
   getLocation: false as boolean,
   locations: {} as Locations,
   userImage: "" as string,
-  userImages: {} as UserImages,
+  userImages: {
+    박주성:
+      "https://post-phinf.pstatic.net/MjAyMDExMDRfODgg/MDAxNjA0NDUyNDkwNTk5.3qW-hU8R0DvdQW8bgDuldGPN27uFdDvTh7haVQTpDqgg.2Tj5OcLz-xJx4rAFgkN48q8w5hrN5QahTK_DDIsNo2Ig.PNG/VneKfm5.png?type=w800_q75",
+  } as UserImages,
 };
 
 const crewpingSlice = createSlice({
