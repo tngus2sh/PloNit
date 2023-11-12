@@ -103,7 +103,7 @@ const MyPloggingPage = () => {
         tileContent={tileContent}
         calendarType="US"
       />
-      <MyPloggingList dateRange={dateRange} />
+      <MyPloggingList dateRange={dateRange} PloggingList={isPloggingList} />
       <div style={{ height: "4rem" }}></div>
     </div>
   );
