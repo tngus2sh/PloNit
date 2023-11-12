@@ -22,3 +22,24 @@ export interface PloggingLog {
   totalTime?: string;
   distance?: string;
 }
+
+export interface Location {
+  latitude: number;
+  longitude: number;
+}
+
+export interface Locations {
+  [key: string]: Location;
+}
+
+export interface UserImages {
+  [key: string]: string;
+}
+
+export interface Message {
+  type: string;
+  senderId: string;
+  location?: Location;
+  userImage?: string;
+  roomId: string;
+}
