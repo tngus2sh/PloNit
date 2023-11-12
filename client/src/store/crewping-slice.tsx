@@ -1,26 +1,23 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-
-interface Location {
-  latitude: number;
-  longitude: number;
-}
-
-interface Locations {
-  [key: string]: Location;
-}
-
-interface UserImages {
-  [key: string]: string;
-}
+import {
+  Location,
+  Locations,
+  UserImages,
+  Message,
+} from "interface/ploggingInterface";
 
 const initialState = {
-  charge: false as boolean,
-  isLoading: false as boolean,
-  startCrewping: false as boolean,
-  endCrewping: false as boolean,
   roomId: "" as string,
   senderId: "" as string,
+  charge: false as boolean,
+  isLoading: false as boolean,
+  startRequest: false as boolean,
+  crewpingStart: false as boolean,
+  endRequest: false as boolean,
+  crewpingEnd: false as boolean,
+  getLocation: false as boolean,
   locations: {} as Locations,
+  userImage: "" as string,
   userImages: {} as UserImages,
 };
 
@@ -31,42 +28,70 @@ const crewpingSlice = createSlice({
     clear: () => {
       return initialState;
     },
-    setCharge: (state, action: PayloadAction<boolean>) => {
-      state.charge = action.payload;
-    },
-    setIsLoading: (state, action: PayloadAction<boolean>) => {
-      state.isLoading = action.payload;
-    },
-    setStartCrewping: (state, action: PayloadAction<boolean>) => {
-      state.startCrewping = action.payload;
-    },
-    setEndCrewping: (state, action: PayloadAction<boolean>) => {
-      state.endCrewping = action.payload;
-    },
     setRoomId: (state, action: PayloadAction<string>) => {
       state.roomId = action.payload;
     },
     setSenderId: (state, action: PayloadAction<string>) => {
       state.senderId = action.payload;
     },
-    setLocations: (state, action: PayloadAction<Locations>) => {
-      state.locations = action.payload;
+    setCharge: (state, action: PayloadAction<boolean>) => {
+      state.charge = action.payload;
     },
-    setUserImages: (state, action: PayloadAction<UserImages>) => {
-      state.userImages = action.payload;
+    setIsLoading: (state, action: PayloadAction<boolean>) => {
+      state.isLoading = action.payload;
+    },
+    setStartRequest: (state, action: PayloadAction<boolean>) => {
+      state.startRequest = action.payload;
+    },
+    setCrewpingStart: (state, action: PayloadAction<boolean>) => {
+      state.crewpingStart = action.payload;
+    },
+    setEndRequest: (state, action: PayloadAction<boolean>) => {
+      state.endRequest = action.payload;
+    },
+    setCrewpingEnd: (state, action: PayloadAction<boolean>) => {
+      state.crewpingEnd = action.payload;
+    },
+    setGetLocation: (state, action: PayloadAction<boolean>) => {
+      state.getLocation = action.payload;
+    },
+    setLocations: (state, action: PayloadAction<Message>) => {
+      const newMessage = action.payload;
+      if (newMessage.location) {
+        state.locations = {
+          ...state.locations,
+          [newMessage.senderId]: newMessage.location,
+        };
+      }
+    },
+    setUserImage: (state, action: PayloadAction<string>) => {
+      state.userImage = action.payload;
+    },
+    setUserImages: (state, action: PayloadAction<Message>) => {
+      const newMessage = action.payload;
+      if (newMessage.userImage) {
+        state.userImages = {
+          ...state.userImages,
+          [newMessage.senderId]: newMessage.userImage,
+        };
+      }
     },
   },
 });
 
 export const {
   clear,
-  setCharge,
-  setIsLoading,
-  setStartCrewping,
-  setEndCrewping,
   setRoomId,
   setSenderId,
+  setCharge,
+  setIsLoading,
+  setStartRequest,
+  setCrewpingStart,
+  setEndRequest,
+  setCrewpingEnd,
+  setGetLocation,
   setLocations,
+  setUserImage,
   setUserImages,
 } = crewpingSlice.actions;
 export default crewpingSlice.reducer;
