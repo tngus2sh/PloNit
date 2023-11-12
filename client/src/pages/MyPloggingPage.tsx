@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { BackTopBar } from "components/common/TopBar";
 import MyPloggingList from "components/MyPlogging/MyPloggingList";
 import "../custom_css/MyPloggingCalendar.css";
+import { searchPloggingUsingDay } from "api/lib/plogging";
+import { PloggingLog } from "interface/ploggingInterface";
 
 const dayList = [
   "2023-10-10",
@@ -13,15 +16,28 @@ const dayList = [
   "2023-10-27",
 ];
 
+// date 형식 변경 (2023-10-27)
+const formattedDate = (date: any) => {
+  const year = date.getFullYear();
+  const month = ("0" + (date.getMonth() + 1)).slice(-2);
+  const day = ("0" + date.getDate()).slice(-2);
+  return `${year}-${month}-${day}`;
+};
+
 const MyPloggingPage = () => {
+  const accessToken = useSelector((state: any) => state.user.accessToken);
+  // 선택한 날짜
   const [dateRange, setDateRange] = useState<[Date, Date]>([
     new Date(),
     new Date(),
   ]);
-
+  // 시작 종료 날짜
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
+  // 해당 날짜의 플로깅 기록 리스트
+  const [isPloggingList, setPloggingList] = useState<PloggingLog[]>([]);
 
+  // 시작 종료 날짜를 변경하는 로직
   const handleDateChange = (date: any) => {
     if (!startDate) {
       setStartDate(date);
@@ -41,6 +57,7 @@ const MyPloggingPage = () => {
     }
   };
 
+  // 플로깅한 날짜에 점 표시
   const tileContent = ({ date, view }: { date: Date; view: string }) => {
     if (dayList.includes(date.toISOString().split("T")[0])) {
       return (
@@ -57,6 +74,23 @@ const MyPloggingPage = () => {
     }
   };
 
+  useEffect(() => {
+    searchPloggingUsingDay({
+      accessToken: accessToken,
+      start_day: formattedDate(dateRange[0]),
+      end_day: formattedDate(dateRange[1]),
+      success: (res) => {
+        console.log("플로깅 일별기록 조회 성공");
+        console.log(res);
+        setPloggingList(res.data.resultBody);
+      },
+      fail: (error) => {
+        console.error("플로깅 일별기록 조회 실패", error);
+      },
+    });
+  }, []);
+  console.log(isPloggingList);
+
   return (
     <div>
       <BackTopBar text="나의 플로깅 기록" />
@@ -69,7 +103,6 @@ const MyPloggingPage = () => {
         tileContent={tileContent}
         calendarType="US"
       />
-
       <MyPloggingList dateRange={dateRange} />
       <div style={{ height: "4rem" }}></div>
     </div>

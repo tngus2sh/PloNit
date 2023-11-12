@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import style from "styles/css/MyPloggingPage/MyPloggingItem.module.css";
 import { PloggingLog } from "interface/ploggingInterface";
 
-const MyPloggingItem = ({ plogging }: { plogging: PloggingLog }) => {
+const MyPloggingItem = () => {
   const navigate = useNavigate();
-  console.log(plogging);
+  // console.log(plogging);
 
   const goPloggingDetailHandler = () => {
     navigate("/profile/plogging/detail");
