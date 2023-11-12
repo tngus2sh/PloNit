@@ -2,7 +2,9 @@ import React from "react";
 import style from "styles/css/App.module.css";
 import NavBar from "components/common/NavBar";
 import RouteComponent from "pages/lib/index";
+
 import useEffectApp from "useEffects/useEffectApp";
+import useEffectApp_Crewping from "useEffects/useEffectApp_crewping";
 
 import { useSelector } from "react-redux";
 import { rootState } from "store/store";
@@ -19,6 +21,7 @@ function App() {
   });
 
   useEffectApp();
+  // useEffectApp_Crewping();
 
   return (
     <div

@@ -9,11 +9,12 @@ import { rootState } from "store/store";
 import * as Crewping from "store/crewping-slice";
 
 interface IuseSocket {
+  stompClient: React.MutableRefObject<Client | null>;
   roomId: string;
   senderId: string;
 }
 
-function useSocket({ roomId, senderId }: IuseSocket) {
+function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
   const dispatch = useDispatch();
   const startRequest = useSelector<rootState, boolean>((state) => {
     return state.crewping.startRequest;
@@ -27,7 +28,6 @@ function useSocket({ roomId, senderId }: IuseSocket) {
   const userImage = useSelector<rootState, string>((state) => {
     return state.crewping.userImage;
   });
-  const stompClient = useRef<Client | null>(null);
 
   function onMessageReceived(message: IMessage) {
     const newMessage: Message = JSON.parse(message.body);
