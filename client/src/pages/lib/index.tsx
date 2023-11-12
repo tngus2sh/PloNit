@@ -30,10 +30,12 @@ import FeedCreatePage from "pages/FeedCreatePage";
 import CrewNoticePage from "pages/CrewNoticePage";
 
 import PloggingImagePage from "pages/PloggingImagePage";
+import Test from "./Test";
 
 const RouteComponent = () => {
   return (
     <Routes>
+      <Route path="/test" element={<Test />}></Route>
       <Route path="/" element={<HomePage />}></Route>
       <Route path="/login" element={<LoginPage />}></Route>
       <Route path="/plonit/auth/kakao" element={<KakaoCallback />}></Route>

@@ -4,6 +4,7 @@ import { ploggingType } from "types/ploggingTypes";
 import BeforeStart from "components/plogging/PloggingPage/BeforeStart";
 import SoloJog from "components/plogging/PloggingPage/SoloJog";
 import SoloPlocka from "components/plogging/PloggingPage/SoloPlocka";
+import BeforeCrewping from "components/plogging/PloggingPage/BeforeCrewping";
 import Crewping from "components/plogging/PloggingPage/Crewping";
 
 import { useNavigate } from "react-router-dom";
@@ -15,7 +16,7 @@ function getComponent(
   beforeCrewping: boolean,
 ): JSX.Element {
   if (beforeCrewping) {
-    return <Crewping />;
+    return <BeforeCrewping />;
   }
   switch (ploggingType) {
     case "IND":
