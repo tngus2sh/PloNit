@@ -11,32 +11,45 @@ const Test = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(Crewping.clear());
-    dispatch(P.clear());
-    dispatch(Crewping.setRoomId("박주성"));
-    dispatch(Crewping.setCharge(true));
-    dispatch(
-      Crewping.setUserImages({
-        박주성1:
-          "https://post-phinf.pstatic.net/MjAyMDExMDRfODgg/MDAxNjA0NDUyNDkwNTk5.3qW-hU8R0DvdQW8bgDuldGPN27uFdDvTh7haVQTpDqgg.2Tj5OcLz-xJx4rAFgkN48q8w5hrN5QahTK_DDIsNo2Ig.PNG/VneKfm5.png?type=w800_q75",
-        박주성2:
-          "https://post-phinf.pstatic.net/MjAyMDExMDRfODgg/MDAxNjA0NDUyNDkwNTk5.3qW-hU8R0DvdQW8bgDuldGPN27uFdDvTh7haVQTpDqgg.2Tj5OcLz-xJx4rAFgkN48q8w5hrN5QahTK_DDIsNo2Ig.PNG/VneKfm5.png?type=w800_q75",
-        박주성3:
-          "https://post-phinf.pstatic.net/MjAyMDExMDRfODgg/MDAxNjA0NDUyNDkwNTk5.3qW-hU8R0DvdQW8bgDuldGPN27uFdDvTh7haVQTpDqgg.2Tj5OcLz-xJx4rAFgkN48q8w5hrN5QahTK_DDIsNo2Ig.PNG/VneKfm5.png?type=w800_q75",
-        박주성4:
-          "https://post-phinf.pstatic.net/MjAyMDExMDRfODgg/MDAxNjA0NDUyNDkwNTk5.3qW-hU8R0DvdQW8bgDuldGPN27uFdDvTh7haVQTpDqgg.2Tj5OcLz-xJx4rAFgkN48q8w5hrN5QahTK_DDIsNo2Ig.PNG/VneKfm5.png?type=w800_q75",
-        박주성5:
-          "https://post-phinf.pstatic.net/MjAyMDExMDRfODgg/MDAxNjA0NDUyNDkwNTk5.3qW-hU8R0DvdQW8bgDuldGPN27uFdDvTh7haVQTpDqgg.2Tj5OcLz-xJx4rAFgkN48q8w5hrN5QahTK_DDIsNo2Ig.PNG/VneKfm5.png?type=w800_q75",
-        박주성6:
-          "https://post-phinf.pstatic.net/MjAyMDExMDRfODgg/MDAxNjA0NDUyNDkwNTk5.3qW-hU8R0DvdQW8bgDuldGPN27uFdDvTh7haVQTpDqgg.2Tj5OcLz-xJx4rAFgkN48q8w5hrN5QahTK_DDIsNo2Ig.PNG/VneKfm5.png?type=w800_q75",
-      }),
-    );
-    dispatch(P.setBeforeCrewping(true));
-    navigate("/plogging");
-  }, []);
-
-  return <></>;
+  return (
+    <div>
+      <button
+        onClick={() => {
+          dispatch(Crewping.clear());
+          dispatch(P.clear());
+          dispatch(Crewping.setRoomId("박주성"));
+          dispatch(Crewping.setCharge(true));
+          dispatch(
+            Crewping.setUserImages({
+              박주성1:
+                "https://post-phinf.pstatic.net/MjAyMDExMDRfODgg/MDAxNjA0NDUyNDkwNTk5.3qW-hU8R0DvdQW8bgDuldGPN27uFdDvTh7haVQTpDqgg.2Tj5OcLz-xJx4rAFgkN48q8w5hrN5QahTK_DDIsNo2Ig.PNG/VneKfm5.png?type=w800_q75",
+              박주성2:
+                "https://post-phinf.pstatic.net/MjAyMDExMDRfODgg/MDAxNjA0NDUyNDkwNTk5.3qW-hU8R0DvdQW8bgDuldGPN27uFdDvTh7haVQTpDqgg.2Tj5OcLz-xJx4rAFgkN48q8w5hrN5QahTK_DDIsNo2Ig.PNG/VneKfm5.png?type=w800_q75",
+              박주성3:
+                "https://post-phinf.pstatic.net/MjAyMDExMDRfODgg/MDAxNjA0NDUyNDkwNTk5.3qW-hU8R0DvdQW8bgDuldGPN27uFdDvTh7haVQTpDqgg.2Tj5OcLz-xJx4rAFgkN48q8w5hrN5QahTK_DDIsNo2Ig.PNG/VneKfm5.png?type=w800_q75",
+              박주성4:
+                "https://post-phinf.pstatic.net/MjAyMDExMDRfODgg/MDAxNjA0NDUyNDkwNTk5.3qW-hU8R0DvdQW8bgDuldGPN27uFdDvTh7haVQTpDqgg.2Tj5OcLz-xJx4rAFgkN48q8w5hrN5QahTK_DDIsNo2Ig.PNG/VneKfm5.png?type=w800_q75",
+              박주성5:
+                "https://post-phinf.pstatic.net/MjAyMDExMDRfODgg/MDAxNjA0NDUyNDkwNTk5.3qW-hU8R0DvdQW8bgDuldGPN27uFdDvTh7haVQTpDqgg.2Tj5OcLz-xJx4rAFgkN48q8w5hrN5QahTK_DDIsNo2Ig.PNG/VneKfm5.png?type=w800_q75",
+              박주성6:
+                "https://post-phinf.pstatic.net/MjAyMDExMDRfODgg/MDAxNjA0NDUyNDkwNTk5.3qW-hU8R0DvdQW8bgDuldGPN27uFdDvTh7haVQTpDqgg.2Tj5OcLz-xJx4rAFgkN48q8w5hrN5QahTK_DDIsNo2Ig.PNG/VneKfm5.png?type=w800_q75",
+            }),
+          );
+          dispatch(P.setBeforeCrewping(true));
+          navigate("/plogging");
+        }}
+      >
+        크루핑
+      </button>
+      <button
+        onClick={() => {
+          navigate("/test2");
+        }}
+      >
+        소켓 연결 테스트
+      </button>
+    </div>
+  );
 };
 
 export default Test;
