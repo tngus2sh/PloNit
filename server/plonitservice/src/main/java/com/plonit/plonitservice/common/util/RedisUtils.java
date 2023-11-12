@@ -18,6 +18,7 @@ public class RedisUtils {
     private final RedisTemplate<String, String> redisTemplate;
     private final StringRedisTemplate stringRedisTemplate;
 
+
     public void setRedisValue(String key, Object o, Long ttl) {
         GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer();
 
@@ -68,7 +69,7 @@ public class RedisUtils {
     public void setRedisSortedSet(String key, String memberKey, double score) {
         redisTemplate.opsForZSet().add(key, memberKey, score);
     }
-    
+
 
     public <T> T getRedisValue(String key, Class<T> classType) throws JsonProcessingException {
         String redisValue = redisTemplate.opsForValue().get(key);
