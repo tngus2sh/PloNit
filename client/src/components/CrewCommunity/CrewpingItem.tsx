@@ -64,8 +64,8 @@ const CrewpingItem = ({ crewping }: { crewping: CrewpingInterface }) => {
               icon="bi:person-fill"
               className={style.people_icon}
               style={{
-                width: "1.1 rem",
-                height: "1.1rem",
+                width: "1.2 rem",
+                height: "1.2rem",
                 marginRight: "0.3rem",
               }}
             />
@@ -83,7 +83,7 @@ const CrewpingItem = ({ crewping }: { crewping: CrewpingInterface }) => {
             style={{
               width: "1.1rem",
               height: "1.2rem",
-              marginRight: "0.3rem",
+              marginRight: "0.2rem",
             }}
           />
           <div>{crewping.place}</div>

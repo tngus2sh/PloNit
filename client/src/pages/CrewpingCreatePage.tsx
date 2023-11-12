@@ -32,6 +32,9 @@ const CrewpingCreatePage = () => {
   };
 
   const crewpingCreateHandler = () => {
+    const now = new Date();
+    const startDate = new Date(isCrewpingStartDate);
+    const endDate = new Date(isCrewpingEndDate);
     const formData = new FormData();
     if (crewId) {
       formData.append("crewId", crewId);
@@ -56,14 +59,20 @@ const CrewpingCreatePage = () => {
     } else if (!isCrewpingStartDate) {
       alert("크루핑 시작시간을 입력하세요");
       return;
+    } else if (startDate < now) {
+      alert("시작시간을 변경해주세요");
+      return;
     } else if (!isCrewpingEndDate) {
       alert("크루핑 종료시간을 입력하세요");
+      return;
+    } else if (endDate < startDate) {
+      alert("종료시간을 다시 입력해주세요");
       return;
     } else if (!isCrewpingPlace) {
       alert("크루핑 장소를 입력하세요");
       return;
     } else if (isCrewpingMaxPeople < 2) {
-      alert("크루핑 참여인원을 입력하세요");
+      alert("크루핑 참여인원은 2명이상으로 입력하세요");
       return;
     } else if (isCrewpingMaxPeople > 10) {
       alert("참여 인원이 초과되었습니다");
