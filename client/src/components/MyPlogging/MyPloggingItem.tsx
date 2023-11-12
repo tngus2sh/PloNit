@@ -20,6 +20,12 @@ const formattedDateTime = (datestr: any) => {
   return formattedDate;
 };
 
+const formatMinutes = (minutes: any) => {
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+  return `${("0" + hours).slice(-2)}:${("0" + remainingMinutes).slice(-2)}`;
+};
+
 const MyPloggingItem = ({ plogging }: { plogging: PloggingLog }) => {
   const navigate = useNavigate();
   const User = useSelector((state: any) => state.user);
@@ -55,7 +61,9 @@ const MyPloggingItem = ({ plogging }: { plogging: PloggingLog }) => {
           </div>
           <div className={style.time}>
             시간
-            <span className={style.largeNumber}>{plogging.totalTime}</span>
+            <span className={style.largeNumber}>
+              {formatMinutes(plogging.totalTime)}
+            </span>
           </div>
         </div>
       </div>

@@ -3,7 +3,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import { Pagination, Navigation } from "swiper/modules";
+import "swiper/css/effect-cards";
+import { Pagination, Navigation, EffectCards } from "swiper/modules";
 import style from "styles/css/HomePage/Carousel.module.css";
 import CrewPloggingCard from "./CrewPloggingCard";
 
@@ -19,11 +20,10 @@ interface CarouselProps {
 const Carousel = ({ card_list }: CarouselProps) => {
   return (
     <Swiper
-      slidesPerView={1.2}
-      centeredSlides={true}
-      spaceBetween={20}
-      modules={[Pagination, Navigation]}
-      className={style.mySwiper}
+      effect={"cards"}
+      grabCursor={true}
+      modules={[EffectCards]}
+      className="mySwiper"
     >
       {card_list.map((card, index) => (
         <SwiperSlide key={card.id} className={style.centerSlide}>

@@ -22,11 +22,11 @@ const HomePage = () => {
   const navigate = useNavigate();
   const isLogined = useSelector((state: any) => state.user.auth.isLogin);
 
-  useEffect(() => {
-    if (!isLogined) {
-      navigate("/login");
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!isLogined) {
+  //     navigate("/login");
+  //   }
+  // }, []);
   return (
     <div>
       <LogoTopBar />
