@@ -24,6 +24,7 @@ public class FCMService{
     public String sendNotification(FCMReq fcmReq) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
         if (!hasKey(fcmReq.getTargetMemberId())) {
+            log.info("서버에 해당 유저의 FirebaseToken 이 존재하지 않습니다.");
             return "서버에 해당 유저의 FirebaseToken 이 존재하지 않습니다.";
         }
 
@@ -39,6 +40,7 @@ public class FCMService{
                 .build();
 
         send(message);
+        log.info("알림을 성공적으로 전송했습니다.");
         log.info(logCurrent(getClassName(), getMethodName(), END));
         return "알림을 성공적으로 전송했습니다.";
     }
