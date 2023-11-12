@@ -31,11 +31,13 @@ import CrewNoticePage from "pages/CrewNoticePage";
 
 import PloggingImagePage from "pages/PloggingImagePage";
 import Test from "./Test";
+import Test2 from "./Test2";
 
 const RouteComponent = () => {
   return (
     <Routes>
       <Route path="/test" element={<Test />}></Route>
+      <Route path="/test2" element={<Test2 />}></Route>
       <Route path="/" element={<HomePage />}></Route>
       <Route path="/login" element={<LoginPage />}></Route>
       <Route path="/plonit/auth/kakao" element={<KakaoCallback />}></Route>
