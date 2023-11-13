@@ -24,7 +24,7 @@ export interface FeedInterface {
   content?: string;
   feedPictures?: any;
   likeCount?: number;
-  islike?: boolean;
+  isLike?: boolean;
   isMine?: boolean;
   comments?: any;
   createdDate?: string;
