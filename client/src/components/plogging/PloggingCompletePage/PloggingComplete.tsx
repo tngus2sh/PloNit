@@ -224,6 +224,7 @@ const PloggingComplete = () => {
               if (nowType === "CREWPING") {
                 savePlogging({
                   accessToken: accessToken,
+                  ploggingId: ploggingId,
                   crewpingId: crewpingId,
                   distance: distance,
                   calorie: calorie,

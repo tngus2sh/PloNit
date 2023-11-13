@@ -7,13 +7,14 @@ import { naver } from "components/common/useNaver";
 import { Coordinate } from "interface/ploggingInterface";
 import { ploggingType } from "types/ploggingTypes";
 import { Locations } from "interface/ploggingInterface";
+import Swal from "sweetalert2";
 
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
 import * as P from "store/plogging-slice";
 
 import { getBins, getToilets } from "api/lib/items";
-import { searchHelpUsingLatLng } from "api/lib/plogging";
+import { searchNeighbor, searchHelpUsingLatLng } from "api/lib/plogging";
 
 const defaultZoom = 16;
 const navbarHeight = 56;
@@ -318,6 +319,21 @@ const DefaultMap: React.FC<IDefaultMap> = ({
               console.error(error);
             },
           });
+
+          if (isBefore) {
+            searchNeighbor({
+              accessToken,
+              latitude,
+              longitude,
+              success: (response) => {
+                console.log(response.data.resultBody);
+                setNeighbors(response.data.resultBody);
+              },
+              fail: (error) => {
+                console.error(error);
+              },
+            });
+          }
         })
         .catch((error) => {
           console.error(error);
@@ -447,6 +463,22 @@ const DefaultMap: React.FC<IDefaultMap> = ({
         url: `/images/PloggingPage/neighborLocation.svg`,
         cursor: "default",
       });
+
+      if (neighborMarkers.current) {
+        const { length } = neighborMarkers.current;
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "center",
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+        });
+
+        Toast.fire({
+          icon: "info",
+          title: `주변에 ${length}명의 유저가 있습니다.`,
+        });
+      }
     }
   }, [neighbors]);
 
@@ -461,6 +493,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
       items: helps,
       map: mapRef.current ?? undefined,
       url: `/images/PloggingPage/help-icon.png`,
+      cursor: "pointer",
     });
   }, [helps]);
 
@@ -484,6 +517,7 @@ const DefaultMap: React.FC<IDefaultMap> = ({
         items: filteredPeerLocations,
         map: mapRef.current ?? undefined,
         url: "/images/PloggingPage/peerLocation.svg",
+        cursor: "default",
       });
     }
   }, [peerLocations]);
