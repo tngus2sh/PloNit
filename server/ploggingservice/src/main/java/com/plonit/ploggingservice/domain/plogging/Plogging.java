@@ -28,6 +28,9 @@ public class Plogging extends TimeBaseEntity{
     
     @Column
     private String place;
+
+    @Column
+    private Long gugunCode;
     
     @Column
     private LocalDateTime startTime;
@@ -55,10 +58,11 @@ public class Plogging extends TimeBaseEntity{
     private LocalDate date;
 
     @Builder
-    public Plogging(Long memberKey, Type type, String place, LocalDateTime startTime, LocalDateTime endTime, Long totalTime, Double distance, Double calorie, String review, Finished finished, LocalDate date) {
+    public Plogging(Long memberKey, Type type, String place, Long gugunCode, LocalDateTime startTime, LocalDateTime endTime, Long totalTime, Double distance, Double calorie, String review, Finished finished, LocalDate date) {
         this.memberKey = memberKey;
         this.type = type;
         this.place = place;
+        this.gugunCode = gugunCode;
         this.startTime = startTime;
         this.endTime = endTime;
         this.totalTime = totalTime;

@@ -41,11 +41,12 @@ public class StartPloggingDto {
                 .build();
     }
     
-    public static Plogging toEntity(Long memberKey, Type type, String place, LocalDateTime startTime, Finished finished, LocalDate date) {
+    public static Plogging toEntity(Long memberKey, Type type, String place, Long gugunCode, LocalDateTime startTime, Finished finished, LocalDate date) {
         return Plogging.builder()
                 .memberKey(memberKey)
                 .type(type)
                 .place(place)
+                .gugunCode(gugunCode)
                 .startTime(startTime)
                 .finished(finished)
                 .date(date)
