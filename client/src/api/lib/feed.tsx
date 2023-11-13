@@ -96,3 +96,22 @@ export async function getCommentDelete(
   api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
   await api.delete(`/comment/${commentId}`).then(success).catch(fail);
 }
+
+// 피드 좋아요
+export async function getLikeFeed(
+  accessToken: string,
+  feedId: number,
+  success: (
+    res: AxiosResponse<any, any>,
+  ) =>
+    | AxiosResponse<any, any>
+    | PromiseLike<AxiosResponse<any, any>>
+    | null
+    | undefined
+    | void,
+  fail: (err: any) => PromiseLike<never> | null | undefined | void,
+) {
+  const api = customApi("/plonit-service/v1/feed");
+  api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
+  await api.post(`/like/${feedId}`).then(success).catch(fail);
+}
