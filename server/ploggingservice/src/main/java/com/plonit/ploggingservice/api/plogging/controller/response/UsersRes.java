@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UsersRes {
 
+    private Long id;
+
     private Double latitude;
 
     private Double longitude;
