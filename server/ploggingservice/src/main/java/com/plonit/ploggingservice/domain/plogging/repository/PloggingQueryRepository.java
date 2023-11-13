@@ -101,12 +101,13 @@ public class PloggingQueryRepository {
     @Transactional(readOnly = true)
     public List<UsersRes> findNearByUsers(Long gugunCode) {
         return queryFactory.select(constructor(UsersRes.class,
-                        latLong.latitude.min(),
-                        latLong.longitude.min()))
+                        plogging.id,
+                        latLong.latitude.min().as("latitude"),
+                        latLong.longitude.min().as("longitude")))
                 .from(plogging)
                 .join(latLong)
                 .on(latLong.plogging.eq(plogging))
-                .groupBy(plogging)
+                .groupBy(plogging.id)
                 .where(plogging.gugunCode.eq(gugunCode)
                         .and(plogging.finished.eq(Finished.ACTIVE)))
                 .fetch();
