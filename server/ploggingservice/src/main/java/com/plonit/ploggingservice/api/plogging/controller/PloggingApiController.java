@@ -95,13 +95,14 @@ public class PloggingApiController {
     public CustomApiResponse<List<PloggingPeriodRes>> findPloggingLogbyDay(
             @PathVariable(value = "start-day") String startDay,
             @PathVariable(value = "end-day") String endDay,
+            @RequestParam(name = "type", required = false, defaultValue = "ALL") String type,
             HttpServletRequest servletRequest
     ) {
         // 플로깅 기록 일별 조회 
         Long memberKey = RequestUtils.getMemberKey(servletRequest);
         log.info("memberKey : " + memberKey);
 
-        List<PloggingPeriodRes> ploggingLogByDay = ploggingQueryService.findPloggingLogByDay(startDay, endDay, memberKey);
+        List<PloggingPeriodRes> ploggingLogByDay = ploggingQueryService.findPloggingLogByDay(startDay, endDay, memberKey, type);
 
         return CustomApiResponse.ok(ploggingLogByDay);
     }

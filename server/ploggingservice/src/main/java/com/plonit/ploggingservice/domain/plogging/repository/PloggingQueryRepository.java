@@ -3,6 +3,7 @@ package com.plonit.ploggingservice.domain.plogging.repository;
 import com.plonit.ploggingservice.api.plogging.controller.response.FindPloggingLogRes;
 import com.plonit.ploggingservice.api.plogging.controller.response.PloggingLogRes;
 import com.plonit.ploggingservice.api.plogging.controller.response.PloggingPeriodRes;
+import com.plonit.ploggingservice.common.enums.Type;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +38,23 @@ public class PloggingQueryRepository {
                         plogging.distance))
                 .from(plogging)
                 .where(plogging.memberKey.eq(memberKey).and(plogging.date.between(startDate, endDate)))
+                .fetch();
+    }
+
+    @Transactional(readOnly = true)
+    public List<PloggingPeriodRes> findPloggingLogByDayAndType(LocalDate startDate, LocalDate endDate, Long memberKey, Type type) {
+        return queryFactory.select(constructor(PloggingPeriodRes.class,
+                        plogging.id,
+                        plogging.type,
+                        plogging.place,
+                        plogging.startTime,
+                        plogging.endTime,
+                        plogging.totalTime,
+                        plogging.distance))
+                .from(plogging)
+                .where(plogging.memberKey.eq(memberKey)
+                        .and(plogging.date.between(startDate, endDate))
+                        .and(plogging.type.eq(type)))
                 .fetch();
     }
     
