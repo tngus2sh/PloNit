@@ -5,19 +5,6 @@ import { LogoTopBar } from "components/common/TopBar";
 import HomeBanner from "components/Home/HomeBanner";
 import Carousel from "components/Home/Carousel";
 
-interface Card {
-  id: number;
-  content: string;
-}
-
-const cardList: Card[] = [
-  { id: 1, content: "Card 1" },
-  { id: 2, content: "Card 2" },
-  { id: 3, content: "Card 3" },
-  { id: 4, content: "Card 4" },
-  { id: 5, content: "Card 5" },
-];
-
 const HomePage = () => {
   const navigate = useNavigate();
   const isLogined = useSelector((state: any) => state.user.auth.isLogin);
@@ -47,7 +34,7 @@ const HomePage = () => {
         <div style={{ fontSize: "1.8rem", fontWeight: "600" }}>크루핑</div>
       </div>
       <div>
-        <Carousel card_list={cardList} />
+        <Carousel />
       </div>
       <div style={{ height: "4rem" }}></div>
     </div>
