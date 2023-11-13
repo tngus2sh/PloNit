@@ -87,6 +87,15 @@ dependencies {
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
+	
+	// batch
+	implementation 'org.springframework.boot:spring-boot-starter-batch'
+	
+	// quartz
+	implementation 'org.springframework.boot:spring-boot-starter-quartz'
+
+	// fcm
+	implementation group: 'com.google.firebase', name: 'firebase-admin', version: '9.1.1'
 
 }
 
