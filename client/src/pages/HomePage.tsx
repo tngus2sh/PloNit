@@ -21,6 +21,7 @@ const cardList: Card[] = [
 const HomePage = () => {
   const navigate = useNavigate();
   const isLogined = useSelector((state: any) => state.user.auth.isLogin);
+  const User = useSelector((state: any) => state.user.info);
 
   // useEffect(() => {
   //   if (!isLogined) {
@@ -31,10 +32,24 @@ const HomePage = () => {
     <div>
       <LogoTopBar />
       <HomeBanner />
-      <div>나의 크루 플로깅</div>
+      <div
+        style={{
+          textAlign: "left",
+          marginLeft: "1.5rem",
+          marginTop: "2rem",
+          marginBottom: "2rem",
+        }}
+      >
+        <div style={{ fontSize: "1.1rem" }}>
+          <span style={{ fontSize: "1.6rem", fontWeight: "600" }}>빵빵덕</span>
+          님의
+        </div>
+        <div style={{ fontSize: "1.8rem", fontWeight: "600" }}>크루핑</div>
+      </div>
       <div>
         <Carousel card_list={cardList} />
       </div>
+      <div style={{ height: "4rem" }}></div>
     </div>
   );
 };
