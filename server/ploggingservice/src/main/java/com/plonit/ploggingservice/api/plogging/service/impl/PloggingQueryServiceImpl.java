@@ -57,11 +57,11 @@ public class PloggingQueryServiceImpl implements PloggingQueryService {
         // 조회 마지막 날짜 -> LocalDate
         LocalDate endDate = LocalDate.parse(endDay, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-        if (type.equals(Type.IND)) {
+        if (type.equals(Type.IND.name())) {
             return ploggingQueryRepository.findPloggingLogByDayAndType(startDate, endDate, memberKey, Type.IND);
-        } else if (type.equals(Type.VOL)) {
+        } else if (type.equals(Type.VOL.name())) {
             return ploggingQueryRepository.findPloggingLogByDayAndType(startDate, endDate, memberKey, Type.VOL);
-        } else if (type.equals(Type.CREWPING)) {
+        } else if (type.equals(Type.CREWPING.name())) {
             return ploggingQueryRepository.findPloggingLogByDayAndType(startDate, endDate, memberKey, Type.CREWPING);
         }
         return ploggingQueryRepository.findPloggingLogByDay(startDate, endDate, memberKey);
