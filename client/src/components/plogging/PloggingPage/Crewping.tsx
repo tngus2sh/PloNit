@@ -88,7 +88,7 @@ const Crewping = () => {
       )}
       <input
         type="file"
-        accept="image/*"
+        accept="image/jpeg, image/png"
         capture="environment"
         id="cameraInput-CREWPING"
         ref={fileInputRef}
