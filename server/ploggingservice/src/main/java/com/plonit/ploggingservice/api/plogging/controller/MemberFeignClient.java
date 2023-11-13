@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "plonit-service", url = "https://k9c207.p.ssafy.io/api")
+@FeignClient(name = "member-service", url = "https://k9c207.p.ssafy.io/api")
 public interface MemberFeignClient {
 
     @PatchMapping("/plonit-service/api/members/volunteer")
