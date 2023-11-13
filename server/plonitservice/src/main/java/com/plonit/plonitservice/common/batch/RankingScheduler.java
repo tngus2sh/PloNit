@@ -1,5 +1,7 @@
 package com.plonit.plonitservice.common.batch;
 
+import com.plonit.plonitservice.api.badge.service.BadgeService;
+import com.plonit.plonitservice.api.badge.service.dto.GrantMemberRankDto;
 import com.plonit.plonitservice.domain.rank.RankingPeriod;
 import com.plonit.plonitservice.domain.rank.repository.RankingPeriodRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +25,7 @@ public class RankingScheduler {
     private final Job job;
     private final RankingPeriodRepository rankingPeriodRepository;
 
-    //    @Scheduled(cron = "0 0 1,15 * * ?") // 매월 1일과 15일에 실행
-//    @Scheduled(cron = "0 0/1 * * * ?")
+    @Scheduled(cron = "0 0 1,15 * * ?") // 매월 1일과 15일에 실행
     public void runBatchJob() throws Exception {
         /* 랭킹 기간 생성 */
         LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Seoul"));

@@ -4,6 +4,7 @@ package com.plonit.plonitservice.domain.rank;
 import com.plonit.plonitservice.domain.member.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -12,6 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Getter
 public class MemberRanking {
     
     @Id
