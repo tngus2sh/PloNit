@@ -2,10 +2,7 @@ package com.plonit.ploggingservice.domain.plogging.repository;
 
 import com.plonit.ploggingservice.api.excel.service.dto.PloggingDto;
 import com.plonit.ploggingservice.api.excel.service.dto.PloggingPictureDto;
-import com.plonit.ploggingservice.api.plogging.controller.response.FindPloggingLogRes;
-import com.plonit.ploggingservice.api.plogging.controller.response.PloggingMonthRes;
-import com.plonit.ploggingservice.api.plogging.controller.response.PloggingPeriodRes;
-import com.plonit.ploggingservice.api.plogging.controller.response.UsersRes;
+import com.plonit.ploggingservice.api.plogging.controller.response.*;
 import com.plonit.ploggingservice.common.enums.Finished;
 import com.plonit.ploggingservice.common.enums.Type;
 import com.plonit.ploggingservice.common.enums.Type;
@@ -160,6 +157,17 @@ public class PloggingQueryRepository {
                     .endImage(ploggingPictureDtos.get(length - 1).getPloggingPicture())
                     .build();
         }).collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public FindCountDistanceRes findCountDistance(Long memberKey) {
+        return queryFactory.select(constructor(FindCountDistanceRes.class,
+                        plogging.count(),
+                        plogging.distance.sum()))
+                .from(plogging)
+                .groupBy(plogging)
+                .where(plogging.memberKey.eq(memberKey))
+                .fetchOne();
     }
 
 }
