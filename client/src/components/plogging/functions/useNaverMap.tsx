@@ -131,10 +131,20 @@ function createMarkers({
   }) => {
     return (
       <div>
-        <div style={{ fontSize: "1.5rem", fontWeight: "bolder" }}>
+        <div
+          style={{
+            fontSize: "1.5rem",
+            fontWeight: "bolder",
+            lineHeight: "1.5rem",
+          }}
+        >
           <img
             src="/images/PloggingPage/nowLocation-pin.png"
-            style={{ height: "1.5rem", aspectRatio: "1/1" }}
+            style={{
+              height: "1.5rem",
+              aspectRatio: "1/1",
+              verticalAlign: "middle",
+            }}
           />
           {place}
         </div>
