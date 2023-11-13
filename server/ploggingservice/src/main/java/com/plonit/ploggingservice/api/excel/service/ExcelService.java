@@ -9,7 +9,7 @@ import java.util.List;
 
 @Transactional
 public interface ExcelService {
-    List<PloggingDto> findVolunteerPloggings();
+    void findVolunteerPloggings();
     void makeExcel(List<PloggingDto> data);
     void saveExcel(Workbook workbook);
 }

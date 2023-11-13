@@ -6,6 +6,7 @@ import com.plonit.ploggingservice.api.plogging.controller.response.FindPloggingL
 import com.plonit.ploggingservice.api.plogging.controller.response.PloggingPeriodRes;
 import com.plonit.ploggingservice.common.enums.Type;
 import com.plonit.ploggingservice.domain.plogging.Plogging;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,7 +81,7 @@ public class PloggingQueryRepository {
                 .selectFrom(plogging)
                 .join(ploggingPicture)
                 .on(ploggingPicture.plogging.eq(plogging))
-                .where(plogging.type.eq(Type.VOL), plogging.startTime.between(startDate, endDate))
+                .where(plogging.type.eq(Type.VOL), betweenStartTime(startDate, endDate))
                 .groupBy(plogging)
                 .having(ploggingPicture.count().goe(3))
                 .fetch();
@@ -105,6 +106,7 @@ public class PloggingQueryRepository {
             int length = ploggingPictureDtos.size();
 
             return PloggingDto.builder()
+                    .memberId(ploggingEntity.getMemberKey())
                     .time(ploggingEntity.getTotalTime())
                     .distance(ploggingEntity.getDistance())
                     .startImage(ploggingPictureDtos.get(0).getPloggingPicture())
@@ -112,6 +114,13 @@ public class PloggingQueryRepository {
                     .endImage(ploggingPictureDtos.get(length - 1).getPloggingPicture())
                     .build();
         }).collect(Collectors.toList());
+    }
+
+    private BooleanExpression betweenStartTime(LocalDateTime startDate, LocalDateTime endDate) {
+        if(startDate == null || endDate == null) {
+            return null;
+        }
+        return plogging.startTime.between(startDate, endDate);
     }
 
 }

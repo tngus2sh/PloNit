@@ -1,14 +1,20 @@
 package com.plonit.ploggingservice.api.excel.service.impl;
 
+import com.plonit.ploggingservice.api.excel.controller.MemberFeignClient;
+import com.plonit.ploggingservice.api.excel.controller.response.VolunteerMemberInfoRes;
 import com.plonit.ploggingservice.api.excel.service.ExcelService;
 import com.plonit.ploggingservice.api.excel.service.dto.ExcelColumn;
 import com.plonit.ploggingservice.api.excel.service.dto.PloggingDto;
+import com.plonit.ploggingservice.common.exception.CustomException;
+import com.plonit.ploggingservice.common.exception.ErrorCode;
 import com.plonit.ploggingservice.domain.plogging.repository.PloggingQueryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -16,10 +22,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static java.time.temporal.ChronoField.DAY_OF_WEEK;
+import static com.plonit.ploggingservice.common.exception.ErrorCode.INVALID_PLACE_REQUEST;
 
 @Service
 @RequiredArgsConstructor
@@ -30,26 +38,45 @@ public class ExcelServiceImpl implements ExcelService {
     private String excelFilePath;
 
     private final PloggingQueryRepository ploggingQueryRepository;
+    private final MemberFeignClient memberFeignClient;
+    private final CircuitBreakerFactory circuitBreakerFactory;
 
     @Override
-    public List<PloggingDto> findVolunteerPloggings() {
-        LocalDate today = LocalDate.now();
-        LocalDate oneWeekBefore = today.minusWeeks(1);
+    public void findVolunteerPloggings() {
+        LocalDate oneWeekBefore = LocalDate.now().minusWeeks(1);
+        int day = oneWeekBefore.getDayOfWeek().getValue() - 1;
 
-        int day = oneWeekBefore.get(DAY_OF_WEEK);
-        if (day == 7) {
-            day = 0;
-        }
+        LocalDateTime startDate = oneWeekBefore.minusDays(day).atStartOfDay();
+        LocalDateTime endDate = oneWeekBefore.plusDays(6 - day).atTime(LocalTime.MAX);
 
-//        LocalDate startDate =
-
+//        List<PloggingDto> ploggings = ploggingQueryRepository.findVolunteerPloggings(startDate, endDate);
         List<PloggingDto> ploggings = ploggingQueryRepository.findVolunteerPloggings(null, null);
 
-        for(PloggingDto dto: ploggings) {
+        List<Long> memberIdList = ploggings.stream().map(ploggingEntity -> {
+            return ploggingEntity.getMemberId();
+        }).collect(Collectors.toList());
 
+        System.out.println("리스트 생성 결과: " + memberIdList);
+
+        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
+
+        List<VolunteerMemberInfoRes> volunteerMemberInfoRes = circuitBreaker.run(
+                () -> memberFeignClient.findVolunteerMemberInfo(memberIdList).getResultBody(),
+                throwable -> null
+        );
+
+        System.out.println("봉사 결과 반환: " + volunteerMemberInfoRes);
+
+        if(volunteerMemberInfoRes != null) {
+            for(int i = 0; i < ploggings.size(); i++) {
+                ploggings.get(i).setVolunteerInfo(volunteerMemberInfoRes.get(i));
+            }
+        }
+        else {
+            throw new CustomException(INVALID_PLACE_REQUEST);
         }
 
-        return null;
+        makeExcel(ploggings);
     }
 
     @Override

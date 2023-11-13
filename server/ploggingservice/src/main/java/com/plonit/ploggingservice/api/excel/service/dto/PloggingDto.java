@@ -1,5 +1,6 @@
 package com.plonit.ploggingservice.api.excel.service.dto;
 
+import com.plonit.ploggingservice.api.excel.controller.response.VolunteerMemberInfoRes;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +14,8 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @Builder()
 public class PloggingDto {
+
+    private Long memberId;
 
     @ExcelColumn(headerName = "1365 아이디")
     private String id1365;
@@ -37,4 +40,11 @@ public class PloggingDto {
 
     @ExcelColumn(headerName = "플로깅 종료 사진")
     private String endImage;
+
+
+    public void setVolunteerInfo(VolunteerMemberInfoRes volunteerInfo) {
+        this.id1365 = volunteerInfo.getId1365();
+        this.name = volunteerInfo.getName();
+        this.birth = volunteerInfo.getBirth();
+    }
 }

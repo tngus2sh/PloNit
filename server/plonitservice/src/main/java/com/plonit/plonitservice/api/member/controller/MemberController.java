@@ -61,4 +61,3 @@ public class MemberController {
         return CustomApiResponse.ok(response, "내 정보 조회에 성공했습니다.");
     }
 }
-
