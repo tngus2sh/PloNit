@@ -4,7 +4,9 @@ import com.plonit.ploggingservice.api.plogging.controller.response.PloggingHelpR
 import com.plonit.ploggingservice.api.plogging.controller.response.PloggingLogRes;
 import com.plonit.ploggingservice.api.plogging.controller.response.PloggingPeriodRes;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public interface PloggingQueryService {
 
@@ -15,5 +17,7 @@ public interface PloggingQueryService {
     List<PloggingHelpRes> findPloggingHelp(Double latitude, Double longitude);
 
     Integer countMemberPlogging();
+
+    HashMap<Long, Long> countCrewPlogging();
     
 }
