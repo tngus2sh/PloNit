@@ -8,6 +8,7 @@ import useEffectApp_Crewping from "useEffects/useEffectApp_crewping";
 
 import { useSelector } from "react-redux";
 import { rootState } from "store/store";
+import "./firebase-messaging-sw.js";
 
 // 부드러운 애니메이션 (https://animate.style/)
 import "animate.css";
