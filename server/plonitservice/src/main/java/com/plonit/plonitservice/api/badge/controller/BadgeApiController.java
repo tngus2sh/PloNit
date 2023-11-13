@@ -57,7 +57,7 @@ public class BadgeApiController {
     }
 
     @Operation(summary = "[관리자용] 크루 랭킹 배지 부여", description = "시즌 종료 후 랭킹 배지 부여")
-    @PostMapping("/member-rank")
+    @PostMapping("/crew-rank")
     public CustomApiResponse<Void> grantCrewRank(
             @RequestBody GrantCrewRankReq grantCrewRankReq,
             HttpServletRequest servletRequest
