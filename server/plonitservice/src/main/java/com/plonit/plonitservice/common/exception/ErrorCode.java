@@ -56,7 +56,8 @@ public enum ErrorCode {
     S3_CONNECTED_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "S3 profile 업데이트에 실패하였습니다."),
     KAKAO_TOKEN_CONNECTED_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "카카오 토큰 발급에 실패하였습니다."),
     KAKAO_INFO_CONNECTED_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "카카오 정보 발급에 실패하였습니다."),
-    KAKAO_LOGOUT_CONNECTED_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "카카오 로그아웃에 실패하였습니다.");
+    KAKAO_LOGOUT_CONNECTED_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "카카오 로그아웃에 실패하였습니다."),
+    FEED_LIKE_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "피드 좋아요 중 문제가 발생했습니다.");
 
     private final HttpStatus httpStatus;
     private final String description;
