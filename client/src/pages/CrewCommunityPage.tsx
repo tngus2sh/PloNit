@@ -71,7 +71,7 @@ const CrewCommunityPage = () => {
         const data = {
           isMyCrew: res.data.resultBody.isMyCrew,
           isCrewMaster: res.data.resultBody.isCrewMaster,
-          isCrewwpingMaster: User.crewinfo.isCrewwpingMaster,
+          isCrewpingMaster: User.crewinfo.isCrewpingMaster,
         };
         console.log(data);
         dispatch(userActions.myCrewHandler(data));
