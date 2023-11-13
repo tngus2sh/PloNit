@@ -1,19 +1,13 @@
 package com.plonit.ploggingservice.api.plogging.controller;
 
-import com.plonit.ploggingservice.api.plogging.controller.request.EndPloggingReq;
-import com.plonit.ploggingservice.api.plogging.controller.request.HelpPloggingReq;
-import com.plonit.ploggingservice.api.plogging.controller.request.ImagePloggingReq;
-import com.plonit.ploggingservice.api.plogging.controller.request.StartPloggingReq;
+import com.plonit.ploggingservice.api.plogging.controller.request.*;
 import com.plonit.ploggingservice.api.plogging.controller.response.PloggingHelpRes;
 import com.plonit.ploggingservice.api.plogging.controller.response.PloggingLogRes;
 import com.plonit.ploggingservice.api.plogging.controller.response.PloggingPeriodRes;
 import com.plonit.ploggingservice.api.plogging.controller.response.UsersRes;
 import com.plonit.ploggingservice.api.plogging.service.PloggingQueryService;
 import com.plonit.ploggingservice.api.plogging.service.PloggingService;
-import com.plonit.ploggingservice.api.plogging.service.dto.EndPloggingDto;
-import com.plonit.ploggingservice.api.plogging.service.dto.HelpPloggingDto;
-import com.plonit.ploggingservice.api.plogging.service.dto.ImagePloggingDto;
-import com.plonit.ploggingservice.api.plogging.service.dto.StartPloggingDto;
+import com.plonit.ploggingservice.api.plogging.service.dto.*;
 import com.plonit.ploggingservice.common.CustomApiResponse;
 import com.plonit.ploggingservice.common.exception.CustomException;
 import com.plonit.ploggingservice.common.util.RequestUtils;
@@ -225,6 +219,21 @@ public class PloggingApiController {
         HashMap<Long, Long> response = ploggingQueryService.countCrewPlogging();
 
         return CustomApiResponse.ok(response, "크루핑 참여 횟수 조회에 성공했습니다.");
+    }
+
+    @Operation(summary = "봉사 블로깅 정보 저장", description = "봉사 플로깅 종료 후 봉사 데이터 정보 저장")
+    @PostMapping("/volunteer")
+    public CustomApiResponse<Long> saveVolunteerData(
+            @RequestBody VolunteerPloggingReq volunteerPloggingReq,
+            HttpServletRequest servletRequest
+            ) {
+        log.info("saveVolunteerData = {}", volunteerPloggingReq.toString());
+
+        Long memberKey = RequestUtils.getMemberKey(servletRequest);
+
+        Long volunteerId = ploggingService.saveVolunteerData(VolunteerPloggingDto.of(volunteerPloggingReq, memberKey));
+
+        return CustomApiResponse.ok(volunteerId);
     }
 
 }
