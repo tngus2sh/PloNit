@@ -133,7 +133,7 @@ function createMarkers({
       <div>
         <div style={{ fontSize: "1.5rem", fontWeight: "bolder" }}>
           <img
-            src="/images/Ploggingpage/nowLocation-pin.png"
+            src="/images/PloggingPage/nowLocation-pin.png"
             style={{ height: "1.5rem", aspectRatio: "1/1" }}
           />
           {place}
