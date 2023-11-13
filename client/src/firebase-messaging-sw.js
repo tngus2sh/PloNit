@@ -11,7 +11,7 @@ const firebaseConfig = {
   measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 };
 
-function requestPermission() {
+export function requestPermission() {
   console.log("푸시 허가 받는 중 ...");
 
   void Notification.requestPermission().then((permission) => {
@@ -25,13 +25,14 @@ function requestPermission() {
   const app = initializeApp(firebaseConfig);
   const messaging = getMessaging(app);
 
-  void getToken(messaging).then((token) => {
+  // 토큰을 반환하는 Promise를 생성
+  return getToken(messaging).then((token) => {
     if (token.length > 0) {
       console.log("푸시 토큰 : ", token);
+      return token; // 토큰 반환
     } else {
       console.log("푸시 토큰 실패");
+      throw new Error("푸시 토큰 실패"); // 실패시 에러 반환
     }
   });
 }
-
-requestPermission();
