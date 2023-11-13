@@ -17,7 +17,7 @@ const CrewpingMemberList = ({ crewping }: { crewping: CrewpingInterface }) => {
   console.log(crewping);
   useEffect(() => {
     if (crewping.crewpingId !== undefined) {
-      getCrewpingMemberListMaster(
+      getCrewpingMemberList(
         accessToken,
         crewping.crewpingId,
         (res) => {
