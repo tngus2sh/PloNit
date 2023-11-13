@@ -10,6 +10,7 @@ interface IcreateMarker {
   url: string;
   cursor?: string;
   zIndex?: number;
+  draggable?: boolean;
 }
 
 interface IcreateCustomControl {
@@ -22,6 +23,7 @@ interface IcreateMarkers {
   map: naver.maps.Map | undefined;
   url: string;
   cursor?: string;
+  draggable?: boolean;
 }
 
 interface IcontrolMarkers {
@@ -48,6 +50,7 @@ function createMarker({
   url,
   cursor = "pointer",
   zIndex,
+  draggable,
 }: IcreateMarker): naver.maps.Marker {
   const marker = new naver.maps.Marker({
     position: latlng,
@@ -61,6 +64,7 @@ function createMarker({
     },
     cursor: cursor,
     zIndex: zIndex,
+    draggable: draggable,
   });
 
   return marker;
@@ -71,6 +75,7 @@ function createMarker_small({
   map,
   url,
   cursor = "pointer",
+  draggable,
 }: IcreateMarker): naver.maps.Marker {
   const marker = new naver.maps.Marker({
     position: latlng,
@@ -83,6 +88,7 @@ function createMarker_small({
       anchor: new naver.maps.Point(10, 10),
     },
     cursor: cursor,
+    draggable: draggable,
   });
 
   return marker;
@@ -104,6 +110,7 @@ function createMarkers({
   map,
   url,
   cursor = "pointer",
+  draggable,
 }: IcreateMarkers): naver.maps.Marker[] {
   const markers: naver.maps.Marker[] = [];
   items.forEach((item) => {
@@ -118,6 +125,7 @@ function createMarkers({
         anchor: new naver.maps.Point(17.5, 17.5),
       },
       cursor: cursor,
+      draggable: draggable,
     });
     markers.push(marker);
   });
