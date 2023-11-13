@@ -470,7 +470,6 @@ const DefaultMap: React.FC<IDefaultMap> = ({
           toast: true,
           position: "top",
           showConfirmButton: false,
-          showCloseButton: true,
           timer: 5000,
           timerProgressBar: true,
         });
