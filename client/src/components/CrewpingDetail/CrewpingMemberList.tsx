@@ -19,8 +19,6 @@ const CrewpingMemberList = ({ crewping }: { crewping: CrewpingInterface }) => {
   console.log(crewping);
 
   useEffect(() => {
-    console.log(crewping.masterNickname);
-    console.log(User.info.nickname);
     if (crewping.masterNickname === User.info.nickname) {
       getCrewpingMemberListMaster(
         accessToken,
@@ -57,7 +55,7 @@ const CrewpingMemberList = ({ crewping }: { crewping: CrewpingInterface }) => {
           <img src={member.profileImage} alt="" />
           <div className={style.nickname}>{member.nickname}</div>
           {User.crewinfo.isCrewpingMaster === User.info.nickname ? (
-            User.crewinfo.isCrewpingMaster === crewping.masterNickname ? (
+            User.crewinfo.isCrewpingMaster !== crewping.masterNickname ? (
               <Icon
                 icon="bi:x"
                 className={style.icon}
