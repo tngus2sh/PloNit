@@ -101,6 +101,23 @@ const searchPloggingUsingDay = ({
   api.get(`/period/${start_day}/${end_day}`).then(success).catch(fail);
 };
 
+// 플로깅 기록 월별 조회
+const searchPloggingUsingMonth = ({
+  accessToken,
+  month,
+  success,
+  fail,
+}: {
+  accessToken: string;
+  month: number;
+  success: (response: AxiosResponse<any, any>) => void | undefined;
+  fail: (error: any) => void | undefined;
+}) => {
+  const api = ploggingApi;
+  api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
+  api.get(`/period?${month}`).then(success).catch(fail);
+};
+
 // 플로깅 기록 상세 조회
 const searchPloggingInfo = ({
   accessToken,
@@ -270,6 +287,7 @@ export {
   savePlogging,
   startPlogging,
   searchPloggingUsingDay,
+  searchPloggingUsingMonth,
   searchPloggingInfo,
   saveHelp,
   searchHelpUsingLatLng,
