@@ -4,16 +4,20 @@ import com.plonit.ploggingservice.api.plogging.controller.response.PloggingHelpR
 import com.plonit.ploggingservice.api.plogging.controller.response.PloggingLogRes;
 import com.plonit.ploggingservice.api.plogging.controller.response.PloggingPeriodRes;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public interface PloggingQueryService {
 
-    List<PloggingPeriodRes> findPloggingLogByDay(String startDay, String endDay, Long memberKey);
+    List<PloggingPeriodRes> findPloggingLogByDay(String startDay, String endDay, Long memberKey, String type);
 
     PloggingLogRes findPloggingLogDetail(Long ploggingId, Long memberKey);
 
     List<PloggingHelpRes> findPloggingHelp(Double latitude, Double longitude);
 
     Integer countMemberPlogging();
+
+    HashMap<Long, Long> countCrewPlogging();
     
 }

@@ -5,6 +5,7 @@ import com.plonit.ploggingservice.api.excel.service.dto.PloggingPictureDto;
 import com.plonit.ploggingservice.api.plogging.controller.response.FindPloggingLogRes;
 import com.plonit.ploggingservice.api.plogging.controller.response.PloggingPeriodRes;
 import com.plonit.ploggingservice.common.enums.Type;
+import com.plonit.ploggingservice.common.enums.Type;
 import com.plonit.ploggingservice.domain.plogging.Plogging;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
@@ -12,8 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -45,6 +44,23 @@ public class PloggingQueryRepository {
                         plogging.distance))
                 .from(plogging)
                 .where(plogging.memberKey.eq(memberKey).and(plogging.date.between(startDate, endDate)))
+                .fetch();
+    }
+
+    @Transactional(readOnly = true)
+    public List<PloggingPeriodRes> findPloggingLogByDayAndType(LocalDate startDate, LocalDate endDate, Long memberKey, Type type) {
+        return queryFactory.select(constructor(PloggingPeriodRes.class,
+                        plogging.id,
+                        plogging.type,
+                        plogging.place,
+                        plogging.startTime,
+                        plogging.endTime,
+                        plogging.totalTime,
+                        plogging.distance))
+                .from(plogging)
+                .where(plogging.memberKey.eq(memberKey)
+                        .and(plogging.date.between(startDate, endDate))
+                        .and(plogging.type.eq(type)))
                 .fetch();
     }
 

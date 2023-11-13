@@ -4,6 +4,7 @@ import com.plonit.plonitservice.api.crew.controller.response.FindCrewRes;
 import com.plonit.plonitservice.api.crew.controller.response.CrewRankRes;
 import com.plonit.plonitservice.api.crew.controller.response.FindCrewsRes;
 import com.plonit.plonitservice.api.crew.controller.response.SearchCrewsRes;
+import com.plonit.plonitservice.api.member.controller.response.FindCrewInfoRes;
 import com.plonit.plonitservice.domain.crew.Crew;
 import com.plonit.plonitservice.domain.crew.CrewMember;
 import com.plonit.plonitservice.domain.member.QMember;
@@ -146,5 +147,25 @@ public class CrewQueryRepository {
                 .where(crew.id.eq(crewId))
                 .fetchFirst();
         return fetchOne != null;
+    }
+
+    public List<FindCrewInfoRes> findCrewsByMemberId(Long memberId){
+        return queryFactory
+                .select(constructor(FindCrewInfoRes.class,
+                        crew.id,
+                        crew.name,
+                        crew.crewImage,
+                        crew.region,
+                        JPAExpressions.select(count(crewMember.id))
+                                .from(crewMember)
+                                .where(crewMember.isCrewMember.isTrue()
+                                        .and(crewMember.crew.id.eq(crew.id))
+                                )))
+                .from(crew)
+                .join(crewMember).on(crewMember.crew.eq(crew)).fetchJoin()
+                .where(crewMember.isCrewMember.isTrue()
+                        .and(crewMember.member.id.eq(memberId)))
+                .orderBy(crew.createdDate.asc())
+                .fetch();
     }
 }

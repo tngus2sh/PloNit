@@ -4,6 +4,7 @@ import com.plonit.ploggingservice.api.plogging.controller.SidoGugunFeignClient;
 import com.plonit.ploggingservice.api.plogging.controller.response.*;
 import com.plonit.ploggingservice.api.plogging.service.PloggingQueryService;
 import com.plonit.ploggingservice.common.enums.Time;
+import com.plonit.ploggingservice.common.enums.Type;
 import com.plonit.ploggingservice.common.exception.CustomException;
 import com.plonit.ploggingservice.common.util.KakaoPlaceUtils;
 import com.plonit.ploggingservice.common.util.RequestUtils;
@@ -19,6 +20,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.plonit.ploggingservice.common.exception.ErrorCode.INVALID_PLACE_REQUEST;
@@ -37,6 +39,7 @@ public class PloggingQueryServiceImpl implements PloggingQueryService {
     private final PloggingHelpQueryRepository ploggingHelpQueryRepository;
     private final PloggingPictureQueryRepository ploggingPictureQueryRepository;
     private final LatLongQueryRepository latLongQueryRepository;
+    private final GropQueryRepository gropQueryRepository;
 
     /**
      * 플로깅 기록 일별 조회
@@ -46,7 +49,7 @@ public class PloggingQueryServiceImpl implements PloggingQueryService {
      * @return 플로깅 기록 일별 조회
      */
     @Override
-    public List<PloggingPeriodRes> findPloggingLogByDay(String startDay, String endDay, Long memberKey) {
+    public List<PloggingPeriodRes> findPloggingLogByDay(String startDay, String endDay, Long memberKey, String type) {
 
         // 조회 시작 날짜 -> LocalDate
         LocalDate startDate = LocalDate.parse(startDay, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -54,6 +57,13 @@ public class PloggingQueryServiceImpl implements PloggingQueryService {
         // 조회 마지막 날짜 -> LocalDate
         LocalDate endDate = LocalDate.parse(endDay, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
+        if (type.equals(Type.IND)) {
+            return ploggingQueryRepository.findPloggingLogByDayAndType(startDate, endDate, memberKey, Type.IND);
+        } else if (type.equals(Type.VOL)) {
+            return ploggingQueryRepository.findPloggingLogByDayAndType(startDate, endDate, memberKey, Type.VOL);
+        } else if (type.equals(Type.CREWPING)) {
+            return ploggingQueryRepository.findPloggingLogByDayAndType(startDate, endDate, memberKey, Type.CREWPING);
+        }
         return ploggingQueryRepository.findPloggingLogByDay(startDate, endDate, memberKey);
     }
 
@@ -134,6 +144,12 @@ public class PloggingQueryServiceImpl implements PloggingQueryService {
 
         Integer response = ploggingQueryRepository.countPloggingByMemberId(memberId);
 
+        return response;
+    }
+
+    @Override
+    public HashMap<Long, Long> countCrewPlogging() {
+        HashMap<Long, Long> response = gropQueryRepository.countCrewPlogging();
         return response;
     }
 }
