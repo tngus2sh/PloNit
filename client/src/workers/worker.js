@@ -6,8 +6,8 @@ self.onmessage = (event) => {
     }, 1000);
   }
   if (event.data === "start2") {
-    console.log("worker2 is work");
     setInterval(() => {
+      console.log("worker2 is work");
       self.postMessage("tick2");
     }, 2000);
   }
