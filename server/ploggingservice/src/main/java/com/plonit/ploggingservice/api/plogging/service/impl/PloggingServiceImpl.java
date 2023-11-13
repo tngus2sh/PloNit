@@ -1,9 +1,11 @@
 package com.plonit.ploggingservice.api.plogging.service.impl;
 
+import com.plonit.ploggingservice.api.plogging.controller.BadgeFeignClient;
 import com.plonit.ploggingservice.api.plogging.controller.CrewpingFeignClient;
 import com.plonit.ploggingservice.api.plogging.controller.MemberFeignClient;
 import com.plonit.ploggingservice.api.plogging.controller.SidoGugunFeignClient;
 import com.plonit.ploggingservice.api.plogging.controller.request.CrewpingRecordReq;
+import com.plonit.ploggingservice.api.plogging.controller.request.GrantMemberBadgeReq;
 import com.plonit.ploggingservice.api.plogging.controller.request.UpdateVolunteerInfoReq;
 import com.plonit.ploggingservice.api.plogging.controller.response.*;
 import com.plonit.ploggingservice.api.plogging.service.PloggingService;
@@ -54,6 +56,7 @@ public class PloggingServiceImpl implements PloggingService {
     private final SidoGugunFeignClient sidoGugunFeignClient;
     private final CrewpingFeignClient crewpingFeignClient;
     private final MemberFeignClient memberFeignClient;
+    private final BadgeFeignClient badgeFeignClient;
     private final CircuitBreakerFactory circuitBreakerFactory;
     private final KakaoPlaceUtils kakaoPlaceUtils;
     private final AwsS3Uploader awsS3Uploader;
@@ -63,6 +66,7 @@ public class PloggingServiceImpl implements PloggingService {
     private final PloggingHelpRepository ploggingHelpRepository;
     private final PloggingPictureRepository ploggingPictureRepository;
     private final VolunteerRepository volunteerRepository;
+    private final PloggingQueryRepository ploggingQueryRepository;
 
 
     /**
@@ -192,6 +196,20 @@ public class PloggingServiceImpl implements PloggingService {
                 redisUtils.updateRedisSortedSet(CREW_AVG_RANK.name(), String.valueOf(dto.getCrewpingId()), crewAvgRankValue + avgDistance);
             }
         }
+
+        /* 개인 배지 부여 */
+        // 지금까지 플로깅 횟수와 거리 구하기
+        FindCountDistanceRes countDistance = ploggingQueryRepository.findCountDistance(dto.getMemberKey());
+        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
+
+        circuitBreaker.run(
+                () -> badgeFeignClient.grantMemberBadge(GrantMemberBadgeReq.builder()
+                                .ploggingCount(countDistance.getCount())
+                                .distance(countDistance.getDistance())
+                                .build())
+                        .getResultBody(),
+                throwable -> null
+        );
 
         return plogging.getId();
     }
