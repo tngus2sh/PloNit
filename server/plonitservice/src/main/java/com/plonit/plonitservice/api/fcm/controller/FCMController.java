@@ -18,7 +18,7 @@ import static com.plonit.plonitservice.common.util.LogCurrent.START;
 
 @Tag(name = "FCM", description = "FCM 알림")
 @Slf4j
-@RequestMapping("/api/plonit-service/v1/fcm")
+@RequestMapping("/api/plonit-service/v1/alarm")
 @RestController
 @RequiredArgsConstructor
 public class FCMController {

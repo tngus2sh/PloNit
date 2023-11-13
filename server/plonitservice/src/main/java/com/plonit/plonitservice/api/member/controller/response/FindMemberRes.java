@@ -25,6 +25,8 @@ public class FindMemberRes {
 
     private String region;
 
+    private Long dongCode;
+
     private Float height;
 
     private Float weight;
@@ -41,6 +43,7 @@ public class FindMemberRes {
                 .profileImage(member.getProfileImage())
                 .gender(member.getGender())
                 .region(member.getRegion())
+                .dongCode(member.getDongCode())
                 .height(member.getHeight())
                 .weight(member.getWeight())
                 .id1365(member.getId1365())

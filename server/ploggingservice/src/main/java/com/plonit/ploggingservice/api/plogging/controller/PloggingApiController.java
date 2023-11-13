@@ -21,7 +21,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static com.plonit.ploggingservice.common.exception.ErrorCode.INVALID_FIELDS_REQUEST;
 import static com.plonit.ploggingservice.common.util.LogCurrent.*;
@@ -205,6 +208,16 @@ public class PloggingApiController {
         log.info("CountMemberPlogging");
 
         Integer response = ploggingQueryService.countMemberPlogging();
+
+        return CustomApiResponse.ok(response, "크루핑 참여 횟수 조회에 성공했습니다.");
+    }
+
+    @Operation(summary = "크루별 플로깅 참여 횟수 조회", description = "크루별로 크루 플로깅에 참여한 횟수를 조회한다.")
+    @GetMapping("/countCrew")
+    public CustomApiResponse<HashMap<Long, Long>> countCrewPlogging() {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        HashMap<Long, Long> response = ploggingQueryService.countCrewPlogging();
 
         return CustomApiResponse.ok(response, "크루핑 참여 횟수 조회에 성공했습니다.");
     }
