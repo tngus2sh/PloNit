@@ -17,18 +17,33 @@ const CrewpingMemberList = ({ crewping }: { crewping: CrewpingInterface }) => {
   console.log(crewping);
   useEffect(() => {
     if (crewping.crewpingId !== undefined) {
-      getCrewpingMemberListMaster(
-        accessToken,
-        crewping.crewpingId,
-        (res) => {
-          console.log("크루핑멤버 상세 조회 성공");
-          console.log(res.data);
-          setCrewpingMemberList(res.data.resultBody);
-        },
-        (err) => {
-          console.log("크루핑멤버 상세 조회 실패", err);
-        },
-      );
+      if (crewping.masterNickname === User.info.nickname) {
+        getCrewpingMemberListMaster(
+          accessToken,
+          crewping.crewpingId,
+          (res) => {
+            console.log("크루핑멤버 마스터 상세 조회 성공");
+            console.log(res.data);
+            setCrewpingMemberList(res.data.resultBody);
+          },
+          (err) => {
+            console.log("크루핑멤버 마스터 상세 조회 실패", err);
+          },
+        );
+      } else {
+        getCrewpingMemberList(
+          accessToken,
+          crewping.crewpingId,
+          (res) => {
+            console.log("크루핑멤버 상세 조회 성공");
+            console.log(res.data);
+            setCrewpingMemberList(res.data.resultBody);
+          },
+          (err) => {
+            console.log("크루핑멤버 상세 조회 실패", err);
+          },
+        );
+      }
     }
   }, []);
   console.log(isCrewpingMemberList);
