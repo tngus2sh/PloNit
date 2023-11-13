@@ -1,7 +1,10 @@
 import React, { useState } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import { Icon } from "@iconify/react";
+import DatePicker, { registerLocale } from "react-datepicker";
+import ko from "date-fns/locale/ko";
+// import "react-datepicker/dist/react-datepicker.css";
 import style from "styles/css/CrewpingCreatePage.module.css";
+import "custom_css/CrewCreateDatePicker.css";
 
 const formattedDate = (date: any) => {
   const year = date.getFullYear();
@@ -33,22 +36,110 @@ const CrewpingDate = ({ setCrewpingStartDate, setCrewpingEndDate }: any) => {
         className={style.datepicker1}
         minDate={new Date()}
         showTimeSelect
+        timeIntervals={30}
         name="date_time"
         id="date_time"
         placeholderText="시작 일시"
         onChange={onChangeStartDate}
         dateFormat="yyyy-MM-dd HH:mm"
+        locale={ko}
+        showPopperArrow={false}
+        fixedHeight
+        renderCustomHeader={({
+          date,
+          decreaseMonth,
+          increaseMonth,
+          prevMonthButtonDisabled,
+          nextMonthButtonDisabled,
+        }) => (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              fontSize: "1.1rem",
+            }}
+            className="custom-react-datepicker__select-wrapper"
+          >
+            <button
+              onClick={decreaseMonth}
+              disabled={prevMonthButtonDisabled}
+              className="custom_btn"
+            >
+              <Icon
+                icon="bi:chevron-left"
+                style={{ width: "1.5rem", height: "1.5rem" }}
+              />
+            </button>
+            <div>
+              {date.getFullYear()}년 {date.getMonth()}월
+            </div>
+            <button
+              onClick={increaseMonth}
+              disabled={nextMonthButtonDisabled}
+              className="custom_btn"
+            >
+              <Icon
+                icon="bi:chevron-right"
+                style={{ width: "1.5rem", height: "1.5rem" }}
+              />
+            </button>
+          </div>
+        )}
       />
       <DatePicker
         selected={selectedEndDate}
         className={style.datepicker2}
         minDate={selectedStartDate}
         showTimeSelect
+        timeIntervals={30}
         name="date_time"
         id="date_time"
         placeholderText="종료 일시"
         onChange={onChangeEndDate}
         dateFormat="yyyy-MM-dd HH:mm"
+        locale={ko}
+        showPopperArrow={false}
+        fixedHeight
+        renderCustomHeader={({
+          date,
+          decreaseMonth,
+          increaseMonth,
+          prevMonthButtonDisabled,
+          nextMonthButtonDisabled,
+        }) => (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              fontSize: "1.1rem",
+            }}
+            className="custom-react-datepicker__select-wrapper"
+          >
+            <button
+              onClick={decreaseMonth}
+              disabled={prevMonthButtonDisabled}
+              className="custom_btn"
+            >
+              <Icon
+                icon="bi:chevron-left"
+                style={{ width: "1.5rem", height: "1.5rem" }}
+              />
+            </button>
+            <div>
+              {date.getFullYear()}년 {date.getMonth()}월
+            </div>
+            <button
+              onClick={increaseMonth}
+              disabled={nextMonthButtonDisabled}
+              className="custom_btn"
+            >
+              <Icon
+                icon="bi:chevron-right"
+                style={{ width: "1.5rem", height: "1.5rem" }}
+              />
+            </button>
+          </div>
+        )}
       />
     </div>
   );
