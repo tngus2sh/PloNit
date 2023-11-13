@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.plonit.ploggingservice.common.exception.ErrorCode.INVALID_PLACE_REQUEST;
@@ -37,6 +38,7 @@ public class PloggingQueryServiceImpl implements PloggingQueryService {
     private final PloggingHelpQueryRepository ploggingHelpQueryRepository;
     private final PloggingPictureQueryRepository ploggingPictureQueryRepository;
     private final LatLongQueryRepository latLongQueryRepository;
+    private final GropQueryRepository gropQueryRepository;
 
     /**
      * 플로깅 기록 일별 조회
@@ -134,6 +136,12 @@ public class PloggingQueryServiceImpl implements PloggingQueryService {
 
         Integer response = ploggingQueryRepository.countPloggingByMemberId(memberId);
 
+        return response;
+    }
+
+    @Override
+    public HashMap<Long, Long> countCrewPlogging() {
+        HashMap<Long, Long> response = gropQueryRepository.countCrewPlogging();
         return response;
     }
 }
