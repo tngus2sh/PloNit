@@ -57,7 +57,7 @@ const FeedItem = ({
     ? new Date(feed.createdDate)
     : new Date();
   const isfeedImages = feed.feedPictures;
-  const [isLiked, setLiked] = useState(false);
+  const [isLiked, setLiked] = useState(feed.isLike);
   const toggleLike = () => {
     getLikeFeed(
       accessToken,
@@ -66,6 +66,7 @@ const FeedItem = ({
         console.log(res.data);
         console.log("좋아요 성공");
         setLiked(!isLiked);
+        fetchFeedList();
       },
       (err) => {
         console.log("좋아요 에러", err);
@@ -85,7 +86,6 @@ const FeedItem = ({
       (res) => {
         console.log(res.data);
         console.log("피드 삭제 성공");
-
         fetchFeedList();
       },
       (err) => {
@@ -141,7 +141,6 @@ const FeedItem = ({
             onClick={toggleLike}
           />
         )}
-        <Icon icon="bi:heart" style={{ width: "1.8rem", height: "1.8rem" }} />
         <Icon
           icon="bi:chat-left"
           onClick={toggleCommentModal}
