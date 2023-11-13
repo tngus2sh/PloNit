@@ -10,14 +10,12 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 public class FindCrewpingMembersRes {
 
-    private Long id;
     private String profileImage;
     private String nickname;
 
 
     @Builder
-    public FindCrewpingMembersRes(Long id, String profileImage, String nickname) {
-        this.id = id;
+    public FindCrewpingMembersRes(String profileImage, String nickname) {
         this.profileImage = profileImage;
         this.nickname = nickname;
     }

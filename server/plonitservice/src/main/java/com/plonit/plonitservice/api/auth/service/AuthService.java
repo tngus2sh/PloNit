@@ -14,7 +14,7 @@ public interface AuthService {
 
     LogInRes getKakaoToken(HttpServletResponse httpServletResponse, String code);
 
-    boolean kakaoLogout(HttpServletRequest request);
+    Long kakaoLogout(HttpServletRequest request);
 
     CheckNicknameRes checkNickname(String nickname);
 

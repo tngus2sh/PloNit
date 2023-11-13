@@ -3,35 +3,52 @@ package com.plonit.ploggingservice.api.excel.service.impl;
 import com.plonit.ploggingservice.api.excel.service.ExcelService;
 import com.plonit.ploggingservice.api.excel.service.dto.ExcelColumn;
 import com.plonit.ploggingservice.api.excel.service.dto.PloggingDto;
+import com.plonit.ploggingservice.domain.plogging.repository.PloggingQueryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
+import java.time.LocalDate;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.time.temporal.ChronoField.DAY_OF_WEEK;
+
 @Service
-@Slf4j
-@Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class ExcelServiceImpl implements ExcelService {
 
     @Value("${file.path.excel}")
     private String excelFilePath;
 
+    private final PloggingQueryRepository ploggingQueryRepository;
+
     @Override
-    public List<PloggingDto> findPloggins(Long ploggingId) {
+    public List<PloggingDto> findVolunteerPloggings() {
+        LocalDate today = LocalDate.now();
+        LocalDate oneWeekBefore = today.minusWeeks(1);
+
+        int day = oneWeekBefore.get(DAY_OF_WEEK);
+        if (day == 7) {
+            day = 0;
+        }
+
+//        LocalDate startDate =
+
+        List<PloggingDto> ploggings = ploggingQueryRepository.findVolunteerPloggings(null, null);
+
+        for(PloggingDto dto: ploggings) {
+
+        }
+
         return null;
     }
 

@@ -33,6 +33,10 @@ public class Feed extends TimeBaseEntity {
 
     private String content;
 
+    @Column(name = "like_count")
+    @ColumnDefault("0")
+    private Integer likeCount;
+
     @ColumnDefault("false")
     private Boolean isDelete;
 

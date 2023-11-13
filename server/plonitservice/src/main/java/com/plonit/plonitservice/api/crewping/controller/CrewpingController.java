@@ -2,9 +2,11 @@ package com.plonit.plonitservice.api.crewping.controller;
 
 import com.plonit.plonitservice.api.crewping.controller.request.SaveCrewpingRecordReq;
 import com.plonit.plonitservice.api.crewping.controller.request.SaveCrewpingReq;
+import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingMembersByMasterRes;
 import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingMembersRes;
 import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingRes;
 import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingsRes;
+import com.plonit.plonitservice.api.crewping.service.CrewpingQueryService;
 import com.plonit.plonitservice.api.crewping.service.CrewpingService;
 import com.plonit.plonitservice.api.crewping.service.dto.SaveCrewpingDto;
 import com.plonit.plonitservice.api.crewping.service.dto.SaveCrewpingRecordDto;
@@ -34,6 +36,7 @@ import static com.plonit.plonitservice.common.util.LogCurrent.START;
 public class CrewpingController {
 
     private final CrewpingService crewpingService;
+    private final CrewpingQueryService crewpingQueryService;
 
     // 크루핑 생성
     @PostMapping
@@ -61,7 +64,7 @@ public class CrewpingController {
         log.info(logCurrent(getClassName(), getMethodName(), START));
         log.info("FindCrewpings={}", crewId);
 
-        List<FindCrewpingsRes> response = crewpingService.findCrewpings(RequestUtils.getMemberKey(request), crewId);
+        List<FindCrewpingsRes> response = crewpingQueryService.findCrewpings(RequestUtils.getMemberKey(request), crewId);
 
         return CustomApiResponse.ok(response, "크루핑 목록 조회를 성공했습니다.");
     }
@@ -72,7 +75,7 @@ public class CrewpingController {
         log.info(logCurrent(getClassName(), getMethodName(), START));
         log.info("FindCrewping={}", crewpingId);
 
-        FindCrewpingRes response = crewpingService.findCrewping(RequestUtils.getMemberKey(request), crewpingId);
+        FindCrewpingRes response = crewpingQueryService.findCrewping(RequestUtils.getMemberKey(request), crewpingId);
 
         return CustomApiResponse.ok(response, "크루핑 상세 조회를 성공했습니다.");
     }
@@ -99,13 +102,24 @@ public class CrewpingController {
         return CustomApiResponse.ok(null, "크루핑 참가를 취소했습니다.");
     }
 
-    // 크루핑 인원 조회
+    // 크루핑 인원 조회 (크루핑장)
+    @GetMapping("/master-member/{crewping-id}")
+    public CustomApiResponse<List<FindCrewpingMembersByMasterRes>> findCrewpingMembersByMaster(@PathVariable("crewping-id") Long crewpingId, HttpServletRequest request) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+        log.info("FindCrewpingMembersByMaster={}", crewpingId);
+
+        List<FindCrewpingMembersByMasterRes> response = crewpingQueryService.findCrewpingMembersByMaster(RequestUtils.getMemberKey(request), crewpingId);
+
+        return CustomApiResponse.ok(response, "크루핑 현재 인원 조회에 성공했습니다.");
+    }
+
+    // 크루핑 인원 조회 (크루핑 멤버)
     @GetMapping("/member/{crewping-id}")
     public CustomApiResponse<List<FindCrewpingMembersRes>> findCrewpingMembers(@PathVariable("crewping-id") Long crewpingId, HttpServletRequest request) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
         log.info("FindCrewpingMembers={}", crewpingId);
 
-        List<FindCrewpingMembersRes> response = crewpingService.findCrewpingMembers(RequestUtils.getMemberKey(request), crewpingId);
+        List<FindCrewpingMembersRes> response = crewpingQueryService.findCrewpingMembers(RequestUtils.getMemberKey(request), crewpingId);
 
         return CustomApiResponse.ok(response, "크루핑 현재 인원 조회에 성공했습니다.");
     }
