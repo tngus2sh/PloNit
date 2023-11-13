@@ -464,13 +464,14 @@ const DefaultMap: React.FC<IDefaultMap> = ({
         cursor: "default",
       });
 
-      if (neighborMarkers.current) {
+      if (neighborMarkers.current && neighborMarkers.current.length > 0) {
         const { length } = neighborMarkers.current;
         const Toast = Swal.mixin({
           toast: true,
-          position: "center",
+          position: "top",
           showConfirmButton: false,
-          timer: 2000,
+          showCloseButton: true,
+          timer: 5000,
           timerProgressBar: true,
         });
 
