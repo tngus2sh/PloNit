@@ -5,9 +5,14 @@ import com.plonit.ploggingservice.api.excel.service.dto.PloggingPictureDto;
 import com.plonit.ploggingservice.api.plogging.controller.response.FindPloggingLogRes;
 import com.plonit.ploggingservice.api.plogging.controller.response.PloggingMonthRes;
 import com.plonit.ploggingservice.api.plogging.controller.response.PloggingPeriodRes;
+import com.plonit.ploggingservice.api.plogging.controller.response.UsersRes;
+import com.plonit.ploggingservice.common.enums.Finished;
 import com.plonit.ploggingservice.common.enums.Type;
 import com.plonit.ploggingservice.common.enums.Type;
 import com.plonit.ploggingservice.domain.plogging.Plogging;
+import com.querydsl.core.Tuple;
+import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -91,6 +96,20 @@ public class PloggingQueryRepository {
                 .from(plogging)
                 .where(plogging.id.eq(ploggingId).and(plogging.memberKey.eq(memberKey)))
                 .fetchOne());
+    }
+
+    @Transactional(readOnly = true)
+    public List<UsersRes> findNearByUsers(Long gugunCode) {
+        return queryFactory.select(constructor(UsersRes.class,
+                        latLong.latitude.min(),
+                        latLong.longitude.min()))
+                .from(plogging)
+                .join(latLong)
+                .on(latLong.plogging.eq(plogging))
+                .groupBy(plogging)
+                .where(plogging.gugunCode.eq(gugunCode)
+                        .and(plogging.finished.eq(Finished.ACTIVE)))
+                .fetch();
     }
 
     @Transactional(readOnly = true)

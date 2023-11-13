@@ -154,6 +154,31 @@ public class PloggingQueryServiceImpl implements PloggingQueryService {
     }
 
     @Override
+    public List<UsersRes> findPloggingUsers(Double latitude, Double longitude) {
+
+        // 위도, 경도로 현재 위치 받아오기
+        KakaoAddressRes.Address address = kakaoPlaceUtils.getAddress(latitude, longitude);
+        if (address == null) {
+            throw new CustomException(INVALID_PLACE_REQUEST);
+        }
+
+        // 구군 코드 얻어오기
+        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
+
+        SidoGugunCodeRes sidoGugunCodeRes = circuitBreaker.run(
+                () -> sidoGugunFeignClient.findSidoGugunCode(address.getRegion_1depth_name(), address.getRegion_2depth_name()).getResultBody(), // 통신하는 서비스
+                throwable -> null
+        );
+
+        if (sidoGugunCodeRes == null) {
+            throw new CustomException(INVALID_PLACE_REQUEST);
+        }
+
+        // 구군 코드로 현재 ACTIVE한 사용자들 정보 가져오기
+        return ploggingQueryRepository.findNearByUsers(sidoGugunCodeRes.getGugunCode());
+    }
+
+    @Override
     public Integer countMemberPlogging() {
         Long memberId = RequestUtils.getMemberId();
 
