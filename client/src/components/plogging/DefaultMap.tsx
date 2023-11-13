@@ -16,7 +16,6 @@ import { getBins, getToilets } from "api/lib/items";
 import { searchHelpUsingLatLng } from "api/lib/plogging";
 
 const defaultZoom = 16;
-const neighbor_help_maxZoom = 12;
 const navbarHeight = 56;
 const popupTime = 1;
 
@@ -172,29 +171,6 @@ const DefaultMap: React.FC<IDefaultMap> = ({
               centerBtnIndicator_active.setMap(null);
               centerBtnIndicator_inactive.setMap(map);
               centerBtnRef.current = centerBtnIndicator_inactive;
-
-              if (isBefore) {
-                const currentZoom = map.getZoom();
-                if (currentZoom <= neighbor_help_maxZoom) {
-                  N.controlMarkers({
-                    markers: neighborMarkers.current,
-                    map: null,
-                  });
-                  N.controlMarkers({
-                    markers: helpMarkers.current,
-                    map: null,
-                  });
-                } else {
-                  N.controlMarkers({
-                    markers: neighborMarkers.current,
-                    map: mapRef.current,
-                  });
-                  N.controlMarkers({
-                    markers: helpMarkers.current,
-                    map: mapRef.current,
-                  });
-                }
-              }
             });
             naver.maps.Event.addDOMListener(
               centerBtnIndicator_inactive.getElement(),
@@ -459,17 +435,19 @@ const DefaultMap: React.FC<IDefaultMap> = ({
 
   // 주변 유저 데이터 로드
   useEffect(() => {
-    N.controlMarkers({
-      markers: neighborMarkers.current,
-      map: null,
-    });
+    if (isBefore) {
+      N.controlMarkers({
+        markers: neighborMarkers.current,
+        map: null,
+      });
 
-    neighborMarkers.current = N.createMarkers({
-      items: neighbors,
-      map: mapRef.current ?? undefined,
-      url: `/images/PloggingPage/neighborLocation.svg`,
-      cursor: "default",
-    });
+      neighborMarkers.current = N.createMarkers({
+        items: neighbors,
+        map: mapRef.current ?? undefined,
+        url: `/images/PloggingPage/neighborLocation.svg`,
+        cursor: "default",
+      });
+    }
   }, [neighbors]);
 
   // 도움 요청 데이터 로드
