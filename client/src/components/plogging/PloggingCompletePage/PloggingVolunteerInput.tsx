@@ -36,8 +36,14 @@ const PloggingVolunteerInput = () => {
   const isVolEnd = useSelector<rootState, boolean>((state) => {
     return state.plogging.isVolEnd;
   });
-  const acessToken = useSelector<rootState, string>((state) => {
+  const accessToken = useSelector<rootState, string>((state) => {
     return state.user.auth.accessToken;
+  });
+  const ploggingId = useSelector<rootState, number>((state) => {
+    return state.plogging.ploggingId;
+  });
+  const birth = useSelector<rootState, string>((state) => {
+    return state.user.info.birthday;
   });
 
   const { image, handleImageCapture, fileInputRef } = useCamera();
@@ -129,9 +135,24 @@ const PloggingVolunteerInput = () => {
         cancelButtonColor: "#FF2953",
       }).then((result) => {
         if (result.isConfirmed) {
-          // 저장 로직 실행
           const formedPhoneNumber = phoneNumber.replace(/-/g, "");
-          dispatch(P.setIsEnd(true));
+          registerVolInfo({
+            accessToken,
+            ploggingId,
+            name,
+            phoneNumber: formedPhoneNumber,
+            id1365: id_1365,
+            email: email,
+            birth,
+            success: (response) => {
+              console.log("봉사 저장 성공!");
+              console.log(response);
+              dispatch(P.setIsEnd(true));
+            },
+            fail: (error) => {
+              console.error(error);
+            },
+          });
         }
       });
     }
