@@ -1,11 +1,13 @@
 package com.plonit.plonitservice.api.crewping.controller;
 
+import com.plonit.plonitservice.api.crewping.controller.request.SaveCrewpingRecordReq;
 import com.plonit.plonitservice.api.crewping.controller.request.SaveCrewpingReq;
 import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingMembersRes;
 import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingRes;
 import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingsRes;
 import com.plonit.plonitservice.api.crewping.service.CrewpingService;
 import com.plonit.plonitservice.api.crewping.service.dto.SaveCrewpingDto;
+import com.plonit.plonitservice.api.crewping.service.dto.SaveCrewpingRecordDto;
 import com.plonit.plonitservice.common.CustomApiResponse;
 import com.plonit.plonitservice.common.exception.CustomException;
 import com.plonit.plonitservice.common.util.RequestUtils;
@@ -50,7 +52,7 @@ public class CrewpingController {
         Long memberKey = RequestUtils.getMemberKey(request);
         crewpingService.saveCrewping(SaveCrewpingDto.of(memberKey, saveCrewpingReq));
 
-        return CustomApiResponse.ok(null);
+        return CustomApiResponse.ok(null, "크루핑을 생성했습니다.");
     }
 
     // 크루핑 목록 조회
@@ -61,7 +63,7 @@ public class CrewpingController {
 
         List<FindCrewpingsRes> response = crewpingService.findCrewpings(RequestUtils.getMemberKey(request), crewId);
 
-        return CustomApiResponse.ok(response);
+        return CustomApiResponse.ok(response, "크루핑 목록 조회를 성공했습니다.");
     }
 
     // 크루핑 상세 조회
@@ -72,7 +74,7 @@ public class CrewpingController {
 
         FindCrewpingRes response = crewpingService.findCrewping(RequestUtils.getMemberKey(request), crewpingId);
 
-        return CustomApiResponse.ok(response);
+        return CustomApiResponse.ok(response, "크루핑 상세 조회를 성공했습니다.");
     }
 
     // 크루핑 참가
@@ -83,7 +85,7 @@ public class CrewpingController {
 
         crewpingService.joinCrewping(RequestUtils.getMemberKey(request), crewpingId);
 
-        return CustomApiResponse.ok("", "크루핑에 참가했습니다.");
+        return CustomApiResponse.ok(null, "크루핑에 참가했습니다.");
     }
 
     // 크루핑 참가 취소
@@ -94,7 +96,7 @@ public class CrewpingController {
 
         crewpingService.quitCrewping(RequestUtils.getMemberKey(request), crewpingId);
 
-        return CustomApiResponse.ok("", "크루핑 참가를 취소했습니다.");
+        return CustomApiResponse.ok(null, "크루핑 참가를 취소했습니다.");
     }
 
     // 크루핑 인원 조회
@@ -116,7 +118,19 @@ public class CrewpingController {
 
         crewpingService.kickoutCrewpingMember(RequestUtils.getMemberKey(request), crewpingId, targetId);
 
-        return CustomApiResponse.ok("", "크루핑 멤버를 강퇴했습니다.");
+        return CustomApiResponse.ok(null, "크루핑 멤버를 강퇴했습니다.");
+    }
+
+    // 크루핑 기록 저장
+    @PostMapping("/record")
+    public CustomApiResponse<Object> saveCrewpingRecord(@RequestBody SaveCrewpingRecordReq saveCrewpingRecordReq, HttpServletRequest request) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+        log.info("SaveCrewpingRecord={}", saveCrewpingRecordReq);
+
+        SaveCrewpingRecordDto dto = SaveCrewpingRecordDto.of(RequestUtils.getMemberKey(request), saveCrewpingRecordReq);
+        crewpingService.saveCrewpingRecord(dto);
+
+        return CustomApiResponse.ok(null, "크루핑 기록을 저장했습니다.");
     }
 
 }
