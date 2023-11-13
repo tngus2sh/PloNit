@@ -1,8 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 import style from "styles/css/MyPloggingDetailPage.module.css";
 import { BackTopBar } from "components/common/TopBar";
+import { searchPloggingInfo } from "api/lib/plogging";
+import { PloggingLog } from "interface/ploggingInterface";
 
 const MyPloggingDetailPage = () => {
+  const accessToken = useSelector((state: any) => state.user.auth.accessToken);
+  const { ploggingId } = useParams();
+  const [isPloggingDetail, setPloggingDetail] = useState<PloggingLog>();
+  console.log(isPloggingDetail);
+  useEffect(() => {
+    searchPloggingInfo({
+      accessToken: accessToken,
+      plogging_id: Number(ploggingId),
+      success: (res) => {
+        console.log("플로깅 상세 조회 성공");
+        console.log(res.data);
+        setPloggingDetail(res.data.resultBody);
+      },
+      fail: (error) => {
+        console.error("플로깅 상세 조회 실패", error);
+      },
+    });
+  }, []);
+
   return (
     <div>
       <BackTopBar text="나의 플로깅" />
