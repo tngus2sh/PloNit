@@ -97,7 +97,7 @@ public class CrewpingQueryServiceImpl implements CrewpingQueryService {
         Crewping crewping = crewpingRepository.findById(crewpingId)
                 .orElseThrow(() -> new CustomException(ErrorCode.CREWPING_NOT_FOUND));
 
-        if(!crewMemberQueryRepository.isValidCrewMember(memberId, crewping.getCrew().getId(), null)) {
+        if(!crewMemberQueryRepository.isValidCrewMember(memberId, crewping.getCrew().getId(), false)) {
             throw new CustomException(ErrorCode.CREWPING_BAD_REQUEST);
         }
 
