@@ -30,20 +30,22 @@ public class ExcelController {
     public CustomApiResponse<Object> makeExcel() throws IOException {
         log.info("MakeExcel");
 
-        List<PloggingDto> data = new ArrayList<>();
-        PloggingDto dto = PloggingDto.builder()
-                .id1365("test01")
-                .name("김유저")
-                .birth("1998-05-12")
-                .time(7200l)
-                .distance(2.4)
-                .startImage("image01")
-                .middleImage("image02")
-                .endImage("image03")
-                .build();
-        data.add(dto);
+//        List<PloggingDto> data = new ArrayList<>();
+//        PloggingDto dto = PloggingDto.builder()
+//                .id1365("test01")
+//                .name("김유저")
+//                .birth("1998-05-12")
+//                .time(7200l)
+//                .distance(2.4)
+//                .startImage("image01")
+//                .middleImage("image02")
+//                .endImage("image03")
+//                .build();
+//        data.add(dto);
+//
+//        excelService.makeExcel(data);
 
-        excelService.makeExcel(data);
+        excelService.findVolunteerPloggings();
 
         return CustomApiResponse.ok("");
     }
