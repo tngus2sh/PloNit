@@ -168,6 +168,7 @@ const searchHelpUsingLatLng = ({
   api.get(`/help/${latitude}/${longitude}`).then(success).catch(fail);
 };
 
+// 플로깅 중 이미지 저장
 const savePloggingImage = ({
   accessToken,
   plogging_id,
@@ -209,8 +210,6 @@ const searchNeighbor = ({
   api.get(`/users/${latitude}/${longitude}`).then(success).catch(fail);
 };
 
-// --- 미완성 인 것들 ---
-
 // 봉사 정보 조회
 const searchVolInfo = ({
   accessToken,
@@ -226,20 +225,45 @@ const searchVolInfo = ({
   api.get(`/volunteer`).then(success).catch(fail);
 };
 
+// 봉사 정보 등록
 const registerVolInfo = ({
   accessToken,
+  ploggingId,
+  name,
+  phoneNumber,
+  id1365,
+  email,
+  birth,
   success,
   fail,
 }: {
   accessToken: string;
+  ploggingId: number;
+  name: string;
+  phoneNumber: string;
+  id1365: string;
+  email: string;
+  birth: string;
   success: (response: AxiosResponse<any, any>) => void | undefined;
   fail: (error: any) => void | undefined;
 }) => {
-  const formData = new FormData();
-
-  const api = ploggingApiForm;
+  const api = ploggingApi;
   api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
-  api.post(`/volunteer`, formData).then(success).catch(fail);
+  api
+    .post(
+      `/volunteer`,
+      JSON.stringify({
+        accessToken,
+        ploggingId,
+        name,
+        phoneNumber,
+        id1365,
+        email,
+        birth,
+      }),
+    )
+    .then(success)
+    .catch(fail);
 };
 
 export {

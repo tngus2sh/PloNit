@@ -40,6 +40,6 @@ export interface Message {
   type: string;
   senderId: string;
   location?: Location;
-  userImage?: string;
+  userImages?: UserImages;
   roomId: string;
 }
