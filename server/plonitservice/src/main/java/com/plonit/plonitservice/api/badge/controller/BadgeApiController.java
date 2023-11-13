@@ -3,6 +3,7 @@ package com.plonit.plonitservice.api.badge.controller;
 import com.plonit.plonitservice.api.badge.controller.request.GrantCrewRankReq;
 import com.plonit.plonitservice.api.badge.controller.request.GrantMemberBadgeReq;
 import com.plonit.plonitservice.api.badge.controller.request.GrantMemberRankReq;
+import com.plonit.plonitservice.api.badge.controller.response.FindBadgeRes;
 import com.plonit.plonitservice.api.badge.service.BadgeService;
 import com.plonit.plonitservice.api.badge.service.dto.GrantCrewRankDto;
 import com.plonit.plonitservice.api.badge.service.dto.GrantMemberBadgeDto;
@@ -13,10 +14,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -68,4 +66,14 @@ public class BadgeApiController {
 
         return CustomApiResponse.ok(null);
     }
+
+    @Operation(summary = "배지 조회", description = "배지를 조회한다.")
+    @GetMapping
+    public CustomApiResponse<FindBadgeRes> findBadge(
+            HttpServletRequest servletRequest
+    ) {
+        Long memberKey = RequestUtils.getMemberKey(servletRequest);
+        return null;
+    }
+
 }
