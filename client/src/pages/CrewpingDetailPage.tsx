@@ -38,7 +38,7 @@ const CrewpingDetailPage = () => {
         const data = {
           isMyCrew: User.crewinfo.isMyCrew,
           isCrewMaster: User.crewinfo.isCrewMaster,
-          isCrewwpingMaster: res.data.resultBody.masterNickname,
+          isCrewpingMaster: res.data.resultBody.masterNickname,
         };
         console.log(data);
         dispatch(userActions.myCrewHandler(data));

@@ -17,18 +17,33 @@ const CrewpingMemberList = ({ crewping }: { crewping: CrewpingInterface }) => {
   console.log(crewping);
   useEffect(() => {
     if (crewping.crewpingId !== undefined) {
-      getCrewpingMemberList(
-        accessToken,
-        crewping.crewpingId,
-        (res) => {
-          console.log("크루핑멤버 상세 조회 성공");
-          console.log(res.data);
-          setCrewpingMemberList(res.data.resultBody);
-        },
-        (err) => {
-          console.log("크루핑멤버 상세 조회 실패", err);
-        },
-      );
+      if (crewping.masterNickname === User.info.nickname) {
+        getCrewpingMemberListMaster(
+          accessToken,
+          crewping.crewpingId,
+          (res) => {
+            console.log("크루핑멤버 마스터 상세 조회 성공");
+            console.log(res.data);
+            setCrewpingMemberList(res.data.resultBody);
+          },
+          (err) => {
+            console.log("크루핑멤버 마스터 상세 조회 실패", err);
+          },
+        );
+      } else {
+        getCrewpingMemberList(
+          accessToken,
+          crewping.crewpingId,
+          (res) => {
+            console.log("크루핑멤버 상세 조회 성공");
+            console.log(res.data);
+            setCrewpingMemberList(res.data.resultBody);
+          },
+          (err) => {
+            console.log("크루핑멤버 상세 조회 실패", err);
+          },
+        );
+      }
     }
   }, []);
   console.log(isCrewpingMemberList);
@@ -38,13 +53,15 @@ const CrewpingMemberList = ({ crewping }: { crewping: CrewpingInterface }) => {
         <div className={style.member_item} key={index}>
           <img src={member.profileImage} alt="" />
           <div className={style.nickname}>{member.nickname}</div>
-          {User.crewinfo.isCrewwpingMaster === crewping.masterNickname ? (
-            User.crewinfo.isCrewwpingMaster !== member.nickname ? (
-              <Icon
-                icon="bi:x"
-                className={style.icon}
-                style={{ height: "1.5rem", width: "1.5rem", color: "black" }}
-              />
+          {User.crewinfo.isCrewpingMaster === User.info.nickname ? (
+            User.crewinfo.isCrewpingMaster === crewping.masterNickname ? (
+              User.crewinfo.isCrewpingMaster !== member.nickname ? (
+                <Icon
+                  icon="bi:x"
+                  className={style.icon}
+                  style={{ height: "1.5rem", width: "1.5rem", color: "black" }}
+                />
+              ) : null
             ) : null
           ) : null}
         </div>
