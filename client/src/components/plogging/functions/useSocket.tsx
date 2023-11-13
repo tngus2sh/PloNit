@@ -160,7 +160,7 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
       connectToSocket();
     }
     return () => {
-      if (!toggleSocket && stompClient.current) {
+      if (stompClient.current) {
         stompClient.current.deactivate();
       }
     };
