@@ -17,7 +17,6 @@ const initialState = {
   crewpingEnd: false as boolean,
   getLocation: false as boolean,
   locations: {} as Locations,
-  userImage: "" as string,
   userImages: {
     박주성:
       "https://post-phinf.pstatic.net/MjAyMDExMDRfODgg/MDAxNjA0NDUyNDkwNTk5.3qW-hU8R0DvdQW8bgDuldGPN27uFdDvTh7haVQTpDqgg.2Tj5OcLz-xJx4rAFgkN48q8w5hrN5QahTK_DDIsNo2Ig.PNG/VneKfm5.png?type=w800_q75",
@@ -67,16 +66,17 @@ const crewpingSlice = createSlice({
         };
       }
     },
-    setUserImage: (state, action: PayloadAction<string>) => {
-      state.userImage = action.payload;
+    addUserImage: (
+      state,
+      action: PayloadAction<{ senderId: string; image: string }>,
+    ) => {
+      const { senderId, image } = action.payload;
+      state.userImages = { ...state.userImages, [senderId]: image };
     },
     setUserImages: (state, action: PayloadAction<Message>) => {
       const newMessage = action.payload;
-      if (newMessage.userImage) {
-        state.userImages = {
-          ...state.userImages,
-          [newMessage.senderId]: newMessage.userImage,
-        };
+      if (newMessage.userImages) {
+        state.userImages = newMessage.userImages;
       }
     },
   },
@@ -94,7 +94,7 @@ export const {
   setCrewpingEnd,
   setGetLocation,
   setLocations,
-  setUserImage,
+  addUserImage,
   setUserImages,
 } = crewpingSlice.actions;
 export default crewpingSlice.reducer;

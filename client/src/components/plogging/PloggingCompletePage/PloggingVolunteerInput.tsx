@@ -4,7 +4,7 @@ import CommonButton from "components/common/CommonButton";
 import Input from "components/common/Input";
 import { BasicTopBar } from "components/common/TopBar";
 import Swal from "sweetalert2";
-import RegionModal from "components/common/RegionModal";
+import { renderToString } from "react-dom/server";
 import style from "styles/css/PloggingPage/PloggingVolunteerInput.module.css";
 
 import { useNavigate } from "react-router-dom";
@@ -43,15 +43,9 @@ const PloggingVolunteerInput = () => {
   const { image, handleImageCapture, fileInputRef } = useCamera();
   const check = useRef<boolean>(false);
   const [name, setName] = useState<string>(reduxName);
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [id_1365, setId_1365] = useState<string>(reduxId1365);
   const [email, setEmail] = useState<string>(reduxEmail);
-  const [region, setRegion] = useState<string>("");
-  const [regionCode, setRegionCode] = useState<string>("");
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-
-  function handleIsOpen() {
-    setIsOpen((current) => !current);
-  }
 
   useEffect(() => {
     if (!check.current) {
@@ -77,6 +71,71 @@ const PloggingVolunteerInput = () => {
       navigate("/plogging/image");
     }
   }, [image]);
+
+  useEffect(() => {
+    if (phoneNumber.length === 10) {
+      setPhoneNumber((current) => {
+        return current
+          .replace(/-/g, "")
+          .replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
+      });
+    } else if (phoneNumber.length === 13) {
+      setPhoneNumber((current) => {
+        {
+          return current
+            .replace(/-/g, "")
+            .replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
+        }
+      });
+    }
+  }, [phoneNumber]);
+
+  function onClick() {
+    if (!name || phoneNumber.length != 13 || !id_1365) {
+      Swal.fire({
+        icon: "warning",
+        title: "입력 정보 불충분",
+        html: renderToString(
+          <div>
+            <div>{`입력 정보가 충분하지 않습니다.`}</div>
+            <div>{`그래도 종료하시겠습니까?`}</div>
+          </div>,
+        ),
+        showCancelButton: true,
+        confirmButtonText: "예",
+        cancelButtonText: "아니오",
+        confirmButtonColor: "#2CD261",
+        cancelButtonColor: "#FF2953",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          dispatch(P.setIsEnd(true));
+        }
+      });
+    } else {
+      Swal.fire({
+        icon: "question",
+        html: renderToString(
+          <div>
+            <div>{`완전한 정보가 아니면`}</div>
+            <div>{`봉사가 등록되지 않습니다.`}</div>
+            <br />
+            <div>{`입력을 마치시겠습니까?`}</div>
+          </div>,
+        ),
+        showCancelButton: true,
+        confirmButtonText: "예",
+        cancelButtonText: "아니오",
+        confirmButtonColor: "#2CD261",
+        cancelButtonColor: "#FF2953",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // 저장 로직 실행
+          const formedPhoneNumber = phoneNumber.replace(/-/g, "");
+          dispatch(P.setIsEnd(true));
+        }
+      });
+    }
+  }
 
   return (
     <div
@@ -119,6 +178,23 @@ const PloggingVolunteerInput = () => {
         />
         <Input
           type="string"
+          labelTitle="전화번호"
+          id="vol-phoneNumber"
+          styles={{
+            marginLeft: "0",
+            marginRight: "0",
+          }}
+          value={phoneNumber}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            const regex = /^[0-9\b -]{0,13}$/;
+            const { value } = event.target;
+            if (value.length <= 13 && regex.test(value)) {
+              setPhoneNumber(value);
+            }
+          }}
+        />
+        <Input
+          type="string"
           labelTitle="1365 ID"
           id="vol-id_1365"
           styles={{
@@ -144,25 +220,7 @@ const PloggingVolunteerInput = () => {
           disabled={true}
           value={email}
         />
-        <div onClick={handleIsOpen}>
-          <label className={style.label}>{`활동지역`}</label>
-          <div
-            className={style.input_area}
-            style={{ marginLeft: 0, marginRight: 0 }}
-            id="vol-region"
-          >
-            {region ? region : "눌러서 거주지역을 선택하세요."}
-          </div>
-        </div>
-        {isOpen && (
-          <div className={style.modalbackground}>
-            <RegionModal
-              onClose={handleIsOpen}
-              setSignupRegion={setRegion}
-              setRegionCode={setRegionCode}
-            />
-          </div>
-        )}
+
         <div className={style.permit_text}>
           <div>{`※ 위 정보들은 봉사활동 인증에 ※`}</div>
           <div>{`필요한 정보들입니다.`}</div>
@@ -178,25 +236,11 @@ const PloggingVolunteerInput = () => {
             backgroundColor: "#2CD261",
             position: "fixed",
             bottom: "56px",
-            zIndex: `${isOpen ? -1 : 1000}`,
+            zIndex: `1000`,
             boxSizing: "border-box",
             margin: `1.25rem 0`,
           }}
-          onClick={() => {
-            Swal.fire({
-              icon: "question",
-              text: "입력을 마치시겠습니까?",
-              showCancelButton: true,
-              confirmButtonText: "예",
-              cancelButtonText: "아니오",
-              confirmButtonColor: "#2CD261",
-              cancelButtonColor: "#FF2953",
-            }).then((result) => {
-              if (result.isConfirmed) {
-                dispatch(P.setIsEnd(true));
-              }
-            });
-          }}
+          onClick={onClick}
         />
       </div>
     </div>
