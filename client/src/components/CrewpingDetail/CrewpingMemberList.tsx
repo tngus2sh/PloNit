@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { CrewpingInterface, MemberInterface } from "interface/crewInterface";
 import {
   getCrewpingMemberList,
@@ -14,38 +15,38 @@ const CrewpingMemberList = ({ crewping }: { crewping: CrewpingInterface }) => {
   const [isCrewpingMemberList, setCrewpingMemberList] = useState<
     MemberInterface[]
   >([]);
+  const { crewpingId } = useParams();
   console.log(crewping);
+
   useEffect(() => {
-    if (crewping.crewpingId !== undefined) {
-      console.log(crewping.masterNickname);
-      console.log(User.info.nickname);
-      if (crewping.masterNickname === User.info.nickname) {
-        getCrewpingMemberListMaster(
-          accessToken,
-          crewping.crewpingId,
-          (res) => {
-            console.log("크루핑멤버 마스터 상세 조회 성공");
-            console.log(res.data);
-            setCrewpingMemberList(res.data.resultBody);
-          },
-          (err) => {
-            console.log("크루핑멤버 마스터 상세 조회 실패", err);
-          },
-        );
-      } else {
-        getCrewpingMemberList(
-          accessToken,
-          crewping.crewpingId,
-          (res) => {
-            console.log("크루핑멤버 상세 조회 성공");
-            console.log(res.data);
-            setCrewpingMemberList(res.data.resultBody);
-          },
-          (err) => {
-            console.log("크루핑멤버 상세 조회 실패", err);
-          },
-        );
-      }
+    console.log(crewping.masterNickname);
+    console.log(User.info.nickname);
+    if (crewping.masterNickname === User.info.nickname) {
+      getCrewpingMemberListMaster(
+        accessToken,
+        Number(crewpingId),
+        (res) => {
+          console.log("크루핑멤버 마스터 상세 조회 성공");
+          console.log(res.data);
+          setCrewpingMemberList(res.data.resultBody);
+        },
+        (err) => {
+          console.log("크루핑멤버 마스터 상세 조회 실패", err);
+        },
+      );
+    } else {
+      getCrewpingMemberList(
+        accessToken,
+        Number(crewpingId),
+        (res) => {
+          console.log("크루핑멤버 상세 조회 성공");
+          console.log(res.data);
+          setCrewpingMemberList(res.data.resultBody);
+        },
+        (err) => {
+          console.log("크루핑멤버 상세 조회 실패", err);
+        },
+      );
     }
   }, []);
   console.log(isCrewpingMemberList);
