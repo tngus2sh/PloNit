@@ -1,10 +1,7 @@
 package com.plonit.ploggingservice.api.plogging.controller;
 
 import com.plonit.ploggingservice.api.plogging.controller.request.*;
-import com.plonit.ploggingservice.api.plogging.controller.response.PloggingHelpRes;
-import com.plonit.ploggingservice.api.plogging.controller.response.PloggingLogRes;
-import com.plonit.ploggingservice.api.plogging.controller.response.PloggingPeriodRes;
-import com.plonit.ploggingservice.api.plogging.controller.response.UsersRes;
+import com.plonit.ploggingservice.api.plogging.controller.response.*;
 import com.plonit.ploggingservice.api.plogging.service.PloggingQueryService;
 import com.plonit.ploggingservice.api.plogging.service.PloggingService;
 import com.plonit.ploggingservice.api.plogging.service.dto.*;
@@ -108,6 +105,22 @@ public class PloggingApiController {
         List<PloggingPeriodRes> ploggingLogByDay = ploggingQueryService.findPloggingLogByDay(startDay, endDay, memberKey, type);
 
         return CustomApiResponse.ok(ploggingLogByDay);
+    }
+
+    @Operation(summary = "플로깅 기록 월별 조회", description = "해당 월에 존재하는 플로깅 정보를 조회한다.")
+    @GetMapping("/period")
+    public CustomApiResponse<List<PloggingMonthRes>> findPloggingLogByMonth(
+            @RequestParam(name = "month", required = false, defaultValue = "0") int month,
+            HttpServletRequest servletRequest
+    ) {
+        // 플로깅 기록 월별 조회
+        log.info("findPloggingLogByMonth = {}", month);
+
+        Long memberKey = RequestUtils.getMemberKey(servletRequest);
+
+        List<PloggingMonthRes> ploggingLogByMonth = ploggingQueryService.findPloggingLogByMonth(month, memberKey);
+
+        return CustomApiResponse.ok(ploggingLogByMonth);
     }
     
     @Operation(summary = "플로깅 기록 상세 조회", description = "플로깅 id에 해당하는 플로깅에 대한 상세 정보를 불러온다.")

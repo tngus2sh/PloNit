@@ -3,6 +3,7 @@ package com.plonit.ploggingservice.domain.plogging.repository;
 import com.plonit.ploggingservice.api.excel.service.dto.PloggingDto;
 import com.plonit.ploggingservice.api.excel.service.dto.PloggingPictureDto;
 import com.plonit.ploggingservice.api.plogging.controller.response.FindPloggingLogRes;
+import com.plonit.ploggingservice.api.plogging.controller.response.PloggingMonthRes;
 import com.plonit.ploggingservice.api.plogging.controller.response.PloggingPeriodRes;
 import com.plonit.ploggingservice.common.enums.Type;
 import com.plonit.ploggingservice.common.enums.Type;
@@ -63,6 +64,15 @@ public class PloggingQueryRepository {
                 .where(plogging.memberKey.eq(memberKey)
                         .and(plogging.date.between(startDate, endDate))
                         .and(plogging.type.eq(type)))
+                .fetch();
+    }
+
+    @Transactional(readOnly = true)
+    public List<PloggingMonthRes> findPlogginLogByMonth(LocalDate firstDay, LocalDate lastDay) {
+        return queryFactory.select(constructor(PloggingMonthRes.class,
+                        plogging.date))
+                .from(plogging)
+                .where(plogging.date.between(firstDay, lastDay))
                 .fetch();
     }
 
