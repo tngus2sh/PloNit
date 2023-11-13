@@ -4,9 +4,9 @@ import com.plonit.ploggingservice.api.excel.controller.MemberFeignClient;
 import com.plonit.ploggingservice.api.excel.controller.response.VolunteerMemberInfoRes;
 import com.plonit.ploggingservice.api.excel.service.ExcelService;
 import com.plonit.ploggingservice.api.excel.service.dto.ExcelColumn;
+import com.plonit.ploggingservice.api.excel.service.dto.ExcelDto;
 import com.plonit.ploggingservice.api.excel.service.dto.PloggingDto;
 import com.plonit.ploggingservice.common.exception.CustomException;
-import com.plonit.ploggingservice.common.exception.ErrorCode;
 import com.plonit.ploggingservice.domain.plogging.repository.PloggingQueryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +41,7 @@ public class ExcelServiceImpl implements ExcelService {
     private final MemberFeignClient memberFeignClient;
     private final CircuitBreakerFactory circuitBreakerFactory;
 
+
     @Override
     public void findVolunteerPloggings() {
         LocalDate oneWeekBefore = LocalDate.now().minusWeeks(1);
@@ -49,8 +50,8 @@ public class ExcelServiceImpl implements ExcelService {
         LocalDateTime startDate = oneWeekBefore.minusDays(day).atStartOfDay();
         LocalDateTime endDate = oneWeekBefore.plusDays(6 - day).atTime(LocalTime.MAX);
 
-//        List<PloggingDto> ploggings = ploggingQueryRepository.findVolunteerPloggings(startDate, endDate);
-        List<PloggingDto> ploggings = ploggingQueryRepository.findVolunteerPloggings(null, null);
+        List<PloggingDto> ploggings = ploggingQueryRepository.findVolunteerPloggings(startDate, endDate);
+//        List<PloggingDto> ploggings = ploggingQueryRepository.findVolunteerPloggings(null, null);
 
         List<Long> memberIdList = ploggings.stream().map(ploggingEntity -> {
             return ploggingEntity.getMemberId();
@@ -60,16 +61,20 @@ public class ExcelServiceImpl implements ExcelService {
 
         CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
 
-        List<VolunteerMemberInfoRes> volunteerMemberInfoRes = circuitBreaker.run(
+        List<VolunteerMemberInfoRes> volunteerInfos = circuitBreaker.run(
                 () -> memberFeignClient.findVolunteerMemberInfo(memberIdList).getResultBody(),
                 throwable -> null
         );
 
-        System.out.println("봉사 결과 반환: " + volunteerMemberInfoRes);
+        System.out.println("봉사 결과 반환: " + volunteerInfos);
 
-        if(volunteerMemberInfoRes != null) {
+        List<ExcelDto> excelDtoList = new ArrayList<>();
+
+        if(volunteerInfos != null) {
             for(int i = 0; i < ploggings.size(); i++) {
-                ploggings.get(i).setVolunteerInfo(volunteerMemberInfoRes.get(i));
+                if(volunteerInfos.get(i) != null) {
+                    excelDtoList.add(ExcelDto.of(ploggings.get(i), volunteerInfos.get(i)));
+                }
             }
         }
         else {
