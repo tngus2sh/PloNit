@@ -3,6 +3,7 @@ package com.plonit.plonitservice.api.badge.service.impl;
 import com.plonit.plonitservice.api.badge.service.BadgeService;
 import com.plonit.plonitservice.api.badge.service.dto.BadgeDto;
 import com.plonit.plonitservice.api.badge.service.dto.CrewBadgeDto;
+import com.plonit.plonitservice.api.badge.service.dto.GrantMemberBadgeDto;
 import com.plonit.plonitservice.api.badge.service.dto.MembersBadgeDto;
 import com.plonit.plonitservice.common.AwsS3Uploader;
 import com.plonit.plonitservice.common.exception.CustomException;
@@ -113,6 +114,13 @@ public class BadgeServiceImpl implements BadgeService {
         }
 
         crewBadgeRepository.saveAll(crewBadges);
+
+    }
+
+    @Override
+    public void grantBadgeByIndividual(GrantMemberBadgeDto grantMemberBadgeDto) {
+
+        // 플로깅 횟수가
 
     }
 }
