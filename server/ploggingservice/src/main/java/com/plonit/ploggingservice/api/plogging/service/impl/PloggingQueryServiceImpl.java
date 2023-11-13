@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -65,6 +66,20 @@ public class PloggingQueryServiceImpl implements PloggingQueryService {
             return ploggingQueryRepository.findPloggingLogByDayAndType(startDate, endDate, memberKey, Type.CREWPING);
         }
         return ploggingQueryRepository.findPloggingLogByDay(startDate, endDate, memberKey);
+    }
+
+    @Override
+    public List<PloggingMonthRes> findPloggingLogByMonth(int month, Long memberKey) {
+
+        YearMonth yearMonth = YearMonth.now().withMonth(month);
+
+        // 해당 월의 첫 날짜 구하기
+        LocalDate firstDayOfMonth = yearMonth.atDay(1);
+
+        // 해당 월의 마지막 날짜 구하기
+        LocalDate lastDayOfMonth = yearMonth.atEndOfMonth();
+
+        return ploggingQueryRepository.findPlogginLogByMonth(firstDayOfMonth, lastDayOfMonth);
     }
 
     @Override
