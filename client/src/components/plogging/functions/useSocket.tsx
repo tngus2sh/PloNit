@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import SockJS from "sockjs-client";
 import { Client, IMessage } from "@stomp/stompjs";
 import getGPS from "./getGPS";
@@ -28,6 +28,7 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
   const userImage = useSelector<rootState, string>((state) => {
     return state.crewping.userImage;
   });
+  const [toggleSocket, setToggleSocket] = useState<boolean>(false);
 
   function onMessageReceived(message: IMessage) {
     const newMessage: Message = JSON.parse(message.body);
@@ -155,13 +156,15 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
   }
 
   useEffect(() => {
-    connectToSocket();
+    if (toggleSocket) {
+      connectToSocket();
+    }
     return () => {
-      if (stompClient.current) {
+      if (!toggleSocket && stompClient.current) {
         stompClient.current.deactivate();
       }
     };
-  }, []);
+  }, [toggleSocket]);
 
   useEffect(() => {
     if (startRequest) {
@@ -187,6 +190,8 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
       sendImage();
     }
   }, [userImage]);
+
+  return { setToggleSocket };
 }
 
 export default useSocket;
