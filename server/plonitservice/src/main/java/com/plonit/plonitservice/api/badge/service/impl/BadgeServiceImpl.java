@@ -126,7 +126,7 @@ public class BadgeServiceImpl implements BadgeService {
 
     }
 
-    /* 플로깅 횟수 */
+    /* 개인 랭킹 */
     @Transactional
     @Override
     public void grantRankBadge(GrantMemberRankDto grantMemberRankDto) {
@@ -138,6 +138,21 @@ public class BadgeServiceImpl implements BadgeService {
             saveMemberBadge(BadgeCode.RANK_2, grantMemberRankDto.getMemberKey());
         } else if (rank == 3) {
             saveMemberBadge(BadgeCode.RANK_3, grantMemberRankDto.getMemberKey());
+        }
+    }
+
+    /* 크루 랭킹 */
+    @Transactional
+    @Override
+    public void grantCrewRankBadge(GrantCrewRankDto grantCrewRankDto) {
+        Integer rank = grantCrewRankDto.getRank();
+
+        if (rank == 1) {
+            saveCrewBadge(BadgeCode.RANK_1, grantCrewRankDto.getCrewId());
+        } else if (rank == 2) {
+            saveCrewBadge(BadgeCode.RANK_2, grantCrewRankDto.getCrewId());
+        } else if (rank == 3) {
+            saveCrewBadge(BadgeCode.RANK_3, grantCrewRankDto.getCrewId());
         }
     }
 
@@ -224,5 +239,19 @@ public class BadgeServiceImpl implements BadgeService {
     }
 
     /* 랭킹 */
+    @Transactional
+    @Override
+    public void saveCrewBadge(BadgeCode code, Long crewId) {
+        Badge badge = badgeRepository.findByCode(BadgeCode.COUNT_1)
+                .orElseThrow(() -> new CustomException(BADGE_NOT_FOUND));
+
+        Crew crew = crewRepository.findById(crewId)
+                .orElseThrow(() -> new CustomException(CREW_NOT_FOUND));
+
+        crewBadgeRepository.save(CrewBadge.builder()
+                .badge(badge)
+                .crew(crew)
+                .build());
+    }
 
 }

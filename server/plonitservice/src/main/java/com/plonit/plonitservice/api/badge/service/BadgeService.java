@@ -17,6 +17,8 @@ public interface BadgeService {
 
     public void grantRankBadge(GrantMemberRankDto grantMemberRankDto);
 
+    public void grantCrewRankBadge(GrantCrewRankDto grantCrewRankDto);
+
     public void doGrantCountBadge(int value, Long memberKey);
 
     public void doGrantDistanceBadge(Double distance, Long memberKey);
@@ -24,4 +26,6 @@ public interface BadgeService {
     public void saveMemberBadge(BadgeCode code, Long memberKey);
 
     public void saveMemberBadgeByDistance(BadgeCode code, Long memberKey);
+
+    public void saveCrewBadge(BadgeCode code, Long crewId);
 }

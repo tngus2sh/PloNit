@@ -1,8 +1,10 @@
 package com.plonit.plonitservice.api.badge.controller;
 
+import com.plonit.plonitservice.api.badge.controller.request.GrantCrewRankReq;
 import com.plonit.plonitservice.api.badge.controller.request.GrantMemberBadgeReq;
 import com.plonit.plonitservice.api.badge.controller.request.GrantMemberRankReq;
 import com.plonit.plonitservice.api.badge.service.BadgeService;
+import com.plonit.plonitservice.api.badge.service.dto.GrantCrewRankDto;
 import com.plonit.plonitservice.api.badge.service.dto.GrantMemberBadgeDto;
 import com.plonit.plonitservice.api.badge.service.dto.GrantMemberRankDto;
 import com.plonit.plonitservice.common.CustomApiResponse;
@@ -41,7 +43,7 @@ public class BadgeApiController {
         return CustomApiResponse.ok(null);
     }
 
-    @Operation(summary = "랭킹 배지 부여", description = "시즌 종료 후 랭킹 배지 부여")
+    @Operation(summary = "[관리자용] 개인 랭킹 배지 부여", description = "시즌 종료 후 랭킹 배지 부여")
     @PostMapping("/member-rank")
     public CustomApiResponse<Void> grantMemberRank(
             @RequestBody GrantMemberRankReq grantMemberRankReq,
@@ -54,5 +56,16 @@ public class BadgeApiController {
         return CustomApiResponse.ok(null);
     }
 
+    @Operation(summary = "[관리자용] 크루 랭킹 배지 부여", description = "시즌 종료 후 랭킹 배지 부여")
+    @PostMapping("/member-rank")
+    public CustomApiResponse<Void> grantCrewRank(
+            @RequestBody GrantCrewRankReq grantCrewRankReq,
+            HttpServletRequest servletRequest
+    ) {
+        Long memberKey = RequestUtils.getMemberKey(servletRequest);
 
+        badgeService.grantCrewRankBadge(GrantCrewRankDto.of(grantCrewRankReq));
+
+        return CustomApiResponse.ok(null);
+    }
 }
