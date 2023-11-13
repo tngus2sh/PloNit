@@ -61,7 +61,7 @@ const SoloJog = () => {
       )}
       <input
         type="file"
-        accept="image/*"
+        accept="image/jpeg, image/png"
         capture="environment"
         id="cameraInput-IND"
         ref={fileInputRef}
