@@ -7,7 +7,7 @@ import { FeedInterface } from "interface/crewInterface";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import styled from "styled-components";
-import { getFeedDelete } from "api/lib/feed";
+import { getFeedDelete, getLikeFeed } from "api/lib/feed";
 import Sheet from "react-modal-sheet";
 
 import "swiper/css";
@@ -57,6 +57,22 @@ const FeedItem = ({
     ? new Date(feed.createdDate)
     : new Date();
   const isfeedImages = feed.feedPictures;
+  const [isLiked, setLiked] = useState(false);
+  const toggleLike = () => {
+    getLikeFeed(
+      accessToken,
+      feed.id,
+      (res) => {
+        console.log(res.data);
+        console.log("좋아요 성공");
+        setLiked(!isLiked);
+      },
+      (err) => {
+        console.log("좋아요 에러", err);
+      },
+    );
+  };
+
   const toggleCommentModal = () => {
     setCommentModalOpen(!isCommentModalOpen);
   };
@@ -112,6 +128,19 @@ const FeedItem = ({
       </StyledSwiper>
 
       <div className={style.icon_area}>
+        {isLiked ? (
+          <Icon
+            icon="bi:heart-fill"
+            style={{ width: "1.8rem", height: "1.8rem", color: "red" }}
+            onClick={toggleLike}
+          />
+        ) : (
+          <Icon
+            icon="bi:heart"
+            style={{ width: "1.8rem", height: "1.8rem" }}
+            onClick={toggleLike}
+          />
+        )}
         <Icon icon="bi:heart" style={{ width: "1.8rem", height: "1.8rem" }} />
         <Icon
           icon="bi:chat-left"
