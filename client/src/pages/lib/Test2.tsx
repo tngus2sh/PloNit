@@ -10,20 +10,14 @@ const Test2 = () => {
   const stompClient = useRef<Client | null>(null);
   const check = useRef<boolean>(false);
 
-  useEffect(() => {
-    if (!check.current) {
-      useSocket({
-        stompClient: stompClient,
-        roomId: "test",
-        senderId: "박주성",
-      });
-    }
+  const { setToggleSocket } = useSocket({
+    stompClient: stompClient,
+    roomId: "test",
+    senderId: "박주성",
+  });
 
-    return () => {
-      if (!check.current) {
-        check.current = true;
-      }
-    };
+  useEffect(() => {
+    setToggleSocket(true);
   }, []);
 
   return (
