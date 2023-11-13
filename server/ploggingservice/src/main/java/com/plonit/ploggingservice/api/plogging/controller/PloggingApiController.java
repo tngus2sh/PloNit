@@ -204,14 +204,17 @@ public class PloggingApiController {
     
     @Operation(summary = "플로깅 주변의 유저 조회", description = "위도, 경도에 맞는 '구'를 가져와 해당 구에 있는 유저를 조회한다.")
     @GetMapping("/users/{latitude}/{longitude}")
-    public CustomApiResponse<UsersRes> findPloggingUsers(
+    public CustomApiResponse<List<UsersRes>> findPloggingUsers(
             @PathVariable(value = "latitude") Double latitude,
-            @PathVariable(value = "longitude") Double longitude
+            @PathVariable(value = "longitude") Double longitude,
+            HttpServletRequest servletRequest
     ) {
-        // TODO: 2023-10-27 주변에 있는 유저 조회 
-        
-        
-        return null;
+        //  주변에 있는 유저 조회
+        Long memberKey = RequestUtils.getMemberKey(servletRequest);
+
+        List<UsersRes> ploggingUsers = ploggingQueryService.findPloggingUsers(latitude, longitude);
+
+        return CustomApiResponse.ok(ploggingUsers);
     }
 
     @Operation(summary = "유저별 플로깅 참여 횟수 조회", description = "유저 아이디를 가지고 플로깅에 참여한 횟수를 조회한다.")

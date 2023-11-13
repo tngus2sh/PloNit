@@ -1,9 +1,6 @@
 package com.plonit.ploggingservice.api.plogging.service;
 
-import com.plonit.ploggingservice.api.plogging.controller.response.PloggingHelpRes;
-import com.plonit.ploggingservice.api.plogging.controller.response.PloggingLogRes;
-import com.plonit.ploggingservice.api.plogging.controller.response.PloggingMonthRes;
-import com.plonit.ploggingservice.api.plogging.controller.response.PloggingPeriodRes;
+import com.plonit.ploggingservice.api.plogging.controller.response.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +15,8 @@ public interface PloggingQueryService {
     PloggingLogRes findPloggingLogDetail(Long ploggingId, Long memberKey);
 
     List<PloggingHelpRes> findPloggingHelp(Double latitude, Double longitude);
+
+    List<UsersRes> findPloggingUsers(Double latitude, Double longitude);
 
     Integer countMemberPlogging();
 
