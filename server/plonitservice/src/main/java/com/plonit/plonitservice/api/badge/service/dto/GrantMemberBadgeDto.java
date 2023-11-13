@@ -9,14 +9,17 @@ import lombok.*;
 @Builder
 public class GrantMemberBadgeDto {
 
+    private Long memberKey;
     private Integer ploggingCount;
 
     private Double distance;
 
-    public static GrantMemberBadgeDto of(GrantMemberBadgeReq req) {
+    public static GrantMemberBadgeDto of(GrantMemberBadgeReq req, Long memberKey) {
         return GrantMemberBadgeDto.builder()
+                .memberKey(memberKey)
                 .ploggingCount(req.getPloggingCount())
                 .distance(req.getDistance())
                 .build();
     }
+
 }
