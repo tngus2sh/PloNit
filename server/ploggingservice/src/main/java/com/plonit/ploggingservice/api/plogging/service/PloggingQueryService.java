@@ -10,7 +10,7 @@ import java.util.Set;
 
 public interface PloggingQueryService {
 
-    List<PloggingPeriodRes> findPloggingLogByDay(String startDay, String endDay, Long memberKey);
+    List<PloggingPeriodRes> findPloggingLogByDay(String startDay, String endDay, Long memberKey, String type);
 
     PloggingLogRes findPloggingLogDetail(Long ploggingId, Long memberKey);
 
