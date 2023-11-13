@@ -21,6 +21,10 @@ export interface PloggingLog {
   endTime?: string;
   totalTime?: string;
   distance?: string;
+  calorie?: number;
+  image?: string;
+  latitude?: number;
+  longitude?: number;
 }
 
 export interface Location {

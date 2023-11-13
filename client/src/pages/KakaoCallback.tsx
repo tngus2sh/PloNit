@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { userActions } from "store/user-slice";
 import { getProfile } from "api/lib/members";
-import { requestPermission } from "firebase-messaging-sw";
+// import { requestPermission } from "firebase-messaging-sw";
 
 const KakaoCallback = () => {
   const dispatch = useDispatch();
