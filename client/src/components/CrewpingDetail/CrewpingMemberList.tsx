@@ -55,7 +55,7 @@ const CrewpingMemberList = ({ crewping }: { crewping: CrewpingInterface }) => {
           <img src={member.profileImage} alt="" />
           <div className={style.nickname}>{member.nickname}</div>
           {User.crewinfo.isCrewpingMaster === User.info.nickname ? (
-            User.crewinfo.isCrewpingMaster !== crewping.masterNickname ? (
+            member.nickname !== crewping.masterNickname ? (
               <Icon
                 icon="bi:x"
                 className={style.icon}
