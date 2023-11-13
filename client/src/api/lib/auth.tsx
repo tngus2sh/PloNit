@@ -1,9 +1,10 @@
 import { AxiosResponse } from "axios";
-import { customApi } from "./index";
+import { customApi, customLoginApi } from "./index";
 import * as Interfaces from "interface/authInterface";
 
 export async function login(
   code: string,
+  token: string,
   success: (
     res: AxiosResponse<any, any>,
   ) =>
@@ -14,7 +15,7 @@ export async function login(
     | void,
   fail: (err: any) => PromiseLike<never> | null | undefined | void,
 ) {
-  await customApi("/plonit-service/auth")
+  await customLoginApi("/plonit-service/auth", token)
     .get(`/kakao/login/${code}`)
     .then(success)
     .catch(fail);

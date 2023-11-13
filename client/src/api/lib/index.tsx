@@ -19,3 +19,14 @@ export const customApiForm = (baseURL: string) => {
   });
   return Api;
 };
+
+export const customLoginApi = (baseURL: string, token: string) => {
+  const Api = axios.create({
+    baseURL: `${process.env.REACT_APP_API_URL}${baseURL}`,
+    headers: {
+      "Content-Type": "application/json",
+      fcmToken: `${token}`,
+    },
+  });
+  return Api;
+};

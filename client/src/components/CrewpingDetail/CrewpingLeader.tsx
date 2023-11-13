@@ -7,7 +7,7 @@ interface CrewpingInfoProps {
 }
 
 const CrewpingLeader = ({ crewping }: CrewpingInfoProps) => {
-  const imageUrl = crewping.crewpingImage || "/NoImage.png";
+  const imageUrl = crewping.masterImage || "/NoImage.png";
 
   return (
     <div className={style.crewping_leader}>
