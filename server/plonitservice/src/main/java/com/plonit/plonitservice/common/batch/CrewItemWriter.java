@@ -1,5 +1,7 @@
 package com.plonit.plonitservice.common.batch;
 
+import com.plonit.plonitservice.api.badge.service.BadgeService;
+import com.plonit.plonitservice.api.badge.service.dto.GrantCrewRankDto;
 import com.plonit.plonitservice.common.enums.Rank;
 import com.plonit.plonitservice.common.util.RedisUtils;
 import com.plonit.plonitservice.domain.rank.CrewRanking;
@@ -16,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CrewItemWriter implements ItemWriter<CrewRanking> {
 
+    private final BadgeService badgeService;
     private final CrewRankingRepository crewRankingRepository;
     private final RedisUtils redisUtils;
 
@@ -24,10 +27,18 @@ public class CrewItemWriter implements ItemWriter<CrewRanking> {
         log.info("[ITEMS] = {}", items.toString());
 
         /* 크루 랭킹 DB에 저장*/
-        crewRankingRepository.saveAll(items);
+        List<? extends CrewRanking> crewRankings = crewRankingRepository.saveAll(items);
 
         /* Redis 지우기 */
-//        redisUtils.deleteRedisKey(Rank.CREW.getDescription());
+        redisUtils.deleteRedisKey(Rank.CREW.getDescription());
 
+        /* 크루 랭킹 */
+        for (int i = 0; i < 3; i++) {
+            CrewRanking crewRanking = crewRankings.get(i);
+            badgeService.grantCrewRankBadge(GrantCrewRankDto.builder()
+                    .crewId(crewRanking.getId())
+                    .rank(crewRanking.getRanking())
+                    .build());
+        }
     }
 }
