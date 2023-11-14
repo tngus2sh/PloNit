@@ -30,6 +30,7 @@ const RegionModal = ({
   const [dongData, setdongData] = useState<RegionInterface[]>([]);
   const [selectedDongCode, setSelectedDongCode] = useState<number | null>(null);
   const [selectedDongName, setSelectedDongName] = useState<number | null>(null);
+  const [isResult, setResult] = useState("");
 
   useEffect(() => {
     getSido(
@@ -49,6 +50,13 @@ const RegionModal = ({
   const SelectedSido = (item: any) => {
     setSelectedSidoCode(item.sidoCode);
     setSelectedSidoName(item.sidoName);
+    setResult(item.sidoName);
+    setSelectedGugunCode(null);
+    setSelectedGugunName(null);
+    setgugunData([]);
+    setSelectedDongCode(null);
+    setSelectedDongName(null);
+    setdongData([]);
     getGugun(
       accessToken,
       item.sidoCode,
@@ -61,11 +69,14 @@ const RegionModal = ({
         console.log("구군 API 연결 실패", err);
       },
     );
-    window.scrollTo(0, 0);
   };
   const SelectedGugun = (item: any) => {
     setSelectedGugunCode(item.gugunCode);
     setSelectedGugunName(item.gugunName);
+    setResult(`${selectedSidoName} ${item.gugunName}`);
+    setSelectedDongCode(null);
+    setSelectedDongName(null);
+    setdongData([]);
     getDong(
       accessToken,
       item.gugunCode,
@@ -78,7 +89,6 @@ const RegionModal = ({
         console.log("동 API 연결 실패", err);
       },
     );
-    window.scrollTo(0, 0);
   };
 
   const SelectedDong = (item: any) => {
@@ -87,6 +97,7 @@ const RegionModal = ({
     setSignupRegion(
       `${selectedSidoName} ${selectedGugunName} ${item.dongName}`,
     );
+    setResult(`${selectedSidoName} ${selectedGugunName} ${item.dongName}`);
     setRegionCode(item.dongCode);
   };
 
@@ -140,6 +151,7 @@ const RegionModal = ({
           </div>
         </div>
       </div>
+      <div className={style.result}>{isResult}</div>
       <div className={style.confirm_btn} onClick={onClose}>
         확인
       </div>
