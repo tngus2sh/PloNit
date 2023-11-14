@@ -103,6 +103,7 @@ const MyPloggingPage = () => {
       accessToken: accessToken,
       start_day: formattedDate(dateRange[0]),
       end_day: formattedDate(dateRange[1]),
+      type: null,
       success: (res) => {
         console.log("플로깅 일별기록 조회 성공");
         console.log(res.data);

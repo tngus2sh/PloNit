@@ -25,4 +25,5 @@ export interface MyCrewpingInterface {
   place: string;
   cntPeople: number;
   memberProfileImage: any;
+  isMaster: boolean;
 }
