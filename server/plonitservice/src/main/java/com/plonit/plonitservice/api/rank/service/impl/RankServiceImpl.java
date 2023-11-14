@@ -53,22 +53,6 @@ public class RankServiceImpl implements RankService {
 
         MembersRankResponse membersRankResponse = new MembersRankResponse();
 
-        /* 랭킹 기간 생성 */
-        LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
-        // 이번 달의 첫째 날을 얻습니다.
-        LocalDate firstDayOfThisMonth = today.withDayOfMonth(1);
-
-        // 첫째 날의 첫 시간을 LocalDateTime으로 가져옵니다.
-        LocalDateTime firstDateTimeOfThisMonth = firstDayOfThisMonth.atStartOfDay();
-
-
-        RankingPeriod rankingPeriodTest = null;
-        rankingPeriodTest = RankingPeriod.builder()
-                .startDate(firstDateTimeOfThisMonth)
-                .endDate(firstDateTimeOfThisMonth.plusDays(13))
-                .build();
-        rankingPeriodRepository.save(rankingPeriodTest);
-
         
         // 현재 랭킹 기간 조회
         RankingPeriod rankingPeriod = nowRankingPeriod();
