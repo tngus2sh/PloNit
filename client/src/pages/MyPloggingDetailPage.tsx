@@ -20,7 +20,7 @@ const MyPloggingDetailPage = () => {
   const User = useSelector((state: any) => state.user.auth);
   const { ploggingId } = useParams();
   const [isPloggingDetail, setPloggingDetail] = useState<PloggingLog>();
-  const [isstartDate, setStartDate] = useState("");
+  const [isstartDate, setStartDate] = useState<Date>(new Date());
   console.log(isPloggingDetail);
   console.log(isstartDate);
   useEffect(() => {
@@ -31,7 +31,7 @@ const MyPloggingDetailPage = () => {
         console.log("플로깅 상세 조회 성공");
         console.log(res.data);
         setPloggingDetail(res.data.resultBody);
-        setStartDate(res.data.resultBody.startTime);
+        setStartDate(new Date(res.data.resultBody.startTime));
       },
       fail: (error) => {
         console.error("플로깅 상세 조회 실패", error);
@@ -39,9 +39,9 @@ const MyPloggingDetailPage = () => {
     });
   }, []);
 
-  const year = new Date(isstartDate).getFullYear();
-  const month = new Date(isstartDate).getMonth() + 1;
-  const day = new Date(isstartDate).getDate();
+  const year = isstartDate.getFullYear();
+  const month = isstartDate.getMonth() + 1;
+  const day = isstartDate.getDate();
   return (
     <div>
       <BackTopBar text="나의 플로깅" />
