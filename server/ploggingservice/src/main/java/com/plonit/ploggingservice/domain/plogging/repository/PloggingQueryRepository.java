@@ -70,11 +70,12 @@ public class PloggingQueryRepository {
     }
 
     @Transactional(readOnly = true)
-    public List<PloggingMonthRes> findPlogginLogByMonth(LocalDate firstDay, LocalDate lastDay) {
+    public List<PloggingMonthRes> findPlogginLogByMonth(Long memberKey, LocalDate firstDay, LocalDate lastDay) {
         return queryFactory.select(constructor(PloggingMonthRes.class,
                         plogging.date))
                 .from(plogging)
-                .where(plogging.date.between(firstDay, lastDay))
+                .where(plogging.date.between(firstDay, lastDay)
+                        .and(plogging.memberKey.eq(memberKey)))
                 .fetch();
     }
 

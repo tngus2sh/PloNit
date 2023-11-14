@@ -79,7 +79,7 @@ public class PloggingQueryServiceImpl implements PloggingQueryService {
         // 해당 월의 마지막 날짜 구하기
         LocalDate lastDayOfMonth = yearMonth.atEndOfMonth();
 
-        return ploggingQueryRepository.findPlogginLogByMonth(firstDayOfMonth, lastDayOfMonth);
+        return ploggingQueryRepository.findPlogginLogByMonth(memberKey, firstDayOfMonth, lastDayOfMonth);
     }
 
     @Override
