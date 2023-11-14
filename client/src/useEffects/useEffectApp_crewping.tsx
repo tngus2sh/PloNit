@@ -85,6 +85,7 @@ function useEffectApp_Crewping() {
             console.log("크루핑 요청!");
             console.log(response);
             dispatch(P.setCrewpingId(response.data.resultBody));
+            dispatch(P.setPloggingType("CREWPING"));
             dispatch(P.setBeforeCrewping(false));
             if (location.pathname !== "/plogging") {
               navigate("/plogging");

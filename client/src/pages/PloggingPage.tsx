@@ -16,19 +16,18 @@ function getComponent(
   beforeCrewping: boolean,
   isLoading: boolean,
 ): JSX.Element {
+  if (beforeCrewping) {
+    if (isLoading) return <BeforeCrewping />;
+    return <BeforeStart />;
+  }
+
   switch (ploggingType) {
     case "IND":
       return <SoloJog />;
     case "VOL":
       return <SoloPlocka />;
     case "CREWPING":
-      if (beforeCrewping && isLoading) {
-        return <BeforeCrewping />;
-      } else if (beforeCrewping && !isLoading) {
-        return <BeforeStart />;
-      } else {
-        return <Crewping />;
-      }
+      return <Crewping />;
     default:
       return <BeforeStart />;
   }
