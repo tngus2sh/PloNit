@@ -18,6 +18,6 @@ public class FindBadgeRes {
 
     private BadgeStatus status;
 
-    private Boolean check; // true : 획득, false : 획득 X
+    private Long memberBadgeId; // null : 갖고 있지 않음
 
 }
