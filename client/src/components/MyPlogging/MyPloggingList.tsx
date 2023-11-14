@@ -19,7 +19,7 @@ const MyPloggingList = ({ dateRange, PloggingList }: MyPloggingListProps) => {
   console.log(dateRange);
 
   const [isSelectedType, setSelectedType] = useState("");
-
+  console.log(isSelectedType);
   return (
     <div className={style.myplogging_list}>
       <div className={style.top_section}>
