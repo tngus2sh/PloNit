@@ -11,12 +11,11 @@ import * as P from "store/plogging-slice";
 
 const intervalTime = 2;
 
-function useEffectApp() {
+function useEffectApp(worker: React.MutableRefObject<Worker>) {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
   const interval = useRef<NodeJS.Timeout | null>(null);
-  const worker = new Worker(new URL(`workers/worker.js`, import.meta.url));
   const useTimer = useSelector<rootState, boolean>((state) => {
     return (
       state.plogging.ploggingType != "none" &&
@@ -78,9 +77,9 @@ function useEffectApp() {
 
           if (window.Worker) {
             setWorkerNA(false);
-            worker.postMessage("start");
-            worker.postMessage("start2");
-            worker.onmessage = (event) => {
+            worker.current.postMessage("start");
+            worker.current.postMessage("start2");
+            worker.current.onmessage = (event) => {
               if (event.data === "tick") {
                 dispatch(P.addTime());
               }
@@ -99,11 +98,11 @@ function useEffectApp() {
       if (interval.current) {
         clearInterval(interval.current);
       }
-      worker.terminate();
+      worker.current.terminate();
     }
 
     return () => {
-      worker.terminate();
+      worker.current.terminate();
     };
   }, [useTimer]);
 

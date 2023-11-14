@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import style from "styles/css/App.module.css";
 import NavBar from "components/common/NavBar";
 import RouteComponent from "pages/lib/index";
@@ -21,8 +21,11 @@ function App() {
     return state.window.width;
   });
 
-  useEffectApp();
-  useEffectApp_Crewping();
+  const worker = useRef<Worker>(
+    new Worker(new URL(`workers/worker.js`, import.meta.url)),
+  );
+  useEffectApp(worker);
+  useEffectApp_Crewping(worker);
 
   return (
     <div
