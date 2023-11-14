@@ -182,6 +182,7 @@ const AddInfoPage = () => {
           dateFormat="yyyy.MM.dd"
           locale={ko}
           showPopperArrow={false}
+          fixedHeight
           renderCustomHeader={({
             date,
             changeYear,

@@ -11,6 +11,13 @@ import style from "styles/css/ProfileEditPage.module.css";
 import { nicknameCheck } from "api/lib/auth";
 import { getProfile, EditProfile } from "api/lib/members";
 
+const formattedDate = (date: any) => {
+  const year = date.getFullYear();
+  const month = ("0" + (date.getMonth() + 1)).slice(-2);
+  const day = ("0" + date.getDate()).slice(-2);
+  return `${year}.${month}.${day}`;
+};
+
 const ProfileEditPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -68,7 +75,12 @@ const ProfileEditPage = () => {
     formData.append("weight", isWeight);
     formData.append("region", isRegion);
     formData.append("id1365", isId_1365);
-    formData.append("profileImage", isProfileImage);
+    if (isProfileImage instanceof File) {
+      formData.append("profileImage", isProfileImage);
+    } else {
+      formData.append("profileImage", User.profileImage);
+    }
+    // formData.append("profileImage", isProfileImage);
     formData.append("birth", User.birth);
     formData.append("gender", User.gender);
     formData.append("name", User.name);
@@ -134,7 +146,7 @@ const ProfileEditPage = () => {
                 <div className={style.gender_man}>남</div>
               )}
             </div>
-            <div className={style.birth}>{User.birth}</div>
+            <div className={style.birth}>{formattedDate(User.birth)}</div>
           </div>
         </div>
         <Input
