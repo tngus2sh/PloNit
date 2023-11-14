@@ -13,7 +13,7 @@ import * as Crewping from "store/crewping-slice";
 
 import { startPlogging } from "api/lib/plogging";
 
-function useEffectApp_Crewping(worker: React.MutableRefObject<Worker>) {
+function useEffectApp_Crewping() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -43,6 +43,7 @@ function useEffectApp_Crewping(worker: React.MutableRefObject<Worker>) {
   const weight = useSelector<rootState, number>((state) => {
     return state.user.info.weight;
   });
+  const workerRef = useRef<Worker | null>(null);
 
   const { setToggleSocket } = useSocket({ stompClient, roomId, senderId });
 
@@ -56,8 +57,11 @@ function useEffectApp_Crewping(worker: React.MutableRefObject<Worker>) {
       }
 
       if (window.Worker) {
-        worker.current.postMessage("start30");
-        worker.current.onmessage = (event) => {
+        workerRef.current = new Worker(
+          new URL(`workers/worker.js`, import.meta.url),
+        );
+        workerRef.current.postMessage("start30");
+        workerRef.current.onmessage = (event) => {
           if (event.data === "tick30") {
             dispatch(Crewping.setGetLocation(true));
           }
@@ -66,6 +70,10 @@ function useEffectApp_Crewping(worker: React.MutableRefObject<Worker>) {
         getLocation();
       }
     }
+
+    return () => {
+      workerRef.current?.terminate();
+    };
   }, [isLoading]);
 
   useEffect(() => {
@@ -106,9 +114,8 @@ function useEffectApp_Crewping(worker: React.MutableRefObject<Worker>) {
       if (interval.current) {
         clearInterval(interval.current);
       }
-      if (worker.current) {
-        worker.current.terminate();
-      }
+
+      workerRef.current?.terminate();
     }
   }, [crewpingEnd]);
 }
