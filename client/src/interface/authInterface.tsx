@@ -19,7 +19,7 @@ export interface MyCrewpingInterface {
   crewName: string;
   crewpingName: string;
   crewpingImage: string;
-  dDay: number;
+  dday: number;
   startDate: string;
   endDate: string;
   place: string;

@@ -12,12 +12,14 @@ const CrewPloggingCard = ({ card }: { card: MyCrewpingInterface }) => {
   return (
     <div className={style.plogging_card}>
       <div className={style.plogging_text}>
-        <div className={style.crewping_leader}>내가 대장</div>
-        <div className={style.crewping_name}>장덕동 지킴이</div>
-        <div className={style.crewping_dday}>D - 3</div>
-        <div className={style.crewping_date}>10.27(금) 17:00~18:30</div>
-        <div className={style.crewping_place}>수완호수공원</div>
-        <div className={style.crewping_member}>크루핑 멤버 5</div>
+        <div className={style.crewping_leader}>{card.crewName}</div>
+        <div className={style.crewping_name}>{card.crewpingName}</div>
+        <div className={style.crewping_dday}>D - {card.dday}</div>
+        <div className={style.crewping_date}>{card.startDate}</div>
+        <div className={style.crewping_place}>{card.place}</div>
+        <div className={style.crewping_member}>
+          크루핑 멤버 {card.cntPeople}
+        </div>
         <div className={style.member_img}>
           <Swiper
             {...{
@@ -29,42 +31,11 @@ const CrewPloggingCard = ({ card }: { card: MyCrewpingInterface }) => {
               },
             }}
           >
-            <SwiperSlide
-              style={{ width: "unset", zIndex: 1 }}
-              className={style.participant_item}
-            >
-              <img src="/metamong.png" alt="몽" />
-            </SwiperSlide>
-            <SwiperSlide
-              style={{ width: "unset", zIndex: 1 }}
-              className={style.participant_item}
-            >
-              <img src="/metamong.png" alt="몽" />
-            </SwiperSlide>
-            <SwiperSlide
-              style={{ width: "unset", zIndex: 1 }}
-              className={style.participant_item}
-            >
-              <img src="/metamong.png" alt="몽" />
-            </SwiperSlide>
-            <SwiperSlide
-              style={{ width: "unset", zIndex: 1 }}
-              className={style.participant_item}
-            >
-              <img src="/metamong.png" alt="몽" />
-            </SwiperSlide>
-            <SwiperSlide
-              style={{ width: "unset", zIndex: 1 }}
-              className={style.participant_item}
-            >
-              <img src="/metamong.png" alt="몽" />
-            </SwiperSlide>
-            <SwiperSlide
-              style={{ width: "unset", zIndex: 1 }}
-              className={style.participant_item}
-            >
-              <img src="/metamong.png" alt="몽" />
-            </SwiperSlide>
+            {card.memberProfileImage.map((image: string, index: number) => (
+              <SwiperSlide key={index} style={{ width: "unset", zIndex: 1 }}>
+                <img src={image} alt="몽" />
+              </SwiperSlide>
+            ))}
           </Swiper>
         </div>
       </div>

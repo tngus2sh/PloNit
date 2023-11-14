@@ -11,13 +11,13 @@ import {
 } from "api/lib/plogging";
 import { PloggingLog } from "interface/ploggingInterface";
 
-const dayList = [
-  "2023-10-10",
-  "2023-10-21",
-  "2023-10-02",
-  "2023-10-14",
-  "2023-10-27",
-];
+// const dayList = [
+//   "2023-10-10",
+//   "2023-10-21",
+//   "2023-10-02",
+//   "2023-10-14",
+//   "2023-10-27",
+// ];
 
 // date 형식 변경 (2023-10-27)
 const formattedDate = (date: any) => {
@@ -67,7 +67,7 @@ const MyPloggingPage = () => {
 
   // 플로깅한 날짜에 점 표시
   const tileContent = ({ date, view }: { date: Date; view: string }) => {
-    if (dayList.includes(date.toISOString().split("T")[0])) {
+    if (isMonthList.includes(date.toISOString().split("T")[0])) {
       return (
         <div
           style={{
@@ -87,7 +87,7 @@ const MyPloggingPage = () => {
       month: isNowMonth,
       success: (res) => {
         console.log("플로깅 월별기록 조회 성공");
-        console.log(res.data);
+        console.log(res.data.resultBody);
         setMonthList(res.data.resultBody);
       },
       fail: (error) => {
