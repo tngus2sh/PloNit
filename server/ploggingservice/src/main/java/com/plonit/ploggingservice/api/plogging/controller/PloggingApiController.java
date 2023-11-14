@@ -178,6 +178,22 @@ public class PloggingApiController {
 
         return CustomApiResponse.ok(ploggingHelp);
     }
+
+    @Operation(summary = "도움 요청 완료", description = "도움 완료 했을 때 요청 상태 변경")
+    @PatchMapping("/help")
+    public CustomApiResponse<Long> updatePloggingHelpActive(
+            @RequestBody UpdatePloggingHelpStatusReq updatePloggingHelpStatusReq,
+            HttpServletRequest servletRequest
+    ) {
+        // 플로깅 도움 요청 완료
+        log.info("updatePloggingHelpActive = {}", updatePloggingHelpStatusReq.toString());
+
+        Long memberKey = RequestUtils.getMemberKey(servletRequest);
+
+        Long ploggingHelpId = ploggingService.updatePloggingHelpStatus(UpdatePloggingHelpStatusDto.of(updatePloggingHelpStatusReq, memberKey));
+
+        return CustomApiResponse.ok(ploggingHelpId);
+    }
     
     @Operation(summary = "플로깅 중간에 이미지 전송", description = "플로깅 중간에 이미지를 전송하고자 할때 이미지 정보를 넣는다.")
     @PostMapping("/image")

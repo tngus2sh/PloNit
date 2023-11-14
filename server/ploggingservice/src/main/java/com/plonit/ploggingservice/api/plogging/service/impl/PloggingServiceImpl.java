@@ -315,5 +315,16 @@ public class PloggingServiceImpl implements PloggingService {
         return null;
     }
 
+    @Transactional
+    @Override
+    public Long updatePloggingHelpStatus(UpdatePloggingHelpStatusDto dto) {
 
+        // ploggingHelpId로 해당 도움 가져오기
+        PloggingHelp ploggingHelp = ploggingHelpRepository.findByIdAndIsActive(dto.getPloggingHelpId(), true)
+                .orElseThrow(() -> new CustomException(PLOGGING_HELP_BAD_REQUEST));
+
+        ploggingHelp.updateIsActive(dto.getIsActive());
+
+        return ploggingHelp.getId();
+    }
 }

@@ -17,6 +17,7 @@ public enum ErrorCode {
     INVALID_PLACE_REQUEST(HttpStatus.BAD_REQUEST, "해당하는 위치가 존재하지 않습니다."),
     PLOGGING_BAD_REQUEST(HttpStatus.BAD_REQUEST, "해당하는 플로깅이 존재하지 않습니다."),
     INVALID_CREWPINGID_REQUEST(HttpStatus.BAD_REQUEST, "해당하는 크루핑이 존재하지 않습니다."),
+    PLOGGING_HELP_BAD_REQUEST(HttpStatus.BAD_REQUEST, "해당하는 도움이 존재하지 않습니다."),
 
     /* 401 UNAUTHORIZED */
 
