@@ -111,7 +111,6 @@ const MyPloggingPage = () => {
       },
     });
   }, [dateRange, isType]);
-  console.log(isPloggingList);
 
   return (
     <div>

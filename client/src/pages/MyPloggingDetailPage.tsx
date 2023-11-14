@@ -7,6 +7,12 @@ import { searchPloggingInfo } from "api/lib/plogging";
 import { PloggingLog } from "interface/ploggingInterface";
 import DefaultPathMap from "components/plogging/DefaultPathMap";
 
+const formatMinutes = (minutes: any) => {
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+  return `${("0" + hours).slice(-2)}:${("0" + remainingMinutes).slice(-2)}`;
+};
+
 const formattedDate = (date: any) => {
   const year = date.getFullYear();
   const month = ("0" + (date.getMonth() + 1)).slice(-2);
@@ -78,7 +84,7 @@ const MyPloggingDetailPage = () => {
           <div className={style.time}>
             <div>총 시간</div>
             <div className={style.record_large}>
-              {isPloggingDetail?.totalTime}
+              {formatMinutes(isPloggingDetail?.totalTime)}
             </div>
           </div>
           <div className={style.calorie}>
