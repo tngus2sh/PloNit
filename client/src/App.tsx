@@ -22,7 +22,7 @@ function App() {
   });
 
   useEffectApp();
-  // useEffectApp_Crewping();
+  useEffectApp_Crewping();
 
   return (
     <div

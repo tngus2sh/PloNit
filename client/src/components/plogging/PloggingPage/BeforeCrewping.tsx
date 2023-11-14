@@ -109,8 +109,6 @@ const BeforeCrewping = () => {
 
   function onClick() {
     dispatch(Crewping.setIsLoading(true));
-    dispatch(Crewping.setRoomId("roomId"));
-    dispatch(Crewping.setSenderId(nickname));
     setShow(true);
   }
 
