@@ -61,9 +61,7 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
         onMessageReceived,
       );
 
-      setTimeout(() => {
-        dispatch(Crewping.setProfileImage(userImage));
-      }, 2000);
+      dispatch(Crewping.setProfileImage(userImage));
     };
 
     stompClient.current?.activate();

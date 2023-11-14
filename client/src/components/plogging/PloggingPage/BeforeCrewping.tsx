@@ -80,7 +80,7 @@ const Waiting = () => {
             backgroundColor: "#2cd261",
           }}
           onClick={() => {
-            console.log("나중에 할 일");
+            dispatch(Crewping.setStartRequest(true));
           }}
         />
       ) : (
@@ -101,9 +101,6 @@ const BeforeCrewping = () => {
   const btnDivHeight = useSelector<rootState, number>((state) => {
     const windowHeight = state.window.height;
     return windowHeight * 0.1;
-  });
-  const nickname = useSelector<rootState, string>((state) => {
-    return state.user.info.nickname;
   });
   const [show, setShow] = useState<boolean>(false);
 

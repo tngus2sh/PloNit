@@ -14,17 +14,21 @@ import { rootState } from "store/store";
 function getComponent(
   ploggingType: ploggingType,
   beforeCrewping: boolean,
+  isLoading: boolean,
 ): JSX.Element {
-  if (beforeCrewping) {
-    return <BeforeCrewping />;
-  }
   switch (ploggingType) {
     case "IND":
       return <SoloJog />;
     case "VOL":
       return <SoloPlocka />;
     case "CREWPING":
-      return <Crewping />;
+      if (beforeCrewping && isLoading) {
+        return <BeforeCrewping />;
+      } else if (beforeCrewping && !isLoading) {
+        return <BeforeStart />;
+      } else {
+        return <Crewping />;
+      }
     default:
       return <BeforeStart />;
   }
@@ -38,12 +42,16 @@ const PloggingPage = () => {
   const beforeCrewping = useSelector<rootState, boolean>((state) => {
     return state.plogging.beforeCrewping;
   });
+  const isLoading = useSelector<rootState, boolean>((state) => {
+    return state.crewping.isLoading;
+  });
   const componentType: ploggingType = useSelector<rootState, ploggingType>(
     (state) => {
       return state.plogging.ploggingType;
     },
   );
-  const Component = getComponent(componentType, beforeCrewping);
+
+  const Component = getComponent(componentType, beforeCrewping, isLoading);
 
   useEffect(() => {
     if (!showComponent) {
