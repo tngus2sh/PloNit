@@ -8,7 +8,7 @@ import lombok.*;
 @Builder
 public class GrantMemberBadgeReq {
 
-    private Integer ploggingCount;
+    private Long ploggingCount;
 
     private Double distance;
 
