@@ -1,4 +1,4 @@
-import { AxiosResponse } from "axios";
+import { Axios, AxiosResponse } from "axios";
 import { customApi, customApiForm } from "./index";
 import { Coordinate } from "interface/ploggingInterface";
 
@@ -185,6 +185,28 @@ const searchHelpUsingLatLng = ({
   api.get(`/help/${latitude}/${longitude}`).then(success).catch(fail);
 };
 
+// 플로깅 도움 요청 상태 변경
+const changeHelp = ({
+  accessToken,
+  ploggingHelpId,
+  isActive,
+  success,
+  fail,
+}: {
+  accessToken: string;
+  ploggingHelpId: number;
+  isActive: boolean;
+  success: (response: AxiosResponse<any, any>) => void | undefined;
+  fail: (error: any) => void | undefined;
+}) => {
+  const api = ploggingApi;
+  api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
+  api
+    .patch(`/help`, JSON.stringify({ ploggingHelpId, isActive }))
+    .then(success)
+    .catch(fail);
+};
+
 // 플로깅 중 이미지 저장
 const savePloggingImage = ({
   accessToken,
@@ -290,6 +312,7 @@ export {
   searchPloggingUsingMonth,
   searchPloggingInfo,
   saveHelp,
+  changeHelp,
   searchHelpUsingLatLng,
   savePloggingImage,
   searchNeighbor,
