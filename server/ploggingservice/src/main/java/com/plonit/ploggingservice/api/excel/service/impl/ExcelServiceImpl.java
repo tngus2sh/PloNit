@@ -3,8 +3,10 @@ package com.plonit.ploggingservice.api.excel.service.impl;
 import com.plonit.ploggingservice.api.excel.controller.MemberFeignClient;
 import com.plonit.ploggingservice.api.excel.controller.response.VolunteerMemberInfoRes;
 import com.plonit.ploggingservice.api.excel.service.ExcelService;
+import com.plonit.ploggingservice.api.excel.service.MailService;
 import com.plonit.ploggingservice.api.excel.service.dto.ExcelColumn;
 import com.plonit.ploggingservice.api.excel.service.dto.ExcelDto;
+import com.plonit.ploggingservice.api.excel.service.dto.MailDto;
 import com.plonit.ploggingservice.api.excel.service.dto.PloggingDto;
 import com.plonit.ploggingservice.common.exception.CustomException;
 import com.plonit.ploggingservice.domain.plogging.repository.PloggingQueryRepository;
@@ -27,7 +29,7 @@ import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.plonit.ploggingservice.common.exception.ErrorCode.INVALID_PLACE_REQUEST;
+import static com.plonit.ploggingservice.common.exception.ErrorCode.INVALID_MAKING_EXCEL;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +39,7 @@ public class ExcelServiceImpl implements ExcelService {
     @Value("${file.path.excel}")
     private String excelFilePath;
 
+    private final MailService mailService;
     private final PloggingQueryRepository ploggingQueryRepository;
     private final MemberFeignClient memberFeignClient;
     private final CircuitBreakerFactory circuitBreakerFactory;
@@ -57,16 +60,12 @@ public class ExcelServiceImpl implements ExcelService {
             return ploggingEntity.getMemberId();
         }).collect(Collectors.toList());
 
-        System.out.println("리스트 생성 결과: " + memberIdList);
-
         CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
 
         List<VolunteerMemberInfoRes> volunteerInfos = circuitBreaker.run(
                 () -> memberFeignClient.findVolunteerMemberInfo(memberIdList).getResultBody(),
                 throwable -> null
         );
-
-        System.out.println("봉사 결과 반환: " + volunteerInfos);
 
         List<ExcelDto> excelDtoList = new ArrayList<>();
 
@@ -78,14 +77,14 @@ public class ExcelServiceImpl implements ExcelService {
             }
         }
         else {
-            throw new CustomException(INVALID_PLACE_REQUEST);
+            throw new CustomException(INVALID_MAKING_EXCEL);
         }
 
-        makeExcel(ploggings);
+        makeExcel(excelDtoList);
     }
 
     @Override
-    public void makeExcel(List<PloggingDto> data) {
+    public void makeExcel(List<ExcelDto> data) {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("봉사 플로깅");
 
@@ -113,40 +112,40 @@ public class ExcelServiceImpl implements ExcelService {
         // Body
         int rowCount = 1; // 현재 행의 개수를 가지고 있는 변수 rowCount 선언 (Header를 그리고 시작했으므로 1부터 시작)
 
-        for(PloggingDto plogging : data) {
+        for(ExcelDto excelDto : data) {
             row = sheet.createRow(rowCount++);
 
             cell = row.createCell(0);
             cell.setCellStyle(dataStyle);
-            cell.setCellValue(plogging.getId1365());
+            cell.setCellValue(excelDto.getId1365());
 
             cell = row.createCell(1);
             cell.setCellStyle(dataStyle);
-            cell.setCellValue(plogging.getName());
+            cell.setCellValue(excelDto.getName());
 
             cell = row.createCell(2);
             cell.setCellStyle(dataStyle);
-            cell.setCellValue(plogging.getBirth());
+            cell.setCellValue(excelDto.getBirth());
 
             cell = row.createCell(3);
             cell.setCellStyle(dataStyle);
-            cell.setCellValue(plogging.getTime());
+            cell.setCellValue(excelDto.getTime());
 
             cell = row.createCell(4);
             cell.setCellStyle(dataStyle);
-            cell.setCellValue(plogging.getDistance());
+            cell.setCellValue(excelDto.getDistance());
 
             cell = row.createCell(5);
             cell.setCellStyle(dataStyle);
-            cell.setCellValue(plogging.getStartImage());
+            cell.setCellValue(excelDto.getStartImage());
 
             cell = row.createCell(6);
             cell.setCellStyle(dataStyle);
-            cell.setCellValue(plogging.getMiddleImage());
+            cell.setCellValue(excelDto.getMiddleImage());
 
             cell = row.createCell(7);
             cell.setCellStyle(dataStyle);
-            cell.setCellValue(plogging.getEndImage());
+            cell.setCellValue(excelDto.getEndImage());
         }
 
         for(int i = 0; i < excelHeaderList.size(); i++){
@@ -165,8 +164,20 @@ public class ExcelServiceImpl implements ExcelService {
             folder.mkdirs();
         }
 
-        String originalFileName = "봉사 플로깅.xlsx";
-        String saveFileName = UUID.randomUUID().toString() + ".xlsx";
+        LocalDate oneWeekBefore = LocalDate.now().minusWeeks(1);
+
+        int year = oneWeekBefore.getYear();
+        int month = oneWeekBefore.getMonthValue();
+        int count = oneWeekBefore.getDayOfMonth() / 7 + 1;
+
+        StringBuffer sb = new StringBuffer();
+        sb.append(year);
+        sb.append("년_");
+        sb.append(month);
+        sb.append("월_");
+        sb.append(count);
+        sb.append("주차_봉사플로깅.xlsx");
+        String saveFileName = sb.toString();
 
         String fileLocation = excelFilePath + "\\" + saveFileName;
 
@@ -179,6 +190,15 @@ public class ExcelServiceImpl implements ExcelService {
         catch (IOException e) {
             e.printStackTrace();
         }
+
+        MailDto mailDto = MailDto.builder()
+                .to("ljh8190@naver.com")
+                .title("봉사 플로깅 입니다.")
+                .content("내용")
+                .filename(fileLocation)
+                .build();
+
+//        mailService.sendMail();
     }
 
     // 엑셀 헤더명을 반환해 주는 메소드

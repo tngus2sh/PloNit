@@ -28,7 +28,8 @@ public enum ErrorCode {
 
 
     /* 500 INTERNAL_SERVER_ERROR : 서버 내부 로직 에러 */
-    KAKAO_ADDRESS_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "카카오 서버 오류입니다.");
+    KAKAO_ADDRESS_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "카카오 서버 오류입니다."),
+    INVALID_MAKING_EXCEL(HttpStatus.BAD_REQUEST, "엑셀 파일을 생성하는 중 문제가 발생했습니다.");
 
     private final HttpStatus httpStatus;
     private final String description;
