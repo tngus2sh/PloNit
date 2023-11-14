@@ -118,11 +118,7 @@ public class RankServiceImpl implements RankService {
     public CrewTotalResponse findAllCrewRank(Long memberKey) {
         
         // memberKey로 crewId 가져오기
-        Optional<Long> crewMemberByMemberId = crewMemberRepository.findCrewMemberByMemberId(memberKey);
-        Long crewId = -1L;
-        if (crewMemberByMemberId.isPresent()) {
-            crewId = crewMemberByMemberId.get();
-        }
+        List<Long> crewIdByMemberKey = crewMemberRepository.findCrewMemberByMemberId(memberKey);
 
         CrewTotalResponse crewTotalResponse = new CrewTotalResponse();
 
@@ -160,7 +156,7 @@ public class RankServiceImpl implements RankService {
 
             // 내 크루인지 확인
             boolean isMine = false;
-            if (crewKey.equals(crewId)) {
+            if (crewIdByMemberKey.contains(crewKey)) {
                 isMine = true;
             }
             
@@ -187,11 +183,7 @@ public class RankServiceImpl implements RankService {
     public CrewAvgResponse findAllCrewRankByAVG(Long memberKey) {
 
         // memberKey로 crewId 가져오기
-        Optional<Long> crewMemberByMemberId = crewMemberRepository.findCrewMemberByMemberId(memberKey);
-        Long crewId = -1L;
-        if (crewMemberByMemberId.isPresent()) {
-            crewId = crewMemberByMemberId.get();
-        }
+        List<Long> crewIdByMemberKey = crewMemberRepository.findCrewMemberByMemberId(memberKey);
         
         CrewAvgResponse crewAvgResponse = new CrewAvgResponse();
 
@@ -229,7 +221,7 @@ public class RankServiceImpl implements RankService {
 
             // 내 크루인지 확인
             boolean isMine = false;
-            if (crewKey.equals(crewId)) {
+            if (crewIdByMemberKey.contains(crewKey)) {
                 isMine = true;
             }
 
