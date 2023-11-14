@@ -70,6 +70,8 @@ public class RankServiceImpl implements RankService {
         // 멤버 식별키와 누적거리 및 랭킹 저장
         Integer index = 0;
         for (ZSetOperations.TypedTuple<String> sortedSetRangeWithScore : sortedSetRangeWithScores) {
+            log.info("sortedSetRangeWithScore = {}, {}", sortedSetRangeWithScore.getScore(), sortedSetRangeWithScore.getValue());
+
             Long memberId = Long.parseLong(sortedSetRangeWithScore.getValue());
             Double distance = sortedSetRangeWithScore.getScore();
 
@@ -102,6 +104,10 @@ public class RankServiceImpl implements RankService {
                     .isMine(isMine)
                     .build());
         }
+
+        membersRanks.sort((o1, o2) -> {
+            return o1.getRanking() - o2.getRanking();
+        });
         
         membersRankResponse.setMembersRanks(membersRanks);
         
