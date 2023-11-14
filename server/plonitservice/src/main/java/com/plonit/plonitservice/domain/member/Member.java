@@ -1,7 +1,5 @@
 package com.plonit.plonitservice.domain.member;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.plonit.plonitservice.api.member.controller.request.UpdateMemberReq;
 import com.plonit.plonitservice.api.member.service.dto.UpdateMemberDto;
 import com.plonit.plonitservice.domain.TimeBaseEntity;
 import com.plonit.plonitservice.domain.region.Dong;
@@ -20,7 +18,6 @@ import javax.persistence.*;
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "members")
-@ToString
 public class Member extends TimeBaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

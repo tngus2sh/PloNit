@@ -4,7 +4,6 @@ import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingsRe
 import com.plonit.plonitservice.api.member.controller.response.FindCrewpingInfoRes;
 import com.plonit.plonitservice.common.enums.Status;
 import com.plonit.plonitservice.domain.crewping.Crewping;
-import com.plonit.plonitservice.domain.member.Member;
 import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
