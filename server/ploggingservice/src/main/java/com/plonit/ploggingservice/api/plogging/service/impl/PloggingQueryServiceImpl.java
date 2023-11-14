@@ -128,6 +128,12 @@ public class PloggingQueryServiceImpl implements PloggingQueryService {
         return ploggingLogRes;
     }
 
+    /**
+     * 플로깅 도움 요청 조회
+     * @param latitude 위도
+     * @param longitude 경도
+     * @return 해당 구의 활성화된 도움 요청 저장
+     */
     @Override
     public List<PloggingHelpRes> findPloggingHelp(Double latitude, Double longitude) {
 
