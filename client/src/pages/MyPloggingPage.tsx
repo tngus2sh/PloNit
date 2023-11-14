@@ -114,7 +114,7 @@ const MyPloggingPage = () => {
         console.error("플로깅 일별기록 조회 실패", error);
       },
     });
-  }, [dateRange]);
+  }, [dateRange, isType]);
   console.log(isPloggingList);
 
   return (
