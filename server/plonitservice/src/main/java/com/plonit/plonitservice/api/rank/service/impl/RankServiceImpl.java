@@ -1,18 +1,18 @@
 package com.plonit.plonitservice.api.rank.service.impl;
 
 import com.plonit.plonitservice.api.crew.controller.response.CrewRankRes;
+import com.plonit.plonitservice.api.member.controller.response.FindCrewInfoRes;
 import com.plonit.plonitservice.api.member.controller.response.MemberRankRes;
-import com.plonit.plonitservice.api.rank.controller.response.CrewAvgRes;
-import com.plonit.plonitservice.api.rank.controller.response.CrewTotalRes;
-import com.plonit.plonitservice.api.rank.controller.response.FindMyRankingRes;
-import com.plonit.plonitservice.api.rank.controller.response.MembersRankRes;
+import com.plonit.plonitservice.api.rank.controller.response.*;
 import com.plonit.plonitservice.api.rank.service.RankService;
 import com.plonit.plonitservice.common.enums.Rank;
 import com.plonit.plonitservice.common.util.RedisUtils;
 import com.plonit.plonitservice.domain.crew.repository.CrewMemberRepository;
 import com.plonit.plonitservice.domain.crew.repository.CrewQueryRepository;
+import com.plonit.plonitservice.domain.crew.repository.CrewRepository;
 import com.plonit.plonitservice.domain.member.repository.MemberQueryRepository;
 import com.plonit.plonitservice.domain.rank.RankingPeriod;
+import com.plonit.plonitservice.domain.rank.repository.CrewRankingQueryRepository;
 import com.plonit.plonitservice.domain.rank.repository.MemberRankingQueryRepository;
 import com.plonit.plonitservice.domain.rank.repository.RankingPeriodQueryRepository;
 import com.plonit.plonitservice.domain.rank.repository.RankingPeriodRepository;
@@ -35,6 +35,7 @@ public class RankServiceImpl implements RankService {
     private final RankingPeriodQueryRepository rankingPeriodQueryRepository;
     private final RankingPeriodRepository rankingPeriodRepository;
     private final MemberRankingQueryRepository memberRankingQueryRepository;
+    private final CrewRankingQueryRepository crewRankingQueryRepository;
     private final RedisUtils redisUtils;
 
     /**
@@ -251,6 +252,19 @@ public class RankServiceImpl implements RankService {
     @Override
     public List<FindMyRankingRes> findMyRanking(Long memberKey) {
         return memberRankingQueryRepository.findMyRanking(memberKey);
+    }
+
+    @Override
+    public List<FindMyCrewRankingRes> findMyCrewRanking(Long memberKey) {
+        // 멤버 키로 크루 아이디들 불러오기
+        List<FindCrewInfoRes> crewsByMemberId = crewQueryRepository.findCrewsByMemberId(memberKey);
+
+        List<Long> crewIds = new ArrayList<>();
+        for (FindCrewInfoRes findCrewInfoRes : crewsByMemberId) {
+            crewIds.add(findCrewInfoRes.getId());
+        }
+
+        return crewRankingQueryRepository.findMyCrewRanking(crewIds);
     }
 
     /**

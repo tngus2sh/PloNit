@@ -1,9 +1,6 @@
 package com.plonit.plonitservice.api.rank.service;
 
-import com.plonit.plonitservice.api.rank.controller.response.CrewAvgRes;
-import com.plonit.plonitservice.api.rank.controller.response.CrewTotalRes;
-import com.plonit.plonitservice.api.rank.controller.response.FindMyRankingRes;
-import com.plonit.plonitservice.api.rank.controller.response.MembersRankRes;
+import com.plonit.plonitservice.api.rank.controller.response.*;
 
 import java.util.List;
 
@@ -16,5 +13,7 @@ public interface RankService {
     public CrewAvgRes findAllCrewRankByAVG(Long memberKey);
 
     public List<FindMyRankingRes> findMyRanking(Long memberKey);
+
+    public List<FindMyCrewRankingRes> findMyCrewRanking(Long memberKey);
     
 }

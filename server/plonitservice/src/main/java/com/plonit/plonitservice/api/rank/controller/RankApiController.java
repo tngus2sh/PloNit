@@ -2,10 +2,7 @@ package com.plonit.plonitservice.api.rank.controller;
 
 import com.plonit.plonitservice.api.rank.controller.request.CrewRankRequest;
 import com.plonit.plonitservice.api.rank.controller.request.IndividualRankRequest;
-import com.plonit.plonitservice.api.rank.controller.response.CrewAvgRes;
-import com.plonit.plonitservice.api.rank.controller.response.CrewTotalRes;
-import com.plonit.plonitservice.api.rank.controller.response.FindMyRankingRes;
-import com.plonit.plonitservice.api.rank.controller.response.MembersRankRes;
+import com.plonit.plonitservice.api.rank.controller.response.*;
 import com.plonit.plonitservice.api.rank.service.RankService;
 import com.plonit.plonitservice.common.CustomApiResponse;
 import com.plonit.plonitservice.common.util.RequestUtils;
@@ -75,6 +72,18 @@ public class RankApiController {
         List<FindMyRankingRes> myRanking = rankService.findMyRanking(memberKey);
 
         return CustomApiResponse.ok(myRanking);
+    }
+
+    @Operation(summary = "내 크루 랭킹 조회", description ="내 크루 랭킹을 조회합니다.")
+    @GetMapping("/crew-ranking")
+    public CustomApiResponse<List<FindMyCrewRankingRes>> findMyCrewRanking(
+            HttpServletRequest servletRequest
+    ) {
+        Long memberKey = RequestUtils.getMemberKey(servletRequest);
+
+        List<FindMyCrewRankingRes> myCrewRanking = rankService.findMyCrewRanking(memberKey);
+
+        return CustomApiResponse.ok(myCrewRanking);
     }
 
 

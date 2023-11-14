@@ -31,6 +31,7 @@ public class MemberRankingQueryRepository {
                 .from(memberRanking)
                 .join(memberRanking.rankingPeriod, rankingPeriod).fetchJoin()
                 .where(memberRanking.member.id.eq(memberKey))
+                .orderBy(rankingPeriod.endDate.desc())
                 .fetch();
     }
 }
