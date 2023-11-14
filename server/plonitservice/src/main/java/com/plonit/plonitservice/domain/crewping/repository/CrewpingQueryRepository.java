@@ -59,6 +59,7 @@ public class CrewpingQueryRepository {
                 .join(crewpingMember)
                 .on(crewpingMember.crewping.eq(crewping))
                 .where(crewpingMember.member.id.eq(memberId), crewping.status.in(Status.ACTIVE, Status.ONGOING))
+                .orderBy(crewping.startDate.asc())
                 .fetch();
 
         // 조회된 Crewping 기반으로 Member 프로필 리스트 생성
