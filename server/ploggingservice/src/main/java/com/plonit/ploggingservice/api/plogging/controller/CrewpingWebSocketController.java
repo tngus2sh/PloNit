@@ -1,6 +1,7 @@
 package com.plonit.ploggingservice.api.plogging.controller;
 
 import com.plonit.ploggingservice.api.plogging.controller.request.CrewpingMessageReq;
+import com.plonit.ploggingservice.api.plogging.controller.request.Members;
 import com.plonit.ploggingservice.common.util.RedisUtils;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -18,14 +19,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Slf4j
 public class CrewpingWebSocketController {
-
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    @AllArgsConstructor
-    @Builder
-    public static class Members {
-        private String nickName;
-        private String profileImage;
-    }
     private final SimpMessageSendingOperations sendingOperations;
     private final RedisUtils redisUtils;
 
