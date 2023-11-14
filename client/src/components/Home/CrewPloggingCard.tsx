@@ -7,17 +7,21 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/pagination";
 
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { rootState } from "store/store";
 import * as P from "store/plogging-slice";
 import * as Crewping from "store/crewping-slice";
-import { useSelector } from "react-redux";
 
 const CrewPloggingCard = ({ card }: { card: MyCrewpingInterface }) => {
   console.log(card);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { crewName, id, isMaster } = card;
+  const { id, isMaster } = card;
+  const nickName = useSelector<rootState, string>((state) => {
+    return state.user.info.nickname;
+  });
+
   return (
     <div className={style.plogging_card}>
       <div className={style.plogging_text}>
@@ -59,7 +63,7 @@ const CrewPloggingCard = ({ card }: { card: MyCrewpingInterface }) => {
           dispatch(P.setCrewpingId(id));
           dispatch(Crewping.setRoomId(`${id}`));
           dispatch(Crewping.setCharge(isMaster));
-          dispatch(Crewping.setSenderId(crewName));
+          dispatch(Crewping.setSenderId(nickName));
           dispatch(P.setBeforeCrewping(true));
           navigate("/plogging");
         }}
