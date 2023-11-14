@@ -8,6 +8,7 @@ import style from "styles/css/ProfilePage.module.css";
 import { UserInterface } from "interface/authInterface";
 import { logout } from "api/lib/auth";
 import { getProfile } from "api/lib/members";
+import { OkModal } from "components/common/AlertModals";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
@@ -41,6 +42,7 @@ const ProfilePage = () => {
       (res) => {
         console.log(res.data);
         console.log("로그아웃 성공");
+        OkModal({ text: "로그아웃을 성공했습니다." });
         navigate("/login");
       },
       (err) => {

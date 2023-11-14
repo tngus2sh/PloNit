@@ -12,6 +12,7 @@ import DatePicker, { registerLocale } from "react-datepicker";
 import ko from "date-fns/locale/ko";
 import "custom_css/CrewCreateDatePicker.css";
 import { Icon } from "@iconify/react";
+import { NotOkModal } from "components/common/AlertModals";
 
 const AddInfoPage = () => {
   const dispatch = useDispatch();
@@ -74,19 +75,24 @@ const AddInfoPage = () => {
       region: isSignupRegion,
     };
     if (!data.name) {
-      alert("이름을 입력하세요");
+      // alert("이름을 입력하세요");
+      NotOkModal({ text: "이름을 입력하세요" });
       return;
     } else if (!data.nickname) {
-      alert("닉네임을 입력하세요");
+      // alert("닉네임을 입력하세요");
+      NotOkModal({ text: "닉네임을 입력하세요" });
       return;
     } else if (!isnickname) {
-      alert("중복된 닉네임입니다");
+      // alert("중복된 닉네임입니다");
+      NotOkModal({ text: "중복된 닉네임입니다" });
       return;
     } else if (!data.birth) {
-      alert("생년월일을 입력하세요");
+      // alert("생년월일을 입력하세요");
+      NotOkModal({ text: "생년월일을 입력하세요" });
       return;
     } else if (!data.dongCode) {
-      alert("활동 지역을 입력하세요");
+      // alert("활동 지역을 입력하세요");
+      NotOkModal({ text: "활동 지역을 입력하세요" });
       return;
     }
     console.log(data);

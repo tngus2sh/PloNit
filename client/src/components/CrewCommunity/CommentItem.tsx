@@ -4,6 +4,11 @@ import { Icon } from "@iconify/react";
 import style from "styles/css/CrewCommunityPage/CommentModal.module.css";
 import { getCommentDelete } from "api/lib/feed";
 import { CommentInterface } from "interface/crewInterface";
+import {
+  NotOkModal,
+  OkModal,
+  QuestionModal,
+} from "components/common/AlertModals";
 
 const CommentItem = ({
   comment,
@@ -14,20 +19,25 @@ const CommentItem = ({
 }) => {
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const handleDeleteComment = () => {
-    if (comment.commentId) {
-      getCommentDelete(
-        accessToken,
-        comment.commentId,
-        (res) => {
-          console.log(res.data);
-          console.log("댓글 삭제 성공");
-          fetchFeedList();
-        },
-        (err) => {
-          console.log("댓글 삭제 에러", err);
-        },
-      );
-    }
+    QuestionModal({ text: "댓글을 삭제하시겠습니까" }).then((res) => {
+      if (res.isConfirmed) {
+        if (comment.commentId) {
+          getCommentDelete(
+            accessToken,
+            comment.commentId,
+            (res) => {
+              console.log(res.data);
+              console.log("댓글 삭제 성공");
+              OkModal({ text: "댓글이 삭제되었습니다." });
+              fetchFeedList();
+            },
+            (err) => {
+              console.log("댓글 삭제 에러", err);
+            },
+          );
+        }
+      }
+    });
   };
   return (
     <div className={style.comment_item}>

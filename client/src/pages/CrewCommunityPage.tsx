@@ -12,6 +12,7 @@ import CommonButton from "components/common/CommonButton";
 import style from "styles/css/CrewCommunityPage.module.css";
 import { getCrewDetail, getCrewRegister } from "api/lib/crew";
 import { CrewInterface } from "interface/crewInterface";
+import { OkModal } from "components/common/AlertModals";
 
 const CrewCommunityPage = () => {
   const dispatch = useDispatch();
@@ -47,7 +48,8 @@ const CrewCommunityPage = () => {
       (res) => {
         console.log("크루 가입 요청 성공");
         console.log(res.data.resultBody);
-        alert("크루 가입 요청을 보냈습니다.");
+        // alert("크루 가입 요청을 보냈습니다.");
+        OkModal({ text: "크루 가입 요청을 보냈습니다." });
         fetchCrewDetail();
       },
       (err) => {

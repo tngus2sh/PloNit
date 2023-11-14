@@ -11,10 +11,6 @@ const CrewInfo = ({ crew }: { crew: CrewInterface }) => {
         <Icon icon="bi:geo-alt" className={style.icon} />
         <div>{crew.region}</div>
       </div>
-      {/* <div className={style.content}>
-        <Icon icon="bi:paypal" className={style.icon} />
-        <div>124 회</div>
-      </div> */}
       <div className={style.content}>
         <Icon icon="bi:person-fill" className={style.icon} />
         <div>{crew.cntPeople} 명</div>

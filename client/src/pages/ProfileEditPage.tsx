@@ -10,6 +10,7 @@ import { Icon } from "@iconify/react";
 import style from "styles/css/ProfileEditPage.module.css";
 import { nicknameCheck } from "api/lib/auth";
 import { getProfile, EditProfile } from "api/lib/members";
+import { NotOkModal, OkModal } from "components/common/AlertModals";
 
 const formattedDate = (date: any) => {
   const birthday = new Date(date);
@@ -101,10 +102,12 @@ const ProfileEditPage = () => {
           },
         );
         console.log("회원 정보 수정 성공");
+        OkModal({ text: "회원 정보 수정을 성공했습니다." });
         navigate("/profile");
       },
       (err) => {
         console.log("회원 정보 수정 실패", err);
+        NotOkModal({ text: "회원 정보 수정을 실패했습니다." });
       },
     );
   };

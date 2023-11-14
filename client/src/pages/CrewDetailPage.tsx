@@ -9,6 +9,11 @@ import CrewIntroduce from "components/CrewDetail/CrewIntroduce";
 import CommonButton from "components/common/CommonButton";
 import { getCrewDetail, getCrewQuit } from "api/lib/crew";
 import { CrewInterface } from "interface/crewInterface";
+import {
+  QuestionModal,
+  OkModal,
+  NotOkModal,
+} from "components/common/AlertModals";
 
 const CrewDetailPage = () => {
   const navigate = useNavigate();
@@ -35,21 +40,26 @@ const CrewDetailPage = () => {
   }, []);
 
   const CrewQuit = () => {
-    alert("크루를 탈퇴하시겠습니까");
-    getCrewQuit(
-      accessToken,
-      Number(crewId),
-      (res) => {
-        console.log("크루 탈퇴 요청 성공");
-        console.log(res.data);
-        navigate(`/crew/community/${crewId}`);
-      },
-      (err) => {
-        console.log("크루 탈퇴 요청 실패", err);
-      },
-    );
+    QuestionModal({ text: "크루를 탈퇴하시겠습니까" }).then((res) => {
+      if (res.isConfirmed) {
+        // alert("크루를 탈퇴하시겠습니까");
+        getCrewQuit(
+          accessToken,
+          Number(crewId),
+          (res) => {
+            console.log("크루 탈퇴 요청 성공");
+            console.log(res.data);
+            // OkModal({ text: "크루 탈퇴가 완료되었습니다." });
+            navigate(`/crew/community/${crewId}`);
+          },
+          (err) => {
+            console.log("크루 탈퇴 요청 실패", err);
+            // NotOkModal({ text: "크루 탈퇴가 실패했습니다." });
+          },
+        );
+      }
+    });
   };
-
   return (
     <div>
       <BackTopBar text={isCrewDetail.name} />
