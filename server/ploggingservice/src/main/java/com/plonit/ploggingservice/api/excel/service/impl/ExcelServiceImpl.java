@@ -53,8 +53,12 @@ public class ExcelServiceImpl implements ExcelService {
         LocalDateTime startDate = oneWeekBefore.minusDays(day).atStartOfDay();
         LocalDateTime endDate = oneWeekBefore.plusDays(6 - day).atTime(LocalTime.MAX);
 
-        List<PloggingDto> ploggings = ploggingQueryRepository.findVolunteerPloggings(startDate, endDate);
-//        List<PloggingDto> ploggings = ploggingQueryRepository.findVolunteerPloggings(null, null);
+//        List<PloggingDto> ploggings = ploggingQueryRepository.findVolunteerPloggings(startDate, endDate);
+        List<PloggingDto> ploggings = ploggingQueryRepository.findVolunteerPloggings(null, null);
+
+        if(ploggings.isEmpty()) {
+            return;
+        }
 
         List<Long> memberIdList = ploggings.stream().map(ploggingEntity -> {
             return ploggingEntity.getMemberId();
@@ -171,12 +175,7 @@ public class ExcelServiceImpl implements ExcelService {
         int count = oneWeekBefore.getDayOfMonth() / 7 + 1;
 
         StringBuffer sb = new StringBuffer();
-        sb.append(year);
-        sb.append("년_");
-        sb.append(month);
-        sb.append("월_");
-        sb.append(count);
-        sb.append("주차_봉사플로깅.xlsx");
+        sb.append(year).append("년_").append(month).append("월_").append(count).append("주차_봉사플로깅.xlsx");
         String saveFileName = sb.toString();
 
         String fileLocation = excelFilePath + "\\" + saveFileName;
@@ -191,14 +190,17 @@ public class ExcelServiceImpl implements ExcelService {
             e.printStackTrace();
         }
 
+        sb = new StringBuffer();
+        sb.append(year).append("년 ").append(month).append("월 ").append(count).append("주차 봉사 플로깅");
+
         MailDto mailDto = MailDto.builder()
                 .to("ljh8190@naver.com")
-                .title("봉사 플로깅 입니다.")
-                .content("내용")
-                .filename(fileLocation)
+                .title(sb.toString() + "입니다.")
+                .content(sb.toString() + " 엑셀 파일입니다.")
+                .filename(saveFileName)
                 .build();
 
-//        mailService.sendMail();
+        mailService.sendMail(mailDto);
     }
 
     // 엑셀 헤더명을 반환해 주는 메소드

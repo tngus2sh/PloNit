@@ -7,5 +7,5 @@ import javax.mail.MessagingException;
 
 @Transactional
 public interface MailService {
-    public void sendMail(MailDto mailDto) throws MessagingException;
+    public void sendMail(MailDto mailDto);
 }
