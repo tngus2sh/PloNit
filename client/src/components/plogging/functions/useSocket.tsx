@@ -60,7 +60,10 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
         `/topic/chat/room/${roomId}`,
         onMessageReceived,
       );
-      dispatch(Crewping.setProfileImage(userImage));
+
+      setTimeout(() => {
+        dispatch(Crewping.setProfileImage(userImage));
+      }, 2000);
     };
 
     stompClient.current?.activate();
