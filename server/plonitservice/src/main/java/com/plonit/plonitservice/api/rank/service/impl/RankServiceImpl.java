@@ -16,11 +16,15 @@ import com.plonit.plonitservice.domain.crew.repository.CrewMemberRepository;
 import com.plonit.plonitservice.domain.crew.repository.CrewQueryRepository;
 import com.plonit.plonitservice.domain.member.repository.MemberQueryRepository;
 import com.plonit.plonitservice.domain.member.repository.MemberRepository;
+import com.plonit.plonitservice.domain.rank.RankingPeriod;
+import com.plonit.plonitservice.domain.rank.repository.RankingPeriodQueryRepository;
+import com.plonit.plonitservice.domain.rank.repository.RankingPeriodRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
+import java.time.*;
 import java.util.*;
 
 import static com.plonit.plonitservice.common.exception.ErrorCode.INVALID_FIELDS_REQUEST;
@@ -35,6 +39,8 @@ public class RankServiceImpl implements RankService {
     private final MemberQueryRepository memberQueryRepository;
     private final CrewQueryRepository crewQueryRepository;
     private final CrewMemberRepository crewMemberRepository;
+    private final RankingPeriodQueryRepository rankingPeriodQueryRepository;
+    private final RankingPeriodRepository rankingPeriodRepository;
     private final RedisUtils redisUtils;
 
     /**
@@ -46,10 +52,28 @@ public class RankServiceImpl implements RankService {
     public MembersRankResponse findAllMembersRank(Long memberKey) {
 
         MembersRankResponse membersRankResponse = new MembersRankResponse();
+
+        /* 랭킹 기간 생성 */
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Seoul"));
+        // 이번 달의 첫째 날을 얻습니다.
+        LocalDate firstDayOfThisMonth = today.withDayOfMonth(1);
+
+        // 첫째 날의 첫 시간을 LocalDateTime으로 가져옵니다.
+        LocalDateTime firstDateTimeOfThisMonth = firstDayOfThisMonth.atStartOfDay();
+
+
+        RankingPeriod rankingPeriodTest = null;
+        rankingPeriodTest = RankingPeriod.builder()
+                .startDate(firstDateTimeOfThisMonth)
+                .endDate(firstDateTimeOfThisMonth.plusDays(13))
+                .build();
+        rankingPeriodRepository.save(rankingPeriodTest);
+
         
         // 현재 랭킹 기간 조회
-        String rankingPeriod = nowRankingPeriod();
-        membersRankResponse.setRankingPeriod(rankingPeriod);
+        RankingPeriod rankingPeriod = nowRankingPeriod();
+        membersRankResponse.setStartDate(rankingPeriod.getStartDate());
+        membersRankResponse.setEndDate(rankingPeriod.getEndDate());
 
         // Redis에서 랭킹 조회
         Set<ZSetOperations.TypedTuple<String>> sortedSetRangeWithScores = redisUtils.getSortedSetRangeWithScores(Rank.MEMBER.getDescription(), 0, 9);
@@ -111,10 +135,14 @@ public class RankServiceImpl implements RankService {
         }
 
         CrewTotalResponse crewTotalResponse = new CrewTotalResponse();
-        
+
+        MembersRankResponse membersRankResponse = new MembersRankResponse();
+
         // 현재 랭킹 기간 조회
-        String rankingPeriod = nowRankingPeriod();
-        crewTotalResponse.setRankingPeriod(rankingPeriod);
+        RankingPeriod rankingPeriod = nowRankingPeriod();
+        membersRankResponse.setStartDate(rankingPeriod.getStartDate());
+        membersRankResponse.setEndDate(rankingPeriod.getEndDate());
+
         
         // Redis에서 랭킹 조회
         Set<ZSetOperations.TypedTuple<String>> sortedSetRangeWithScores = redisUtils.getSortedSetRangeWithScores(Rank.CREW.getDescription(), 0, 9);
@@ -176,10 +204,14 @@ public class RankServiceImpl implements RankService {
         }
         
         CrewAvgResponse crewAvgResponse = new CrewAvgResponse();
-        
+
+        MembersRankResponse membersRankResponse = new MembersRankResponse();
+
         // 현재 랭킹 기간 조회
-        String rankingPeriod = nowRankingPeriod();
-        crewAvgResponse.setRankingPeriod(rankingPeriod);
+        RankingPeriod rankingPeriod = nowRankingPeriod();
+        membersRankResponse.setStartDate(rankingPeriod.getStartDate());
+        membersRankResponse.setEndDate(rankingPeriod.getEndDate());
+
 
         // Redis에서 랭킹 조회
         Set<ZSetOperations.TypedTuple<String>> sortedSetRangeWithScores = redisUtils.getSortedSetRangeWithScores(Rank.CREW_AVG.getDescription(), 0, 9);
@@ -234,13 +266,11 @@ public class RankServiceImpl implements RankService {
      * 현재 랭킹 기간 조회
      * @return 현재 랭킹 기간
      */
-    private String nowRankingPeriod() {
-        String rankingPeriod = null;
-        try {
-            rankingPeriod = redisUtils.getRedisValue("RANKING-PERIOD", String.class);
-        } catch (JsonProcessingException e) {
-            throw new CustomException(RANKING_PERIOD_NOT_FOUND);
+    private RankingPeriod nowRankingPeriod() {
+        Optional<RankingPeriod> rankingPeriodOptional = rankingPeriodQueryRepository.findRecentId();
+        if (rankingPeriodOptional.isPresent()) {
+            return rankingPeriodOptional.get();
         }
-        return rankingPeriod;
+        return null;
     }
 }
