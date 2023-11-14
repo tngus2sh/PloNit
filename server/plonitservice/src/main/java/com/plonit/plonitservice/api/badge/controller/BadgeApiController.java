@@ -48,7 +48,7 @@ public class BadgeApiController {
     public CustomApiResponse<Void> grantMemberRank(
             @RequestBody GrantMemberRankReq grantMemberRankReq,
             HttpServletRequest servletRequest
-            ) {
+    ) {
         Long memberKey = RequestUtils.getMemberKey(servletRequest);
 
         badgeService.grantRankBadge(GrantMemberRankDto.of(grantMemberRankReq, memberKey));
@@ -71,14 +71,26 @@ public class BadgeApiController {
 
     @Operation(summary = "미션 배지 조회", description = "미션 배지를 조회한다.")
     @GetMapping("/mission-badge")
-    public CustomApiResponse<FindBadgeRes> findBadge(
+    public CustomApiResponse<FindBadgeRes> findMissionBadge(
             HttpServletRequest servletRequest
     ) {
+        log.info("findMissionBadge");
         Long memberKey = RequestUtils.getMemberKey(servletRequest);
 
-        FindBadgeRes badge = badgeQueryService.findBadge(memberKey);
+        FindBadgeRes badge = badgeQueryService.findMissionBadge(memberKey);
 
         return CustomApiResponse.ok(badge);
     }
 
+    @Operation(summary = "랭킹 배지 조회", description = "랭킹 배지를 조회한다.")
+    @GetMapping("/ranking-badge")
+    public CustomApiResponse<FindBadgeRes> findRankingBadge(
+            HttpServletRequest servletRequest
+    ) {
+        log.info("findRankingBadge");
+        Long memberKey = RequestUtils.getMemberKey(servletRequest);
+
+        FindBadgeRes rankingBadge = badgeQueryService.findRankingBadge(memberKey);
+        return CustomApiResponse.ok(rankingBadge);
+    }
 }
