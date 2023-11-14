@@ -11,7 +11,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor(access = PROTECTED)
-@Builder(access = PRIVATE)
+@Builder
 public class MailDto {
 
     private String to;
