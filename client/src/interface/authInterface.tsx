@@ -14,3 +14,15 @@ export interface UserInterface {
   crewCount?: number;
   badgeCount?: number;
 }
+export interface MyCrewpingInterface {
+  id: number;
+  crewName: string;
+  crewpingName: string;
+  crewpingImage: string;
+  dday: number;
+  startDate: string;
+  endDate: string;
+  place: string;
+  cntPeople: number;
+  memberProfileImage: any;
+}

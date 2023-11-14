@@ -25,7 +25,6 @@ import PloggingPage from "pages/PloggingPage";
 import ProfileEditPage from "pages/ProfileEditPage";
 import ProfilePage from "pages/ProfilePage";
 import RankingPage from "pages/RankingPage";
-import VolunteerRegisterPage from "pages/VolunteerRegisterPage";
 import FeedCreatePage from "pages/FeedCreatePage";
 import CrewNoticePage from "pages/CrewNoticePage";
 
@@ -53,10 +52,6 @@ const RouteComponent = () => {
       <Route
         path="/plogging/complete"
         element={<PloggingCompletePage />}
-      ></Route>
-      <Route
-        path="/plogging/volunteer"
-        element={<VolunteerRegisterPage />}
       ></Route>
       <Route path="/ranking" element={<RankingPage />}></Route>
       <Route path="/notification" element={<NotificationPage />}></Route>

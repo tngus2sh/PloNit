@@ -101,6 +101,23 @@ const searchPloggingUsingDay = ({
   api.get(`/period/${start_day}/${end_day}`).then(success).catch(fail);
 };
 
+// 플로깅 기록 월별 조회
+const searchPloggingUsingMonth = ({
+  accessToken,
+  month,
+  success,
+  fail,
+}: {
+  accessToken: string;
+  month: number;
+  success: (response: AxiosResponse<any, any>) => void | undefined;
+  fail: (error: any) => void | undefined;
+}) => {
+  const api = ploggingApi;
+  api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
+  api.get(`/period?month=${month}`).then(success).catch(fail);
+};
+
 // 플로깅 기록 상세 조회
 const searchPloggingInfo = ({
   accessToken,
@@ -168,6 +185,7 @@ const searchHelpUsingLatLng = ({
   api.get(`/help/${latitude}/${longitude}`).then(success).catch(fail);
 };
 
+// 플로깅 중 이미지 저장
 const savePloggingImage = ({
   accessToken,
   plogging_id,
@@ -209,6 +227,7 @@ const searchNeighbor = ({
   api.get(`/users/${latitude}/${longitude}`).then(success).catch(fail);
 };
 
+<<<<<<< HEAD
 // 내 플로깅 조회
 export async function getMyPlogging(
   accessToken: string,
@@ -249,6 +268,8 @@ export async function getMyPloggingDetail(
 
 // --- 미완성 인 것들 ---
 
+=======
+>>>>>>> bb9bbc15defdce262e611be0eea2d5fb00a04cca
 // 봉사 정보 조회
 const searchVolInfo = ({
   accessToken,
@@ -264,26 +285,52 @@ const searchVolInfo = ({
   api.get(`/volunteer`).then(success).catch(fail);
 };
 
+// 봉사 정보 등록
 const registerVolInfo = ({
   accessToken,
+  ploggingId,
+  name,
+  phoneNumber,
+  id1365,
+  email,
+  birth,
   success,
   fail,
 }: {
   accessToken: string;
+  ploggingId: number;
+  name: string;
+  phoneNumber: string;
+  id1365: string;
+  email: string;
+  birth: string;
   success: (response: AxiosResponse<any, any>) => void | undefined;
   fail: (error: any) => void | undefined;
 }) => {
-  const formData = new FormData();
-
-  const api = ploggingApiForm;
+  const api = ploggingApi;
   api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
-  api.post(`/volunteer`, formData).then(success).catch(fail);
+  api
+    .post(
+      `/volunteer`,
+      JSON.stringify({
+        accessToken,
+        ploggingId,
+        name,
+        phoneNumber,
+        id1365,
+        email,
+        birth,
+      }),
+    )
+    .then(success)
+    .catch(fail);
 };
 
 export {
   savePlogging,
   startPlogging,
   searchPloggingUsingDay,
+  searchPloggingUsingMonth,
   searchPloggingInfo,
   saveHelp,
   searchHelpUsingLatLng,
