@@ -1,21 +1,16 @@
 package com.plonit.plonitservice.api.rank.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.plonit.plonitservice.api.crew.controller.response.CrewRankRes;
 import com.plonit.plonitservice.api.member.controller.response.MemberRankRes;
-import com.plonit.plonitservice.api.member.service.MemberService;
-import com.plonit.plonitservice.api.rank.controller.response.CrewAvgResponse;
-import com.plonit.plonitservice.api.rank.controller.response.CrewTotalResponse;
-import com.plonit.plonitservice.api.rank.controller.response.MembersRankResponse;
+import com.plonit.plonitservice.api.rank.controller.response.CrewAvgRes;
+import com.plonit.plonitservice.api.rank.controller.response.CrewTotalRes;
+import com.plonit.plonitservice.api.rank.controller.response.MembersRankRes;
 import com.plonit.plonitservice.api.rank.service.RankService;
 import com.plonit.plonitservice.common.enums.Rank;
-import com.plonit.plonitservice.common.exception.CustomException;
-import com.plonit.plonitservice.common.exception.ErrorCode;
 import com.plonit.plonitservice.common.util.RedisUtils;
 import com.plonit.plonitservice.domain.crew.repository.CrewMemberRepository;
 import com.plonit.plonitservice.domain.crew.repository.CrewQueryRepository;
 import com.plonit.plonitservice.domain.member.repository.MemberQueryRepository;
-import com.plonit.plonitservice.domain.member.repository.MemberRepository;
 import com.plonit.plonitservice.domain.rank.RankingPeriod;
 import com.plonit.plonitservice.domain.rank.repository.RankingPeriodQueryRepository;
 import com.plonit.plonitservice.domain.rank.repository.RankingPeriodRepository;
@@ -24,11 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
-import java.time.*;
 import java.util.*;
-
-import static com.plonit.plonitservice.common.exception.ErrorCode.INVALID_FIELDS_REQUEST;
-import static com.plonit.plonitservice.common.exception.ErrorCode.RANKING_PERIOD_NOT_FOUND;
 
 
 @Service
@@ -49,20 +40,20 @@ public class RankServiceImpl implements RankService {
      * @return 전체 회원 랭킹
      */
     @Override
-    public MembersRankResponse findAllMembersRank(Long memberKey) {
+    public MembersRankRes findAllMembersRank(Long memberKey) {
 
-        MembersRankResponse membersRankResponse = new MembersRankResponse();
+        MembersRankRes membersRankRes = new MembersRankRes();
 
         
         // 현재 랭킹 기간 조회
         RankingPeriod rankingPeriod = nowRankingPeriod();
-        membersRankResponse.setStartDate(rankingPeriod.getStartDate());
-        membersRankResponse.setEndDate(rankingPeriod.getEndDate());
+        membersRankRes.setStartDate(rankingPeriod.getStartDate());
+        membersRankRes.setEndDate(rankingPeriod.getEndDate());
 
         // Redis에서 랭킹 조회
         Set<ZSetOperations.TypedTuple<String>> sortedSetRangeWithScores = redisUtils.getSortedSetRangeWithScores(Rank.MEMBER.getDescription(), 0, 9);
 
-        List<MembersRankResponse.MembersRank> membersRanks = membersRankResponse.getMembersRanks();
+        List<MembersRankRes.MembersRank> membersRanks = membersRankRes.getMembersRanks();
         
         List<Long> memberIds = new LinkedList<>();
         Map<Long, Object[]> distanceRankings = new HashMap<>();
@@ -96,7 +87,7 @@ public class RankServiceImpl implements RankService {
             Double distance = (Double) distanceRanking[0];
             Integer ranking = (Integer) distanceRanking[1];
 
-            membersRanks.add(MembersRankResponse.MembersRank.builder()
+            membersRanks.add(MembersRankRes.MembersRank.builder()
                     .nickName(memberRankRes.getNickName())
                     .profileImage(memberRankRes.getProfileImage())
                     .ranking(ranking)
@@ -109,31 +100,31 @@ public class RankServiceImpl implements RankService {
             return o1.getRanking() - o2.getRanking();
         });
         
-        membersRankResponse.setMembersRanks(membersRanks);
+        membersRankRes.setMembersRanks(membersRanks);
         
-        return membersRankResponse;
+        return membersRankRes;
     }
 
     @Override
-    public CrewTotalResponse findAllCrewRank(Long memberKey) {
+    public CrewTotalRes findAllCrewRank(Long memberKey) {
         
         // memberKey로 crewId 가져오기
         List<Long> crewIdByMemberKey = crewMemberRepository.findCrewMemberByMemberId(memberKey);
 
-        CrewTotalResponse crewTotalResponse = new CrewTotalResponse();
+        CrewTotalRes crewTotalRes = new CrewTotalRes();
 
-        MembersRankResponse membersRankResponse = new MembersRankResponse();
+        MembersRankRes membersRankRes = new MembersRankRes();
 
         // 현재 랭킹 기간 조회
         RankingPeriod rankingPeriod = nowRankingPeriod();
-        membersRankResponse.setStartDate(rankingPeriod.getStartDate());
-        membersRankResponse.setEndDate(rankingPeriod.getEndDate());
+        membersRankRes.setStartDate(rankingPeriod.getStartDate());
+        membersRankRes.setEndDate(rankingPeriod.getEndDate());
 
         
         // Redis에서 랭킹 조회
         Set<ZSetOperations.TypedTuple<String>> sortedSetRangeWithScores = redisUtils.getSortedSetRangeWithScores(Rank.CREW.getDescription(), 0, 9);
 
-        List<CrewTotalResponse.CrewsRanks> crewsRanks = crewTotalResponse.getCrewsRanks();
+        List<CrewTotalRes.CrewsRanks> crewsRanks = crewTotalRes.getCrewsRanks();
         
         List<Long> crewIds = new LinkedList<>();
         Map<Long, Object[]> disanceRankings = new HashMap<>();
@@ -165,7 +156,7 @@ public class RankServiceImpl implements RankService {
             Double distance = (Double) distanceRanking[0];
             Integer ranking = (Integer) distanceRanking[1];
 
-            crewsRanks.add(CrewTotalResponse.CrewsRanks.builder()
+            crewsRanks.add(CrewTotalRes.CrewsRanks.builder()
                     .nickName(crewRankRes.getName())
                     .profileImage(crewRankRes.getCrewImage())
                     .ranking(ranking)
@@ -178,31 +169,31 @@ public class RankServiceImpl implements RankService {
             return o1.getRanking() - o2.getRanking();
         });
         
-        crewTotalResponse.setCrewsRanks(crewsRanks);
+        crewTotalRes.setCrewsRanks(crewsRanks);
         
-        return crewTotalResponse;
+        return crewTotalRes;
     }
 
     @Override
-    public CrewAvgResponse findAllCrewRankByAVG(Long memberKey) {
+    public CrewAvgRes findAllCrewRankByAVG(Long memberKey) {
 
         // memberKey로 crewId 가져오기
         List<Long> crewIdByMemberKey = crewMemberRepository.findCrewMemberByMemberId(memberKey);
         
-        CrewAvgResponse crewAvgResponse = new CrewAvgResponse();
+        CrewAvgRes crewAvgRes = new CrewAvgRes();
 
-        MembersRankResponse membersRankResponse = new MembersRankResponse();
+        MembersRankRes membersRankRes = new MembersRankRes();
 
         // 현재 랭킹 기간 조회
         RankingPeriod rankingPeriod = nowRankingPeriod();
-        membersRankResponse.setStartDate(rankingPeriod.getStartDate());
-        membersRankResponse.setEndDate(rankingPeriod.getEndDate());
+        membersRankRes.setStartDate(rankingPeriod.getStartDate());
+        membersRankRes.setEndDate(rankingPeriod.getEndDate());
 
 
         // Redis에서 랭킹 조회
         Set<ZSetOperations.TypedTuple<String>> sortedSetRangeWithScores = redisUtils.getSortedSetRangeWithScores(Rank.CREW_AVG.getDescription(), 0, 9);
 
-        List<CrewAvgResponse.CrewsAvgRanks> crewsAvgRanks = crewAvgResponse.getCrewsAvgRanks();
+        List<CrewAvgRes.CrewsAvgRanks> crewsAvgRanks = crewAvgRes.getCrewsAvgRanks();
 
         List<Long> crewIds = new LinkedList<>();
         Map<Long, Object[]> disanceRankings = new HashMap<>();
@@ -234,7 +225,7 @@ public class RankServiceImpl implements RankService {
             Double distance = (Double) distanceRanking[0];
             Integer ranking = (Integer) distanceRanking[1];
 
-            crewsAvgRanks.add(CrewAvgResponse.CrewsAvgRanks.builder()
+            crewsAvgRanks.add(CrewAvgRes.CrewsAvgRanks.builder()
                     .nickName(crewRankRes.getName())
                     .profileImage(crewRankRes.getCrewImage())
                     .ranking(ranking)
@@ -247,9 +238,9 @@ public class RankServiceImpl implements RankService {
             return o1.getRanking() - o2.getRanking();
         });
         
-        crewAvgResponse.setCrewsAvgRanks(crewsAvgRanks);
+        crewAvgRes.setCrewsAvgRanks(crewsAvgRanks);
 
-        return crewAvgResponse;
+        return crewAvgRes;
     }
 
     /**

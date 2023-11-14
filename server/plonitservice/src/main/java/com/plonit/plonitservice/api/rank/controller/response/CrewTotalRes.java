@@ -1,29 +1,24 @@
 package com.plonit.plonitservice.api.rank.controller.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.LinkedList;
 import java.util.List;
 
-@Schema(name = "크루 평균 랭킹 정보")
+@Schema(name = "크루 전체 랭킹 정보")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CrewAvgResponse {
-
+public class CrewTotalRes {
     private String rankingPeriod;
-
-    private List<CrewsAvgRanks> crewsAvgRanks = new LinkedList<>();
+    private List<CrewsRanks> crewsRanks = new LinkedList<>();
 
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class CrewsAvgRanks {
+    public static class CrewsRanks {
         private String nickName;
 
         private String profileImage;
@@ -34,4 +29,5 @@ public class CrewAvgResponse {
 
         private Boolean isMine;
     }
+    
 }

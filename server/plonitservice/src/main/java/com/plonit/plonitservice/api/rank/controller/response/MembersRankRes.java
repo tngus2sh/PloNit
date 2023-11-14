@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MembersRankResponse {
+public class MembersRankRes {
 
     private LocalDateTime startDate;
     private LocalDateTime endDate;
