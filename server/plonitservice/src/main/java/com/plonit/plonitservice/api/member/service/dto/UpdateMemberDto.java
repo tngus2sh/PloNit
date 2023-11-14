@@ -34,6 +34,7 @@ public class UpdateMemberDto {
                 .memberId(memberKey)
                 .name(updateMemberReq.getName())
                 .nickname(updateMemberReq.getNickname())
+                .profileImage(updateMemberReq.getProfileImage())
                 .gender(Boolean.parseBoolean(updateMemberReq.getGender()))
                 .birth(updateMemberReq.getBirth())
                 .dongCode(Long.parseLong(updateMemberReq.getDongCode()))

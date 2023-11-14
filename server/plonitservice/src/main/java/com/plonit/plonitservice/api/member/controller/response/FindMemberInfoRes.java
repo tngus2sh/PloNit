@@ -18,6 +18,7 @@ public class FindMemberInfoRes {
     private Boolean gender;
     private String birth;
     private String region;
+    private Long dongCode;
     private Float height;
     private Float weight;
     private String id1365;
@@ -36,6 +37,7 @@ public class FindMemberInfoRes {
                 .gender(member.getGender())
                 .birth(member.getBirth())
                 .region(member.getRegion())
+                .dongCode(member.getDongCode())
                 .height(member.getHeight())
                 .weight(member.getWeight())
                 .id1365(member.getId1365())

@@ -27,9 +27,12 @@ public class PloggingHelpQueryRepository {
                         ploggingHelp.longitude,
                         ploggingHelp.place,
                         ploggingHelp.image,
-                        ploggingHelp.context))
+                        ploggingHelp.context,
+                        ploggingHelp.id))
                 .from(ploggingHelp)
-                .where(ploggingHelp.gugunCode.eq(gugunCode).and(ploggingHelp.createdDate.between(today.atStartOfDay(), today.plusDays(1).atStartOfDay())))
+                .where(ploggingHelp.gugunCode.eq(gugunCode)
+                        .and(ploggingHelp.createdDate.between(today.atStartOfDay(), today.plusDays(1).atStartOfDay()))
+                        .and(ploggingHelp.isActive.eq(true)))
                 .fetch();
     }
     

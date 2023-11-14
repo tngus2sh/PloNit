@@ -9,23 +9,33 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
 public class CrewpingWebSocketController {
 
+    public static class Members {
+        private String nickName;
+        private String profileImage;
+    }
     private final SimpMessageSendingOperations sendingOperations;
+    private List<Members> crewMembers;
+
 
     @MessageMapping("/chat/message")
     public ResponseEntity<Void> enter(@RequestBody CrewpingMessageReq request) {
         log.info("[WEBSOCKET] start");
         log.info(request.toString());
         String roomId = request.getRoomId();
-        if (CrewpingMessageReq.MessageType.ENTER.equals(request.getType())) {
+        if (CrewpingMessageReq.MessageType.WAIT.equals(request.getType())) {
+
             request.setMessage(request.getSenderId() + "님이 입장하셨습니다.");
         } else {
             // 위도, 경도 주고받기
         }
+
 
         // topic-1대다, queue-1대1
         sendingOperations.convertAndSend("/topic/chat/room/" + roomId, request);

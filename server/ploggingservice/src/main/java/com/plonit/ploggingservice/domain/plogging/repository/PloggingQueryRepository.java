@@ -2,10 +2,14 @@ package com.plonit.ploggingservice.domain.plogging.repository;
 
 import com.plonit.ploggingservice.api.excel.service.dto.PloggingDto;
 import com.plonit.ploggingservice.api.excel.service.dto.PloggingPictureDto;
-import com.plonit.ploggingservice.api.plogging.controller.response.FindPloggingLogRes;
-import com.plonit.ploggingservice.api.plogging.controller.response.PloggingPeriodRes;
+import com.plonit.ploggingservice.api.plogging.controller.response.*;
+import com.plonit.ploggingservice.common.enums.Finished;
+import com.plonit.ploggingservice.common.enums.Type;
 import com.plonit.ploggingservice.common.enums.Type;
 import com.plonit.ploggingservice.domain.plogging.Plogging;
+import com.querydsl.core.Tuple;
+import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
@@ -50,6 +54,33 @@ public class PloggingQueryRepository {
     }
 
     @Transactional(readOnly = true)
+    public List<PloggingPeriodRes> findPloggingLogByDayAndType(LocalDate startDate, LocalDate endDate, Long memberKey, Type type) {
+        return queryFactory.select(constructor(PloggingPeriodRes.class,
+                        plogging.id,
+                        plogging.type,
+                        plogging.place,
+                        plogging.startTime,
+                        plogging.endTime,
+                        plogging.totalTime,
+                        plogging.distance))
+                .from(plogging)
+                .where(plogging.memberKey.eq(memberKey)
+                        .and(plogging.date.between(startDate, endDate))
+                        .and(plogging.type.eq(type)))
+                .fetch();
+    }
+
+    @Transactional(readOnly = true)
+    public List<PloggingMonthRes> findPlogginLogByMonth(Long memberKey, LocalDate firstDay, LocalDate lastDay) {
+        return queryFactory.select(constructor(PloggingMonthRes.class,
+                        plogging.date))
+                .from(plogging)
+                .where(plogging.date.between(firstDay, lastDay)
+                        .and(plogging.memberKey.eq(memberKey)))
+                .fetch();
+    }
+
+    @Transactional(readOnly = true)
     public Optional<FindPloggingLogRes> findPloggingLogDetail(Long ploggingId, Long memberKey) {
         return Optional.ofNullable(queryFactory.select(constructor(FindPloggingLogRes.class,
                         plogging.id,
@@ -64,6 +95,21 @@ public class PloggingQueryRepository {
                 .from(plogging)
                 .where(plogging.id.eq(ploggingId).and(plogging.memberKey.eq(memberKey)))
                 .fetchOne());
+    }
+
+    @Transactional(readOnly = true)
+    public List<UsersRes> findNearByUsers(Long gugunCode) {
+        return queryFactory.select(constructor(UsersRes.class,
+                        plogging.id,
+                        latLong.latitude.min().as("latitude"),
+                        latLong.longitude.min().as("longitude")))
+                .from(plogging)
+                .join(latLong)
+                .on(latLong.plogging.eq(plogging))
+                .groupBy(plogging.id)
+                .where(plogging.gugunCode.eq(gugunCode)
+                        .and(plogging.finished.eq(Finished.ACTIVE)))
+                .fetch();
     }
 
     @Transactional(readOnly = true)
@@ -121,6 +167,17 @@ public class PloggingQueryRepository {
             return null;
         }
         return plogging.startTime.between(startDate, endDate);
+    }
+
+    @Transactional(readOnly = true)
+    public FindCountDistanceRes findCountDistance(Long memberKey) {
+        return queryFactory.select(constructor(FindCountDistanceRes.class,
+                        plogging.count(),
+                        plogging.distance.sum()))
+                .from(plogging)
+                .groupBy(plogging)
+                .where(plogging.memberKey.eq(memberKey))
+                .fetchOne();
     }
 
 }

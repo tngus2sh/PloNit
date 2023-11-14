@@ -1,4 +1,4 @@
-package com.plonit.ploggingservice.api.plogging.controller.response;
+package com.plonit.plonitservice.api.badge.controller.request;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -8,12 +8,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class UsersRes {
+public class GrantMemberBadgeReq {
 
-    private Long id;
+    private Integer ploggingCount;
 
-    private Double latitude;
-
-    private Double longitude;
+    private Double distance;
 
 }

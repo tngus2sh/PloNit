@@ -5,15 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class UsersRes {
+public class PloggingMonthRes {
 
-    private Long id;
-
-    private Double latitude;
-
-    private Double longitude;
+    private LocalDate date;
 
 }
