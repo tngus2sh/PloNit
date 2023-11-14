@@ -28,7 +28,9 @@ const HomePage = () => {
         }}
       >
         <div style={{ fontSize: "1.1rem" }}>
-          <span style={{ fontSize: "1.6rem", fontWeight: "600" }}>빵빵덕</span>
+          <span style={{ fontSize: "1.6rem", fontWeight: "600" }}>
+            {User.nickname}
+          </span>
           님의
         </div>
         <div style={{ fontSize: "1.8rem", fontWeight: "600" }}>크루핑</div>
