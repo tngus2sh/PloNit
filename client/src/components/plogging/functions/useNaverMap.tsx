@@ -163,7 +163,7 @@ function createMarkers({
   };
 
   // Help의 경우
-  if (items[0]?.image || items[0]?.place || items[0]?.context) {
+  if (items[0]?.id || items[0]?.image || items[0]?.place || items[0]?.context) {
     markers.forEach((marker, index) => {
       naver.maps.Event.addListener(marker, "click", () => {
         Swal.fire({
@@ -177,8 +177,13 @@ function createMarkers({
               context: items[index].context ?? "",
             }),
           ),
-          showConfirmButton: false,
+          showConfirmButton: true,
+          confirmButtonText: "도움요청 종료",
           showCloseButton: true,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            console.log("여기에 새로운 api가 들어갑니다.");
+          }
         });
       });
     });

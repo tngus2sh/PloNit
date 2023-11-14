@@ -6,6 +6,7 @@ export interface GeolocationPosition {
 }
 
 export interface Coordinate {
+  id?: number;
   latitude: number;
   longitude: number;
   place?: string;
