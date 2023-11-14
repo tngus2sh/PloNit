@@ -553,7 +553,11 @@ const DefaultMap: React.FC<IDefaultMap> = ({
             }),
           ),
           showConfirmButton: true,
+          showDenyButton: true,
+          denyButtonText: "취소",
           confirmButtonText: "도움 요청 종료",
+          // denyButtonColor: "#FF2953",
+          // confirmButtonColor: "#2CD261",
           showCloseButton: true,
         }).then((result) => {
           if (result.isConfirmed) {
@@ -564,10 +568,26 @@ const DefaultMap: React.FC<IDefaultMap> = ({
               if (result.isConfirmed) {
                 changeHelp({
                   accessToken: accessToken,
-                  ploggingHelpId: help.id ?? 0,
+                  ploggingHelpId: help.ploggingHelpId ?? 0,
                   isActive: false,
                   success: (response) => {
                     console.log(response);
+                    getGPS()
+                      .then((response) => {
+                        const { latitude, longitude } = response.coords;
+                        searchHelpUsingLatLng({
+                          accessToken,
+                          latitude,
+                          longitude,
+                          success: (response) => {
+                            setHelps(response.data.resultBody);
+                          },
+                          fail: (error) => {
+                            console.error(error);
+                          },
+                        });
+                      })
+                      .catch((error) => console.error(error));
                   },
                   fail: (error) => {
                     console.error(error);
