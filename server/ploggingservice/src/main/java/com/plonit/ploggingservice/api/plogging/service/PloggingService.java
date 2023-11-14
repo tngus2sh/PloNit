@@ -15,4 +15,6 @@ public interface PloggingService {
 
     Long saveVolunteerData(VolunteerPloggingDto dto);
 
+    Long updatePloggingHelpStatus(UpdatePloggingHelpStatusDto dto);
+
 }
