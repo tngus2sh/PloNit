@@ -9,19 +9,21 @@ import lombok.NoArgsConstructor;
 import java.util.LinkedList;
 import java.util.List;
 
-@Schema(name = "크루 전체 랭킹 정보")
+@Schema(name = "크루 평균 랭킹 정보")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CrewTotalResponse {
+public class CrewAvgRes {
+
     private String rankingPeriod;
-    private List<CrewsRanks> crewsRanks = new LinkedList<>();
+
+    private List<CrewsAvgRanks> crewsAvgRanks = new LinkedList<>();
 
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class CrewsRanks {
+    public static class CrewsAvgRanks {
         private String nickName;
 
         private String profileImage;
@@ -32,5 +34,4 @@ public class CrewTotalResponse {
 
         private Boolean isMine;
     }
-    
 }
