@@ -9,7 +9,7 @@ import { Pagination } from "swiper/modules";
 import { Icon } from "@iconify/react";
 import { getFeedCreate } from "api/lib/feed";
 import styled from "styled-components";
-import { NotOkModal } from "components/common/AlertModals";
+import { NotOkModal, OkModal } from "components/common/AlertModals";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -65,6 +65,7 @@ const FeedCreatePage = () => {
       (res) => {
         console.log(res.data);
         console.log("피드 생성 성공");
+        OkModal({ text: "피드가 등록되었습니다." });
         navigate(`/crew/community/${crewId}`);
       },
       (err) => {
