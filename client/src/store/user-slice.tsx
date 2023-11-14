@@ -38,6 +38,7 @@ const userSlice = createSlice({
     },
     logout: (state) => {
       localStorage.removeItem("persist:PloNit");
+      localStorage.clear();
     },
     saveMemberInfo(state, action) {
       return { ...state, info: action.payload };

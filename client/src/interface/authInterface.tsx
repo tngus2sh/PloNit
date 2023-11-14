@@ -4,7 +4,7 @@ export interface UserInterface {
   nickname: string;
   name?: string;
   gender?: boolean;
-  birth?: string;
+  birth?: any;
   region?: string;
   dongCode?: number;
   height?: number;

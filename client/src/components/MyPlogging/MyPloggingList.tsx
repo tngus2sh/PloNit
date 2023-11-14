@@ -23,7 +23,6 @@ const MyPloggingList = ({
   }월 ${dateRange[1].getDate()}일`;
 
   const [isSelectedType, setSelectedType] = useState("");
-  console.log(isSelectedType);
   useEffect(() => {
     setType(isSelectedType);
   }, [isSelectedType]);
