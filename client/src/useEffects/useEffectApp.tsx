@@ -11,7 +11,7 @@ import * as P from "store/plogging-slice";
 
 const intervalTime = 2;
 
-function useEffectApp(worker: React.MutableRefObject<Worker>) {
+function useEffectApp() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -36,6 +36,7 @@ function useEffectApp(worker: React.MutableRefObject<Worker>) {
     return state.plogging.volTakePicture;
   });
 
+  const workerRef = useRef<Worker | null>(null);
   const [workerNA, setWorkerNA] = useState<boolean>(true);
 
   useEffect(() => {
@@ -76,10 +77,13 @@ function useEffectApp(worker: React.MutableRefObject<Worker>) {
           }
 
           if (window.Worker) {
+            workerRef.current = new Worker(
+              new URL(`workers/worker.js`, import.meta.url),
+            );
             setWorkerNA(false);
-            worker.current.postMessage("start");
-            worker.current.postMessage("start2");
-            worker.current.onmessage = (event) => {
+            workerRef.current.postMessage("start");
+            workerRef.current.postMessage("start2");
+            workerRef.current.onmessage = (event) => {
               if (event.data === "tick") {
                 dispatch(P.addTime());
               }
@@ -98,11 +102,11 @@ function useEffectApp(worker: React.MutableRefObject<Worker>) {
       if (interval.current) {
         clearInterval(interval.current);
       }
-      worker.current.terminate();
+      workerRef.current?.terminate();
     }
 
     return () => {
-      worker.current.terminate();
+      workerRef.current?.terminate();
     };
   }, [useTimer]);
 
