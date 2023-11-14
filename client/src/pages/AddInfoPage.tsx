@@ -171,14 +171,13 @@ const AddInfoPage = () => {
       </div>
       <div className={style.birth}>
         <label className={style.label} htmlFor="date_time">
-          시간
+          생년월일
         </label>
         <DatePicker
           selected={isSignupBirth}
           className={style.datepicker}
           name="date_time"
           id="date_time"
-          placeholderText="시작 일시"
           onChange={onChangeBirthDate}
           dateFormat="yyyy.MM.dd"
           locale={ko}
@@ -186,44 +185,74 @@ const AddInfoPage = () => {
           fixedHeight
           renderCustomHeader={({
             date,
+            changeYear,
+            changeMonth,
             decreaseMonth,
             increaseMonth,
             prevMonthButtonDisabled,
             nextMonthButtonDisabled,
-          }) => (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                fontSize: "1.1rem",
-              }}
-              className="custom-react-datepicker__select-wrapper"
-            >
-              <button
-                onClick={decreaseMonth}
-                disabled={prevMonthButtonDisabled}
-                className="custom_btn"
+          }) => {
+            const years = [];
+            const months = [
+              "1월",
+              "2월",
+              "3월",
+              "4월",
+              "5월",
+              "6월",
+              "7월",
+              "8월",
+              "9월",
+              "10월",
+              "11월",
+              "12월",
+            ];
+
+            for (
+              let i = date.getFullYear() - 70;
+              i <= date.getFullYear();
+              i++
+            ) {
+              years.push(i);
+            }
+
+            return (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  fontSize: "1.1rem",
+                }}
+                className="custom-react-datepicker__select-wrapper2"
               >
-                <Icon
-                  icon="bi:chevron-left"
-                  style={{ width: "1.5rem", height: "1.5rem" }}
-                />
-              </button>
-              <div>
-                {date.getFullYear()}년 {date.getMonth()}월
+                <select
+                  value={date.getFullYear()}
+                  onChange={({ target: { value } }) =>
+                    changeYear(parseInt(value))
+                  }
+                >
+                  {years.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+                년
+                <select
+                  value={months[date.getMonth()]}
+                  onChange={({ target: { value } }) =>
+                    changeMonth(months.indexOf(value))
+                  }
+                >
+                  {months.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
               </div>
-              <button
-                onClick={increaseMonth}
-                disabled={nextMonthButtonDisabled}
-                className="custom_btn"
-              >
-                <Icon
-                  icon="bi:chevron-right"
-                  style={{ width: "1.5rem", height: "1.5rem" }}
-                />
-              </button>
-            </div>
-          )}
+            );
+          }}
         />
       </div>
       <div className={style.region}>
