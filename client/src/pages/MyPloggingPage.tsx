@@ -11,14 +11,6 @@ import {
 } from "api/lib/plogging";
 import { PloggingLog } from "interface/ploggingInterface";
 
-// const dayList = [
-//   "2023-10-10",
-//   "2023-10-21",
-//   "2023-10-02",
-//   "2023-10-14",
-//   "2023-10-27",
-// ];
-
 // date 형식 변경 (2023-10-27)
 const formattedDate = (date: any) => {
   const year = date.getFullYear();
@@ -47,7 +39,7 @@ const MyPloggingPage = () => {
 
   // 타입 선택
   const [isType, setType] = useState("");
-  console.log(isType);
+
   // 시작 종료 날짜를 변경하는 로직
   const handleDateChange = (date: any) => {
     if (!startDate) {
@@ -70,7 +62,11 @@ const MyPloggingPage = () => {
 
   // 플로깅한 날짜에 점 표시
   const tileContent = ({ date, view }: { date: Date; view: string }) => {
-    if (realMonthList.includes(date.toISOString().split("T")[0])) {
+    const localDate = `${date.getFullYear()}-${(
+      "0" +
+      (date.getMonth() + 1)
+    ).slice(-2)}-${("0" + date.getDate()).slice(-2)}`;
+    if (realMonthList.includes(localDate)) {
       return (
         <div
           style={{
