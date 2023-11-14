@@ -8,6 +8,10 @@ import RegionModal from "components/common/RegionModal";
 import { nicknameCheck } from "api/lib/auth";
 import { addInfo, getProfile } from "api/lib/members";
 import style from "styles/css/AddInfoPage.module.css";
+import DatePicker, { registerLocale } from "react-datepicker";
+import ko from "date-fns/locale/ko";
+import "custom_css/CrewCreateDatePicker.css";
+import { Icon } from "@iconify/react";
 
 const AddInfoPage = () => {
   const dispatch = useDispatch();
@@ -16,14 +20,21 @@ const AddInfoPage = () => {
   const [isSignupName, setSignupName] = useState("");
   const [isSignupNickname, setSignupNickname] = useState("");
   const [isSignupGender, setSignupGender] = useState(false);
-  const [isSignupBirth, setSignupBirth] = useState("");
+  const [isSignupBirth, setSignupBirth] = useState(null);
   const [isSignupRegion, setSignupRegion] = useState("");
   const [isRegionCode, setRegionCode] = useState(0);
   const [isnickname, setnickname] = useState(false);
   const [isOpenRegionModal, setOpenRegionModal] = useState(false);
 
   const onChangeName = (event: any) => {
-    setSignupName(event.target.value);
+    const newName = event.target.value;
+    // 정규식을 사용하여 특수 기호 검사
+    const specialCharacters = /[!@#$%^&*(),.?":{}|<>]/g;
+    if (specialCharacters.test(newName)) {
+      // 특수 기호가 포함되어 있으면 입력을 무시하고 기존의 값으로 설정
+      return;
+    }
+    setSignupName(newName);
   };
 
   const onChangeNickname = (event: any) => {
@@ -33,8 +44,6 @@ const AddInfoPage = () => {
       newNickname,
       (res) => {
         console.log("닉네임 중복 확인");
-        console.log(res);
-        console.log(res.data);
         setnickname(res.data.resultBody.avl);
       },
       (err) => {
@@ -47,8 +56,8 @@ const AddInfoPage = () => {
     setSignupGender(value);
   };
 
-  const onChangeBirth = (event: any) => {
-    setSignupBirth(event.target.value);
+  const onChangeBirthDate = (date: any) => {
+    setSignupBirth(date);
   };
 
   const OpenRegionModal = () => {
@@ -75,9 +84,6 @@ const AddInfoPage = () => {
       return;
     } else if (!data.birth) {
       alert("생년월일을 입력하세요");
-      return;
-    } else if (data.birth.length > 6) {
-      alert("생년월일을 다시 입력하세요");
       return;
     } else if (!data.dongCode) {
       alert("활동 지역을 입력하세요");
@@ -163,14 +169,61 @@ const AddInfoPage = () => {
           여
         </div>
       </div>
-      <div className={style.birthday}>
-        <Input
-          id="birth"
-          labelTitle="생년월일"
-          type="number"
-          value={isSignupBirth}
-          placeholder="900101"
-          onChange={onChangeBirth}
+      <div className={style.birth}>
+        <label className={style.label} htmlFor="date_time">
+          시간
+        </label>
+        <DatePicker
+          selected={isSignupBirth}
+          className={style.datepicker}
+          name="date_time"
+          id="date_time"
+          placeholderText="시작 일시"
+          onChange={onChangeBirthDate}
+          dateFormat="yyyy.MM.dd"
+          locale={ko}
+          showPopperArrow={false}
+          fixedHeight
+          renderCustomHeader={({
+            date,
+            decreaseMonth,
+            increaseMonth,
+            prevMonthButtonDisabled,
+            nextMonthButtonDisabled,
+          }) => (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                fontSize: "1.1rem",
+              }}
+              className="custom-react-datepicker__select-wrapper"
+            >
+              <button
+                onClick={decreaseMonth}
+                disabled={prevMonthButtonDisabled}
+                className="custom_btn"
+              >
+                <Icon
+                  icon="bi:chevron-left"
+                  style={{ width: "1.5rem", height: "1.5rem" }}
+                />
+              </button>
+              <div>
+                {date.getFullYear()}년 {date.getMonth()}월
+              </div>
+              <button
+                onClick={increaseMonth}
+                disabled={nextMonthButtonDisabled}
+                className="custom_btn"
+              >
+                <Icon
+                  icon="bi:chevron-right"
+                  style={{ width: "1.5rem", height: "1.5rem" }}
+                />
+              </button>
+            </div>
+          )}
         />
       </div>
       <div className={style.region}>
