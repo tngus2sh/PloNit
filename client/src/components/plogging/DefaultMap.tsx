@@ -84,6 +84,9 @@ const DefaultMap: React.FC<IDefaultMap> = ({
   const nowType = useSelector<rootState, ploggingType>((state) => {
     return state.plogging.ploggingType;
   });
+  const helpChanged = useSelector<rootState, boolean>((state) => {
+    return state.plogging.helpChanged;
+  });
   const peerLocations = useSelector<rootState, Locations>((state) => {
     return state.crewping.locations;
   });
@@ -553,17 +556,18 @@ const DefaultMap: React.FC<IDefaultMap> = ({
             }),
           ),
           showConfirmButton: true,
-          showDenyButton: true,
-          denyButtonText: "취소",
           confirmButtonText: "도움 요청 종료",
-          // denyButtonColor: "#FF2953",
-          // confirmButtonColor: "#2CD261",
           showCloseButton: true,
         }).then((result) => {
           if (result.isConfirmed) {
             Swal.fire({
               icon: "question",
               text: "도움 요청을 종료하시겠습니까?",
+              showDenyButton: true,
+              denyButtonText: "취소",
+              confirmButtonText: "예",
+              denyButtonColor: "#FF2953",
+              confirmButtonColor: "#2CD261",
             }).then((result) => {
               if (result.isConfirmed) {
                 changeHelp({
@@ -604,6 +608,31 @@ const DefaultMap: React.FC<IDefaultMap> = ({
 
     helpMarkers.current = markers;
   }, [helps]);
+
+  useEffect(() => {
+    if (helpChanged) {
+      getGPS()
+        .then((response) => {
+          const { latitude, longitude } = response.coords;
+          searchHelpUsingLatLng({
+            accessToken,
+            latitude,
+            longitude,
+            success: (response) => {
+              setHelps(response.data.resultBody);
+            },
+            fail: (error) => {
+              console.error(error);
+            },
+          });
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+
+      dispatch(P.setHelpChanged(false));
+    }
+  }, [helpChanged]);
 
   useEffect(() => {
     if (nowType === "CREWPING") {
