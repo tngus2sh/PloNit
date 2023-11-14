@@ -39,7 +39,7 @@ public class MemberBadgeQueryRepository {
                         badge.image,
                         badgeCondition.status,
                         new CaseBuilder()
-                                .when(memberBadge.id.isNotNull())
+                                .when(memberBadge.isNotNull())
                                 .then(true)
                                 .otherwise(false)))
                 .from(badge)
