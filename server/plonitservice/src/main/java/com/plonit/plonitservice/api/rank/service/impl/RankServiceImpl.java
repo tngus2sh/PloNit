@@ -4,6 +4,7 @@ import com.plonit.plonitservice.api.crew.controller.response.CrewRankRes;
 import com.plonit.plonitservice.api.member.controller.response.MemberRankRes;
 import com.plonit.plonitservice.api.rank.controller.response.CrewAvgRes;
 import com.plonit.plonitservice.api.rank.controller.response.CrewTotalRes;
+import com.plonit.plonitservice.api.rank.controller.response.FindMyRankingRes;
 import com.plonit.plonitservice.api.rank.controller.response.MembersRankRes;
 import com.plonit.plonitservice.api.rank.service.RankService;
 import com.plonit.plonitservice.common.enums.Rank;
@@ -12,6 +13,7 @@ import com.plonit.plonitservice.domain.crew.repository.CrewMemberRepository;
 import com.plonit.plonitservice.domain.crew.repository.CrewQueryRepository;
 import com.plonit.plonitservice.domain.member.repository.MemberQueryRepository;
 import com.plonit.plonitservice.domain.rank.RankingPeriod;
+import com.plonit.plonitservice.domain.rank.repository.MemberRankingQueryRepository;
 import com.plonit.plonitservice.domain.rank.repository.RankingPeriodQueryRepository;
 import com.plonit.plonitservice.domain.rank.repository.RankingPeriodRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,7 @@ public class RankServiceImpl implements RankService {
     private final CrewMemberRepository crewMemberRepository;
     private final RankingPeriodQueryRepository rankingPeriodQueryRepository;
     private final RankingPeriodRepository rankingPeriodRepository;
+    private final MemberRankingQueryRepository memberRankingQueryRepository;
     private final RedisUtils redisUtils;
 
     /**
@@ -237,6 +240,17 @@ public class RankServiceImpl implements RankService {
         crewAvgRes.setCrewsAvgRanks(crewsAvgRanks);
 
         return crewAvgRes;
+    }
+
+
+    /**
+     * 내 랭킹 조회
+     * @param memberKey 회원 식별키
+     * @return 랭킹
+     */
+    @Override
+    public List<FindMyRankingRes> findMyRanking(Long memberKey) {
+        return memberRankingQueryRepository.findMyRanking(memberKey);
     }
 
     /**

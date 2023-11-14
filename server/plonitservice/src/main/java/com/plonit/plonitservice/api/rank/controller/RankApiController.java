@@ -4,6 +4,7 @@ import com.plonit.plonitservice.api.rank.controller.request.CrewRankRequest;
 import com.plonit.plonitservice.api.rank.controller.request.IndividualRankRequest;
 import com.plonit.plonitservice.api.rank.controller.response.CrewAvgRes;
 import com.plonit.plonitservice.api.rank.controller.response.CrewTotalRes;
+import com.plonit.plonitservice.api.rank.controller.response.FindMyRankingRes;
 import com.plonit.plonitservice.api.rank.controller.response.MembersRankRes;
 import com.plonit.plonitservice.api.rank.service.RankService;
 import com.plonit.plonitservice.common.CustomApiResponse;
@@ -16,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Tag(name = "Rank API Controller", description = "Rank API Document")
 @RestController
@@ -59,6 +61,20 @@ public class RankApiController {
         Long memberKey = RequestUtils.getMemberKey(request);
         CrewAvgRes allCrewRankByAVG = rankService.findAllCrewRankByAVG(memberKey);
         return CustomApiResponse.ok(allCrewRankByAVG);
+    }
+
+    @Operation(summary = "내 랭킹 조회", description = "내 랭킹을 조회합니다.")
+    @GetMapping("/member-ranking")
+    public CustomApiResponse<List<FindMyRankingRes>> findMyRanking(
+            HttpServletRequest servletRequest
+    ) {
+        log.info("내 랭킹 조회");
+
+        Long memberKey = RequestUtils.getMemberKey(servletRequest);
+
+        List<FindMyRankingRes> myRanking = rankService.findMyRanking(memberKey);
+
+        return CustomApiResponse.ok(myRanking);
     }
 
 
