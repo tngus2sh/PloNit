@@ -6,9 +6,9 @@ export interface GeolocationPosition {
 }
 
 export interface Coordinate {
-  id?: number;
   latitude: number;
   longitude: number;
+  ploggingHelpId?: number;
   place?: string;
   image?: string;
   context?: string;
