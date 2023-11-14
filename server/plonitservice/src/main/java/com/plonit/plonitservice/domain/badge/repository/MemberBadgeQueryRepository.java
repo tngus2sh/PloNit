@@ -34,14 +34,11 @@ public class MemberBadgeQueryRepository {
 
     public FindBadgeRes findBadge(Long memberKey, List<BadgeStatus> status) {
         return queryFactory
-                .select(Projections.fields(FindBadgeRes.class,
+                .select(constructor(FindBadgeRes.class,
                         badge.code,
                         badge.image,
                         badgeCondition.status,
-                        new CaseBuilder()
-                                .when(memberBadge.isNotNull())
-                                .then(true)
-                                .otherwise(false)))
+                        memberBadge.id))
                 .from(badge)
                 .leftJoin(memberBadge.badge)
                 .on(memberBadge.badge.eq(badge))
