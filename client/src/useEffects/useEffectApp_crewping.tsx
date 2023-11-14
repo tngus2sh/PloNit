@@ -104,7 +104,7 @@ function useEffectApp_Crewping() {
       dispatch(P.setIsEnd(true));
       navigate("/plogging/complete");
       stompClient.current?.deactivate();
-      if (!window.Worker && interval.current) {
+      if (interval.current) {
         clearInterval(interval.current);
       }
       worker.terminate();
