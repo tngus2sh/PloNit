@@ -34,6 +34,8 @@ const MyPloggingPage = () => {
   console.log(isNowMonth);
   const [isMonthList, setMonthList] = useState([]);
   console.log(isMonthList);
+  const realMonthList = [...new Set(isMonthList.map((item: any) => item.date))];
+  console.log(realMonthList);
   // 선택한 날짜
   const [dateRange, setDateRange] = useState<[Date, Date]>([
     new Date(),
@@ -66,21 +68,21 @@ const MyPloggingPage = () => {
   };
 
   // 플로깅한 날짜에 점 표시
-  // const tileContent = ({ date, view }: { date: Date; view: string }) => {
-  //   if (isMonthList.includes(date.toISOString().split("T")[0])) {
-  //     return (
-  //       <div
-  //         style={{
-  //           width: "0.5rem",
-  //           height: "0.5rem",
-  //           backgroundColor: "#1a8e3f",
-  //           margin: "auto",
-  //           borderRadius: "50%",
-  //         }}
-  //       ></div>
-  //     );
-  //   }
-  // };
+  const tileContent = ({ date, view }: { date: Date; view: string }) => {
+    if (realMonthList.includes(date.toISOString().split("T")[0])) {
+      return (
+        <div
+          style={{
+            width: "0.5rem",
+            height: "0.5rem",
+            backgroundColor: "#1a8e3f",
+            margin: "auto",
+            borderRadius: "50%",
+          }}
+        ></div>
+      );
+    }
+  };
   useEffect(() => {
     searchPloggingUsingMonth({
       accessToken: accessToken,
@@ -122,7 +124,7 @@ const MyPloggingPage = () => {
         prev2Label={null}
         onChange={handleDateChange}
         value={dateRange}
-        // tileContent={tileContent}
+        tileContent={tileContent}
         calendarType="US"
         onActiveStartDateChange={({ activeStartDate }) => {
           if (activeStartDate) {
