@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import DefaultMap from "../DefaultMap";
 import CommonButton from "components/common/CommonButton";
 import CenterModal from "../ploggingComps/CenterModal";
+import { Member } from "interface/ploggingInterface";
 import style from "styles/css/PloggingPage/BeforeCrewping.module.css";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -12,10 +13,6 @@ import * as Crewping from "store/crewping-slice";
 interface IBtnDiv {
   height: number;
   onClick?: () => void;
-}
-
-interface UserImages {
-  [key: string]: string;
 }
 
 const BtnDiv: React.FC<IBtnDiv> = ({ height, onClick }) => {
@@ -48,10 +45,9 @@ const Waiting = () => {
   const isCharge = useSelector<rootState, boolean>((state) => {
     return state.crewping.charge;
   });
-  const userImages = useSelector<rootState, UserImages>((state) => {
-    return state.crewping.userImages;
+  const members = useSelector<rootState, Member[]>((state) => {
+    return state.crewping.members;
   });
-  const keys = Object.keys(userImages);
 
   return (
     <div>
@@ -63,16 +59,16 @@ const Waiting = () => {
         className={style.wrapper}
         style={{ maxHeight: `${0.25 * windowHeight}px` }}
       >
-        {keys.map((key) => {
+        {members.map((member) => {
           return (
-            <div key={key} className={style.user}>
+            <div key={member.nickName} className={style.user}>
               <div
                 className={style.profile_image}
                 style={{
-                  backgroundImage: `url(${userImages[key]})`,
+                  backgroundImage: `url(${member.profileImage})`,
                 }}
               ></div>
-              <div className={style.nickname}>{key}</div>
+              <div className={style.nickname}>{member.nickName}</div>
             </div>
           );
         })}

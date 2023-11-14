@@ -1,10 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import {
-  Location,
-  Locations,
-  UserImages,
-  Message,
-} from "interface/ploggingInterface";
+import { Locations, Message, Member } from "interface/ploggingInterface";
 
 const initialState = {
   roomId: "" as string,
@@ -17,10 +12,8 @@ const initialState = {
   crewpingEnd: false as boolean,
   getLocation: false as boolean,
   locations: {} as Locations,
-  userImages: {
-    박주성:
-      "https://post-phinf.pstatic.net/MjAyMDExMDRfODgg/MDAxNjA0NDUyNDkwNTk5.3qW-hU8R0DvdQW8bgDuldGPN27uFdDvTh7haVQTpDqgg.2Tj5OcLz-xJx4rAFgkN48q8w5hrN5QahTK_DDIsNo2Ig.PNG/VneKfm5.png?type=w800_q75",
-  } as UserImages,
+  profileImage: "" as string,
+  members: [] as Member[],
 };
 
 const crewpingSlice = createSlice({
@@ -59,24 +52,19 @@ const crewpingSlice = createSlice({
     },
     setLocations: (state, action: PayloadAction<Message>) => {
       const newMessage = action.payload;
-      if (newMessage.location) {
-        state.locations = {
-          ...state.locations,
-          [newMessage.senderId]: newMessage.location,
-        };
-      }
+      const { senderId, latitude, longitude } = newMessage;
+      state.locations = {
+        ...state.locations,
+        [senderId]: { latitude: latitude ?? 0, longitude: longitude ?? 0 },
+      };
     },
-    addUserImage: (
-      state,
-      action: PayloadAction<{ senderId: string; image: string }>,
-    ) => {
-      const { senderId, image } = action.payload;
-      state.userImages = { ...state.userImages, [senderId]: image };
+    setProfileImage: (state, action: PayloadAction<string>) => {
+      state.profileImage = action.payload;
     },
-    setUserImages: (state, action: PayloadAction<Message>) => {
+    setMembers: (state, action: PayloadAction<Message>) => {
       const newMessage = action.payload;
-      if (newMessage.userImages) {
-        state.userImages = newMessage.userImages;
+      if (newMessage.members) {
+        state.members = newMessage.members;
       }
     },
   },
@@ -94,7 +82,7 @@ export const {
   setCrewpingEnd,
   setGetLocation,
   setLocations,
-  addUserImage,
-  setUserImages,
+  setProfileImage,
+  setMembers,
 } = crewpingSlice.actions;
 export default crewpingSlice.reducer;

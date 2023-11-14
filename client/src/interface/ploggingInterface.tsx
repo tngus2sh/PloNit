@@ -37,14 +37,19 @@ export interface Locations {
   [key: string]: Location;
 }
 
-export interface UserImages {
-  [key: string]: string;
+export interface Member {
+  nickName: string;
+  profileImage: string;
 }
 
 export interface Message {
-  type: string;
+  type: "START" | "END" | "LOCATION" | "WAIT";
+  nickName: string;
   senderId: string;
-  location?: Location;
-  userImages?: UserImages;
   roomId: string;
+  message?: string;
+  profileImage?: string;
+  latitude?: number;
+  longitude?: number;
+  members?: Member[];
 }
