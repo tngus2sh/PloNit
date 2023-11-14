@@ -11,12 +11,13 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import * as P from "store/plogging-slice";
 import * as Crewping from "store/crewping-slice";
+import { useSelector } from "react-redux";
 
 const CrewPloggingCard = ({ card }: { card: MyCrewpingInterface }) => {
   console.log(card);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { id, isMaster } = card;
+  const { crewName, id, isMaster } = card;
   return (
     <div className={style.plogging_card}>
       <div className={style.plogging_text}>
@@ -58,6 +59,7 @@ const CrewPloggingCard = ({ card }: { card: MyCrewpingInterface }) => {
           dispatch(P.setCrewpingId(id));
           dispatch(Crewping.setRoomId(`${id}`));
           dispatch(Crewping.setCharge(isMaster));
+          dispatch(Crewping.setSenderId(crewName));
           dispatch(P.setBeforeCrewping(true));
           navigate("/plogging");
         }}
