@@ -7,8 +7,16 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/pagination";
 
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import * as P from "store/plogging-slice";
+import * as Crewping from "store/crewping-slice";
+
 const CrewPloggingCard = ({ card }: { card: MyCrewpingInterface }) => {
   console.log(card);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { id, isMaster } = card;
   return (
     <div className={style.plogging_card}>
       <div className={style.plogging_text}>
@@ -43,6 +51,14 @@ const CrewPloggingCard = ({ card }: { card: MyCrewpingInterface }) => {
         text="시작하기"
         styles={{
           backgroundColor: "#2cd261",
+        }}
+        onClick={() => {
+          dispatch(P.clear());
+          dispatch(Crewping.clear());
+          dispatch(P.setCrewpingId(id));
+          dispatch(Crewping.setRoomId(`${id}`));
+          dispatch(Crewping.setCharge(isMaster));
+          navigate("/plogging");
         }}
       />
     </div>

@@ -25,6 +25,9 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
   const getLocation = useSelector<rootState, boolean>((state) => {
     return state.crewping.getLocation;
   });
+  const userImage = useSelector<rootState, string>((state) => {
+    return state.user.info.profileImage;
+  });
   const profileImage = useSelector<rootState, string>((state) => {
     return state.crewping.profileImage;
   });
@@ -60,6 +63,7 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
     };
 
     stompClient.current?.activate();
+    dispatch(Crewping.setProfileImage(userImage));
   }
 
   function sendStartRequest() {
