@@ -113,12 +113,10 @@ public class RankServiceImpl implements RankService {
 
         CrewTotalRes crewTotalRes = new CrewTotalRes();
 
-        MembersRankRes membersRankRes = new MembersRankRes();
-
         // 현재 랭킹 기간 조회
         RankingPeriod rankingPeriod = nowRankingPeriod();
-        membersRankRes.setStartDate(rankingPeriod.getStartDate());
-        membersRankRes.setEndDate(rankingPeriod.getEndDate());
+        crewTotalRes.setStartDate(rankingPeriod.getStartDate());
+        crewTotalRes.setEndDate(rankingPeriod.getEndDate());
 
         
         // Redis에서 랭킹 조회
@@ -182,12 +180,10 @@ public class RankServiceImpl implements RankService {
         
         CrewAvgRes crewAvgRes = new CrewAvgRes();
 
-        MembersRankRes membersRankRes = new MembersRankRes();
-
         // 현재 랭킹 기간 조회
         RankingPeriod rankingPeriod = nowRankingPeriod();
-        membersRankRes.setStartDate(rankingPeriod.getStartDate());
-        membersRankRes.setEndDate(rankingPeriod.getEndDate());
+        crewAvgRes.setStartDate(rankingPeriod.getStartDate());
+        crewAvgRes.setEndDate(rankingPeriod.getEndDate());
 
 
         // Redis에서 랭킹 조회

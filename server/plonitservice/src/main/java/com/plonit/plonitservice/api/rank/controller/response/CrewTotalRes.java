@@ -3,6 +3,7 @@ package com.plonit.plonitservice.api.rank.controller.response;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -11,7 +12,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CrewTotalRes {
-    private String rankingPeriod;
+
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private List<CrewsRanks> crewsRanks = new LinkedList<>();
 
     @Data
