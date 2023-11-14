@@ -39,16 +39,15 @@ dependencies {
 //	implementation 'org.springframework.boot:spring-boot-starter-security'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
 	// spring cloud
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 	implementation 'org.springframework.cloud:spring-cloud-starter-config'
 	implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
-	
+
 	// mysql
 	runtimeOnly 'com.mysql:mysql-connector-j'
-	
+
 	// swagger
 	implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
 
@@ -56,7 +55,7 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
-	
+
 	// test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
@@ -67,7 +66,7 @@ dependencies {
 	
 	// actuator
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	
+
 	// S3
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
@@ -87,16 +86,18 @@ dependencies {
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
-	
+
 	// batch
 	implementation 'org.springframework.boot:spring-boot-starter-batch'
-	
+
 	// quartz
 	implementation 'org.springframework.boot:spring-boot-starter-quartz'
 
 	// fcm
 	implementation group: 'com.google.firebase', name: 'firebase-admin', version: '9.1.1'
 
+	// redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 }
 
 dependencyManagement {

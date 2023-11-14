@@ -8,6 +8,7 @@ import com.plonit.plonitservice.api.rank.controller.response.CrewAvgResponse;
 import com.plonit.plonitservice.api.rank.controller.response.CrewTotalResponse;
 import com.plonit.plonitservice.api.rank.controller.response.MembersRankResponse;
 import com.plonit.plonitservice.api.rank.service.RankService;
+import com.plonit.plonitservice.common.enums.Rank;
 import com.plonit.plonitservice.common.exception.CustomException;
 import com.plonit.plonitservice.common.exception.ErrorCode;
 import com.plonit.plonitservice.common.util.RedisUtils;
@@ -51,7 +52,7 @@ public class RankServiceImpl implements RankService {
         membersRankResponse.setRankingPeriod(rankingPeriod);
 
         // Redis에서 랭킹 조회
-        Set<ZSetOperations.TypedTuple<String>> sortedSetRangeWithScores = redisUtils.getSortedSetRangeWithScores("MEMBER-RANK", 0, 9);
+        Set<ZSetOperations.TypedTuple<String>> sortedSetRangeWithScores = redisUtils.getSortedSetRangeWithScores(Rank.MEMBER.getDescription(), 0, 9);
 
         List<MembersRankResponse.MembersRank> membersRanks = membersRankResponse.getMembersRanks();
         
@@ -116,7 +117,7 @@ public class RankServiceImpl implements RankService {
         crewTotalResponse.setRankingPeriod(rankingPeriod);
         
         // Redis에서 랭킹 조회
-        Set<ZSetOperations.TypedTuple<String>> sortedSetRangeWithScores = redisUtils.getSortedSetRangeWithScores("CREW-RANK", 0, 9);
+        Set<ZSetOperations.TypedTuple<String>> sortedSetRangeWithScores = redisUtils.getSortedSetRangeWithScores(Rank.CREW.getDescription(), 0, 9);
 
         List<CrewTotalResponse.CrewsRanks> crewsRanks = crewTotalResponse.getCrewsRanks();
         
@@ -181,7 +182,7 @@ public class RankServiceImpl implements RankService {
         crewAvgResponse.setRankingPeriod(rankingPeriod);
 
         // Redis에서 랭킹 조회
-        Set<ZSetOperations.TypedTuple<String>> sortedSetRangeWithScores = redisUtils.getSortedSetRangeWithScores("CREW-AVG-RANK", 0, 9);
+        Set<ZSetOperations.TypedTuple<String>> sortedSetRangeWithScores = redisUtils.getSortedSetRangeWithScores(Rank.CREW_AVG.getDescription(), 0, 9);
 
         List<CrewAvgResponse.CrewsAvgRanks> crewsAvgRanks = crewAvgResponse.getCrewsAvgRanks();
 
