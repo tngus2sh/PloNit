@@ -227,7 +227,6 @@ const searchNeighbor = ({
   api.get(`/users/${latitude}/${longitude}`).then(success).catch(fail);
 };
 
-<<<<<<< HEAD
 // 내 플로깅 조회
 export async function getMyPlogging(
   accessToken: string,
@@ -268,8 +267,6 @@ export async function getMyPloggingDetail(
 
 // --- 미완성 인 것들 ---
 
-=======
->>>>>>> bb9bbc15defdce262e611be0eea2d5fb00a04cca
 // 봉사 정보 조회
 const searchVolInfo = ({
   accessToken,

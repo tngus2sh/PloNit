@@ -7,12 +7,8 @@ import Carousel from "components/Home/Carousel";
 
 const HomePage = () => {
   const navigate = useNavigate();
-<<<<<<< HEAD
-  //const isLogined = useSelector((state: any) => state.user.auth.isLogin);
-=======
   const isLogined = useSelector((state: any) => state.user.auth.isLogin);
   const User = useSelector((state: any) => state.user.info);
->>>>>>> bb9bbc15defdce262e611be0eea2d5fb00a04cca
 
   // useEffect(() => {
   //   if (!isLogined) {
