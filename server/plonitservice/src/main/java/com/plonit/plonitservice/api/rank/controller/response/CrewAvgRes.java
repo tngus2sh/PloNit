@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,7 +16,8 @@ import java.util.List;
 @AllArgsConstructor
 public class CrewAvgRes {
 
-    private String rankingPeriod;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
 
     private List<CrewsAvgRanks> crewsAvgRanks = new LinkedList<>();
 
