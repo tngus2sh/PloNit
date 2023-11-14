@@ -1,17 +1,15 @@
 package com.plonit.plonitservice.api.rank.service;
 
-import com.plonit.plonitservice.api.rank.controller.response.CrewAvgResponse;
-import com.plonit.plonitservice.api.rank.controller.response.CrewTotalResponse;
-import com.plonit.plonitservice.api.rank.controller.response.MembersRankResponse;
-
-import java.util.List;
+import com.plonit.plonitservice.api.rank.controller.response.CrewAvgRes;
+import com.plonit.plonitservice.api.rank.controller.response.CrewTotalRes;
+import com.plonit.plonitservice.api.rank.controller.response.MembersRankRes;
 
 public interface RankService {
 
-    public MembersRankResponse findAllMembersRank(Long memberKey);
+    public MembersRankRes findAllMembersRank(Long memberKey);
 
-    public CrewTotalResponse findAllCrewRank(Long memberKey);
+    public CrewTotalRes findAllCrewRank(Long memberKey);
     
-    public CrewAvgResponse findAllCrewRankByAVG(Long memberKey);
+    public CrewAvgRes findAllCrewRankByAVG(Long memberKey);
     
 }

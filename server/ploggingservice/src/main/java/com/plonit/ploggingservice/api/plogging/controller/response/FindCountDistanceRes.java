@@ -8,12 +8,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class UsersRes {
+public class FindCountDistanceRes {
 
-    private Long id;
+    private Integer count;
 
-    private Double latitude;
-
-    private Double longitude;
+    private Double distance;
 
 }

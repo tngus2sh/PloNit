@@ -1,9 +1,11 @@
 package com.plonit.ploggingservice.api.plogging.service.impl;
 
+import com.plonit.ploggingservice.api.plogging.controller.BadgeFeignClient;
 import com.plonit.ploggingservice.api.plogging.controller.CrewpingFeignClient;
 import com.plonit.ploggingservice.api.plogging.controller.MemberFeignClient;
 import com.plonit.ploggingservice.api.plogging.controller.SidoGugunFeignClient;
 import com.plonit.ploggingservice.api.plogging.controller.request.CrewpingRecordReq;
+import com.plonit.ploggingservice.api.plogging.controller.request.GrantMemberBadgeReq;
 import com.plonit.ploggingservice.api.plogging.controller.request.UpdateVolunteerInfoReq;
 import com.plonit.ploggingservice.api.plogging.controller.response.*;
 import com.plonit.ploggingservice.api.plogging.service.PloggingService;
@@ -54,6 +56,7 @@ public class PloggingServiceImpl implements PloggingService {
     private final SidoGugunFeignClient sidoGugunFeignClient;
     private final CrewpingFeignClient crewpingFeignClient;
     private final MemberFeignClient memberFeignClient;
+    private final BadgeFeignClient badgeFeignClient;
     private final CircuitBreakerFactory circuitBreakerFactory;
     private final KakaoPlaceUtils kakaoPlaceUtils;
     private final AwsS3Uploader awsS3Uploader;
@@ -63,6 +66,7 @@ public class PloggingServiceImpl implements PloggingService {
     private final PloggingHelpRepository ploggingHelpRepository;
     private final PloggingPictureRepository ploggingPictureRepository;
     private final VolunteerRepository volunteerRepository;
+    private final PloggingQueryRepository ploggingQueryRepository;
 
 
     /**
@@ -193,6 +197,20 @@ public class PloggingServiceImpl implements PloggingService {
             }
         }
 
+        /* 개인 배지 부여 */
+        // 지금까지 플로깅 횟수와 거리 구하기
+        FindCountDistanceRes countDistance = ploggingQueryRepository.findCountDistance(dto.getMemberKey());
+        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
+
+        circuitBreaker.run(
+                () -> badgeFeignClient.grantMemberBadge(GrantMemberBadgeReq.builder()
+                                .ploggingCount(countDistance.getCount())
+                                .distance(countDistance.getDistance())
+                                .build())
+                        .getResultBody(),
+                throwable -> null
+        );
+
         return plogging.getId();
     }
     
@@ -297,5 +315,16 @@ public class PloggingServiceImpl implements PloggingService {
         return null;
     }
 
+    @Transactional
+    @Override
+    public Long updatePloggingHelpStatus(UpdatePloggingHelpStatusDto dto) {
 
+        // ploggingHelpId로 해당 도움 가져오기
+        PloggingHelp ploggingHelp = ploggingHelpRepository.findByIdAndIsActive(dto.getPloggingHelpId(), true)
+                .orElseThrow(() -> new CustomException(PLOGGING_HELP_BAD_REQUEST));
+
+        ploggingHelp.updateIsActive(dto.getIsActive());
+
+        return ploggingHelp.getId();
+    }
 }
