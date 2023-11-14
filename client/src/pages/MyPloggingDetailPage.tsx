@@ -59,7 +59,9 @@ const MyPloggingDetailPage = () => {
               <span className={style.large}>{User.nickname}</span> 님
             </div>
             <div>
-              {formattedDate(isPloggingDetail?.startTime)}{" "}
+              {isPloggingDetail?.startTime
+                ? formattedDate(isPloggingDetail.startTime)
+                : "Loading..."}{" "}
               {isPloggingDetail?.place}
             </div>
           </div>
