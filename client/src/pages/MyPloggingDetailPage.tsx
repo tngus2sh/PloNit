@@ -20,14 +20,9 @@ const MyPloggingDetailPage = () => {
   const User = useSelector((state: any) => state.user.auth);
   const { ploggingId } = useParams();
   const [isPloggingDetail, setPloggingDetail] = useState<PloggingLog>();
-
-  let year, month, day;
-  if (isPloggingDetail && isPloggingDetail.startTime) {
-    const startTimeDate = new Date(isPloggingDetail.startTime);
-    year = startTimeDate.getFullYear();
-    month = startTimeDate.getMonth() + 1;
-    day = startTimeDate.getDate();
-  }
+  const year = isPloggingDetail?.startTime?.slice(0, 2);
+  const month = isPloggingDetail?.startTime?.slice(3, 5);
+  const day = isPloggingDetail?.startTime?.slice(6, 8);
 
   console.log(isPloggingDetail);
 
