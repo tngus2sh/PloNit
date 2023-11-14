@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
 import * as P from "store/plogging-slice";
+import * as Crewping from "store/crewping-slice";
 import * as camera from "store/camera-slice";
 
 interface IIconBottom {
@@ -88,6 +89,9 @@ const InfoDiv: React.FC<IInfoDiv> = ({
   const imagesLen = useSelector<rootState, number>((state) => {
     return state.plogging.images.length;
   });
+  const charge = useSelector<rootState, boolean>((state) => {
+    return state.crewping.charge;
+  });
 
   function helpBtnEvent() {
     dispatch(camera.setTarget("help"));
@@ -124,11 +128,20 @@ const InfoDiv: React.FC<IInfoDiv> = ({
         cancelButtonColor: "#FF2953",
       }).then((result) => {
         if (result.isConfirmed) {
-          // axios 요청 성공 시
           Swal.close();
-          dispatch(P.setIsEnd(true));
-          dispatch(camera.clear());
-          navigate("/plogging/complete");
+          if (nowType === "IND") {
+            dispatch(P.setIsEnd(true));
+            dispatch(camera.clear());
+            navigate("/plogging/complete");
+          } else {
+            if (charge) {
+              dispatch(Crewping.setEndRequest(true));
+              dispatch(camera.clear());
+            } else {
+              dispatch(Crewping.setCrewpingEnd(true));
+              dispatch(camera.clear());
+            }
+          }
         }
       });
     } else {
