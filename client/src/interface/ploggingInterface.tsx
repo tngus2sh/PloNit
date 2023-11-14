@@ -24,7 +24,7 @@ export interface PloggingLog {
   calorie?: number;
   images?: any;
   review?: string;
-  coordinates: Coordinate;
+  coordinates: Coordinate[];
 }
 
 export interface Location {

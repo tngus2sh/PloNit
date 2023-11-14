@@ -5,6 +5,7 @@ import style from "styles/css/MyPloggingDetailPage.module.css";
 import { BackTopBar } from "components/common/TopBar";
 import { searchPloggingInfo } from "api/lib/plogging";
 import { PloggingLog } from "interface/ploggingInterface";
+import DefaultPathMap from "components/plogging/DefaultPathMap";
 
 const formattedDate = (date: any) => {
   const year = date.getFullYear();
@@ -17,12 +18,9 @@ const formattedDate = (date: any) => {
 
 const MyPloggingDetailPage = () => {
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
-  const User = useSelector((state: any) => state.user.auth);
+  const User = useSelector((state: any) => state.user.info);
   const { ploggingId } = useParams();
   const [isPloggingDetail, setPloggingDetail] = useState<PloggingLog>();
-  // if (isPloggingDetail?.startTime !== undefined) {
-  //   const StartDate = new Date(isPloggingDetail.startTime);
-  // }
   const year = isPloggingDetail?.startTime?.slice(0, 4);
   const month = isPloggingDetail?.startTime?.slice(5, 7);
   const day = isPloggingDetail?.startTime?.slice(8, 10);
@@ -63,7 +61,7 @@ const MyPloggingDetailPage = () => {
             <div>
               {isPloggingDetail?.startTime !== undefined && (
                 <>
-                  {formattedDate(new Date(isPloggingDetail.startTime))}
+                  {formattedDate(new Date(isPloggingDetail.startTime))}{" "}
                   {isPloggingDetail.place}
                 </>
               )}
@@ -91,6 +89,14 @@ const MyPloggingDetailPage = () => {
           </div>
         </div>
         <div className={style.content}>{isPloggingDetail?.review}</div>
+        <div>
+          {isPloggingDetail?.coordinates !== undefined && (
+            <DefaultPathMap
+              paths={isPloggingDetail.coordinates}
+              subHeight={0}
+            />
+          )}
+        </div>
         <div className={style.img_area}>
           {isPloggingDetail?.images.map((image: string, index: number) => (
             <img key={index} src={image} alt="이미지" />
