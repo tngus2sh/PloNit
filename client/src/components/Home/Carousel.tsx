@@ -35,6 +35,7 @@ const Carousel = () => {
       accessToken,
       (res) => {
         console.log("나의 크루핑 조회 성공");
+        console.log(res.data);
         console.log(res.data.resultBody);
         setMyCrewpingList(res.data.resultBody);
       },

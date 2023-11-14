@@ -115,7 +115,7 @@ const searchPloggingUsingMonth = ({
 }) => {
   const api = ploggingApi;
   api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
-  api.get(`/period?${month}`).then(success).catch(fail);
+  api.get(`/period?month=${month}`).then(success).catch(fail);
 };
 
 // 플로깅 기록 상세 조회
