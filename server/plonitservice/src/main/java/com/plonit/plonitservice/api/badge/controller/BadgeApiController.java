@@ -4,6 +4,7 @@ import com.plonit.plonitservice.api.badge.controller.request.GrantCrewRankReq;
 import com.plonit.plonitservice.api.badge.controller.request.GrantMemberBadgeReq;
 import com.plonit.plonitservice.api.badge.controller.request.GrantMemberRankReq;
 import com.plonit.plonitservice.api.badge.controller.response.FindBadgeRes;
+import com.plonit.plonitservice.api.badge.service.BadgeQueryService;
 import com.plonit.plonitservice.api.badge.service.BadgeService;
 import com.plonit.plonitservice.api.badge.service.dto.GrantCrewRankDto;
 import com.plonit.plonitservice.api.badge.service.dto.GrantMemberBadgeDto;
@@ -22,10 +23,11 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/plonit-service/api/badge")
+@RequestMapping("/api/plonit-service/v1/badge")
 public class BadgeApiController {
 
     private final BadgeService badgeService;
+    private final BadgeQueryService badgeQueryService;
 
 
     @Operation(summary = "[관리자용] 개인 배지 부여 여부 확인", description = "개인 배지를 부여할 수 있는지 확인한 후 부여한다.")
@@ -67,13 +69,16 @@ public class BadgeApiController {
         return CustomApiResponse.ok(null);
     }
 
-    @Operation(summary = "배지 조회", description = "배지를 조회한다.")
-    @GetMapping
+    @Operation(summary = "미션 배지 조회", description = "미션 배지를 조회한다.")
+    @GetMapping("/mission-badge")
     public CustomApiResponse<FindBadgeRes> findBadge(
             HttpServletRequest servletRequest
     ) {
         Long memberKey = RequestUtils.getMemberKey(servletRequest);
-        return null;
+
+        FindBadgeRes badge = badgeQueryService.findBadge(memberKey);
+
+        return CustomApiResponse.ok(badge);
     }
 
 }

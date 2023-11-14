@@ -2,12 +2,15 @@ package com.plonit.plonitservice.domain.badge.repository;
 
 import com.plonit.plonitservice.api.badge.controller.response.FindBadgeRes;
 import com.plonit.plonitservice.common.batch.CrewItemProcessor;
+import com.plonit.plonitservice.common.enums.BadgeStatus;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+
+import java.util.List;
 
 import static com.plonit.plonitservice.domain.badge.QBadge.badge;
 import static com.plonit.plonitservice.domain.badge.QBadgeCondition.badgeCondition;
@@ -29,9 +32,10 @@ public class MemberBadgeQueryRepository {
                 .fetchOne());
     }
 
-    public FindBadgeRes findBadge(Long memberKey) {
+    public FindBadgeRes findBadge(Long memberKey, List<BadgeStatus> status) {
         return queryFactory
                 .select(Projections.fields(FindBadgeRes.class,
+                        badge.code,
                         badge.image,
                         badgeCondition.status,
                         new CaseBuilder()
@@ -43,7 +47,8 @@ public class MemberBadgeQueryRepository {
                 .on(memberBadge.badge.eq(badge))
                 .leftJoin(badge.badgeCondition)
                 .on(badge.badgeCondition.eq(badgeCondition))
-                .where(memberBadge.member.id.eq(memberKey))
+                .where(memberBadge.member.id.eq(memberKey)
+                        .and(badgeCondition.status.in(status)))
                 .fetchOne();
     }
 }
