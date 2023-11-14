@@ -130,65 +130,6 @@ function createMarkers({
     markers.push(marker);
   });
 
-  const InnerComponent = ({
-    place,
-    context,
-  }: {
-    place: string;
-    context: string;
-  }) => {
-    return (
-      <div>
-        <div
-          style={{
-            fontSize: "1.5rem",
-            fontWeight: "bolder",
-            lineHeight: "1.5rem",
-          }}
-        >
-          <img
-            src="/images/PloggingPage/nowLocation-pin.png"
-            style={{
-              height: "1.5rem",
-              aspectRatio: "1/1",
-              verticalAlign: "middle",
-            }}
-          />
-          {place}
-        </div>
-        <br />
-        <div>{context}</div>
-      </div>
-    );
-  };
-
-  // Help의 경우
-  if (items[0]?.id || items[0]?.image || items[0]?.place || items[0]?.context) {
-    markers.forEach((marker, index) => {
-      naver.maps.Event.addListener(marker, "click", () => {
-        Swal.fire({
-          imageUrl: items[index].image,
-          imageWidth: `min(70vw, 400px)`,
-          imageHeight: `auto`,
-          imageAlt: `helpImage`,
-          html: renderToString(
-            InnerComponent({
-              place: items[index].place ?? "",
-              context: items[index].context ?? "",
-            }),
-          ),
-          showConfirmButton: true,
-          confirmButtonText: "도움요청 종료",
-          showCloseButton: true,
-        }).then((result) => {
-          if (result.isConfirmed) {
-            console.log("여기에 새로운 api가 들어갑니다.");
-          }
-        });
-      });
-    });
-  }
-
   return markers;
 }
 

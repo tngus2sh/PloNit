@@ -7,6 +7,7 @@ import { naver } from "components/common/useNaver";
 import { Coordinate } from "interface/ploggingInterface";
 import { ploggingType } from "types/ploggingTypes";
 import { Locations } from "interface/ploggingInterface";
+import { renderToString } from "react-dom/server";
 import Swal from "sweetalert2";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -14,7 +15,11 @@ import { rootState } from "store/store";
 import * as P from "store/plogging-slice";
 
 import { getBins, getToilets } from "api/lib/items";
-import { searchNeighbor, searchHelpUsingLatLng } from "api/lib/plogging";
+import {
+  searchNeighbor,
+  searchHelpUsingLatLng,
+  changeHelp,
+} from "api/lib/plogging";
 
 const defaultZoom = 16;
 const navbarHeight = 56;
@@ -25,6 +30,38 @@ interface IDefaultMap {
   isBefore: boolean;
   children?: ReactNode;
 }
+
+const InnerComponent = ({
+  place,
+  context,
+}: {
+  place: string;
+  context: string;
+}) => {
+  return (
+    <div>
+      <div
+        style={{
+          fontSize: "1.5rem",
+          fontWeight: "bolder",
+          lineHeight: "1.5rem",
+        }}
+      >
+        <img
+          src="/images/PloggingPage/nowLocation-pin.png"
+          style={{
+            height: "1.5rem",
+            aspectRatio: "1/1",
+            verticalAlign: "middle",
+          }}
+        />
+        {place}
+      </div>
+      <br />
+      <div>{context}</div>
+    </div>
+  );
+};
 
 const DefaultMap: React.FC<IDefaultMap> = ({
   subHeight,
@@ -487,12 +524,65 @@ const DefaultMap: React.FC<IDefaultMap> = ({
       map: null,
     });
 
-    helpMarkers.current = N.createMarkers({
-      items: helps,
-      map: mapRef.current ?? undefined,
-      url: `/images/PloggingPage/help-icon.png`,
-      cursor: "pointer",
+    const markers: naver.maps.Marker[] = [];
+    helps.forEach((help) => {
+      const marker = new naver.maps.Marker({
+        position: new naver.maps.LatLng(help.latitude, help.longitude),
+        map: mapRef.current ?? undefined,
+        icon: {
+          url: `/images/PloggingPage/help-icon.png`,
+          size: new naver.maps.Size(35, 35),
+          scaledSize: new naver.maps.Size(35, 35),
+          origin: new naver.maps.Point(0, 0),
+          anchor: new naver.maps.Point(17.5, 17.5),
+        },
+        cursor: "pointer",
+        draggable: false,
+      });
+
+      naver.maps.Event.addListener(marker, "click", () => {
+        Swal.fire({
+          imageUrl: help.image,
+          imageWidth: `min(70vw, 400px)`,
+          imageHeight: `auto`,
+          imageAlt: "helpImage",
+          html: renderToString(
+            InnerComponent({
+              place: help.place ?? "",
+              context: help.context ?? "",
+            }),
+          ),
+          showConfirmButton: true,
+          confirmButtonText: "도움 요청 종료",
+          showCloseButton: true,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              icon: "question",
+              text: "도움 요청을 종료하시겠습니까?",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                changeHelp({
+                  accessToken: accessToken,
+                  ploggingHelpId: help.id ?? 0,
+                  isActive: false,
+                  success: (response) => {
+                    console.log(response);
+                  },
+                  fail: (error) => {
+                    console.error(error);
+                  },
+                });
+              }
+            });
+          }
+        });
+      });
+
+      markers.push(marker);
     });
+
+    helpMarkers.current = markers;
   }, [helps]);
 
   useEffect(() => {
