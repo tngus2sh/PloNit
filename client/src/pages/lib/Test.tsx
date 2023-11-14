@@ -18,7 +18,8 @@ const Test = () => {
           dispatch(Crewping.clear());
           dispatch(P.clear());
           dispatch(Crewping.setRoomId("박주성"));
-          dispatch(Crewping.setCharge(true));
+          dispatch(Crewping.setCharge(false));
+          dispatch(P.setPloggingType("CREWPING"));
           dispatch(P.setBeforeCrewping(true));
           navigate("/plogging");
         }}

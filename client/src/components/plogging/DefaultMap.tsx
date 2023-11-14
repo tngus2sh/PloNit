@@ -359,19 +359,19 @@ const DefaultMap: React.FC<IDefaultMap> = ({
             },
           });
 
-          // if (isBefore) {
-          //   searchNeighbor({
-          //     accessToken,
-          //     latitude,
-          //     longitude,
-          //     success: (response) => {
-          //       setNeighbors(response.data.resultBody);
-          //     },
-          //     fail: (error) => {
-          //       console.error(error);
-          //     },
-          //   });
-          // }
+          if (isBefore) {
+            searchNeighbor({
+              accessToken,
+              latitude,
+              longitude,
+              success: (response) => {
+                setNeighbors(response.data.resultBody);
+              },
+              fail: (error) => {
+                console.error(error);
+              },
+            });
+          }
         })
         .catch((error) => {
           console.error(error);

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import SockJS from "sockjs-client";
 import { Client, IMessage } from "@stomp/stompjs";
 import getGPS from "./getGPS";
-import { Message, UserImages } from "interface/ploggingInterface";
+import { Message } from "interface/ploggingInterface";
 
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
@@ -25,8 +25,8 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
   const getLocation = useSelector<rootState, boolean>((state) => {
     return state.crewping.getLocation;
   });
-  const userImages = useSelector<rootState, UserImages>((state) => {
-    return state.crewping.userImages;
+  const profileImage = useSelector<rootState, string>((state) => {
+    return state.crewping.profileImage;
   });
   const [toggleSocket, setToggleSocket] = useState<boolean>(false);
 
@@ -42,7 +42,7 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
       dispatch(Crewping.setLocations(newMessage));
     }
     if (newMessage.type === "WAIT") {
-      dispatch(Crewping.setUserImages(newMessage));
+      dispatch(Crewping.setMembers(newMessage));
     }
   }
 
@@ -67,6 +67,7 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
     if (stompClient.current?.connected) {
       const newMessage: Message = {
         type: "START",
+        nickName: senderId,
         senderId: senderId,
         roomId: roomId,
       };
@@ -88,6 +89,7 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
     if (stompClient.current?.connected) {
       const newMessage: Message = {
         type: "END",
+        nickName: senderId,
         senderId: senderId,
         roomId: roomId,
       };
@@ -112,9 +114,11 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
           const { latitude, longitude } = response.coords;
           const newMessage: Message = {
             type: "LOCATION",
+            nickName: senderId,
             senderId: senderId,
-            location: { latitude, longitude },
             roomId: roomId,
+            latitude: latitude,
+            longitude: longitude,
           };
           console.log("[SEND]", newMessage);
 
@@ -138,9 +142,10 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
     if (stompClient.current?.connected) {
       const newMessage: Message = {
         type: "WAIT",
+        nickName: senderId,
         senderId: senderId,
-        userImages: userImages,
         roomId: roomId,
+        profileImage: profileImage,
       };
       console.log("[SEND]", newMessage);
 
@@ -186,8 +191,10 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
   }, [getLocation]);
 
   useEffect(() => {
-    sendWait();
-  }, [userImages]);
+    if (profileImage) {
+      sendWait();
+    }
+  }, [profileImage]);
 
   return { setToggleSocket };
 }
