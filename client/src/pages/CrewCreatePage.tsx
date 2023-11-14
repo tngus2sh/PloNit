@@ -8,6 +8,7 @@ import RegionModal from "components/common/RegionModal";
 import { getCrewCreate } from "api/lib/crew";
 import { Icon } from "@iconify/react";
 import style from "styles/css/CrewCreatePage.module.css";
+import { NotOkModal, OkModal } from "components/common/AlertModals";
 
 const CrewCreatePage = () => {
   const navigate = useNavigate();
@@ -31,16 +32,20 @@ const CrewCreatePage = () => {
 
   const crewCreateHandler = () => {
     if (!isCrewName) {
-      alert("크루 이름을 입력하세요");
+      // alert("크루 이름을 입력하세요");
+      NotOkModal({ text: "크루 이름을 입력하세요" });
       return;
     } else if (!isCrewImage) {
-      alert("크루 이미지를 등록해주세요");
+      NotOkModal({ text: "크루 이미지를 등록해주세요" });
+      // alert("크루 이미지를 등록해주세요");
       return;
     } else if (!isCrewRegion) {
-      alert("활동 지역을 입력하세요");
+      // alert("활동 지역을 입력하세요");
+      NotOkModal({ text: "활동 지역을 입력하세요" });
       return;
     } else if (!isCrewIntroduce) {
-      alert("크루 소개를 입력하세요");
+      // alert("크루 소개를 입력하세요");
+      NotOkModal({ text: "크루 소개를 입력하세요" });
       return;
     }
     const formData = new FormData();
@@ -57,6 +62,7 @@ const CrewCreatePage = () => {
       (res) => {
         console.log(res.data);
         console.log("크루 생성 성공");
+        OkModal({ text: "크루가 생성되었습니다" });
         navigate("/crew/list");
       },
       (err) => {
@@ -90,7 +96,7 @@ const CrewCreatePage = () => {
         <input
           type="file"
           id="input_file"
-          accept="image/*"
+          accept=".gif, .jpg, .png"
           style={{ display: "none" }}
           onChange={handleImageUpload}
         />

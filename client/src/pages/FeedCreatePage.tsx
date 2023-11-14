@@ -9,6 +9,7 @@ import { Pagination } from "swiper/modules";
 import { Icon } from "@iconify/react";
 import { getFeedCreate } from "api/lib/feed";
 import styled from "styled-components";
+import { NotOkModal } from "components/common/AlertModals";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -39,10 +40,12 @@ const FeedCreatePage = () => {
 
   const feedCreateHandler = () => {
     if (isFeedImages.length < 1) {
-      alert("피드 이미지를 등록하세요");
+      // alert("피드 이미지를 등록하세요");
+      NotOkModal({ text: "피드 이미지를 등록하세요." });
       return;
     } else if (!isFeedIntroduce) {
-      alert("피드 내용을 입력하세요");
+      // alert("피드 내용을 입력하세요");
+      NotOkModal({ text: "피드 내용을 입력하세요." });
       return;
     }
     const formData = new FormData();
@@ -95,7 +98,7 @@ const FeedCreatePage = () => {
               type="file"
               multiple
               id="input_file"
-              accept="image/*"
+              accept=".gif, .jpg, .png"
               style={{ display: "none" }}
               onChange={handleImageUpload}
             />

@@ -23,20 +23,8 @@ const formattedDateTime = (datestr: any) => {
 const CrewpingItem = ({ crewping }: { crewping: CrewpingInterface }) => {
   const navigate = useNavigate();
   const goCrewpingDetailHandler = () => {
-    // id가 선택적 프로퍼티이므로, 존재하는 경우에만 내비게이션을 수행합니다.
-    // console.log("crewping:", crewping);
-    // console.log("crewping id: ", crewping.crewpingId);
-    // if (crewping && crewping.crewpingId) {
-    // crewping과 crewping.id가 존재하는지 확인합니다.
     navigate(`/crew/crewping/detail/${crewping.crewpingId}`);
-    // }
   };
-
-  // cntPeople과 maxPeople이 숫자 또는 문자열일 수 있으므로, 적절히 표시합니다.
-  // const participantsDisplay =
-  //   crewping.cntPeople !== undefined && crewping.maxPeople !== undefined
-  //     ? `${crewping.cntPeople}/${crewping.maxPeople}`
-  //     : "참가자 정보 없음";
 
   return (
     <div className={style.crewping_Item} onClick={goCrewpingDetailHandler}>
@@ -69,7 +57,6 @@ const CrewpingItem = ({ crewping }: { crewping: CrewpingInterface }) => {
                 marginRight: "0.3rem",
               }}
             />
-            {/* <div>{participantsDisplay}</div> */}
             <div>
               {crewping.cntPeople}/{crewping.maxPeople} 명
             </div>

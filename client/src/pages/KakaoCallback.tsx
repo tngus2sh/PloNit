@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { userActions } from "store/user-slice";
 import { getProfile } from "api/lib/members";
+import { NotOkModal } from "components/common/AlertModals";
 // import { requestPermission } from "firebase-messaging-sw";
 
 const KakaoCallback = () => {
@@ -47,6 +48,7 @@ const KakaoCallback = () => {
           },
           (err) => {
             console.error("로그인 api 실패:", err);
+            NotOkModal({ text: "로그인이 실패했습니다." });
           },
         );
       }

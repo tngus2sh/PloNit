@@ -37,7 +37,7 @@ const CrewpingImg = ({ setCrewpingImage, isCrewpingImage }: any) => {
       <input
         type="file"
         id="input_file"
-        accept="image/*"
+        accept=".gif, .jpg, .png"
         style={{ display: "none" }}
         onChange={handleImageUpload}
       />

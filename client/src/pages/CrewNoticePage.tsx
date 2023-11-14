@@ -5,6 +5,7 @@ import { BackTopBar } from "components/common/TopBar";
 import CommonButton from "components/common/CommonButton";
 import style from "styles/css/CrewNoticePage.module.css";
 import { getNotice, getCrewDetail } from "api/lib/crew";
+import { OkModal, NotOkModal } from "components/common/AlertModals";
 
 const CrewNoticePage = () => {
   const navigate = useNavigate();
@@ -42,10 +43,12 @@ const CrewNoticePage = () => {
       (res) => {
         console.log("공지사항 변경 성공");
         console.log(res.data.resultBody);
+        OkModal({ text: "공지사항이 변경되었습니다." });
         navigate(`/crew/community/${crewId}`);
       },
       (err) => {
         console.log("공지사항 변경 실패", err);
+        NotOkModal({ text: "공지사항이 변경에 실패했습니다." });
       },
     );
   };

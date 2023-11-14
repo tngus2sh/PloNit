@@ -9,6 +9,7 @@ import { Pagination } from "swiper/modules";
 import styled from "styled-components";
 import { getFeedDelete, getLikeFeed } from "api/lib/feed";
 import Sheet from "react-modal-sheet";
+import { QuestionModal } from "components/common/AlertModals";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -79,19 +80,23 @@ const FeedItem = ({
   };
 
   const handleDeleteFeed = () => {
-    alert("피드를 삭제하시겠습니까");
-    getFeedDelete(
-      accessToken,
-      feed.id,
-      (res) => {
-        console.log(res.data);
-        console.log("피드 삭제 성공");
-        fetchFeedList();
-      },
-      (err) => {
-        console.log("피드 삭제 에러", err);
-      },
-    );
+    // alert("피드를 삭제하시겠습니까");
+    QuestionModal({ text: "피드를 삭제하시겠습니까." }).then((res) => {
+      if (res.isConfirmed) {
+        getFeedDelete(
+          accessToken,
+          feed.id,
+          (res) => {
+            console.log(res.data);
+            console.log("피드 삭제 성공");
+            fetchFeedList();
+          },
+          (err) => {
+            console.log("피드 삭제 에러", err);
+          },
+        );
+      }
+    });
   };
 
   return (

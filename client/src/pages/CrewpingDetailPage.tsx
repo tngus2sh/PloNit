@@ -13,6 +13,11 @@ import {
   getCrewpingJoin,
   getCrewpingQuit,
 } from "api/lib/crewping";
+import {
+  QuestionModal,
+  OkModal,
+  NotOkModal,
+} from "components/common/AlertModals";
 
 const CrewpingDetailPage = () => {
   const dispatch = useDispatch();
@@ -50,35 +55,44 @@ const CrewpingDetailPage = () => {
   };
 
   const crewpingJoinHandler = () => {
-    getCrewpingJoin(
-      accessToken,
-      Number(crewpingId),
-      (res) => {
-        console.log(res.data);
-        console.log("크루핑 참가 요청 성공");
-        alert("크루핑 참가 완료");
-        fetchCrewpingDetailList();
-      },
-      (err) => {
-        console.log("크루핑 참가 요청 에러", err);
-      },
-    );
+    QuestionModal({ text: "크루핑에 참가하시겠습니까" }).then((res) => {
+      if (res.isConfirmed) {
+        getCrewpingJoin(
+          accessToken,
+          Number(crewpingId),
+          (res) => {
+            console.log(res.data);
+            console.log("크루핑 참가 요청 성공");
+            // alert("크루핑 참가 완료");
+            // OkModal({ text: "크루핑가 완료되었습니다." });
+            fetchCrewpingDetailList();
+          },
+          (err) => {
+            console.log("크루핑 참가 요청 에러", err);
+          },
+        );
+      }
+    });
   };
 
   const crewpingQuitHandler = () => {
-    getCrewpingQuit(
-      accessToken,
-      Number(crewpingId),
-      (res) => {
-        console.log(res.data);
-        console.log("크루핑 참가 취소 성공");
-        alert("크루핑 취소 완료");
-        fetchCrewpingDetailList();
-      },
-      (err) => {
-        console.log("크루핑 참가 취소 에러", err);
-      },
-    );
+    QuestionModal({ text: "크루핑을 취소하시겠습니까" }).then((res) => {
+      if (res.isConfirmed) {
+        getCrewpingQuit(
+          accessToken,
+          Number(crewpingId),
+          (res) => {
+            console.log(res.data);
+            console.log("크루핑 참가 취소 성공");
+            alert("크루핑 취소 완료");
+            fetchCrewpingDetailList();
+          },
+          (err) => {
+            console.log("크루핑 참가 취소 에러", err);
+          },
+        );
+      }
+    });
   };
 
   return (

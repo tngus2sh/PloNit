@@ -5,6 +5,7 @@ import { Icon } from "@iconify/react";
 import style from "styles/css/CrewMemberListPage.module.css";
 import { MemberInterface } from "interface/crewInterface";
 import { getCrewKickOut } from "api/lib/crew";
+import { QuestionModal, OkModal } from "components/common/AlertModals";
 
 const MemberItem = ({
   member,
@@ -17,22 +18,26 @@ const MemberItem = ({
   const User = useSelector((state: any) => state.user);
   const { crewId } = useParams();
   const CrewKickOut = () => {
-    if (member.crewMemberId !== undefined) {
-      getCrewKickOut(
-        accessToken,
-        Number(crewId),
-        member.crewMemberId,
-        (res) => {
-          alert("강퇴시키시겠습니까?");
-          console.log("크루 강퇴 요청 성공");
-          console.log(res.data);
-          fetchMemberList();
-        },
-        (err) => {
-          console.log("크루 강퇴 요청 실패", err);
-        },
-      );
-    }
+    QuestionModal({ text: "강퇴시키시겠습니까." }).then((res) => {
+      if (res.isConfirmed) {
+        if (member.crewMemberId !== undefined) {
+          getCrewKickOut(
+            accessToken,
+            Number(crewId),
+            member.crewMemberId,
+            (res) => {
+              console.log("크루 강퇴 요청 성공");
+              console.log(res.data);
+              OkModal({ text: "크루 강퇴가 완료되었습니다." });
+              fetchMemberList();
+            },
+            (err) => {
+              console.log("크루 강퇴 요청 실패", err);
+            },
+          );
+        }
+      }
+    });
   };
   return (
     <div className={style.Member_Item}>
