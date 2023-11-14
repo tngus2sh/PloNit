@@ -169,7 +169,6 @@ public class ExcelServiceImpl implements ExcelService {
         }
 
         LocalDate oneWeekBefore = LocalDate.now().minusWeeks(1);
-
         int year = oneWeekBefore.getYear();
         int month = oneWeekBefore.getMonthValue();
         int count = oneWeekBefore.getDayOfMonth() / 7 + 1;
