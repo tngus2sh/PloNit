@@ -106,7 +106,18 @@ public class PloggingServiceImpl implements PloggingService {
 
         Plogging plogging = StartPloggingDto.toEntity(dto.getMemberKey(), dto.getType(), place, sidoGugunCodeRes.getGugunCode(), startTime, Finished.ACTIVE, today);
 
-        return ploggingRepository.save(plogging).getId();
+        Plogging savePlogging = ploggingRepository.save(plogging);
+
+        // 처음 위치 저장
+        LatLong latlong = LatLong.builder()
+                .plogging(savePlogging)
+                .latitude(dto.getLatitude())
+                .longitude(dto.getLongitude())
+                .build();
+
+        latLongRepository.save(latlong);
+
+        return savePlogging.getId();
     }
 
 
