@@ -230,3 +230,21 @@ export async function getCrewKickOut(
   api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
   await api.delete(`/kick-out/${crewId}/${memberId}`).then(success).catch(fail);
 }
+
+// 크루 리스트 조회
+export async function getMyCrewList(
+  accessToken: string,
+  success: (
+    res: AxiosResponse<any, any>,
+  ) =>
+    | AxiosResponse<any, any>
+    | PromiseLike<AxiosResponse<any, any>>
+    | null
+    | undefined
+    | void,
+  fail: (err: any) => PromiseLike<never> | null | undefined | void,
+) {
+  const api = customApi("/plonit-service/v1/members/crew");
+  api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
+  await api.get("").then(success).catch(fail);
+}
