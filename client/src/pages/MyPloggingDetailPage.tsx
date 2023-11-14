@@ -6,11 +6,23 @@ import { BackTopBar } from "components/common/TopBar";
 import { searchPloggingInfo } from "api/lib/plogging";
 import { PloggingLog } from "interface/ploggingInterface";
 
+const formattedDate = (date: any) => {
+  const year = date.getFullYear();
+  const month = ("0" + (date.getMonth() + 1)).slice(-2);
+  const day = ("0" + date.getDate()).slice(-2);
+  const hours = ("0" + date.getHours()).slice(-2);
+  const minutes = ("0" + date.getMinutes()).slice(-2);
+  return `${year}.${month}.${day} ${hours}:${minutes}`;
+};
+
 const MyPloggingDetailPage = () => {
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
+  const User = useSelector((state: any) => state.user.auth);
   const { ploggingId } = useParams();
   const [isPloggingDetail, setPloggingDetail] = useState<PloggingLog>();
+  const [isstartDate, setStartDate] = useState<Date>(new Date());
   console.log(isPloggingDetail);
+  console.log(isstartDate);
   useEffect(() => {
     searchPloggingInfo({
       accessToken: accessToken,
@@ -19,50 +31,66 @@ const MyPloggingDetailPage = () => {
         console.log("플로깅 상세 조회 성공");
         console.log(res.data);
         setPloggingDetail(res.data.resultBody);
+        setStartDate(new Date(res.data.resultBody.startTime));
       },
       fail: (error) => {
         console.error("플로깅 상세 조회 실패", error);
       },
     });
   }, []);
+  useEffect(() => {
+    const year = isstartDate.getFullYear();
+    const month = isstartDate.getMonth() + 1;
+    const day = isstartDate.getDate();
+  }, [isstartDate]);
 
   return (
     <div>
       <BackTopBar text="나의 플로깅" />
       <div className={style.myplogging_detail}>
         <div className={style.date_area}>
-          <div>2023년</div>
-          <div>10월 15일의 기록</div>
+          <div>년</div>
+          <div>월 일의 기록</div>
         </div>
         <div className={style.profile}>
-          <img src="/metamong.png" alt="몽" />
+          <img src={User.profileImage} alt="프로필" />
           <div className={style.text}>
             <div className={style.nickname}>
-              <span className={style.large}>빵빵덕</span> 님
+              <span className={style.large}>{User.nickname}</span> 님
             </div>
-            <div>2023.10.15 19:27 수완동, 광주</div>
+            <div>
+              {isPloggingDetail?.startTime
+                ? formattedDate(isPloggingDetail.startTime)
+                : "Loading..."}{" "}
+              {isPloggingDetail?.place}
+            </div>
           </div>
         </div>
         <div className={style.myrecord}>
           <div className={style.dist}>
             <div>총 거리</div>
-            <div className={style.record_large}>2.47</div>
+            <div className={style.record_large}>
+              {isPloggingDetail?.distance}
+            </div>
           </div>
           <div className={style.time}>
             <div>총 시간</div>
-            <div className={style.record_large}>42:37</div>
+            <div className={style.record_large}>
+              {isPloggingDetail?.totalTime}
+            </div>
           </div>
           <div className={style.calorie}>
             <div>칼로리</div>
-            <div className={style.record_large}>354</div>
+            <div className={style.record_large}>
+              {isPloggingDetail?.calorie}
+            </div>
           </div>
         </div>
-        <div className={style.content}>
-          날이 좋아서 플로깅을 다녀왔다! 상쾌한 하루였다!! ㅏ하핳하핳하ㅏㅎ
-        </div>
+        <div className={style.content}>{isPloggingDetail?.review}</div>
         <div className={style.img_area}>
-          <img src="/feed_img.png" alt="이미지" />
-          <img src="/crewbg.png" alt="이미지" />
+          {isPloggingDetail?.images.map((image: string, index: number) => (
+            <img key={index} src={image} alt="이미지" />
+          ))}
         </div>
       </div>
       <div style={{ height: "4rem" }}></div>
