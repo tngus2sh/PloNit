@@ -64,7 +64,6 @@ const CrewPloggingCard = ({ card }: { card: MyCrewpingInterface }) => {
           dispatch(Crewping.setRoomId(`${id}`));
           dispatch(Crewping.setCharge(isMaster));
           dispatch(Crewping.setSenderId(nickName));
-          dispatch(P.setPloggingType("CREWPING"));
           dispatch(P.setBeforeCrewping(true));
           navigate("/plogging");
         }}
