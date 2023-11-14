@@ -107,6 +107,7 @@ function useEffectApp_Crewping() {
       if (!window.Worker && interval.current) {
         clearInterval(interval.current);
       }
+      worker.terminate();
     }
   }, [crewpingEnd]);
 }
