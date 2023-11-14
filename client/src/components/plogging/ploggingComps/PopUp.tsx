@@ -192,6 +192,7 @@ const PopUp: React.FC<IPopUP> = ({
                       success: (response) => {
                         console.log(response);
                         dispatch(P.handleIsLoading(-1));
+                        dispatch(P.setHelpChanged(true));
                       },
                       fail: (error) => {
                         console.error(error);
@@ -212,6 +213,7 @@ const PopUp: React.FC<IPopUP> = ({
                   context: payloadContext,
                   success: (response) => {
                     console.log(response);
+                    dispatch(P.setHelpChanged(true));
                   },
                   fail: (error) => {
                     console.error(error);

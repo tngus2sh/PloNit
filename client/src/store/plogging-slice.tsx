@@ -26,6 +26,7 @@ const initialState = {
   isLoading: 0 as number,
   kg: 65 as number,
   people: null as number | null,
+  helpChanged: false as boolean,
 };
 
 const intervalTime = 2;
@@ -104,6 +105,9 @@ const ploggingSlice = createSlice({
     setPeople: (state, action: PayloadAction<number | null>) => {
       state.people = action.payload;
     },
+    setHelpChanged: (state, action: PayloadAction<boolean>) => {
+      state.helpChanged = action.payload;
+    },
   },
 });
 
@@ -126,5 +130,6 @@ export const {
   handleIsLoading,
   setKg,
   setPeople,
+  setHelpChanged,
 } = ploggingSlice.actions;
 export default ploggingSlice.reducer;
