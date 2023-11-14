@@ -20,7 +20,7 @@ const MyPloggingDetailPage = () => {
   const User = useSelector((state: any) => state.user.auth);
   const { ploggingId } = useParams();
   const [isPloggingDetail, setPloggingDetail] = useState<PloggingLog>();
-  const [isstartDate, setStartDate] = useState<Date>(new Date());
+  const [isstartDate, setStartDate] = useState("");
   console.log(isPloggingDetail);
   console.log(isstartDate);
   useEffect(() => {
@@ -31,26 +31,26 @@ const MyPloggingDetailPage = () => {
         console.log("플로깅 상세 조회 성공");
         console.log(res.data);
         setPloggingDetail(res.data.resultBody);
-        setStartDate(new Date(res.data.resultBody.startTime));
+        setStartDate(res.data.resultBody.startTime);
       },
       fail: (error) => {
         console.error("플로깅 상세 조회 실패", error);
       },
     });
   }, []);
-  useEffect(() => {
-    const year = isstartDate.getFullYear();
-    const month = isstartDate.getMonth() + 1;
-    const day = isstartDate.getDate();
-  }, [isstartDate]);
 
+  const year = new Date(isstartDate).getFullYear();
+  const month = new Date(isstartDate).getMonth() + 1;
+  const day = new Date(isstartDate).getDate();
   return (
     <div>
       <BackTopBar text="나의 플로깅" />
       <div className={style.myplogging_detail}>
         <div className={style.date_area}>
-          <div>년</div>
-          <div>월 일의 기록</div>
+          <div>{year}년</div>
+          <div>
+            {month}월 {day}일의 기록
+          </div>
         </div>
         <div className={style.profile}>
           <img src={User.profileImage} alt="프로필" />
