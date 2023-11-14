@@ -30,7 +30,7 @@ const MyPloggingDetailPage = () => {
         console.log("플로깅 상세 조회 성공");
         console.log(res.data);
         setPloggingDetail(res.data.resultBody);
-        setStartDate(res.data.resultBody.startTime);
+        setStartDate(new Date(res.data.resultBody.startTime));
       },
       fail: (error) => {
         console.error("플로깅 상세 조회 실패", error);
