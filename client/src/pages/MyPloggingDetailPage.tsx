@@ -5,6 +5,7 @@ import style from "styles/css/MyPloggingDetailPage.module.css";
 import { BackTopBar } from "components/common/TopBar";
 import { searchPloggingInfo } from "api/lib/plogging";
 import { PloggingLog } from "interface/ploggingInterface";
+import DefaultPathMap from "components/plogging/DefaultPathMap";
 
 const formattedDate = (date: any) => {
   const year = date.getFullYear();
@@ -17,12 +18,12 @@ const formattedDate = (date: any) => {
 
 const MyPloggingDetailPage = () => {
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
-  const User = useSelector((state: any) => state.user.auth);
+  const User = useSelector((state: any) => state.user.info);
   const { ploggingId } = useParams();
   const [isPloggingDetail, setPloggingDetail] = useState<PloggingLog>();
-  const year = isPloggingDetail?.startTime?.slice(0, 2);
-  const month = isPloggingDetail?.startTime?.slice(3, 5);
-  const day = isPloggingDetail?.startTime?.slice(6, 8);
+  const year = isPloggingDetail?.startTime?.slice(0, 4);
+  const month = isPloggingDetail?.startTime?.slice(5, 7);
+  const day = isPloggingDetail?.startTime?.slice(8, 10);
 
   console.log(isPloggingDetail);
 
@@ -58,10 +59,12 @@ const MyPloggingDetailPage = () => {
               <span className={style.large}>{User.nickname}</span> 님
             </div>
             <div>
-              {isPloggingDetail?.startTime
-                ? formattedDate(isPloggingDetail.startTime)
-                : "Loading..."}{" "}
-              {isPloggingDetail?.place}
+              {isPloggingDetail?.startTime !== undefined && (
+                <>
+                  {formattedDate(new Date(isPloggingDetail.startTime))}{" "}
+                  {isPloggingDetail.place}
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -86,6 +89,14 @@ const MyPloggingDetailPage = () => {
           </div>
         </div>
         <div className={style.content}>{isPloggingDetail?.review}</div>
+        <div>
+          {isPloggingDetail?.coordinates !== undefined && (
+            <DefaultPathMap
+              paths={isPloggingDetail.coordinates}
+              subHeight={0}
+            />
+          )}
+        </div>
         <div className={style.img_area}>
           {isPloggingDetail?.images.map((image: string, index: number) => (
             <img key={index} src={image} alt="이미지" />
