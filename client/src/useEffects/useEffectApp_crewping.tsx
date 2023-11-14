@@ -18,7 +18,6 @@ function useEffectApp_Crewping() {
   const location = useLocation();
   const dispatch = useDispatch();
   const interval = useRef<NodeJS.Timeout | null>(null);
-  const worker = new Worker(new URL(`workers/worker.js`, import.meta.url));
   const stompClient = useRef<Client | null>(null);
   const nowType = useSelector<rootState, ploggingType>((state) => {
     return state.plogging.ploggingType;
@@ -44,6 +43,7 @@ function useEffectApp_Crewping() {
   const weight = useSelector<rootState, number>((state) => {
     return state.user.info.weight;
   });
+  const workerRef = useRef<Worker | null>(null);
 
   const { setToggleSocket } = useSocket({ stompClient, roomId, senderId });
 
@@ -57,8 +57,11 @@ function useEffectApp_Crewping() {
       }
 
       if (window.Worker) {
-        worker.postMessage("start30");
-        worker.onmessage = (event) => {
+        workerRef.current = new Worker(
+          new URL(`workers/worker.js`, import.meta.url),
+        );
+        workerRef.current.postMessage("start30");
+        workerRef.current.onmessage = (event) => {
           if (event.data === "tick30") {
             dispatch(Crewping.setGetLocation(true));
           }
@@ -107,7 +110,9 @@ function useEffectApp_Crewping() {
       if (interval.current) {
         clearInterval(interval.current);
       }
-      worker.terminate();
+      if (workerRef.current) {
+        workerRef.current.terminate();
+      }
     }
   }, [crewpingEnd]);
 }
