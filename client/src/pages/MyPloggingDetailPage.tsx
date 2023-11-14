@@ -22,6 +22,7 @@ const MyPloggingDetailPage = () => {
   const [isPloggingDetail, setPloggingDetail] = useState<PloggingLog>();
   const [isstartDate, setStartDate] = useState<Date>(new Date());
   console.log(isPloggingDetail);
+  console.log(isstartDate);
   useEffect(() => {
     searchPloggingInfo({
       accessToken: accessToken,
@@ -37,20 +38,19 @@ const MyPloggingDetailPage = () => {
       },
     });
   }, []);
-
-  const year = isstartDate.getFullYear();
-  const month = isstartDate.getMonth() + 1;
-  const day = isstartDate.getDate();
+  useEffect(() => {
+    const year = isstartDate.getFullYear();
+    const month = isstartDate.getMonth() + 1;
+    const day = isstartDate.getDate();
+  }, [isstartDate]);
 
   return (
     <div>
       <BackTopBar text="나의 플로깅" />
       <div className={style.myplogging_detail}>
         <div className={style.date_area}>
-          <div>{year}년</div>
-          <div>
-            {month}월 {day}일의 기록
-          </div>
+          <div>년</div>
+          <div>월 일의 기록</div>
         </div>
         <div className={style.profile}>
           <img src={User.profileImage} alt="프로필" />
