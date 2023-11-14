@@ -27,5 +27,5 @@ public class CrewpingMessageReq {
     private String roomId;
     private Double latitude;
     private Double longitude;
-    private List<CrewpingWebSocketController.Members> members = new ArrayList<>();
+    private List<Members> members = new ArrayList<>();
 }

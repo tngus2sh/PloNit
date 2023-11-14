@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FindCountDistanceRes {
 
-    private Integer count;
+    private Long count;
 
     private Double distance;
 
