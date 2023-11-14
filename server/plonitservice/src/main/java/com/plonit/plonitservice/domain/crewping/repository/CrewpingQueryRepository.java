@@ -48,7 +48,8 @@ public class CrewpingQueryRepository {
                         crewping.cntPeople,
                         crewping.maxPeople))
                 .from(crewping)
-                .where(crewping.crew.id.eq(crewId))
+                .where(crewping.crew.id.eq(crewId), crewping.status.in(Status.ACTIVE, Status.ONGOING))
+                .orderBy(crewping.startDate.asc())
                 .fetch();
     }
 
