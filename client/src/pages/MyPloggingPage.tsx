@@ -31,11 +31,9 @@ const MyPloggingPage = () => {
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   // 현재 달력이 몇월인지 저장
   const [isNowMonth, setNowMonth] = useState(new Date().getMonth() + 1);
-  console.log(isNowMonth);
   const [isMonthList, setMonthList] = useState([]);
-  console.log(isMonthList);
   const realMonthList = [...new Set(isMonthList.map((item: any) => item.date))];
-  console.log(realMonthList);
+
   // 선택한 날짜
   const [dateRange, setDateRange] = useState<[Date, Date]>([
     new Date(),
@@ -47,6 +45,9 @@ const MyPloggingPage = () => {
   // 해당 날짜의 플로깅 기록 리스트
   const [isPloggingList, setPloggingList] = useState<PloggingLog[]>([]);
 
+  // 타입 선택
+  const [isType, setType] = useState("");
+  console.log(isType);
   // 시작 종료 날짜를 변경하는 로직
   const handleDateChange = (date: any) => {
     if (!startDate) {
@@ -103,7 +104,7 @@ const MyPloggingPage = () => {
       accessToken: accessToken,
       start_day: formattedDate(dateRange[0]),
       end_day: formattedDate(dateRange[1]),
-      type: null,
+      type: isType,
       success: (res) => {
         console.log("플로깅 일별기록 조회 성공");
         console.log(res.data);
@@ -133,7 +134,11 @@ const MyPloggingPage = () => {
           }
         }}
       />
-      <MyPloggingList dateRange={dateRange} PloggingList={isPloggingList} />
+      <MyPloggingList
+        dateRange={dateRange}
+        PloggingList={isPloggingList}
+        setType={setType}
+      />
       <div style={{ height: "4rem" }}></div>
     </div>
   );
