@@ -25,5 +25,6 @@ public class FindCrewpingInfoRes {
     private String place;
     private int cntPeople;
     private List<String> memberProfileImage;
+    private Boolean isMaster;
 
 }

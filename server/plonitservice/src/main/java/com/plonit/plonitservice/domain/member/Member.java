@@ -20,6 +20,7 @@ import javax.persistence.*;
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "members")
+@ToString
 public class Member extends TimeBaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

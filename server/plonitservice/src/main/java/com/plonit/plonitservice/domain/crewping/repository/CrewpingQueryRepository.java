@@ -4,6 +4,7 @@ import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingsRe
 import com.plonit.plonitservice.api.member.controller.response.FindCrewpingInfoRes;
 import com.plonit.plonitservice.common.enums.Status;
 import com.plonit.plonitservice.domain.crewping.Crewping;
+import com.plonit.plonitservice.domain.member.Member;
 import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
@@ -23,7 +24,7 @@ import static com.plonit.plonitservice.domain.crewping.QCrewping.crewping;
 import static com.plonit.plonitservice.domain.crewping.QCrewpingMember.crewpingMember;
 import static com.plonit.plonitservice.domain.member.QMember.member;
 import static com.querydsl.core.group.GroupBy.groupBy;
-import static com.querydsl.core.types.Projections.list;
+import static com.querydsl.core.group.GroupBy.list;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 @Repository
@@ -61,17 +62,26 @@ public class CrewpingQueryRepository {
                 .where(crewpingMember.member.id.eq(memberId), crewping.status.in(Status.ACTIVE, Status.ONGOING))
                 .fetch();
 
-        Map<Long, List<?>> memberProfilesMap = queryFactory
+        // 조회된 Crewping 기반으로 Member 프로필 리스트 생성
+        Map<Long, List<String>> memberProfilesMap = queryFactory
                 .selectFrom(member)
                 .join(crewpingMember)
                 .on(crewpingMember.member.eq(member))
                 .where(crewpingMember.crewping.id.in(crewpings.stream().map(Crewping::getId).collect(Collectors.toList())))
                 .transform(groupBy(crewpingMember.crewping.id).as(list(member.profileImage)));
 
+        Map<Long, Boolean> isMasterMap = queryFactory
+                .selectFrom(crewpingMember)
+                .where(crewpingMember.crewping.id.in(crewpings.stream().map(Crewping::getId).collect(Collectors.toList())), crewpingMember.member.id.eq(memberId))
+                .transform(groupBy(crewpingMember.crewping.id).as(
+                        crewpingMember.isCrewpingMaster
+                ));
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
         return crewpings.stream().map(crewpingEntity -> {
-            List<String> memberProfiles = (List<String>) memberProfilesMap.getOrDefault(crewpingEntity.getId(), Collections.emptyList());
+            List<String> memberProfiles = memberProfilesMap.getOrDefault(crewpingEntity.getId(), Collections.emptyList());
+            Boolean isMaster = isMasterMap.getOrDefault(crewpingEntity.getId(), false);
             Long dDay = DAYS.between(LocalDate.now(), crewpingEntity.getStartDate());
 
             return FindCrewpingInfoRes.builder()
@@ -85,6 +95,7 @@ public class CrewpingQueryRepository {
                     .place(crewpingEntity.getPlace())
                     .cntPeople(crewpingEntity.getCntPeople())
                     .memberProfileImage(memberProfiles)
+                    .isMaster(isMaster)
                     .build();
         }).collect(Collectors.toList());
     }
