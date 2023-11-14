@@ -40,9 +40,9 @@ public class MemberBadgeQueryRepository {
                         badgeCondition.status,
                         memberBadge.id))
                 .from(badge)
-                .leftJoin(memberBadge.badge)
+                .join(memberBadge.badge)
                 .on(memberBadge.badge.eq(badge))
-                .leftJoin(badge.badgeCondition)
+                .join(badge.badgeCondition)
                 .on(badge.badgeCondition.eq(badgeCondition))
                 .where(memberBadge.member.id.eq(memberKey)
                         .and(badgeCondition.status.in(status)))
