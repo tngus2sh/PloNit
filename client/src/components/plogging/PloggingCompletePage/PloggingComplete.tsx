@@ -105,7 +105,7 @@ const PloggingComplete = () => {
     >
       <input
         type="file"
-        accept="image/*"
+        accept="image/jpeg, image/png"
         capture="environment"
         id="cameraInput-COMPLETE"
         ref={fileInputRef}
@@ -224,6 +224,7 @@ const PloggingComplete = () => {
               if (nowType === "CREWPING") {
                 savePlogging({
                   accessToken: accessToken,
+                  ploggingId: ploggingId,
                   crewpingId: crewpingId,
                   distance: distance,
                   calorie: calorie,

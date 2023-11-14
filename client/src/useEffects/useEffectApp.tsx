@@ -18,7 +18,11 @@ function useEffectApp() {
   const interval = useRef<NodeJS.Timeout | null>(null);
   const worker = new Worker(new URL(`workers/worker.js`, import.meta.url));
   const useTimer = useSelector<rootState, boolean>((state) => {
-    return state.plogging.ploggingType != "none" && !state.plogging.isEnd;
+    return (
+      state.plogging.ploggingType != "none" &&
+      !state.plogging.isEnd &&
+      !state.plogging.beforeEnd
+    );
   });
   const second = useSelector<rootState, number>((state) => {
     return state.plogging.second;

@@ -1,20 +1,22 @@
 import React, { useState, useEffect, useRef, ReactNode } from "react";
 import style from "styles/css/PloggingPage/DefaultMap.module.css";
-import { GeolocationPosition, Coordinate } from "interface/ploggingInterface";
 import getGPS from "./functions/getGPS";
 import useCluster from "./functions/useCluster";
 import * as N from "./functions/useNaverMap";
 import { naver } from "components/common/useNaver";
+import { Coordinate } from "interface/ploggingInterface";
+import { ploggingType } from "types/ploggingTypes";
+import { Locations } from "interface/ploggingInterface";
+import Swal from "sweetalert2";
 
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
 import * as P from "store/plogging-slice";
 
 import { getBins, getToilets } from "api/lib/items";
-import { searchHelpUsingLatLng } from "api/lib/plogging";
+import { searchNeighbor, searchHelpUsingLatLng } from "api/lib/plogging";
 
 const defaultZoom = 16;
-const neighbor_help_maxZoom = 12;
 const navbarHeight = 56;
 const popupTime = 1;
 
@@ -42,6 +44,12 @@ const DefaultMap: React.FC<IDefaultMap> = ({
   const paths = useSelector<rootState, Coordinate[]>((state) => {
     return state.plogging.paths;
   });
+  const nowType = useSelector<rootState, ploggingType>((state) => {
+    return state.plogging.ploggingType;
+  });
+  const peerLocations = useSelector<rootState, Locations>((state) => {
+    return state.crewping.locations;
+  });
   const [onCenter, setOnCenter] = useState<boolean>(false);
   const isMapLoaded = useRef<boolean>(false);
   const isBottomLoaded = useRef<boolean>(false);
@@ -61,12 +69,16 @@ const DefaultMap: React.FC<IDefaultMap> = ({
   const toiletMarkers = useRef<naver.maps.Marker[]>([]);
   const neighborMarkers = useRef<naver.maps.Marker[]>([]);
   const helpMarkers = useRef<naver.maps.Marker[]>([]);
+  const peerMarkers = useRef<naver.maps.Marker[]>([]);
   const binCluster = useRef<any>(null);
   const toiletCluster = useRef<any>(null);
   const [showBottom, setShowBottom] = useState<boolean>(isBefore);
 
   const accessToken = useSelector<rootState, string>((state) => {
     return state.user.auth.accessToken;
+  });
+  const nickName = useSelector<rootState, string>((state) => {
+    return state.user.info.nickname;
   });
 
   const centerBtn_inactive = `<div class="${style.btn_white_margin_inc}" style="background-image:url('/images/PloggingPage/location-cross-black.svg')"></div>`;
@@ -160,29 +172,6 @@ const DefaultMap: React.FC<IDefaultMap> = ({
               centerBtnIndicator_active.setMap(null);
               centerBtnIndicator_inactive.setMap(map);
               centerBtnRef.current = centerBtnIndicator_inactive;
-
-              if (isBefore) {
-                const currentZoom = map.getZoom();
-                if (currentZoom <= neighbor_help_maxZoom) {
-                  N.controlMarkers({
-                    markers: neighborMarkers.current,
-                    map: null,
-                  });
-                  N.controlMarkers({
-                    markers: helpMarkers.current,
-                    map: null,
-                  });
-                } else {
-                  N.controlMarkers({
-                    markers: neighborMarkers.current,
-                    map: mapRef.current,
-                  });
-                  N.controlMarkers({
-                    markers: helpMarkers.current,
-                    map: mapRef.current,
-                  });
-                }
-              }
             });
             naver.maps.Event.addDOMListener(
               centerBtnIndicator_inactive.getElement(),
@@ -299,7 +288,6 @@ const DefaultMap: React.FC<IDefaultMap> = ({
             latitude: latitude,
             longitude: longitude,
             success: (response) => {
-              console.log(response.data.resultBody);
               setBins(response.data.resultBody);
             },
             fail: (error) => {
@@ -312,7 +300,6 @@ const DefaultMap: React.FC<IDefaultMap> = ({
             latitude: latitude,
             longitude: longitude,
             success: (response) => {
-              console.log(response.data.resultBody);
               setToilets(response.data.resultBody);
             },
             fail: (error) => {
@@ -325,13 +312,26 @@ const DefaultMap: React.FC<IDefaultMap> = ({
             latitude: latitude,
             longitude: longitude,
             success: (response) => {
-              console.log(response.data.resultBody);
               setHelps(response.data.resultBody);
             },
             fail: (error) => {
               console.error(error);
             },
           });
+
+          // if (isBefore) {
+          //   searchNeighbor({
+          //     accessToken,
+          //     latitude,
+          //     longitude,
+          //     success: (response) => {
+          //       setNeighbors(response.data.resultBody);
+          //     },
+          //     fail: (error) => {
+          //       console.error(error);
+          //     },
+          //   });
+          // }
         })
         .catch((error) => {
           console.error(error);
@@ -449,17 +449,35 @@ const DefaultMap: React.FC<IDefaultMap> = ({
 
   // 주변 유저 데이터 로드
   useEffect(() => {
-    N.controlMarkers({
-      markers: neighborMarkers.current,
-      map: null,
-    });
+    if (isBefore) {
+      N.controlMarkers({
+        markers: neighborMarkers.current,
+        map: null,
+      });
 
-    neighborMarkers.current = N.createMarkers({
-      items: neighbors,
-      map: mapRef.current ?? undefined,
-      url: `/images/PloggingPage/neighborLocation.svg`,
-      cursor: "default",
-    });
+      neighborMarkers.current = N.createMarkers({
+        items: neighbors,
+        map: mapRef.current ?? undefined,
+        url: `/images/PloggingPage/neighborLocation.svg`,
+        cursor: "default",
+      });
+
+      if (neighborMarkers.current && neighborMarkers.current.length > 0) {
+        const { length } = neighborMarkers.current;
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "top",
+          showConfirmButton: false,
+          timer: 5000,
+          timerProgressBar: true,
+        });
+
+        Toast.fire({
+          icon: "info",
+          title: `주변에 ${length}명의 유저가 있습니다.`,
+        });
+      }
+    }
   }, [neighbors]);
 
   // 도움 요청 데이터 로드
@@ -473,8 +491,34 @@ const DefaultMap: React.FC<IDefaultMap> = ({
       items: helps,
       map: mapRef.current ?? undefined,
       url: `/images/PloggingPage/help-icon.png`,
+      cursor: "pointer",
     });
   }, [helps]);
+
+  useEffect(() => {
+    if (nowType === "CREWPING") {
+      N.controlMarkers({
+        markers: peerMarkers.current,
+        map: null,
+      });
+
+      const keys = Object.keys(peerLocations);
+      const filteredPeerLocations: Coordinate[] = keys
+        .filter((key) => {
+          return key !== nickName;
+        })
+        .map((key) => {
+          return peerLocations[key];
+        });
+
+      peerMarkers.current = N.createMarkers({
+        items: filteredPeerLocations,
+        map: mapRef.current ?? undefined,
+        url: "/images/PloggingPage/peerLocation.svg",
+        cursor: "default",
+      });
+    }
+  }, [peerLocations]);
 
   return (
     <div

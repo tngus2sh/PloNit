@@ -9,6 +9,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
 import * as P from "store/plogging-slice";
+import * as Crewping from "store/crewping-slice";
 
 import { startPlogging } from "api/lib/plogging";
 
@@ -16,6 +17,7 @@ function useEffectApp_Crewping() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
+  const interval = useRef<NodeJS.Timeout | null>(null);
   const worker = new Worker(new URL(`workers/worker.js`, import.meta.url));
   const stompClient = useRef<Client | null>(null);
   const nowType = useSelector<rootState, ploggingType>((state) => {
@@ -43,9 +45,27 @@ function useEffectApp_Crewping() {
     return state.user.info.weight;
   });
 
+  const { setToggleSocket } = useSocket({ stompClient, roomId, senderId });
+
   useEffect(() => {
     if (isLoading) {
-      useSocket({ stompClient, roomId, senderId });
+      setToggleSocket(true);
+      function getLocation() {
+        interval.current = setInterval(() => {
+          dispatch(Crewping.setGetLocation(true));
+        }, 30000);
+      }
+
+      if (window.Worker) {
+        worker.postMessage("start30");
+        worker.onmessage = (event) => {
+          if (event.data === "tick30") {
+            dispatch(Crewping.setGetLocation(true));
+          }
+        };
+      } else {
+        getLocation();
+      }
     }
   }, [isLoading]);
 
@@ -83,6 +103,9 @@ function useEffectApp_Crewping() {
       dispatch(P.setIsEnd(true));
       navigate("/plogging/complete");
       stompClient.current?.deactivate();
+      if (!window.Worker && interval.current) {
+        clearInterval(interval.current);
+      }
     }
   }, [crewpingEnd]);
 }

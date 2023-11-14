@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import SockJS from "sockjs-client";
 import { Client, IMessage } from "@stomp/stompjs";
 import getGPS from "./getGPS";
-import { Message } from "interface/ploggingInterface";
+import { Message, UserImages } from "interface/ploggingInterface";
 
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
@@ -25,23 +25,23 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
   const getLocation = useSelector<rootState, boolean>((state) => {
     return state.crewping.getLocation;
   });
-  const userImage = useSelector<rootState, string>((state) => {
-    return state.crewping.userImage;
+  const userImages = useSelector<rootState, UserImages>((state) => {
+    return state.crewping.userImages;
   });
   const [toggleSocket, setToggleSocket] = useState<boolean>(false);
 
   function onMessageReceived(message: IMessage) {
     const newMessage: Message = JSON.parse(message.body);
-    if (newMessage.type === "start") {
+    if (newMessage.type === "START") {
       dispatch(Crewping.setCrewpingStart(true));
     }
-    if (newMessage.type === "end") {
+    if (newMessage.type === "END") {
       dispatch(Crewping.setCrewpingEnd(true));
     }
-    if (newMessage.type === "location") {
+    if (newMessage.type === "LOCATION") {
       dispatch(Crewping.setLocations(newMessage));
     }
-    if (newMessage.type === "image") {
+    if (newMessage.type === "WAIT") {
       dispatch(Crewping.setUserImages(newMessage));
     }
   }
@@ -66,7 +66,7 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
     console.log(`[roomId]: ${roomId} - sendStartRequest`);
     if (stompClient.current?.connected) {
       const newMessage: Message = {
-        type: "start",
+        type: "START",
         senderId: senderId,
         roomId: roomId,
       };
@@ -87,7 +87,7 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
     console.log(`[roomId]: ${roomId} - sendEndRequest`);
     if (stompClient.current?.connected) {
       const newMessage: Message = {
-        type: "end",
+        type: "END",
         senderId: senderId,
         roomId: roomId,
       };
@@ -111,7 +111,7 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
         .then((response) => {
           const { latitude, longitude } = response.coords;
           const newMessage: Message = {
-            type: "location",
+            type: "LOCATION",
             senderId: senderId,
             location: { latitude, longitude },
             roomId: roomId,
@@ -133,13 +133,13 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
     }
   }
 
-  function sendImage() {
-    console.log(`[roomId]: ${roomId} - sendImage`);
+  function sendWait() {
+    console.log(`[roomId]: ${roomId} - sendWait`);
     if (stompClient.current?.connected) {
       const newMessage: Message = {
-        type: "image",
+        type: "WAIT",
         senderId: senderId,
-        userImage: userImage,
+        userImages: userImages,
         roomId: roomId,
       };
       console.log("[SEND]", newMessage);
@@ -160,7 +160,7 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
       connectToSocket();
     }
     return () => {
-      if (!toggleSocket && stompClient.current) {
+      if (stompClient.current) {
         stompClient.current.deactivate();
       }
     };
@@ -186,10 +186,8 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
   }, [getLocation]);
 
   useEffect(() => {
-    if (userImage) {
-      sendImage();
-    }
-  }, [userImage]);
+    sendWait();
+  }, [userImages]);
 
   return { setToggleSocket };
 }

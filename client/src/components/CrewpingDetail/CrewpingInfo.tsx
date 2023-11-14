@@ -29,6 +29,7 @@ const formattedDateTime = (datestr: any, onlyTime = false) => {
 };
 
 const CrewpingInfo = ({ crewping }: { crewping: CrewpingInterface }) => {
+  const User = useSelector((state: any) => state.user);
   const [isMemberModalOpen, setMemberModalOpen] = useState(false);
   const StartDate = crewping.startDate;
   const EndDate = crewping.endDate;
@@ -60,19 +61,21 @@ const CrewpingInfo = ({ crewping }: { crewping: CrewpingInterface }) => {
         <div>
           {crewping.cntPeople}/{crewping.maxPeople} 명
         </div>
-        {isMemberModalOpen ? (
-          <Icon
-            icon="bi:chevron-up"
-            className={style.icon}
-            style={{ marginLeft: "0.2rem" }}
-          />
-        ) : (
-          <Icon
-            icon="bi:chevron-down"
-            className={style.icon}
-            style={{ marginLeft: "0.2rem" }}
-          />
-        )}
+        {User.crewinfo.isMyCrew ? (
+          isMemberModalOpen ? (
+            <Icon
+              icon="bi:chevron-up"
+              className={style.icon}
+              style={{ marginLeft: "0.2rem" }}
+            />
+          ) : (
+            <Icon
+              icon="bi:chevron-down"
+              className={style.icon}
+              style={{ marginLeft: "0.2rem" }}
+            />
+          )
+        ) : null}
       </div>
       {isMemberModalOpen ? <CrewpingMemberList crewping={crewping} /> : null}
     </div>

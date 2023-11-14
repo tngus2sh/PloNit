@@ -6,6 +6,7 @@ export interface GeolocationPosition {
 }
 
 export interface Coordinate {
+  id?: number;
   latitude: number;
   longitude: number;
   place?: string;
@@ -21,6 +22,10 @@ export interface PloggingLog {
   endTime?: string;
   totalTime?: string;
   distance?: string;
+  calorie?: number;
+  image?: string;
+  latitude?: number;
+  longitude?: number;
 }
 
 export interface Location {
@@ -40,6 +45,6 @@ export interface Message {
   type: string;
   senderId: string;
   location?: Location;
-  userImage?: string;
+  userImages?: UserImages;
   roomId: string;
 }

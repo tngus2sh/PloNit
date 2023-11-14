@@ -4,7 +4,6 @@ import * as Interfaces from "interface/authInterface";
 
 export async function login(
   code: string,
-  token: string,
   success: (
     res: AxiosResponse<any, any>,
   ) =>
@@ -15,11 +14,29 @@ export async function login(
     | void,
   fail: (err: any) => PromiseLike<never> | null | undefined | void,
 ) {
-  await customLoginApi("/plonit-service/auth", token)
+  await customApi("/plonit-service/auth")
     .get(`/kakao/login/${code}`)
     .then(success)
     .catch(fail);
 }
+// export async function login(
+//   code: string,
+//   token: string,
+//   success: (
+//     res: AxiosResponse<any, any>,
+//   ) =>
+//     | AxiosResponse<any, any>
+//     | PromiseLike<AxiosResponse<any, any>>
+//     | null
+//     | undefined
+//     | void,
+//   fail: (err: any) => PromiseLike<never> | null | undefined | void,
+// ) {
+//   await customLoginApi("/plonit-service/auth", token)
+//     .get(`/kakao/login/${code}`)
+//     .then(success)
+//     .catch(fail);
+// }
 
 export async function nicknameCheck(
   nickname: string,

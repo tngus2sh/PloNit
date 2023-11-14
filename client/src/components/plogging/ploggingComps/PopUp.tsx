@@ -3,6 +3,7 @@ import getGPS from "../functions/getGPS";
 import useImageCompress from "../functions/useImageCompress";
 import CommonButton from "components/common/CommonButton";
 import style from "styles/css/PloggingPage/PopUp.module.css";
+import Swal from "sweetalert2";
 
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
@@ -145,6 +146,27 @@ const PopUp: React.FC<IPopUP> = ({
         onClick={() => {
           const payloadValue = value;
           const payloadContext = context;
+
+          if (context.length === 0) {
+            const Toast = Swal.mixin({
+              toast: true,
+              position: "top",
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+              },
+            });
+
+            Swal.fire({
+              icon: "warning",
+              title: "내용을 입력해주세요",
+            });
+            return;
+          }
+
           dispatch(camera.clear());
 
           async function saveHelpRequest() {

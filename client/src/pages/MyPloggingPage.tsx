@@ -5,16 +5,19 @@ import "react-calendar/dist/Calendar.css";
 import { BackTopBar } from "components/common/TopBar";
 import MyPloggingList from "components/MyPlogging/MyPloggingList";
 import "../custom_css/MyPloggingCalendar.css";
-import { searchPloggingUsingDay } from "api/lib/plogging";
+import {
+  searchPloggingUsingDay,
+  searchPloggingUsingMonth,
+} from "api/lib/plogging";
 import { PloggingLog } from "interface/ploggingInterface";
 
-const dayList = [
-  "2023-10-10",
-  "2023-10-21",
-  "2023-10-02",
-  "2023-10-14",
-  "2023-10-27",
-];
+// const dayList = [
+//   "2023-10-10",
+//   "2023-10-21",
+//   "2023-10-02",
+//   "2023-10-14",
+//   "2023-10-27",
+// ];
 
 // date 형식 변경 (2023-10-27)
 const formattedDate = (date: any) => {
@@ -26,6 +29,13 @@ const formattedDate = (date: any) => {
 
 const MyPloggingPage = () => {
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
+  // 현재 달력이 몇월인지 저장
+  const [isNowMonth, setNowMonth] = useState(new Date().getMonth() + 1);
+  console.log(isNowMonth);
+  const [isMonthList, setMonthList] = useState([]);
+  console.log(isMonthList);
+  const realMonthList = [...new Set(isMonthList.map((item: any) => item.date))];
+  console.log(realMonthList);
   // 선택한 날짜
   const [dateRange, setDateRange] = useState<[Date, Date]>([
     new Date(),
@@ -59,7 +69,7 @@ const MyPloggingPage = () => {
 
   // 플로깅한 날짜에 점 표시
   const tileContent = ({ date, view }: { date: Date; view: string }) => {
-    if (dayList.includes(date.toISOString().split("T")[0])) {
+    if (realMonthList.includes(date.toISOString().split("T")[0])) {
       return (
         <div
           style={{
@@ -73,6 +83,20 @@ const MyPloggingPage = () => {
       );
     }
   };
+  useEffect(() => {
+    searchPloggingUsingMonth({
+      accessToken: accessToken,
+      month: isNowMonth,
+      success: (res) => {
+        console.log("플로깅 월별기록 조회 성공");
+        console.log(res.data.resultBody);
+        setMonthList(res.data.resultBody);
+      },
+      fail: (error) => {
+        console.error("플로깅 월별기록 조회 실패", error);
+      },
+    });
+  }, [isNowMonth]);
 
   useEffect(() => {
     searchPloggingUsingDay({
@@ -102,6 +126,11 @@ const MyPloggingPage = () => {
         value={dateRange}
         tileContent={tileContent}
         calendarType="US"
+        onActiveStartDateChange={({ activeStartDate }) => {
+          if (activeStartDate) {
+            setNowMonth(activeStartDate.getMonth() + 1);
+          }
+        }}
       />
       <MyPloggingList dateRange={dateRange} PloggingList={isPloggingList} />
       <div style={{ height: "4rem" }}></div>
