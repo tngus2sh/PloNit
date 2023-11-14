@@ -12,9 +12,10 @@ import { nicknameCheck } from "api/lib/auth";
 import { getProfile, EditProfile } from "api/lib/members";
 
 const formattedDate = (date: any) => {
-  const year = date.getFullYear();
-  const month = ("0" + (date.getMonth() + 1)).slice(-2);
-  const day = ("0" + date.getDate()).slice(-2);
+  const birthday = new Date(date);
+  const year = birthday.getFullYear();
+  const month = ("0" + (birthday.getMonth() + 1)).slice(-2);
+  const day = ("0" + birthday.getDate()).slice(-2);
   return `${year}.${month}.${day}`;
 };
 
