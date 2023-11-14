@@ -7,18 +7,26 @@ import { PloggingLog } from "interface/ploggingInterface";
 interface MyPloggingListProps {
   dateRange: [Date, Date];
   PloggingList: PloggingLog[];
+  setType: any;
 }
 
-const MyPloggingList = ({ dateRange, PloggingList }: MyPloggingListProps) => {
+const MyPloggingList = ({
+  dateRange,
+  PloggingList,
+  setType,
+}: MyPloggingListProps) => {
   const startDateString = `${
     dateRange[0].getMonth() + 1
   }월 ${dateRange[0].getDate()}일`;
   const endDateString = `${
     dateRange[1].getMonth() + 1
   }월 ${dateRange[1].getDate()}일`;
-  console.log(dateRange);
 
   const [isSelectedType, setSelectedType] = useState("");
+  console.log(isSelectedType);
+  useEffect(() => {
+    setType(isSelectedType);
+  }, [isSelectedType]);
 
   return (
     <div className={style.myplogging_list}>

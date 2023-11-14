@@ -7,13 +7,13 @@ import { PloggingLog } from "interface/ploggingInterface";
 const formattedDateTime = (datestr: any) => {
   const days = ["일", "월", "화", "수", "목", "금", "토"];
   const date = new Date(datestr);
-  const year = date.getFullYear();
+  // const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();
   const dayName = days[date.getDay()];
   const hour = date.getHours();
   const minute = date.getMinutes();
-  const formattedDate = `${year}년 ${month}월 ${day}일(${dayName}) ${hour}:${
+  const formattedDate = `${month}월 ${day}일(${dayName}) ${hour}:${
     minute < 10 ? "0" : ""
   }${minute}`;
 
@@ -60,7 +60,7 @@ const MyPloggingItem = ({ plogging }: { plogging: PloggingLog }) => {
             km
           </div>
           <div className={style.time}>
-            시간
+            시간{" "}
             <span className={style.largeNumber}>
               {formatMinutes(plogging.totalTime)}
             </span>

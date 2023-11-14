@@ -31,9 +31,9 @@ const MyPloggingPage = () => {
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   // 현재 달력이 몇월인지 저장
   const [isNowMonth, setNowMonth] = useState(new Date().getMonth() + 1);
-  console.log(isNowMonth);
-  const [isMonthList, setMonthList] = useState("");
-  console.log(isMonthList);
+  const [isMonthList, setMonthList] = useState([]);
+  const realMonthList = [...new Set(isMonthList.map((item: any) => item.date))];
+
   // 선택한 날짜
   const [dateRange, setDateRange] = useState<[Date, Date]>([
     new Date(),
@@ -45,6 +45,9 @@ const MyPloggingPage = () => {
   // 해당 날짜의 플로깅 기록 리스트
   const [isPloggingList, setPloggingList] = useState<PloggingLog[]>([]);
 
+  // 타입 선택
+  const [isType, setType] = useState("");
+  console.log(isType);
   // 시작 종료 날짜를 변경하는 로직
   const handleDateChange = (date: any) => {
     if (!startDate) {
@@ -67,7 +70,7 @@ const MyPloggingPage = () => {
 
   // 플로깅한 날짜에 점 표시
   const tileContent = ({ date, view }: { date: Date; view: string }) => {
-    if (isMonthList.includes(date.toISOString().split("T")[0])) {
+    if (realMonthList.includes(date.toISOString().split("T")[0])) {
       return (
         <div
           style={{
@@ -101,6 +104,7 @@ const MyPloggingPage = () => {
       accessToken: accessToken,
       start_day: formattedDate(dateRange[0]),
       end_day: formattedDate(dateRange[1]),
+      type: isType,
       success: (res) => {
         console.log("플로깅 일별기록 조회 성공");
         console.log(res.data);
@@ -110,7 +114,7 @@ const MyPloggingPage = () => {
         console.error("플로깅 일별기록 조회 실패", error);
       },
     });
-  }, [dateRange]);
+  }, [dateRange, isType]);
   console.log(isPloggingList);
 
   return (
@@ -130,7 +134,11 @@ const MyPloggingPage = () => {
           }
         }}
       />
-      <MyPloggingList dateRange={dateRange} PloggingList={isPloggingList} />
+      <MyPloggingList
+        dateRange={dateRange}
+        PloggingList={isPloggingList}
+        setType={setType}
+      />
       <div style={{ height: "4rem" }}></div>
     </div>
   );

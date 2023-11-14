@@ -87,18 +87,23 @@ const searchPloggingUsingDay = ({
   accessToken,
   start_day,
   end_day,
+  type,
   success,
   fail,
 }: {
   accessToken: string;
   start_day: string;
   end_day: string;
+  type: string | null;
   success: (response: AxiosResponse<any, any>) => void | undefined;
   fail: (error: any) => void | undefined;
 }) => {
   const api = ploggingApi;
   api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
-  api.get(`/period/${start_day}/${end_day}`).then(success).catch(fail);
+  api
+    .get(`/period/${start_day}/${end_day}?type=${type}`)
+    .then(success)
+    .catch(fail);
 };
 
 // 플로깅 기록 월별 조회
@@ -248,6 +253,46 @@ const searchNeighbor = ({
   api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
   api.get(`/users/${latitude}/${longitude}`).then(success).catch(fail);
 };
+
+// 내 플로깅 조회
+export async function getMyPlogging(
+  accessToken: string,
+  crewId: number,
+  success: (
+    res: AxiosResponse<any, any>,
+  ) =>
+    | AxiosResponse<any, any>
+    | PromiseLike<AxiosResponse<any, any>>
+    | null
+    | undefined
+    | void,
+  fail: (err: any) => PromiseLike<never> | null | undefined | void,
+) {
+  const api = customApi("/plonit-service/v1/flogging/{date}");
+  api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
+  await api.get(`/${crewId}`).then(success).catch(fail);
+}
+
+// 내 플로깅 상세 조회
+export async function getMyPloggingDetail(
+  accessToken: string,
+  crewId: number,
+  success: (
+    res: AxiosResponse<any, any>,
+  ) =>
+    | AxiosResponse<any, any>
+    | PromiseLike<AxiosResponse<any, any>>
+    | null
+    | undefined
+    | void,
+  fail: (err: any) => PromiseLike<never> | null | undefined | void,
+) {
+  const api = customApi("/plonit-service/v1/flogging/{flogging-id}");
+  api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
+  await api.get(`/${crewId}`).then(success).catch(fail);
+}
+
+// --- 미완성 인 것들 ---
 
 // 봉사 정보 조회
 const searchVolInfo = ({
