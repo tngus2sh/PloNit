@@ -173,6 +173,10 @@ public class RankServiceImpl implements RankService {
                     .isMine(isMine)
                     .build());
         }
+
+        crewsRanks.sort((o1, o2) -> {
+            return o1.getRanking() - o2.getRanking();
+        });
         
         crewTotalResponse.setCrewsRanks(crewsRanks);
         
@@ -238,6 +242,10 @@ public class RankServiceImpl implements RankService {
                     .isMine(isMine)
                     .build());
         }
+
+        crewsAvgRanks.sort((o1, o2) -> {
+            return o1.getRanking() - o2.getRanking();
+        });
         
         crewAvgResponse.setCrewsAvgRanks(crewsAvgRanks);
 
