@@ -14,11 +14,9 @@ import { rootState } from "store/store";
 function getComponent(
   ploggingType: ploggingType,
   beforeCrewping: boolean,
-  isLoading: boolean,
 ): JSX.Element {
   if (beforeCrewping) {
-    if (isLoading) return <BeforeCrewping />;
-    return <BeforeStart />;
+    return <BeforeCrewping />;
   }
 
   switch (ploggingType) {
@@ -41,16 +39,13 @@ const PloggingPage = () => {
   const beforeCrewping = useSelector<rootState, boolean>((state) => {
     return state.plogging.beforeCrewping;
   });
-  const isLoading = useSelector<rootState, boolean>((state) => {
-    return state.crewping.isLoading;
-  });
   const componentType: ploggingType = useSelector<rootState, ploggingType>(
     (state) => {
       return state.plogging.ploggingType;
     },
   );
 
-  const Component = getComponent(componentType, beforeCrewping, isLoading);
+  const Component = getComponent(componentType, beforeCrewping);
 
   useEffect(() => {
     if (!showComponent) {
