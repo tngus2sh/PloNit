@@ -171,7 +171,7 @@ public class PloggingQueryRepository {
                         plogging.count(),
                         plogging.distance.sum()))
                 .from(plogging)
-                .groupBy(plogging)
+                .groupBy(plogging.memberKey)
                 .where(plogging.memberKey.eq(memberKey))
                 .fetchOne();
     }
