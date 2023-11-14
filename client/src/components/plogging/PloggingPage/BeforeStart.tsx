@@ -7,6 +7,7 @@ import getGPS from "../functions/getGPS";
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
 import * as P from "store/plogging-slice";
+import * as Crewping from "store/crewping-slice";
 
 import { startPlogging } from "api/lib/plogging";
 
@@ -95,6 +96,7 @@ const BeforeStart = () => {
   const dispatch = useDispatch();
   async function onClick1() {
     dispatch(P.clear());
+    dispatch(Crewping.clear());
     dispatch(P.setPloggingType("IND"));
     if (weight > 0) {
       dispatch(P.setKg(weight));
@@ -125,6 +127,7 @@ const BeforeStart = () => {
   }
   async function onClick2() {
     dispatch(P.clear());
+    dispatch(Crewping.clear());
     dispatch(P.setPloggingType("VOL"));
     if (weight > 0) {
       dispatch(P.setKg(weight));
