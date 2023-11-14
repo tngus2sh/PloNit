@@ -63,7 +63,7 @@ dependencies {
 	//querydsl
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
 	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
-
+	
 	// actuator
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
@@ -92,6 +92,9 @@ dependencies {
 
 	// quartz
 	implementation 'org.springframework.boot:spring-boot-starter-quartz'
+
+	// fcm
+	implementation group: 'com.google.firebase', name: 'firebase-admin', version: '9.1.1'
 
 	// redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'

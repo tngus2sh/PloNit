@@ -1,6 +1,7 @@
 package com.plonit.plonitservice.domain.badge;
 
 
+import com.plonit.plonitservice.common.enums.BadgeCode;
 import com.plonit.plonitservice.common.enums.BadgeStatus;
 import lombok.*;
 

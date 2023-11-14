@@ -3,7 +3,6 @@ package com.plonit.plonitservice.domain.feed.repository;
 import com.plonit.plonitservice.api.feed.service.dto.FeedCommentDto;
 import com.plonit.plonitservice.api.feed.service.dto.FeedPictureDto;
 import com.plonit.plonitservice.api.feed.controller.response.FindFeedRes;
-import com.plonit.plonitservice.domain.crew.Crew;
 import com.plonit.plonitservice.domain.feed.Feed;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
@@ -19,9 +18,11 @@ import java.util.stream.Collectors;
 import static com.plonit.plonitservice.domain.feed.QFeed.feed;
 import static com.plonit.plonitservice.domain.feed.QFeedPicture.feedPicture;
 import static com.plonit.plonitservice.domain.feed.QComment.comment;
+import static com.plonit.plonitservice.domain.feed.QLike.like;
 import static com.plonit.plonitservice.domain.member.QMember.member;
 import static com.plonit.plonitservice.domain.crew.QCrew.crew;
 import static com.plonit.plonitservice.domain.crew.QCrewMember.crewMember;
+import static com.querydsl.core.group.GroupBy.groupBy;
 
 @Repository
 public class FeedQueryRepository {
@@ -74,24 +75,33 @@ public class FeedQueryRepository {
                         )
                 ));
 
+        // 각 Feed ID와 Member ID를 기준으로 Likes를 조회
+        Map<Long, Boolean> likeMap = queryFactory
+                .selectFrom(like)
+                .where(like.feed.id.in(feeds.stream().map(Feed::getId).collect(Collectors.toList())), like.member.id.eq(memberKey))
+                .transform(groupBy(like.feed.id).as(
+                        like.isNotNull()
+                ));
+
         // 조회된 Feed 엔티티 리스트를 기반으로 DTO 리스트를 생성합니다.
         return feeds.stream().map(feedEntity -> {
             List<FeedPictureDto> feedPictureDtos = feedPicturesMap.getOrDefault(feedEntity.getId(), Collections.emptyList());
             List<FeedCommentDto> feedCommentDtos = feedCommentMap.getOrDefault(feedEntity.getId(), Collections.emptyList());
+            Boolean isLike = likeMap.getOrDefault(feedEntity.getId(), false);
 
             // FindFeedRes DTO 인스턴스를 생성합니다.
             return FindFeedRes.builder()
                     .id(feedEntity.getId())
                     .content(feedEntity.getContent())
-                    .isLike(false)
-                    .isMine(feedEntity.getMember().getId().equals(memberKey))
                     .nickname(feedEntity.getMember().getNickname())
                     .profileImage(feedEntity.getMember().getProfileImage())
-                    .feedPictures(feedPictureDtos)
-                    .comments(feedCommentDtos)
+                    .isMine(feedEntity.getMember().getId().equals(memberKey))
                     .createdDate(feedEntity.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                    .feedPictures(feedPictureDtos)
+                    .likeCount(feedEntity.getLikeCount())
+                    .isLike(isLike)
+                    .comments(feedCommentDtos)
                     .build();
-            // todo : likeCount, isLike
 
         }).collect(Collectors.toList());
     }

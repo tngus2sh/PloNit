@@ -1,8 +1,11 @@
 package com.plonit.plonitservice.api.member.controller;
 
 import com.plonit.plonitservice.api.member.controller.request.UpdateMemberReq;
+import com.plonit.plonitservice.api.member.controller.response.FindCrewInfoRes;
+import com.plonit.plonitservice.api.member.controller.response.FindCrewpingInfoRes;
 import com.plonit.plonitservice.api.member.controller.response.FindMemberInfoRes;
 import com.plonit.plonitservice.api.member.controller.response.FindMemberRes;
+import com.plonit.plonitservice.api.member.service.MemberQueryService;
 import com.plonit.plonitservice.api.member.service.MemberService;
 import com.plonit.plonitservice.api.member.service.dto.UpdateMemberDto;
 import com.plonit.plonitservice.common.CustomApiResponse;
@@ -17,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.util.List;
+
 import static com.plonit.plonitservice.common.exception.ErrorCode.INVALID_FIELDS_REQUEST;
 import static com.plonit.plonitservice.common.util.LogCurrent.*;
 
@@ -28,6 +33,7 @@ import static com.plonit.plonitservice.common.util.LogCurrent.*;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
+    private final MemberQueryService memberQueryService;
 
     @Operation(summary = "사용자 정보 수정", description = "사용자는 정보를 수정할 수 있다.")
     @PutMapping // 사용자 정보 수정
@@ -51,6 +57,7 @@ public class MemberController {
         return CustomApiResponse.ok(findMemberRes);
     }
 
+    @Operation(summary = "회원 정보 조회", description = "사용자는 내 정보를 조회할 수 있다.")
     @GetMapping()
     public CustomApiResponse<FindMemberInfoRes> findMemberInfo() {
         log.info(logCurrent(getClassName(), getMethodName(), START));
@@ -60,5 +67,26 @@ public class MemberController {
 
         return CustomApiResponse.ok(response, "내 정보 조회에 성공했습니다.");
     }
-}
 
+    @Operation(summary = "내 크루 조회", description = "사용자는 내 크루 정보를 조회할 수 있다.")
+    @GetMapping("/crew")
+    public CustomApiResponse<Object> findCrewInfo() {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+        log.info("FindMemberInfo");
+
+        List<FindCrewInfoRes> response = memberService.findCrewInfo();
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+        return CustomApiResponse.ok(response, "내 크루 정보 조회에 성공했습니다.");
+    }
+
+    @Operation(summary = "내 크루핑 조회", description = "사용자는 내 크루핑 정보를 조회할 수 있다.")
+    @GetMapping("/crewping")
+    public CustomApiResponse<List<FindCrewpingInfoRes>> findCrewpingInfo() {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+        log.info("FindCrewpingInfo");
+
+        List<FindCrewpingInfoRes> response = memberQueryService.findCrewpingInfo();
+
+        return CustomApiResponse.ok(response, "내 크루핑 정보 조회에 성공했습니다.");
+    }
+}

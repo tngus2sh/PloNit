@@ -5,6 +5,7 @@ import com.plonit.plonitservice.api.auth.service.AuthService;
 import com.plonit.plonitservice.api.auth.service.dto.KakaoToken;
 import com.plonit.plonitservice.common.exception.CustomException;
 import com.plonit.plonitservice.common.security.JwtTokenProvider;
+import com.plonit.plonitservice.common.util.RequestUtils;
 import com.plonit.plonitservice.domain.member.Member;
 import com.plonit.plonitservice.domain.member.repository.MemberQueryRepository;
 import com.plonit.plonitservice.domain.member.repository.MemberRepository;
@@ -210,7 +211,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Transactional
-    public boolean kakaoLogout(HttpServletRequest request) {
+    public Long kakaoLogout(HttpServletRequest request) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
 
         // 1. user find
@@ -258,7 +259,7 @@ public class AuthServiceImpl implements AuthService {
             redisTemplate.delete("KAKAO_AT:" + id);
             redisTemplate.delete("KAKAO_RT:" + id);
             log.info(logCurrent(getClassName(), getMethodName(), END));
-            return true;
+            return id;
         } else
             throw new CustomException(UNKNOWN_ERROR);
     }

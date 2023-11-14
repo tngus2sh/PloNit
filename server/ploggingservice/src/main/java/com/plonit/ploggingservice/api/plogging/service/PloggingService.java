@@ -1,10 +1,7 @@
 package com.plonit.ploggingservice.api.plogging.service;
 
 
-import com.plonit.ploggingservice.api.plogging.service.dto.EndPloggingDto;
-import com.plonit.ploggingservice.api.plogging.service.dto.HelpPloggingDto;
-import com.plonit.ploggingservice.api.plogging.service.dto.ImagePloggingDto;
-import com.plonit.ploggingservice.api.plogging.service.dto.StartPloggingDto;
+import com.plonit.ploggingservice.api.plogging.service.dto.*;
 
 public interface PloggingService {
     
@@ -15,5 +12,9 @@ public interface PloggingService {
     Long savePloggingHelp(HelpPloggingDto dto);
 
     String savePloggingImage(ImagePloggingDto dto);
+
+    Long saveVolunteerData(VolunteerPloggingDto dto);
+
+    Long updatePloggingHelpStatus(UpdatePloggingHelpStatusDto dto);
 
 }

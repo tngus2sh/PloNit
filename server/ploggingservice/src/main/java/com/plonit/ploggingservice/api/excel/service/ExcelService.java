@@ -1,5 +1,6 @@
 package com.plonit.ploggingservice.api.excel.service;
 
+import com.plonit.ploggingservice.api.excel.service.dto.ExcelDto;
 import com.plonit.ploggingservice.api.excel.service.dto.PloggingDto;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,7 +10,7 @@ import java.util.List;
 
 @Transactional
 public interface ExcelService {
-    List<PloggingDto> findPloggins(Long ploggingId);
-    void makeExcel(List<PloggingDto> data);
+    void findVolunteerPloggings();
+    void makeExcel(List<ExcelDto> data);
     void saveExcel(Workbook workbook);
 }

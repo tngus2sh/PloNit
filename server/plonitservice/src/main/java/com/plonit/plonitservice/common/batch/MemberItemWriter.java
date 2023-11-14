@@ -1,5 +1,7 @@
 package com.plonit.plonitservice.common.batch;
 
+import com.plonit.plonitservice.api.badge.service.BadgeService;
+import com.plonit.plonitservice.api.badge.service.dto.GrantMemberRankDto;
 import com.plonit.plonitservice.common.enums.Rank;
 import com.plonit.plonitservice.common.util.RedisUtils;
 import com.plonit.plonitservice.domain.rank.MemberRanking;
@@ -16,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberItemWriter implements ItemWriter<MemberRanking> {
 
+    private final BadgeService badgeService;
     private final MemberRankingRepository memberRankingRepository;
     private final RedisUtils redisUtils;
 
@@ -26,8 +29,15 @@ public class MemberItemWriter implements ItemWriter<MemberRanking> {
         List<? extends MemberRanking> memberRankings = memberRankingRepository.saveAll(items);
 
         /* Redis 지우기 */
-//        redisUtils.deleteRedisKey(Rank.MEMBER.getDescription());
-        log.info("[BATCH] = {}", memberRankings.toString());
+        redisUtils.deleteRedisKey(Rank.MEMBER.getDescription());
+
+        for (int i = 0; i < 3; i++) {
+            MemberRanking memberRanking = memberRankings.get(i);
+            badgeService.grantRankBadge(GrantMemberRankDto.builder()
+                    .memberKey(memberRanking.getMember().getId())
+                    .rank(memberRanking.getRanking())
+                    .build());
+        }
     }
 }
 
