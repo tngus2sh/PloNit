@@ -227,6 +227,46 @@ const searchNeighbor = ({
   api.get(`/users/${latitude}/${longitude}`).then(success).catch(fail);
 };
 
+// 내 플로깅 조회
+export async function getMyPlogging(
+  accessToken: string,
+  crewId: number,
+  success: (
+    res: AxiosResponse<any, any>,
+  ) =>
+    | AxiosResponse<any, any>
+    | PromiseLike<AxiosResponse<any, any>>
+    | null
+    | undefined
+    | void,
+  fail: (err: any) => PromiseLike<never> | null | undefined | void,
+) {
+  const api = customApi("/plonit-service/v1/flogging/{date}");
+  api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
+  await api.get(`/${crewId}`).then(success).catch(fail);
+}
+
+// 내 플로깅 상세 조회
+export async function getMyPloggingDetail(
+  accessToken: string,
+  crewId: number,
+  success: (
+    res: AxiosResponse<any, any>,
+  ) =>
+    | AxiosResponse<any, any>
+    | PromiseLike<AxiosResponse<any, any>>
+    | null
+    | undefined
+    | void,
+  fail: (err: any) => PromiseLike<never> | null | undefined | void,
+) {
+  const api = customApi("/plonit-service/v1/flogging/{flogging-id}");
+  api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
+  await api.get(`/${crewId}`).then(success).catch(fail);
+}
+
+// --- 미완성 인 것들 ---
+
 // 봉사 정보 조회
 const searchVolInfo = ({
   accessToken,
