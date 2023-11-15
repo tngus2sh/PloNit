@@ -39,12 +39,13 @@ const CrewAverageRanking = () => {
           {isAvgList[2] && <SecondRankingItem data={isAvgList[2]} />}
         </div>
       }
-      {[3, 4, 5].map(
-        (index) =>
-          isAvgList[index] && (
-            <BasicRankingItem key={index} data={isAvgList[index]} />
-          ),
-      )}
+      {isAvgList.map((data, index) => {
+        if (index >= 3) {
+          return <BasicRankingItem key={index} data={data} />;
+        }
+        return null;
+      })}
+      <div style={{ height: "4rem" }}></div>
     </div>
   );
 };

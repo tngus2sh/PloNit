@@ -45,6 +45,7 @@ const PersonalRanking = () => {
         }
         return null;
       })}
+      <div style={{ height: "4rem" }}></div>
     </div>
   );
 };
