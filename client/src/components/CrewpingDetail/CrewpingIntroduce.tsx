@@ -9,7 +9,7 @@ interface CrewpingInfoProps {
 const CrewpingIntroduce = ({ crewping }: CrewpingInfoProps) => {
   return (
     <div className={style.crewping_introduce}>
-      <div className={style.title}>크루 소개</div>
+      <div className={style.title}>크루핑 소개</div>
       <div className={style.content}>{crewping.introduce} </div>
     </div>
   );

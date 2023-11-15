@@ -7,6 +7,8 @@ import ListAltRounded from "@mui/icons-material/ListAltRounded";
 import Person from "@mui/icons-material/Person";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+import DirectionsWalkIcon from "@mui/icons-material/DirectionsWalk";
 
 export default function LabelBottomNavigation() {
   const navigate = useNavigate();
@@ -66,7 +68,7 @@ export default function LabelBottomNavigation() {
         style={{ color: value === "plogging" ? "#2CD261" : "gray" }}
         label="Plogging"
         value="plogging"
-        icon={<FavoriteIcon />}
+        icon={<DirectionsWalkIcon />}
         sx={{ minWidth: "70px" }}
         onClick={() => {
           navigate("/plogging");
@@ -76,7 +78,7 @@ export default function LabelBottomNavigation() {
         style={{ color: value === "ranking" ? "#2CD261" : "gray" }}
         label="Ranking"
         value="ranking"
-        icon={<LocationOnIcon />}
+        icon={<EmojiEventsIcon />}
         sx={{ minWidth: "70px" }}
         onClick={() => {
           navigate("/ranking");
