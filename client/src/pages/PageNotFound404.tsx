@@ -1,8 +1,11 @@
 import React, { useEffect, useRef } from "react";
 import Swal from "sweetalert2";
 
+import { useNavigate } from "react-router-dom";
+
 const PageNotFound404 = () => {
   const check = useRef<boolean>(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!check.current) {
@@ -15,6 +18,9 @@ const PageNotFound404 = () => {
         didOpen: (toast) => {
           toast.onmouseover = Swal.stopTimer;
           toast.onmouseleave = Swal.resumeTimer;
+        },
+        didClose: () => {
+          navigate("/");
         },
       });
 
@@ -32,7 +38,7 @@ const PageNotFound404 = () => {
   return (
     <div
       style={{
-        height: "calc(100vh - 56)px",
+        height: "calc(100vh - 56)",
         width: "100%",
         backgroundSize: "contain",
         backgroundRepeat: "no-repeat",
