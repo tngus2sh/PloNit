@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { BasicTopBar } from "components/common/TopBar";
 import CustomTab from "components/common/CustomTab";
 import PersonalRanking from "components/Ranking/PersonalRanking";
