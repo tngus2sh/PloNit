@@ -4,9 +4,7 @@ import com.plonit.ploggingservice.api.plogging.controller.BadgeFeignClient;
 import com.plonit.ploggingservice.api.plogging.controller.CrewpingFeignClient;
 import com.plonit.ploggingservice.api.plogging.controller.MemberFeignClient;
 import com.plonit.ploggingservice.api.plogging.controller.SidoGugunFeignClient;
-import com.plonit.ploggingservice.api.plogging.controller.request.CrewpingRecordReq;
-import com.plonit.ploggingservice.api.plogging.controller.request.GrantMemberBadgeReq;
-import com.plonit.ploggingservice.api.plogging.controller.request.UpdateVolunteerInfoReq;
+import com.plonit.ploggingservice.api.plogging.controller.request.*;
 import com.plonit.ploggingservice.api.plogging.controller.response.*;
 import com.plonit.ploggingservice.api.plogging.service.PloggingService;
 import com.plonit.ploggingservice.api.plogging.service.dto.*;
@@ -117,6 +115,28 @@ public class PloggingServiceImpl implements PloggingService {
 
         latLongRepository.save(latlong);
 
+        // 크루핑이면서 크루핑장일 때 크루핑 상태 변경 요청
+        if (dto.getType().equals(Type.CREWPING)) {
+            Boolean isCrewpingMaster = circuitBreaker.run(
+                    () -> crewpingFeignClient.isCrewpingMaster(CheckCrewpingMaster.builder()
+                                    .memberKey(dto.getMemberKey())
+                                    .crewpingId(dto.getCrewpingId())
+                                    .build())
+                            .getResultBody(),
+                    throwable -> null
+            );
+
+            if (isCrewpingMaster) {
+                circuitBreaker.run(
+                        () -> crewpingFeignClient.updateCrewpingStatus(UpdateCrewpingStatusReq.builder()
+                                        .crewpingId(dto.getCrewpingId())
+                                        .build())
+                                .getResultBody(),
+                        throwable -> null
+                );
+            }
+        }
+
         return savePlogging.getId();
     }
 
@@ -158,24 +178,38 @@ public class PloggingServiceImpl implements PloggingService {
         latLongRepository.saveAll(latLongs);
 
         /* 크루핑시에 크루핑 테이블에 내용 저장 */
+
         if (plogging.getType().equals(Type.CREWPING)) {
-            CrewpingRecordReq crewpingRecordReq = CrewpingRecordReq.builder()
-                    .startDate(plogging.getStartTime())
-                    .endDate(endTime)
-                    .place(plogging.getPlace())
-                    .activeTime(totalTime)
-                    .build();
             CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
-    
-            Long crewpingId = circuitBreaker.run(
-                    () -> crewpingFeignClient.saveCrewpingRecord(crewpingRecordReq)
-                            .getResultBody(),
-                    throwable -> null // 에러 발생시 null 반환
+
+            Boolean isCrewpingMaster = circuitBreaker.run(
+                    () -> crewpingFeignClient.isCrewpingMaster(CheckCrewpingMaster.builder()
+                                    .memberKey(dto.getMemberKey())
+                                    .crewpingId(dto.getCrewpingId())
+                                    .build())
+                            .getResultBody()
+                    , throwable -> null
             );
-    
-            if (crewpingId == null) {
-                throw new CustomException(INVALID_CREWPINGID_REQUEST);
+
+            if (isCrewpingMaster) {
+                CrewpingRecordReq crewpingRecordReq = CrewpingRecordReq.builder()
+                        .startDate(plogging.getStartTime())
+                        .endDate(endTime)
+                        .place(plogging.getPlace())
+                        .activeTime(totalTime)
+                        .build();
+
+                Long crewpingId = circuitBreaker.run(
+                        () -> crewpingFeignClient.saveCrewpingRecord(crewpingRecordReq)
+                                .getResultBody(),
+                        throwable -> null // 에러 발생시 null 반환
+                );
+
+                if (crewpingId == null) {
+                    throw new CustomException(INVALID_CREWPINGID_REQUEST);
+                }
             }
+
         }
 
         /* 랭킹*/
