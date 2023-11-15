@@ -16,9 +16,12 @@ const HomePage = () => {
   const User = useSelector((state: any) => state.user.info);
   const fcmToken = useSelector((state: any) => state.user.alarm.fcmToken);
   useEffect(() => {
+    const data = {
+      fcmToken: fcmToken,
+    };
     alarm(
       accessToken,
-      fcmToken,
+      data,
       (res) => {
         console.log("FCM 토큰 전달 성공");
         console.log(res.data);

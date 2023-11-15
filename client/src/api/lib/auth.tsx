@@ -74,7 +74,7 @@ export async function logout(
 
 export async function alarm(
   accessToken: string,
-  fcmToken: string,
+  data: any,
   success: (
     res: AxiosResponse<any, any>,
   ) =>
@@ -87,5 +87,5 @@ export async function alarm(
 ) {
   const api = customApi("/plonit-service/auth");
   api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
-  await api.post("/fcm", fcmToken).then(success).catch(fail);
+  await api.post("/fcm", data).then(success).catch(fail);
 }
