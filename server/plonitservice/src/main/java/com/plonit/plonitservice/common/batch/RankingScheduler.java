@@ -35,7 +35,7 @@ public class RankingScheduler {
         if (dayOfMonth == 1) {
             rankingPeriod = RankingPeriod.builder()
                     .startDate(now)
-                    .endDate(now.plusDays(13))
+                    .endDate(now.plusDays(13).withHour(23).withMinute(59).withSecond(59))
                     .build();
         } else if (dayOfMonth == 15) {
             YearMonth yearMonth = YearMonth.from(now);

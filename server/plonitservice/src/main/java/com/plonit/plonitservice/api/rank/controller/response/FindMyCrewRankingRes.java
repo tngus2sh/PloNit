@@ -17,8 +17,13 @@ public class FindMyCrewRankingRes {
 
     private Integer ranking;
 
+    private Double avgDistance;
+
+    private Integer avgRanking;
+
     private LocalDateTime startDate;
 
     private LocalDateTime endDate;
+
 
 }
