@@ -4,8 +4,10 @@ import com.plonit.plonitservice.api.crewping.service.dto.SaveCrewpingDto;
 import com.plonit.plonitservice.api.crewping.service.CrewpingService;
 import com.plonit.plonitservice.api.crewping.service.dto.SaveCrewpingRecordDto;
 import com.plonit.plonitservice.common.AwsS3Uploader;
+import com.plonit.plonitservice.common.enums.Status;
 import com.plonit.plonitservice.common.exception.CustomException;
 import com.plonit.plonitservice.common.exception.ErrorCode;
+import com.plonit.plonitservice.common.util.RequestUtils;
 import com.plonit.plonitservice.domain.crew.Crew;
 import com.plonit.plonitservice.domain.crew.repository.CrewMemberRepository;
 import com.plonit.plonitservice.domain.crew.repository.CrewRepository;
@@ -37,6 +39,7 @@ public class CrewpingServiceImpl implements CrewpingService {
     private final CrewRepository crewRepository;
     private final CrewMemberRepository crewMemberRepository;
     private final AwsS3Uploader awsS3Uploader;
+
 
     @Override
     public void saveCrewping(SaveCrewpingDto dto) {
@@ -149,6 +152,22 @@ public class CrewpingServiceImpl implements CrewpingService {
         }
 
         crewping.updateRecord(dto);
+    }
+
+    @Override
+    public Long updateCrewpingStatus(Long crewpingId) {
+        Long memberId = RequestUtils.getMemberId();
+
+        if(!crewpingMemberQueryRepository.isCrewpingMember(memberId, crewpingId)) {
+            throw new CustomException(ErrorCode.CREWPING_BAD_REQUEST);
+        }
+
+        Crewping crewping = crewpingRepository.findById(crewpingId)
+                .orElseThrow(() -> new CustomException(ErrorCode.CREWPING_NOT_FOUND));
+
+        crewping.updateStatus(Status.ONGOING);
+
+        return crewping.getId();
     }
 
 }

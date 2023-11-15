@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
@@ -99,5 +100,13 @@ public class CrewpingQueryRepository {
                     .isMaster(isMaster)
                     .build();
         }).collect(Collectors.toList());
+    }
+
+    public List<Crewping> findCanceledCrewping(LocalDateTime now) {
+        return queryFactory
+                .select(crewping)
+                .from(crewping)
+                .where(crewping.endDate.lt(now), crewping.status.eq(Status.ACTIVE))
+                .fetch();
     }
 }

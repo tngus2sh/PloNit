@@ -13,4 +13,5 @@ public interface CrewpingService {
     void quitCrewping(Long memberId, Long crewpingId);
     void kickoutCrewpingMember(Long memberId, Long crewpingId, Long targetId);
     void saveCrewpingRecord(SaveCrewpingRecordDto dto);
+    Long updateCrewpingStatus(Long crewpingId);
 }

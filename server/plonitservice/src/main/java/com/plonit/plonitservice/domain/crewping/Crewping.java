@@ -73,5 +73,10 @@ public class Crewping extends TimeBaseEntity {
         this.endDate = dto.getEndDate();
         this.place = dto.getPlace();
         this.activeTime = dto.getActiveTime();
+        this.status = Status.FINISH;
+    }
+
+    public void updateStatus(Status status) {
+        this.status = status;
     }
 }

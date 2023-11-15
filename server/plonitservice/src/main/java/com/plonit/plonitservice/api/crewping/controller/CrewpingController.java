@@ -2,6 +2,7 @@ package com.plonit.plonitservice.api.crewping.controller;
 
 import com.plonit.plonitservice.api.crewping.controller.request.SaveCrewpingRecordReq;
 import com.plonit.plonitservice.api.crewping.controller.request.SaveCrewpingReq;
+import com.plonit.plonitservice.api.crewping.controller.request.UpdateCrewpingStatusReq;
 import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingMembersByMasterRes;
 import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingMembersRes;
 import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingRes;
@@ -145,6 +146,28 @@ public class CrewpingController {
         crewpingService.saveCrewpingRecord(dto);
 
         return CustomApiResponse.ok(null, "크루핑 기록을 저장했습니다.");
+    }
+
+    // 크루핑 마스터 여부
+    @GetMapping("/master/{crewping-id}")
+    public CustomApiResponse<Boolean> isCrewpingMaster(@PathVariable("crewping-id") Long crewpingId) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+        log.info("IsCrewpingMaster={}", crewpingId);
+
+        Boolean result = crewpingQueryService.isCrewpingMaster(crewpingId);
+
+        return CustomApiResponse.ok(result, "크루핑 마스터 여부를 조회했습니다.");
+    }
+
+    // 크루핑 진행 중 업데이트
+    @PatchMapping("/status")
+    public CustomApiResponse<Long> updateCrewpingStatus(@RequestBody UpdateCrewpingStatusReq request) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+        log.info("UpdateCrewpingStatus={}", request);
+
+        Long result = crewpingService.updateCrewpingStatus(request.getCrewpingId());
+
+        return CustomApiResponse.ok(result, "크루핑 상태를 업데이트했습니다.");
     }
 
 }
