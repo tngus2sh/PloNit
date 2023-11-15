@@ -1,27 +1,9 @@
 import { AxiosResponse } from "axios";
-import { customApi, customLoginApi } from "./index";
+import { customApi } from "./index";
 import * as Interfaces from "interface/authInterface";
 
-// export async function login(
-//   code: string,
-//   success: (
-//     res: AxiosResponse<any, any>,
-//   ) =>
-//     | AxiosResponse<any, any>
-//     | PromiseLike<AxiosResponse<any, any>>
-//     | null
-//     | undefined
-//     | void,
-//   fail: (err: any) => PromiseLike<never> | null | undefined | void,
-// ) {
-//   await customApi("/plonit-service/auth")
-//     .get(`/kakao/login/${code}`)
-//     .then(success)
-//     .catch(fail);
-// }
 export async function login(
   code: string,
-  token: string,
   success: (
     res: AxiosResponse<any, any>,
   ) =>
@@ -32,11 +14,28 @@ export async function login(
     | void,
   fail: (err: any) => PromiseLike<never> | null | undefined | void,
 ) {
-  await customLoginApi("/plonit-service/auth", token)
+  await customApi("/plonit-service/auth")
     .get(`/kakao/login/${code}`)
     .then(success)
     .catch(fail);
 }
+// export async function login(
+//   code: string,
+//   token: string,
+//   success: (
+//     res: AxiosResponse<any, any>,
+//   ) =>
+//     | AxiosResponse<any, any>
+//     | PromiseLike<AxiosResponse<any, any>>
+//     | undefined
+//     | void,
+//   fail: (err: any) => PromiseLike<never> | null | undefined | void,
+// ) {
+//   await customLoginApi("/plonit-service/auth", token)
+//     .get(`/kakao/login/${code}`)
+//     .then(success)
+//     .catch(fail);
+// }
 
 export async function nicknameCheck(
   nickname: string,
@@ -71,4 +70,22 @@ export async function logout(
   const api = customApi("/plonit-service/auth");
   api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
   await api.post(`/kakao/logout`).then(success).catch(fail);
+}
+
+export async function alarm(
+  accessToken: string,
+  fcmToken: string,
+  success: (
+    res: AxiosResponse<any, any>,
+  ) =>
+    | AxiosResponse<any, any>
+    | PromiseLike<AxiosResponse<any, any>>
+    | null
+    | undefined
+    | void,
+  fail: (err: any) => PromiseLike<never> | null | undefined | void,
+) {
+  const api = customApi("/plonit-service/auth");
+  api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
+  await api.post("/fcm", fcmToken).then(success).catch(fail);
 }
