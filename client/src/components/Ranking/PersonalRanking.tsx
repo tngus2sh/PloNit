@@ -29,20 +29,23 @@ const PersonalRanking = () => {
     );
   }, []);
   console.log(isMemberRank);
+  console.log(isMemberList);
   return (
-    /*
     <div className={style.ranking}>
-      <div className={style.top}>
-        <SecondRankingItem data={isMemberList[1]} />
-        <FirstRankingItem data={isMemberList[0]} />
-        <SecondRankingItem data={isMemberList[2]} />
-      </div>
-      {[3, 4, 5].map((index) => (
-        <BasicRankingItem key={index} data={isMemberList[index]} />
-      ))}
-      </div>
-      */
-    <div></div>
+      {
+        <div className={style.top}>
+          {isMemberList[1] && <SecondRankingItem data={isMemberList[1]} />}
+          {isMemberList[0] && <FirstRankingItem data={isMemberList[0]} />}
+          {isMemberList[2] && <SecondRankingItem data={isMemberList[2]} />}
+        </div>
+      }
+      {[3, 4, 5].map(
+        (index) =>
+          isMemberList[index] && (
+            <BasicRankingItem key={index} data={isMemberList[index]} />
+          ),
+      )}
+    </div>
   );
 };
 
