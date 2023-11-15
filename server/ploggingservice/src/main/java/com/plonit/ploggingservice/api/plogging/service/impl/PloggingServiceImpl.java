@@ -120,6 +120,10 @@ public class PloggingServiceImpl implements PloggingService {
                     throwable -> null
             );
 
+            if (isCrewpingMaster == null) {
+                throw new CustomException(INVALID_FIELDS_REQUEST);
+            }
+
             if (isCrewpingMaster) {
                 circuitBreaker.run(
                         () -> crewpingFeignClient.updateCrewpingStatus(
