@@ -1,10 +1,9 @@
-package com.plonit.ploggingservice.common.util;
+package com.plonit.plonitservice.common.util;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-
 @Slf4j
 public class RequestUtils {
     public static Long getMemberKey(HttpServletRequest request) {
@@ -30,5 +29,25 @@ public class RequestUtils {
             }
         }
         return memberId;
+    }
+
+    public static String getFCMToken() {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder
+                .getRequestAttributes();
+
+        String headerValue = attributes.getRequest().getHeader("fcmToken");
+
+        if (headerValue == null || headerValue.isEmpty()) {
+            return null;
+        }
+
+        return headerValue;
+    }
+
+    public static String getToken() {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder
+                .getRequestAttributes();
+
+        return attributes.getRequest().getHeader("accessToken");
     }
 }

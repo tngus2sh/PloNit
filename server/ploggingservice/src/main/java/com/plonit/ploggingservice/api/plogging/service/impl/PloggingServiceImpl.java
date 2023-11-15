@@ -15,30 +15,24 @@ import com.plonit.ploggingservice.common.enums.Type;
 import com.plonit.ploggingservice.common.exception.CustomException;
 import com.plonit.ploggingservice.common.util.KakaoPlaceUtils;
 import com.plonit.ploggingservice.common.util.RedisUtils;
-import com.plonit.ploggingservice.common.util.WebClientUtil;
 import com.plonit.ploggingservice.domain.plogging.LatLong;
 import com.plonit.ploggingservice.domain.plogging.Plogging;
 import com.plonit.ploggingservice.domain.plogging.PloggingHelp;
 import com.plonit.ploggingservice.domain.plogging.PloggingPicture;
 import com.plonit.ploggingservice.domain.plogging.repository.*;
+import com.plonit.plonitservice.common.util.RequestUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
-import org.springframework.core.env.Environment;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.reactive.function.client.WebClient;
 
-import javax.ws.rs.core.HttpHeaders;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -118,16 +112,20 @@ public class PloggingServiceImpl implements PloggingService {
         // 크루핑이면서 크루핑장일 때 크루핑 상태 변경 요청
         if (dto.getType().equals(Type.CREWPING)) {
             Boolean isCrewpingMaster = circuitBreaker.run(
-                    () -> crewpingFeignClient.isCrewpingMaster(dto.getCrewpingId())
+                    () -> crewpingFeignClient.isCrewpingMaster(
+                                    RequestUtils.getToken(),
+                                    dto.getCrewpingId())
                             .getResultBody(),
                     throwable -> null
             );
 
             if (isCrewpingMaster) {
                 circuitBreaker.run(
-                        () -> crewpingFeignClient.updateCrewpingStatus(UpdateCrewpingStatusReq.builder()
-                                        .crewpingId(dto.getCrewpingId())
-                                        .build())
+                        () -> crewpingFeignClient.updateCrewpingStatus(
+                                        RequestUtils.getToken(),
+                                        UpdateCrewpingStatusReq.builder()
+                                                .crewpingId(dto.getCrewpingId())
+                                                .build())
                                 .getResultBody(),
                         throwable -> null
                 );
@@ -180,7 +178,9 @@ public class PloggingServiceImpl implements PloggingService {
             CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
 
             Boolean isCrewpingMaster = circuitBreaker.run(
-                    () -> crewpingFeignClient.isCrewpingMaster(dto.getCrewpingId())
+                    () -> crewpingFeignClient.isCrewpingMaster(
+                                    RequestUtils.getToken(),
+                                    dto.getCrewpingId())
                             .getResultBody()
                     , throwable -> null
             );
@@ -194,7 +194,9 @@ public class PloggingServiceImpl implements PloggingService {
                         .build();
 
                 Long crewpingId = circuitBreaker.run(
-                        () -> crewpingFeignClient.saveCrewpingRecord(crewpingRecordReq)
+                        () -> crewpingFeignClient.saveCrewpingRecord(
+                                        RequestUtils.getToken(),
+                                        crewpingRecordReq)
                                 .getResultBody(),
                         throwable -> null // 에러 발생시 null 반환
                 );

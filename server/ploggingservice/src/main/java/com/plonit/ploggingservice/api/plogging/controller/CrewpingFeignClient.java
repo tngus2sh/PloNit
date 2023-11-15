@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.*;
 public interface CrewpingFeignClient {
 
     @GetMapping("/plonit-service/v1/crewping/master/{crewping-id}")
-    CustomApiResponse<Boolean> isCrewpingMaster(@PathVariable(name = "crewping-id") Long crewpingId);
+    CustomApiResponse<Boolean> isCrewpingMaster(@RequestHeader("accessToken") String token, @PathVariable(name = "crewping-id") Long crewpingId);
 
     @PostMapping("/plonit-service/v1/crewping/record")
-    CustomApiResponse<Long> saveCrewpingRecord(@RequestBody CrewpingRecordReq crewpingRecordReq);
+    CustomApiResponse<Long> saveCrewpingRecord(@RequestHeader("accessToken") String token, @RequestBody CrewpingRecordReq crewpingRecordReq);
 
     @PatchMapping("/plonit-service/v1/crewping/status")
-    CustomApiResponse<Long> updateCrewpingStatus(@RequestBody UpdateCrewpingStatusReq updateCrewpingStatusReq);
+    CustomApiResponse<Long> updateCrewpingStatus(@RequestHeader("accessToekn") String token, @RequestBody UpdateCrewpingStatusReq updateCrewpingStatusReq);
 }
