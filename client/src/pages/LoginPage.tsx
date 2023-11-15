@@ -13,6 +13,17 @@ import { userActions } from "store/user-slice";
 import { registerServiceWorker } from "notification";
 import { messaging } from "settingFCM";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import styled from "styled-components";
+
+const StyledSwiper = styled(Swiper)`
+  .swiper-pagination {
+    position: relative;
+  }
+  .swiper-pagination-bullet-active {
+    background: #2cd261;
+  }
+`;
+
 async function handleAllowNotification() {
   const permission = await Notification.requestPermission();
 
@@ -46,7 +57,11 @@ const LoginPage = () => {
   console.log(deviceToken);
   return (
     <div className={style.login}>
-      <Swiper pagination={true} modules={[Pagination]} className="mySwiper">
+      <StyledSwiper
+        pagination={true}
+        modules={[Pagination]}
+        className={style.myswiper}
+      >
         <SwiperSlide>
           <Section_1 />
         </SwiperSlide>
@@ -56,7 +71,7 @@ const LoginPage = () => {
         <SwiperSlide>
           <Section_3 />
         </SwiperSlide>
-      </Swiper>
+      </StyledSwiper>
       <div onClick={handleLogin} className={style.login_btn}>
         <img src="/kakao_login2.png" alt="카카오" style={{ width: "90%" }} />
       </div>
