@@ -4,7 +4,7 @@ import BasicRankingItem from "./BasicRankingItem";
 import FirstRankingItem from "./FirstRankingItem";
 import SecondRankingItem from "./SecondRankingItem";
 import style from "styles/css/RankingPage/RankingList.module.css";
-import { RankInterface, MemberRankInterface } from "interface/rankInterface";
+import { RankInterface, RankDetailInterface } from "interface/rankInterface";
 import { getMemberRank } from "api/lib/rank";
 
 const PersonalRanking = () => {
@@ -30,7 +30,7 @@ const PersonalRanking = () => {
 
   return (
     <div className={style.ranking}>
-      <div className={style.top}>
+      {/* <div className={style.top}>
         {isMemberRank.rankingList && isMemberRank.rankingList.length > 1 && (
           <SecondRankingItem data={isMemberRank} />
         )}
@@ -41,7 +41,7 @@ const PersonalRanking = () => {
           <SecondRankingItem data={isMemberRank} />
         )}
       </div>
-      <BasicRankingItem />
+      <BasicRankingItem /> */}
     </div>
   );
 };

@@ -1,23 +1,26 @@
 export interface RankInterface {
-  rankingPeriod: string;
-  rankingList: any;
+  startDate: string;
+  endDate: string;
+  membersRanks: any;
 }
 
-export interface MemberRankInterface {
-  nickname: string;
-  profileImage: string;
-  ranking: number;
-  distance: number;
-  isMine: boolean;
+export interface RankDetailInterface {
+  nickname?: string;
+  crewImage?: string;
+  profileImage?: string;
+  ranking?: number;
+  distance?: number;
+  isMine?: boolean;
+  isMyCrew?: boolean;
 }
 
-export interface CrewRankInterface {
-  name: string;
-  crewImage: string;
-  ranking: number;
-  distance: number;
-  isMyCrew: boolean;
-}
+// export interface CrewRankInterface {
+//   nickname: string;
+//   crewImage: string;
+//   ranking: number;
+//   distance: number;
+//   isMyCrew: boolean;
+// }
 
 export interface MyRankInterface {
   rank: number;
