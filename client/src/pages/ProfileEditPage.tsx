@@ -26,7 +26,8 @@ const ProfileEditPage = () => {
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const User = useSelector((state: any) => state.user.info);
 
-  const [isProfileImage, setProfileImage] = useState(User.profileImage);
+  const [isProfileImage, setProfileImage] = useState("");
+  console.log(isProfileImage);
   const [isNickname, setNickname] = useState(User.nickname);
   const [isAllowNickname, setAllowNickname] = useState(false);
   const [isRegion, setRegion] = useState(User.region);
@@ -39,6 +40,7 @@ const ProfileEditPage = () => {
     const file = event.target.files[0];
     if (file) {
       setProfileImage(file);
+      console.log(isProfileImage);
     }
   };
   console.log(isProfileImage);
@@ -77,10 +79,10 @@ const ProfileEditPage = () => {
     formData.append("weight", isWeight);
     formData.append("region", isRegion);
     formData.append("id1365", isId_1365);
-    if (isProfileImage instanceof File) {
-      formData.append("profileImage", isProfileImage);
-    } else {
+    if (isProfileImage === "") {
       formData.append("profileImage", User.profileImage);
+    } else {
+      formData.append("profileImage", isProfileImage);
     }
     // formData.append("profileImage", isProfileImage);
     formData.append("birth", User.birth);
