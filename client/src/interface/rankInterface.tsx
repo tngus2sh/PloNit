@@ -5,7 +5,7 @@ export interface RankInterface {
 }
 
 export interface RankDetailInterface {
-  nickname?: string;
+  nickName?: string;
   crewImage?: string;
   profileImage?: string;
   ranking?: number;
