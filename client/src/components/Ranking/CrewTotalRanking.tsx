@@ -4,7 +4,7 @@ import BasicRankingItem from "./BasicRankingItem";
 import FirstRankingItem from "./FirstRankingItem";
 import SecondRankingItem from "./SecondRankingItem";
 import style from "styles/css/RankingPage/RankingList.module.css";
-import { RankInterface } from "interface/rankInterface";
+import { RankInterface, RankDetailInterface } from "interface/rankInterface";
 import { getCrewTotalRank } from "api/lib/rank";
 
 const CrewTotalRanking = () => {
@@ -12,6 +12,9 @@ const CrewTotalRanking = () => {
   const [isCrewTotalRank, setCrewTotalRank] = useState<RankInterface>(
     {} as RankInterface,
   );
+  const [isCrewTotalRankList, setCrewTotalRankList] = useState<
+    RankDetailInterface[]
+  >([]);
 
   useEffect(() => {
     getCrewTotalRank(
@@ -20,6 +23,7 @@ const CrewTotalRanking = () => {
         console.log("크루 전체 랭킹 조회 성공");
         console.log(res.data);
         setCrewTotalRank(res.data.resultBody);
+        setCrewTotalRankList(res.data.resultBody.membersRanks);
       },
       (err) => {
         console.log("크루 전체 랭킹 조회 실패", err);
@@ -31,22 +35,13 @@ const CrewTotalRanking = () => {
   return (
     <div className={style.ranking}>
       <div className={style.top}>
-        {isCrewTotalRank.rankingList &&
-          isCrewTotalRank.rankingList.length > 1 && (
-            <SecondRankingItem data={isCrewTotalRank} />
-          )}
-        {isCrewTotalRank.rankingList &&
-          isCrewTotalRank.rankingList.length > 0 && (
-            <FirstRankingItem data={isCrewTotalRank} />
-          )}
-        {isCrewTotalRank.rankingList &&
-          isCrewTotalRank.rankingList.length > 2 && (
-            <SecondRankingItem data={isCrewTotalRank} />
-          )}
+        <SecondRankingItem data={isCrewTotalRankList[1]} />
+        <FirstRankingItem data={isCrewTotalRankList[0]} />
+        <SecondRankingItem data={isCrewTotalRankList[2]} />
       </div>
-      <BasicRankingItem />
-      <BasicRankingItem />
-      <BasicRankingItem />
+      {isCrewTotalRankList.slice(3).map((item, index) => (
+        <BasicRankingItem key={index} data={item} />
+      ))}
     </div>
   );
 };
