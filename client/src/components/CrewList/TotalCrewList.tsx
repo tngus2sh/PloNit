@@ -4,6 +4,7 @@ import style from "styles/css/CrewList/TotalCrewList.module.css";
 import CrewItem from "./CrewItem";
 import { CrewInterface } from "interface/crewInterface";
 import { getCrewList, getCrewSearch } from "api/lib/crew";
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 
 const TotalCrewList = () => {
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
@@ -78,6 +79,7 @@ const TotalCrewList = () => {
           className={style.inputBox}
           value={isSearchWord}
           onChange={handleSearchInputChange}
+          placeholder="크루를 검색해 보세요 🔎"
         />
       </div>
       {totalCrewList ? (
