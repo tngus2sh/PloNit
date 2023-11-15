@@ -4,6 +4,8 @@ package com.plonit.ploggingservice.api.plogging.service;
 import com.plonit.ploggingservice.api.plogging.service.dto.*;
 
 public interface PloggingService {
+
+    void test(int num);
     
     Long saveStartPlogging(StartPloggingDto dto);
     

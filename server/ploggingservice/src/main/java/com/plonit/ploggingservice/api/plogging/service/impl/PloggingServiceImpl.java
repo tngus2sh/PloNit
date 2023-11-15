@@ -59,6 +59,31 @@ public class PloggingServiceImpl implements PloggingService {
     private final PloggingQueryRepository ploggingQueryRepository;
 
 
+    @Override
+    public void test(int num) {
+        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
+
+        if (num == 1) {
+            Boolean isCrewpingMaster = circuitBreaker.run(
+                    () -> crewpingFeignClient.isCrewpingMaster(
+                                    RequestUtils.getToken(),
+                                    29L)
+                            .getResultBody()
+                    , throwable -> null
+            );
+        } else if (num == 2) {
+            circuitBreaker.run(
+                    () -> crewpingFeignClient.updateCrewpingStatus(
+                                    RequestUtils.getToken(),
+                                    UpdateCrewpingStatusReq.builder()
+                                            .crewpingId(29L)
+                                            .build())
+                            .getResultBody(),
+                    throwable -> null
+            );
+        }
+    }
+
     /**
      * 플로깅 시작시 기록 저장
      * @param dto 플로깅 저장 데이터
@@ -112,8 +137,7 @@ public class PloggingServiceImpl implements PloggingService {
             log.info("[CREWPING ACCESSTOKEN] = {}", RequestUtils.getToken());
             log.info("[CREWPING_ID] = {}", dto.getCrewpingId());
 
-            CircuitBreaker circuitBreaker1 = circuitBreakerFactory.create("circuitBreaker");
-            Boolean isCrewpingMaster = circuitBreaker1.run(
+            Boolean isCrewpingMaster = circuitBreaker.run(
                     () -> crewpingFeignClient.isCrewpingMaster(
                                     RequestUtils.getToken(),
                                     dto.getCrewpingId())
