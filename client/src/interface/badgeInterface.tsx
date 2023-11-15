@@ -1,7 +1,7 @@
 export interface BadgeInterface {
-  name?: string;
+  badgeCode?: string;
   image?: string;
-  type?: boolean;
+  badgeId?: number;
   status?: string;
-  check?: boolean;
+  isMine?: boolean;
 }
