@@ -43,9 +43,13 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
     }
     if (newMessage.type === "LOCATION") {
       dispatch(Crewping.setLocations(newMessage));
+      console.log(
+        `latitude: ${newMessage.latitude} | longitude: ${newMessage.longitude}`,
+      );
     }
     if (newMessage.type === "WAIT") {
       dispatch(Crewping.setMembers(newMessage));
+      console.log(`members: ${newMessage.members}`);
     }
   }
 
