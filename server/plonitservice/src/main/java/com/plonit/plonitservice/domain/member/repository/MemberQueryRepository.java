@@ -1,6 +1,7 @@
 package com.plonit.plonitservice.domain.member.repository;
 
 import com.plonit.plonitservice.api.member.controller.response.MemberRankRes;
+import com.plonit.plonitservice.api.member.controller.response.VolunteerMemberInfoRes;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -59,6 +60,17 @@ public class MemberQueryRepository {
                 .from(member)
                 .where(member.id.in(memberIds))
                 .fetch();
+    }
+
+    public VolunteerMemberInfoRes findVolunteerMemberInfo(Long memberId) {
+        return queryFactory.select(constructor(VolunteerMemberInfoRes.class,
+                        member.id,
+                        member.id1365,
+                        member.name,
+                        member.birth))
+                .from(member)
+                .where(member.id.eq(memberId))
+                .fetchOne();
     }
 
     public List<Long> findByGugunCode(Long gugunCode) {

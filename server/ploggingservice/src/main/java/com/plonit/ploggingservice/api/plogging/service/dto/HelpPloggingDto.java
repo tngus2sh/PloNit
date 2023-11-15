@@ -44,6 +44,7 @@ public class HelpPloggingDto {
                 .place(place)
                 .context(dto.getContext())
                 .image(imageUrl)
+                .isActive(true)
                 .build();
     }
 }
