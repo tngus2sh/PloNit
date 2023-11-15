@@ -1,6 +1,5 @@
 package com.plonit.ploggingservice.api.plogging.controller;
 
-import com.plonit.ploggingservice.api.plogging.controller.request.CheckCrewpingMaster;
 import com.plonit.ploggingservice.api.plogging.controller.request.CrewpingRecordReq;
 import com.plonit.ploggingservice.api.plogging.controller.request.UpdateCrewpingStatusReq;
 import com.plonit.ploggingservice.common.CustomApiResponse;

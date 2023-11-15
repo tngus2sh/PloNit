@@ -109,6 +109,9 @@ public class PloggingServiceImpl implements PloggingService {
 
         // 크루핑이면서 크루핑장일 때 크루핑 상태 변경 요청
         if (dto.getType().equals(Type.CREWPING)) {
+            log.info("[CREWPING ACCESSTOKEN] = {}", RequestUtils.getToken());
+            log.info("[CREWPING_ID] = {}", dto.getCrewpingId());
+
             Boolean isCrewpingMaster = circuitBreaker.run(
                     () -> crewpingFeignClient.isCrewpingMaster(
                                     RequestUtils.getToken(),
