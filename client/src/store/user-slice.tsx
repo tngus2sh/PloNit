@@ -25,6 +25,9 @@ const initialState = {
     isCrewMaster: false,
     isCrewpingMaster: "",
   },
+  alarm: {
+    fcmToken: "",
+  },
 };
 
 const userSlice = createSlice({
@@ -45,6 +48,9 @@ const userSlice = createSlice({
     },
     myCrewHandler(state, action) {
       return { ...state, crewinfo: action.payload };
+    },
+    fcmHandler(state, action) {
+      return { ...state, alarm: action.payload };
     },
   },
 });
