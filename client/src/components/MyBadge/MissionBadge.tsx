@@ -33,11 +33,15 @@ const MissionBadge = () => {
   // ];
 
   const renderImages = () => {
-    return isMissionBadge.map((badge, index) => (
-      <div className={style.imageContainer} key={index}>
-        <img src={badge.image} alt={badge.name} />
-      </div>
-    ));
+    if (isMissionBadge.length === 0) {
+      return <div>뱃지가 존재하지 않습니다</div>;
+    } else {
+      return isMissionBadge.map((badge, index) => (
+        <div className={style.imageContainer} key={index}>
+          <img src={badge.image} alt={badge.name} />
+        </div>
+      ));
+    }
   };
 
   return <div className={style.missionBadge}>{renderImages()}</div>;
