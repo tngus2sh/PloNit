@@ -38,7 +38,7 @@ const PageNotFound404 = () => {
   return (
     <div
       style={{
-        height: "calc(100vh - 56)",
+        height: "calc(100vh - 56px)",
         width: "100%",
         backgroundSize: "contain",
         backgroundRepeat: "no-repeat",
