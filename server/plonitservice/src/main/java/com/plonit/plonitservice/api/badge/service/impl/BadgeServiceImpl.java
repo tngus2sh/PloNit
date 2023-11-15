@@ -45,31 +45,25 @@ public class BadgeServiceImpl implements BadgeService {
 
     @Override
     @Transactional
-    public void saveBadge(List<BadgeDto> badgeDtos) {
+    public void saveBadge(BadgeDto badgeDto) {
 
-        List<BadgeCondition> badgeConditions = new ArrayList<>();
-        List<Badge> badges = new ArrayList<>();
-        
-        for (BadgeDto badgeDto : badgeDtos) {
-            String badgeImage = null;
-            if (badgeDto.getImage() != null) {
-                try {
-                    badgeImage = awsS3Uploader.uploadFile(badgeDto.getImage(), "badge/badgeImage");
-                } catch (IOException e) {
-                    throw new CustomException(INVALID_FIELDS_REQUEST);
-                }
+        String badgeImage = null;
+        if (badgeDto.getImage() != null) {
+            try {
+                badgeImage = awsS3Uploader.uploadFile(badgeDto.getImage(), "badge/badgeImage");
+            } catch (IOException e) {
+                throw new CustomException(INVALID_FIELDS_REQUEST);
             }
-            // 뱃지 상태 저장
-            BadgeCondition badgeCondition = BadgeDto.toEntity(badgeDto);
-            badgeConditions.add(badgeCondition);
-            
-            // 뱃지 저장
-            badges.add(BadgeDto.toEntity(badgeDto, badgeCondition, badgeImage));
-            
         }
-        
-        badgeConditionRepository.saveAll(badgeConditions);
-        badgeRepository.saveAll(badges);
+
+        log.info("[REQ_IMAGE] = {}", badgeDto.getImage());
+        log.info("[IMAGE] = {}", badgeImage);
+        // 뱃지 상태 저장
+        BadgeCondition badgeCondition = BadgeDto.toEntity(badgeDto);
+        badgeConditionRepository.save(badgeCondition);
+
+        // 뱃지 저장
+        badgeRepository.save(BadgeDto.toEntity(badgeDto, badgeCondition, badgeImage));
     }
 
     @Override

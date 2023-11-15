@@ -29,14 +29,12 @@ public class BadgeNaApiController {
     @Operation(summary = "[관리자용] 배지 설정", description = "배지를 설정합니다.")
     @PostMapping("/setting")
     public CustomApiResponse<Void> saveBadge(
-            @ModelAttribute List<BadgeReq> reqs
+            @ModelAttribute BadgeReq req
             ) {
+
+        log.info("saveBadge = {}", req.toString());
         // 배지 설정
-        List<BadgeDto> badgeDtos = new ArrayList<>();
-        for (BadgeReq req : reqs) {
-            badgeDtos.add(BadgeDto.of(req));
-        }
-        badgeService.saveBadge(badgeDtos);
+        badgeService.saveBadge(BadgeDto.of(req));
         
         return CustomApiResponse.ok(null);
     }

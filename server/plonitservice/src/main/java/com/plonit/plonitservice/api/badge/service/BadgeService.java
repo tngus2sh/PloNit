@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface BadgeService {
 
-    public void saveBadge(List<BadgeDto> badgeDtos);
+    public void saveBadge(BadgeDto badgeDto);
 
     public void saveBadgeByIndividual(List<MembersBadgeDto> membersBadgeDtos);
 
