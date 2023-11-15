@@ -186,6 +186,10 @@ public class PloggingServiceImpl implements PloggingService {
                     , throwable -> null
             );
 
+            if (isCrewpingMaster == null) {
+                throw new CustomException(INVALID_FIELDS_REQUEST);
+            }
+
             if (isCrewpingMaster) {
                 CrewpingRecordReq crewpingRecordReq = CrewpingRecordReq.builder()
                         .startDate(plogging.getStartTime())
