@@ -20,6 +20,7 @@ import com.plonit.plonitservice.domain.region.repository.GugunRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -46,6 +47,11 @@ public class FCMService{
         }
 
         String token = getFcmToken(fcmReq.getTargetMemberId());
+        if(token.isEmpty()) {
+            log.info("서버에 해당 유저의 FirebaseToken 이 유효하지 않습니다.");
+            return "서버에 해당 유저의 FirebaseToken 이 유효하지 않습니다.";
+        }
+
         Notification notification = Notification.builder()
                 .setTitle(fcmReq.getTitle())
                 .setBody(fcmReq.getBody())
@@ -65,6 +71,7 @@ public class FCMService{
         FirebaseMessaging.getInstance().sendAsync(message);
     }
 
+    @Transactional
     public String sendHelp(FCMHelpReq fcmHelpReq) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
         Long memberId = RequestUtils.getMemberId();
@@ -79,6 +86,7 @@ public class FCMService{
             if(!hasKey(item)) continue;
             if(item == memberId) continue;
             String token = getFcmToken(item);
+            if(token.isEmpty()) continue;
             Notification notification = Notification.builder()
                     .setTitle("HELP")
                     .setBody(makeHelpString(gugun.getName(), member.getNickname()))
@@ -103,6 +111,7 @@ public class FCMService{
         for(Long item : nearMemberIds) {
             if(!hasKey(item)) continue;
             String token = getFcmToken(item);
+            if(token.isEmpty()) continue;
             Notification notification = Notification.builder()
                     .setTitle("CREWPING_END")
                     .setBody(makeCrewEndString(fcmCrewpingReq.getCrewName(), fcmCrewpingReq.getCrewpingName()))
@@ -119,6 +128,7 @@ public class FCMService{
         return "알림을 성공적으로 전송했습니다.";
     }
 
+    @Transactional
     public void saveToken(FCMRes fcmRes) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
         Long memberId = RequestUtils.getMemberId();
@@ -134,6 +144,7 @@ public class FCMService{
         log.info(logCurrent(getClassName(), getMethodName(), END));
     }
 
+    @Transactional
     public void deleteToken(Long memberIdl) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
         fcmTokenRepository.deleteToken(memberIdl);
