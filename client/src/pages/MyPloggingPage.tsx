@@ -108,6 +108,27 @@ const MyPloggingPage = () => {
       },
       fail: (error) => {
         console.error("플로깅 일별기록 조회 실패", error);
+        const response = [
+          {
+            id: 5,
+            type: "IND",
+            place: "광주 광산구 오선동 549-1",
+            startTime: "2023-11-10T10:46:22.308894",
+            endTime: "2023-11-10T10:46:22.308894",
+            totalTime: "3600",
+            distance: 2,
+          },
+          {
+            id: 9,
+            type: "IND",
+            place: "광주 광산구 오선동 549-1",
+            startTime: "2023-11-10T10:50:16.942554",
+            endTime: "2023-11-10T10:50:16.942554",
+            totalTime: "3600",
+            distance: 3,
+          },
+        ];
+        setPloggingList(response);
       },
     });
   }, [dateRange, isType]);

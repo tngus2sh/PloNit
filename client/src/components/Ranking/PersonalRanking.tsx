@@ -27,17 +27,26 @@ const PersonalRanking = () => {
     );
   }, []);
   console.log(isMemberRank);
+  console.log(isMemberRank.rankingList);
+  console.log(isMemberRank.rankingList[0]);
+  console.log(isMemberRank.rankingList.membersRanks);
+  console.log(isMemberRank.rankingList.membersRanks[0]);
 
   return (
     <div className={style.ranking}>
+<<<<<<< HEAD
+      <div className={style.top}>
+        {isMemberRank.rankingList > 1 && (
+=======
       {/* <div className={style.top}>
         {isMemberRank.rankingList && isMemberRank.rankingList.length > 1 && (
+>>>>>>> 996fd5a654a039da081b416020d1d42b91da8ff0
           <SecondRankingItem data={isMemberRank} />
         )}
-        {isMemberRank.rankingList && isMemberRank.rankingList.length > 0 && (
+        {isMemberRank.rankingList > 0 && (
           <FirstRankingItem data={isMemberRank} />
         )}
-        {isMemberRank.rankingList && isMemberRank.rankingList.length > 2 && (
+        {isMemberRank.rankingList > 2 && (
           <SecondRankingItem data={isMemberRank} />
         )}
       </div>
