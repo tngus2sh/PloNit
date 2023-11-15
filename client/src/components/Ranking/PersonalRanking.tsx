@@ -29,9 +29,8 @@ const PersonalRanking = () => {
     );
   }, []);
   console.log(isMemberRank);
-  console.log(isMemberRank.membersRanks);
-  console.log(isMemberRank.membersRanks[0]);
   return (
+    /*
     <div className={style.ranking}>
       <div className={style.top}>
         <SecondRankingItem data={isMemberList[1]} />
@@ -41,7 +40,9 @@ const PersonalRanking = () => {
       {[3, 4, 5].map((index) => (
         <BasicRankingItem key={index} data={isMemberList[index]} />
       ))}
-    </div>
+      </div>
+      */
+    <div></div>
   );
 };
 
