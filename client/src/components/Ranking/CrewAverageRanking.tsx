@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import BasicRankingItem from "./BasicRankingItem";
-import FirstRankingItem from "./FirstRankingItem";
+// import FirstRankingItem from "./FirstRankingItem";
 import SecondRankingItem from "./SecondRankingItem";
 import style from "styles/css/RankingPage/RankingList.module.css";
 import { RankInterface } from "interface/rankInterface";
@@ -29,19 +29,13 @@ const CrewAverageRanking = () => {
   console.log(isCrewAvgRank);
   return (
     <div className={style.ranking}>
-      {/* <div className={style.top}>
-        {isCrewAvgRank.rankingList && isCrewAvgRank.rankingList.length > 1 && (
-          <SecondRankingItem data={isCrewAvgRank} />
-        )}
-        {isCrewAvgRank.rankingList && isCrewAvgRank.rankingList.length > 0 && (
-          <FirstRankingItem data={isCrewAvgRank} />
-        )}
-        {isCrewAvgRank.rankingList && isCrewAvgRank.rankingList.length > 2 && (
-          <SecondRankingItem data={isCrewAvgRank} />
-        )}
-      </div> */}
-      {/* <BasicRankingItem />
-      <BasicRankingItem /> */}
+      <div className={style.top}>
+        {/* <SecondRankingItem />
+        <FirstRankingItem />
+        <SecondRankingItem /> */}
+      </div>
+      <BasicRankingItem />
+      <BasicRankingItem />
     </div>
   );
 };
