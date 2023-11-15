@@ -18,3 +18,19 @@ export interface CrewRankInterface {
   distance: number;
   isMyCrew: boolean;
 }
+
+export interface MyRankInterface {
+  rank: number;
+  distance: number;
+  StartDate: string;
+  EndDate: string;
+}
+
+export interface MyCrewRankInterface {
+  totalRanking: number;
+  avgRanking: number;
+  totalDistance: number;
+  avgDistance: number;
+  startDate: string;
+  endDate: string;
+}
