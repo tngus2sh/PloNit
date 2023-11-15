@@ -26,20 +26,16 @@ const HomeBanner = () => {
     <div className={style.wrapper}>
       <Swiper {...swiperProps}>
         <SwiperSlide>
-          <div>1</div>
-          {/* <img src="/1.png" alt="1" className={style.fullWidthImage} /> */}
+          <img src="/001.png" alt="1" className={style.fullWidthImage} />
         </SwiperSlide>
         <SwiperSlide>
-          <div>2</div>
-          {/* <img src="/2.png" alt="2" className={style.fullWidthImage} /> */}
+          <img src="/002.png" alt="2" className={style.fullWidthImage} />
         </SwiperSlide>
         <SwiperSlide>
-          <div>3</div>
-          {/* <img src="/3.png" alt="3" className={style.fullWidthImage} /> */}
+          <img src="/003.png" alt="3" className={style.fullWidthImage} />
         </SwiperSlide>
         <SwiperSlide>
-          <div>4</div>
-          {/* <img src="/4.png" alt="4" className={style.fullWidthImage} /> */}
+          <img src="/004.png" alt="4" className={style.fullWidthImage} />
         </SwiperSlide>
       </Swiper>
     </div>
