@@ -22,26 +22,6 @@ const MissionBadge = () => {
     );
   }, []);
 
-  // const images = [
-  //   { src: "/metamong.png", alt: "몽" },
-  //   { src: "/metamong.png", alt: "몽" },
-  //   { src: "/metamong.png", alt: "몽" },
-  //   { src: "/metamong.png", alt: "몽" },
-  //   { src: "/metamong.png", alt: "몽" },
-  //   { src: "/metamong.png", alt: "몽" },
-  //   { src: "/metamong.png", alt: "몽" },
-  // ];
-
-  // const renderImages = () => {
-
-  //     return isMissionBadge.map((badge, index) => (
-  //       <div className={style.imageContainer} key={index}>
-  //         <img src={badge.image} alt={badge.name} />
-  //       </div>
-  //     ));
-  //   }
-  // };
-
   return (
     <div className={style.missionBadge}>
       {isMissionBadge ? (
