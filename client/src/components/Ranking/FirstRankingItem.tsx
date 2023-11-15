@@ -12,7 +12,7 @@ const FirstRankingItem = ({ data }: { data: RankDetailInterface }) => {
         alt="몽"
       />
 
-      <div className={style.nickname}>{data.nickname}</div>
+      <div className={style.nickname}>{data.nickName}</div>
       <div className={style.dist}>
         <span className={style.large}>{data.distance}</span>km
       </div>
