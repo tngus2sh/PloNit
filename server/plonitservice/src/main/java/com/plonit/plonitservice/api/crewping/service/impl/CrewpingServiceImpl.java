@@ -3,6 +3,9 @@ package com.plonit.plonitservice.api.crewping.service.impl;
 import com.plonit.plonitservice.api.crewping.service.dto.SaveCrewpingDto;
 import com.plonit.plonitservice.api.crewping.service.CrewpingService;
 import com.plonit.plonitservice.api.crewping.service.dto.SaveCrewpingRecordDto;
+import com.plonit.plonitservice.api.fcm.controller.request.FCMCrewpingReq;
+import com.plonit.plonitservice.api.fcm.controller.request.FCMReq;
+import com.plonit.plonitservice.api.fcm.service.FCMService;
 import com.plonit.plonitservice.common.AwsS3Uploader;
 import com.plonit.plonitservice.common.exception.CustomException;
 import com.plonit.plonitservice.common.exception.ErrorCode;
@@ -37,6 +40,7 @@ public class CrewpingServiceImpl implements CrewpingService {
     private final CrewRepository crewRepository;
     private final CrewMemberRepository crewMemberRepository;
     private final AwsS3Uploader awsS3Uploader;
+    private final FCMService fcmService;
 
     @Override
     public void saveCrewping(SaveCrewpingDto dto) {
@@ -133,6 +137,13 @@ public class CrewpingServiceImpl implements CrewpingService {
         CrewpingMember crewpingMember = crewpingMemberRepository.findCrewpingMemberByJoinFetch(targetId, crewpingId).get();
         crewpingMemberRepository.delete(crewpingMember);
         crewping.updateCurrentPeople(false);
+
+        // fcm 알림
+        fcmService.sendNotification(FCMReq.builder()
+                .targetMemberId(targetId)
+                .title("CREWPING_DROP")
+                .body(crewping.getName() + " 크루핑에서 강퇴되었습니다.")
+                .build());
     }
 
     @Override
@@ -147,6 +158,8 @@ public class CrewpingServiceImpl implements CrewpingService {
         if(masterCrewpingMember.getMember().getId() != dto.getMemberId()) {
             throw new CustomException(ErrorCode.CREWPING_BAD_REQUEST);
         }
+
+        fcmService.sendCrewEnd(FCMCrewpingReq.of(crewping));
 
         crewping.updateRecord(dto);
     }

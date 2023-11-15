@@ -50,4 +50,12 @@ public class CrewpingMemberQueryRepository {
                 .where(crewpingMember.crewping.id.eq(crewpingId))
                 .fetch();
     }
+
+    public List<Long> findByCrewpingId(Long crewpingId) {
+        return queryFactory.select(crewpingMember.member.id)
+                .from(crewpingMember)
+                .where(crewpingMember.crewping.id.eq(crewpingId)
+                        .and(crewpingMember.isCrewpingMaster.isFalse()))
+                .fetch();
+    }
 }

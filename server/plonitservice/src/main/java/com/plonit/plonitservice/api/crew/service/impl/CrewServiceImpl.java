@@ -122,7 +122,7 @@ public class CrewServiceImpl implements CrewService {
             fcmService.sendNotification(FCMReq.builder()
                     .targetMemberId(approveCrewDto.getCrewMemberId())
                     .title("CREW_APRV")
-                    .body(crewMember.getCrew().getName() + " 크루 승인이 완료되었습니다.")
+                    .body(crewMember.getCrew().getName() + " 크루에 승인이 완료되었습니다.")
                     .build());
         } else {
             crewMemberRepository.delete(crewMember);
@@ -131,7 +131,7 @@ public class CrewServiceImpl implements CrewService {
             fcmService.sendNotification(FCMReq.builder()
                     .targetMemberId(approveCrewDto.getCrewMemberId())
                     .title("CREW_APRV")
-                    .body(crewMember.getCrew().getName() + " 크루 승인이 거절되었습니다.")
+                    .body(crewMember.getCrew().getName() + " 크루에 승인이 거절되었습니다.")
                     .build());
         }
         log.info(logCurrent(getClassName(), getMethodName(), END));
@@ -215,7 +215,7 @@ public class CrewServiceImpl implements CrewService {
         fcmService.sendNotification(FCMReq.builder()
                 .targetMemberId(crewMemberId)
                 .title("CREW_DROP")
-                .body(crewMember.getCrew().getName() + " 크루 강퇴되었습니다.")
+                .body(crewMember.getCrew().getName() + " 크루에서 강퇴되었습니다.")
                 .build());
 
         log.info(logCurrent(getClassName(), getMethodName(), END));
