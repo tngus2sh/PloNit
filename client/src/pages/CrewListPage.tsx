@@ -11,8 +11,8 @@ const CrewListPage = () => {
   const navigate = useNavigate();
 
   const tabProps = {
-    나의크루목록: <MyCrewList />,
-    전체크루목록: <TotalCrewList />,
+    "나의 크루 목록": <MyCrewList />,
+    "전체 크루 목록": <TotalCrewList />,
   };
 
   const goCrewcreate = () => {
@@ -20,7 +20,7 @@ const CrewListPage = () => {
   };
 
   return (
-    <div>
+    <div style={{ height: "100%" }}>
       <BasicTopBar text="크루 목록" />
       <CustomTab tabProps={tabProps} />
 
@@ -29,10 +29,11 @@ const CrewListPage = () => {
         onClick={goCrewcreate}
         icon="bi:plus-lg"
         style={{
-          width: "2.5rem",
-          height: "2.5rem",
+          width: "2rem",
+          height: "2rem",
           color: "white",
           marginTop: "0.25rem",
+          padding: "0.6rem",
         }}
       />
     </div>

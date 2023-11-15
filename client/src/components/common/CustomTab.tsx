@@ -43,8 +43,12 @@ const StyledTab = styled((props: StyledTabProps) => (
 ))(({ theme, tabcount }) => ({
   width: `${(100 / tabcount).toFixed(2)}%`,
   textTransform: "none",
-  fontWeight: theme.typography.fontWeightRegular,
-  fontSize: theme.typography.pxToRem(15),
+  // fontWeight: theme.typography.fontWeightRegular,
+  // fontSize: theme.typography.pxToRem(15),
+  // 폰트 고정
+  fontFamily: "omyu_pretty",
+  fontWeight: "bold",
+  fontSize: "1.2rem",
   marginRight: theme.spacing(0),
   color: "gray",
   "&.Mui-selected": {
@@ -72,7 +76,7 @@ export default function CustomTab(props: CustomizedTabsProps) {
             <StyledTab key={index} label={key} tabcount={tabcount} />
           ))}
         </StyledTabs>
-        <Box>{Object.values(tabProps)[value]}</Box>
+        <Box sx={{ height: "100%" }}>{Object.values(tabProps)[value]}</Box>
       </Box>
     </Box>
   );
