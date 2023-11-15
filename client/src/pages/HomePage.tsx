@@ -40,7 +40,7 @@ const HomePage = () => {
         style={{
           textAlign: "left",
           marginLeft: "1.5rem",
-          marginTop: "2rem",
+          marginTop: "1.5rem",
           marginBottom: "2rem",
         }}
       >
