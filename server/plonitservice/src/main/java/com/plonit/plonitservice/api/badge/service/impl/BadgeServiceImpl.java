@@ -1,6 +1,7 @@
 package com.plonit.plonitservice.api.badge.service.impl;
 
 import ch.qos.logback.core.joran.conditional.IfAction;
+import com.plonit.plonitservice.api.badge.service.BadgeQueryService;
 import com.plonit.plonitservice.api.badge.service.BadgeService;
 import com.plonit.plonitservice.api.badge.service.dto.*;
 import com.plonit.plonitservice.common.AwsS3Uploader;
@@ -11,10 +12,7 @@ import com.plonit.plonitservice.domain.badge.Badge;
 import com.plonit.plonitservice.domain.badge.BadgeCondition;
 import com.plonit.plonitservice.domain.badge.CrewBadge;
 import com.plonit.plonitservice.domain.badge.MemberBadge;
-import com.plonit.plonitservice.domain.badge.repository.BadgeConditionRepository;
-import com.plonit.plonitservice.domain.badge.repository.BadgeRepository;
-import com.plonit.plonitservice.domain.badge.repository.CrewBadgeRepository;
-import com.plonit.plonitservice.domain.badge.repository.MemberBadgeRepository;
+import com.plonit.plonitservice.domain.badge.repository.*;
 import com.plonit.plonitservice.domain.crew.Crew;
 import com.plonit.plonitservice.domain.crew.repository.CrewRepository;
 import com.plonit.plonitservice.domain.member.Member;
@@ -35,12 +33,13 @@ import static com.plonit.plonitservice.common.exception.ErrorCode.*;
 @Slf4j
 @RequiredArgsConstructor
 public class BadgeServiceImpl implements BadgeService {
-    
+
     private final MemberRepository memberRepository;
     private final CrewRepository crewRepository;
     private final BadgeRepository badgeRepository;
     private final BadgeConditionRepository badgeConditionRepository;
     private final MemberBadgeRepository memberBadgeRepository;
+    private final MemberBadgeQueryRepository memberBadgeQueryRepository;
     private final CrewBadgeRepository crewBadgeRepository;
     private final AwsS3Uploader awsS3Uploader;
 
@@ -148,6 +147,8 @@ public class BadgeServiceImpl implements BadgeService {
     @Transactional
     @Override
     public void grantBadgeByIndividual(GrantMemberBadgeDto grantMemberBadgeDto) {
+        log.info("grantBadge dto = {}", grantMemberBadgeDto);
+
         // 플로깅 횟수  배지 부여
         doGrantCountBadge(grantMemberBadgeDto.getPloggingCount(), grantMemberBadgeDto.getMemberKey());
 
@@ -255,8 +256,10 @@ public class BadgeServiceImpl implements BadgeService {
         Badge badge = badgeRepository.findByCode(code)
                 .orElseThrow(() -> new CustomException(BADGE_NOT_FOUND));
 
+        log.info("[BADGE] = {}", badge.toString());
+
         // 기존에 배지가 있는지 확인
-        Optional<Long> badgeId = memberBadgeRepository.existById(badge.getId());
+        Optional<Long> badgeId = memberBadgeQueryRepository.findIdByBadgeId(badge.getId());
         if (badgeId.isEmpty()) {
             Member member = memberRepository.findById(memberKey)
                     .orElseThrow(() -> new CustomException(USER_NOT_FOUND));

@@ -1,6 +1,7 @@
 package com.plonit.plonitservice.api.member.controller;
 
 import com.plonit.plonitservice.api.member.controller.request.UpdateMemberReq;
+import com.plonit.plonitservice.api.member.controller.request.UpdateVolunteerInfoReq;
 import com.plonit.plonitservice.api.member.controller.response.FindCrewInfoRes;
 import com.plonit.plonitservice.api.member.controller.response.FindCrewpingInfoRes;
 import com.plonit.plonitservice.api.member.controller.response.FindMemberInfoRes;
@@ -88,5 +89,11 @@ public class MemberController {
         List<FindCrewpingInfoRes> response = memberQueryService.findCrewpingInfo();
 
         return CustomApiResponse.ok(response, "내 크루핑 정보 조회에 성공했습니다.");
+    }
+
+    @Operation(summary = "봉사 정보 저장", description = "사용자는 봉사 정보를 저장할 수 있다.")
+    @PutMapping("/volunteer")
+    public CustomApiResponse<Void> updateVolunteerInfo(@RequestBody UpdateVolunteerInfoReq updateVolunteerInfoReq) {
+        return CustomApiResponse.ok(null);
     }
 }

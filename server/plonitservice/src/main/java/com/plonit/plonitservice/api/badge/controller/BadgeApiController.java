@@ -37,6 +37,7 @@ public class BadgeApiController {
             @RequestBody GrantMemberBadgeReq grantMemberBadgeReq,
             HttpServletRequest servletRequest
     ) {
+        log.info("grantMemberBadge = {}", grantMemberBadgeReq);
         Long memberKey = RequestUtils.getMemberKey(servletRequest);
 
         badgeService.grantBadgeByIndividual(GrantMemberBadgeDto.of(grantMemberBadgeReq, memberKey));

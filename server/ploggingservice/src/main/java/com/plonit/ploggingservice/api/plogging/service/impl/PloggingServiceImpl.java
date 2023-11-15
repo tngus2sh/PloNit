@@ -264,16 +264,12 @@ public class PloggingServiceImpl implements PloggingService {
         /* 개인 배지 부여 */
         // 지금까지 플로깅 횟수와 거리 구하기
         FindCountDistanceRes countDistance = ploggingQueryRepository.findCountDistance(dto.getMemberKey());
-        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
-
-        circuitBreaker.run(
-                () -> badgeFeignClient.grantMemberBadge(GrantMemberBadgeReq.builder()
-                                .ploggingCount(countDistance.getCount())
-                                .distance(countDistance.getDistance())
-                                .build())
-                        .getResultBody(),
-                throwable -> null
-        );
+        badgeFeignClient.grantMemberBadge(
+                RequestUtils.getToken(),
+                GrantMemberBadgeReq.builder()
+                        .ploggingCount(countDistance.getCount())
+                        .distance(countDistance.getDistance())
+                        .build());
 
         return plogging.getId();
     }
@@ -378,11 +374,10 @@ public class PloggingServiceImpl implements PloggingService {
                 .birth(dto.getBirth())
                 .build();
 
-        circuitBreaker.run(
-                () -> memberFeignClient.updateVolunteerInfo(volunteerInfo)
-                        .getResultBody(),
-                throwable -> new CustomException(USER_BAD_REQUEST) // 에러 발생시 해당하는 유저가 없다는 오류 보냄
-        );
+        memberFeignClient.updateVolunteerInfo(
+                        RequestUtils.getToken(),
+                        volunteerInfo);
+
 
         /* 정보 저장 */
         volunteerRepository.save(VolunteerPloggingDto.toEntity(plogging));

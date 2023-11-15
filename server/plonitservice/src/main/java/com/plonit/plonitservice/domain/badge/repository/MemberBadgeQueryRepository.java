@@ -35,6 +35,15 @@ public class MemberBadgeQueryRepository {
                 .fetchOne());
     }
 
+    public Optional<Long> findIdByBadgeId(Long badgeId) {
+        return Optional.ofNullable(queryFactory
+                .select(memberBadge.id)
+                .from(memberBadge)
+                .join(memberBadge.badge, badge)
+                .where(memberBadge.badge.id.eq(badgeId))
+                .fetchOne());
+    }
+
     public List<Long> findBadgeIdsByMemberId(Long memberKey) {
         return queryFactory
                 .select(memberBadge.badge.id)
