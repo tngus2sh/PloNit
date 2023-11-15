@@ -46,6 +46,9 @@ function useEffectApp_Crewping() {
   const membersLen = useSelector<rootState, number>((state) => {
     return Object.keys(state.crewping.members).length;
   });
+  const crewpingId = useSelector<rootState, number>((state) => {
+    return state.plogging.crewpingId;
+  });
   const workerRef = useRef<Worker | null>(null);
 
   const { setToggleSocket } = useSocket({ stompClient, roomId, senderId });
@@ -88,6 +91,7 @@ function useEffectApp_Crewping() {
         const { latitude, longitude } = response.coords;
         startPlogging({
           accessToken: accessToken,
+          crewpingId: crewpingId,
           type: "CREWPING",
           latitude: latitude,
           longitude: longitude,
