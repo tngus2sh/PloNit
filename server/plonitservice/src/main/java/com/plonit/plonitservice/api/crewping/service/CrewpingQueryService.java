@@ -14,4 +14,5 @@ public interface CrewpingQueryService {
     FindCrewpingRes findCrewping(Long memberId, Long crewpingId);
     List<FindCrewpingMembersByMasterRes> findCrewpingMembersByMaster(Long memberId, Long crewpingId);
     List<FindCrewpingMembersRes> findCrewpingMembers(Long memberId, Long crewpingId);
+    Boolean isCrewpingMaster(Long crewpingId);
 }

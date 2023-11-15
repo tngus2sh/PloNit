@@ -73,4 +73,11 @@ public class MemberQueryRepository {
                 .fetchOne();
     }
 
+    public List<Long> findByGugunCode(Long gugunCode) {
+        return queryFactory.select(member.id)
+                .from(member)
+                .where(member.gugunCode.eq(gugunCode))
+                .fetch();
+    }
+
 }

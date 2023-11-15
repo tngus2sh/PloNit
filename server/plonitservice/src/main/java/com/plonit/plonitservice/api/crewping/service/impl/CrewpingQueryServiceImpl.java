@@ -5,8 +5,10 @@ import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingMem
 import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingRes;
 import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingsRes;
 import com.plonit.plonitservice.api.crewping.service.CrewpingQueryService;
+import com.plonit.plonitservice.common.enums.Status;
 import com.plonit.plonitservice.common.exception.CustomException;
 import com.plonit.plonitservice.common.exception.ErrorCode;
+import com.plonit.plonitservice.common.util.RequestUtils;
 import com.plonit.plonitservice.domain.crew.Crew;
 import com.plonit.plonitservice.domain.crew.repository.CrewMemberQueryRepository;
 import com.plonit.plonitservice.domain.crew.repository.CrewMemberRepository;
@@ -21,9 +23,11 @@ import com.plonit.plonitservice.domain.member.Member;
 import com.plonit.plonitservice.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -41,6 +45,16 @@ public class CrewpingQueryServiceImpl implements CrewpingQueryService {
     private final CrewMemberQueryRepository crewMemberQueryRepository;
     private final MemberRepository memberRepository;
 
+
+    @Scheduled(cron = "0 0/30 * * * *")
+    public void checkCanceledCrewping() {
+        List<Crewping> crewpings = crewpingQueryRepository.findCanceledCrewping(LocalDateTime.now());
+
+        crewpings.stream().map(crewping -> {
+            crewping.updateStatus(Status.CANCEL);
+            return null;
+        });
+    }
 
     @Override
     public List<FindCrewpingsRes> findCrewpings(Long memberId, Long crewId) {
@@ -104,5 +118,10 @@ public class CrewpingQueryServiceImpl implements CrewpingQueryService {
         List<FindCrewpingMembersRes> result = crewpingMemberQueryRepository.findCrewpingMembers(crewpingId);
 
         return result;
+    }
+
+    @Override
+    public Boolean isCrewpingMaster(Long crewpingId) {
+        return crewpingMemberQueryRepository.isCrewpingMember(RequestUtils.getMemberId(), crewpingId);
     }
 }

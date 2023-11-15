@@ -116,7 +116,7 @@ public class RedisUtils {
     }
 
     public Set<ZSetOperations.TypedTuple<String>> getSortedSetRangeWithScores(String key, long start, long end) {
-        Set<ZSetOperations.TypedTuple<String>> membersWithScores = redisTemplate.opsForZSet().rangeWithScores(key, start, end);
+        Set<ZSetOperations.TypedTuple<String>> membersWithScores = redisTemplate.opsForZSet().reverseRangeWithScores(key, start, end);
 
         // Sorted Set에서 멤버와 Score를 가져와서 DefaultTypedTuple로 반환합니다.
         return membersWithScores;

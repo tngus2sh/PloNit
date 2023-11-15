@@ -2,9 +2,7 @@ package com.plonit.plonitservice.api.rank.controller;
 
 import com.plonit.plonitservice.api.rank.controller.request.CrewRankRequest;
 import com.plonit.plonitservice.api.rank.controller.request.IndividualRankRequest;
-import com.plonit.plonitservice.api.rank.controller.response.CrewAvgResponse;
-import com.plonit.plonitservice.api.rank.controller.response.CrewTotalResponse;
-import com.plonit.plonitservice.api.rank.controller.response.MembersRankResponse;
+import com.plonit.plonitservice.api.rank.controller.response.*;
 import com.plonit.plonitservice.api.rank.service.RankService;
 import com.plonit.plonitservice.common.CustomApiResponse;
 import com.plonit.plonitservice.common.util.RequestUtils;
@@ -29,37 +27,63 @@ public class RankApiController {
 
     @Operation(summary = "회원 랭킹 조회", description = "전체 회원들의 랭킹을 조회합니다.")
     @GetMapping
-    public CustomApiResponse<MembersRankResponse> findAllMembersRank(
+    public CustomApiResponse<MembersRankRes> findAllMembersRank(
             HttpServletRequest request
     ) {
         // 회원 랭킹 조회
         Long memberkey = RequestUtils.getMemberKey(request);
-        MembersRankResponse allMembersRank = rankService.findAllMembersRank(memberkey);
+        MembersRankRes allMembersRank = rankService.findAllMembersRank(memberkey);
         return CustomApiResponse.ok(allMembersRank);
     }
 
     @Operation(summary = "크루 전체 랭킹 조회", description = "크루 전체의 랭킹을 조회합니다.")
     @GetMapping("/crew-total")
 
-    public CustomApiResponse<CrewTotalResponse> findAllCrewRank(
+    public CustomApiResponse<CrewTotalRes> findAllCrewRank(
             HttpServletRequest request
     ) {
         // 크루 전체 랭킹 조회
         Long memberKey = RequestUtils.getMemberKey(request);
-        CrewTotalResponse allCrewRank = rankService.findAllCrewRank(memberKey);
+        CrewTotalRes allCrewRank = rankService.findAllCrewRank(memberKey);
         return CustomApiResponse.ok(allCrewRank);
     }
 
     @Operation(summary = "크루 평균 랭킹 조회", description = "크루 평균 랭킹을 조회합니다.")
     @GetMapping("/crew-avg")
-    public CustomApiResponse<CrewAvgResponse> findAllCrewRankByAVG(
+    public CustomApiResponse<CrewAvgRes> findAllCrewRankByAVG(
             HttpServletRequest request
     ) {
 
         // 크루 평균 랭킹 조회
         Long memberKey = RequestUtils.getMemberKey(request);
-        CrewAvgResponse allCrewRankByAVG = rankService.findAllCrewRankByAVG(memberKey);
+        CrewAvgRes allCrewRankByAVG = rankService.findAllCrewRankByAVG(memberKey);
         return CustomApiResponse.ok(allCrewRankByAVG);
+    }
+
+    @Operation(summary = "내 랭킹 조회", description = "내 랭킹을 조회합니다.")
+    @GetMapping("/member-ranking")
+    public CustomApiResponse<List<FindMyRankingRes>> findMyRanking(
+            HttpServletRequest servletRequest
+    ) {
+        log.info("내 랭킹 조회");
+
+        Long memberKey = RequestUtils.getMemberKey(servletRequest);
+
+        List<FindMyRankingRes> myRanking = rankService.findMyRanking(memberKey);
+
+        return CustomApiResponse.ok(myRanking);
+    }
+
+    @Operation(summary = "내 크루 랭킹 조회", description ="내 크루 랭킹을 조회합니다.")
+    @GetMapping("/crew-ranking")
+    public CustomApiResponse<List<FindMyCrewRankingRes>> findMyCrewRanking(
+            HttpServletRequest servletRequest
+    ) {
+        Long memberKey = RequestUtils.getMemberKey(servletRequest);
+
+        List<FindMyCrewRankingRes> myCrewRanking = rankService.findMyCrewRanking(memberKey);
+
+        return CustomApiResponse.ok(myCrewRanking);
     }
 
 

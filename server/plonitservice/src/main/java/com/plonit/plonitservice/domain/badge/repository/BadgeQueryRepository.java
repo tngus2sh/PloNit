@@ -1,6 +1,7 @@
 package com.plonit.plonitservice.domain.badge.repository;
 
 
+import com.plonit.plonitservice.api.badge.controller.response.FindBadgeRes;
 import com.plonit.plonitservice.domain.badge.Badge;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
@@ -48,7 +49,8 @@ public class CrewpingQueryRepository {
                         crewping.cntPeople,
                         crewping.maxPeople))
                 .from(crewping)
-                .where(crewping.crew.id.eq(crewId))
+                .where(crewping.crew.id.eq(crewId), crewping.status.in(Status.ACTIVE, Status.ONGOING))
+                .orderBy(crewping.startDate.asc())
                 .fetch();
     }
 
@@ -59,6 +61,7 @@ public class CrewpingQueryRepository {
                 .join(crewpingMember)
                 .on(crewpingMember.crewping.eq(crewping))
                 .where(crewpingMember.member.id.eq(memberId), crewping.status.in(Status.ACTIVE, Status.ONGOING))
+                .orderBy(crewping.startDate.asc())
                 .fetch();
 
         // 조회된 Crewping 기반으로 Member 프로필 리스트 생성
@@ -97,5 +100,13 @@ public class CrewpingQueryRepository {
                     .isMaster(isMaster)
                     .build();
         }).collect(Collectors.toList());
+    }
+
+    public List<Crewping> findCanceledCrewping(LocalDateTime now) {
+        return queryFactory
+                .select(crewping)
+                .from(crewping)
+                .where(crewping.endDate.lt(now), crewping.status.eq(Status.ACTIVE))
+                .fetch();
     }
 }
