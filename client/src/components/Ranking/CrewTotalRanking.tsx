@@ -4,7 +4,7 @@ import BasicRankingItem from "./BasicRankingItem";
 // import FirstRankingItem from "./FirstRankingItem";
 import SecondRankingItem from "./SecondRankingItem";
 import style from "styles/css/RankingPage/RankingList.module.css";
-import { RankInterface } from "interface/rankInterface";
+import { RankInterface, RankDetailInterface } from "interface/rankInterface";
 import { getCrewTotalRank } from "api/lib/rank";
 
 const CrewTotalRanking = () => {
@@ -36,6 +36,7 @@ const CrewTotalRanking = () => {
   console.log("crewvalue: ", isCrewTotalList);
 
   return (
+    /*
     <div className={style.ranking}>
       <div className={style.top}>
         <SecondRankingItem data={isCrewTotalList[1]} />
@@ -46,6 +47,8 @@ const CrewTotalRanking = () => {
         <BasicRankingItem key={index} data={isCrewTotalList[index]} />
       ))}
     </div>
+    */
+    <div></div>
   );
 };
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import BasicRankingItem from "./BasicRankingItem";
-// import FirstRankingItem from "./FirstRankingItem";
+import FirstRankingItem from "./FirstRankingItem";
 import SecondRankingItem from "./SecondRankingItem";
 import style from "styles/css/RankingPage/RankingList.module.css";
 import { RankInterface, RankDetailInterface } from "interface/rankInterface";
