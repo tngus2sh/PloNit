@@ -34,7 +34,7 @@ const ProfileEditPage = () => {
   const [isOpenRegionModal, setOpenRegionModal] = useState(false);
   const [isWeight, setWeight] = useState(User.weight);
   const [isId_1365, setId_1365] = useState(User.id1365);
-
+  console.log(isProfileImage);
   const handleImageUpload = (event: any) => {
     const file = event.target.files[0];
     if (file) {
@@ -76,18 +76,19 @@ const ProfileEditPage = () => {
 
   const SendEdit = () => {
     const formData = new FormData();
+    if (isProfileImage) {
+      formData.append("profileImage", isProfileImage);
+    }
     formData.append("dongCode", isRegionCode);
     formData.append("nickname", isNickname);
     formData.append("weight", isWeight);
     formData.append("region", isRegion);
     formData.append("id1365", isId_1365);
-    if (isProfileImage) {
-      formData.append("profileImage", isProfileImage);
-    }
     formData.append("birth", User.birth);
     formData.append("gender", User.gender);
     formData.append("name", User.name);
 
+    console.log(formData);
     EditProfile(
       accessToken,
       formData,
