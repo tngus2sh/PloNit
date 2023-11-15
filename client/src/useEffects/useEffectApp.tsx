@@ -77,6 +77,9 @@ function useEffectApp() {
           }
 
           if (window.Worker) {
+            const broadcast1 = new BroadcastChannel("timer1");
+            broadcast1.postMessage("test");
+
             workerRef.current = new Worker(
               new URL(`workers/worker.js`, import.meta.url),
             );
