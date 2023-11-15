@@ -39,12 +39,13 @@ const PersonalRanking = () => {
           {isMemberList[2] && <SecondRankingItem data={isMemberList[2]} />}
         </div>
       }
-      {[3, 4, 5].map(
-        (index) =>
-          isMemberList[index] && (
-            <BasicRankingItem key={index} data={isMemberList[index]} />
-          ),
-      )}
+      {isMemberList.map((data, index) => {
+        if (index >= 3) {
+          return <BasicRankingItem key={index} data={data} />;
+        }
+        return null;
+      })}
+      <div style={{ height: "4rem" }}></div>
     </div>
   );
 };

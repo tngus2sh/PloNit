@@ -40,12 +40,13 @@ const CrewTotalRanking = () => {
           {isTotalList[2] && <SecondRankingItem data={isTotalList[2]} />}
         </div>
       }
-      {[3, 4, 5].map(
-        (index) =>
-          isTotalList[index] && (
-            <BasicRankingItem key={index} data={isTotalList[index]} />
-          ),
-      )}
+      {isTotalList.map((data, index) => {
+        if (index >= 3) {
+          return <BasicRankingItem key={index} data={data} />;
+        }
+        return null;
+      })}
+      <div style={{ height: "4rem" }}></div>
     </div>
   );
 };

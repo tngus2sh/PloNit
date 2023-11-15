@@ -4,13 +4,14 @@ import { RankInterface, RankDetailInterface } from "interface/rankInterface";
 // { rankingList }: { crew: RankInterface }
 const SecondRankingItem = ({ data }: { data: RankDetailInterface }) => {
   return (
-    <div className={style.first_ranker}>
+    <div className={style.second_ranker}>
+      <div className={style.rank}>{data.ranking}</div>
       <img
         className={style.user}
         src={data?.crewImage || data?.profileImage}
         alt="몽"
       />
-      <div className={style.nickname}>{data.nickname}</div>
+      <div className={style.nickname}>{data.nickName}</div>
       <div className={style.dist}>
         <span className={style.large}>{data.distance}</span>km
       </div>
