@@ -7,7 +7,7 @@ const SecondRankingItem = ({ data }: { data: RankDetailInterface }) => {
     <div className={style.first_ranker}>
       <img
         className={style.user}
-        src={data.crewImage || data.profileImage}
+        src={data?.crewImage || data?.profileImage}
         alt="몽"
       />
       <div className={style.nickname}>{data.nickname}</div>

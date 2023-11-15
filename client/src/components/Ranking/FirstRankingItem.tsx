@@ -8,7 +8,7 @@ const FirstRankingItem = ({ data }: { data: RankDetailInterface }) => {
       <img className={style.crown} src="/crown.png" alt="왕관" />
       <img
         className={style.user}
-        src={data.crewImage || data.profileImage}
+        src={data?.crewImage || data?.profileImage}
         alt="몽"
       />
 
