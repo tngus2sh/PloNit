@@ -31,7 +31,7 @@ public class CrewRankingQueryRepository {
                         rankingPeriod.endDate))
                 .from(crewRanking)
                 .join(crewRanking.crew, crew)
-                .join(crewRanking.rankingPeriod, rankingPeriod).fetchJoin()
+                .join(crewRanking.rankingPeriod, rankingPeriod)
                 .where(crewRanking.crew.id.in(crewIds))
                 .orderBy(rankingPeriod.endDate.desc())
                 .fetch();

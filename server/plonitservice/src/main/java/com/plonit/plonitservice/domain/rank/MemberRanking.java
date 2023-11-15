@@ -22,11 +22,11 @@ public class MemberRanking {
     private Long id;
     
     @JoinColumn(name = "member_id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
     
     @JoinColumn(name = "ranking_period_id")
-    @ManyToOne
+    @ManyToOne(fetch =FetchType.LAZY)
     private RankingPeriod rankingPeriod;
     
     private Double distance;

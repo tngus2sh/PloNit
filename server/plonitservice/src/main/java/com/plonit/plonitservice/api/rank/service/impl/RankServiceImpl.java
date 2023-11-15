@@ -67,7 +67,7 @@ public class RankServiceImpl implements RankService {
         for (ZSetOperations.TypedTuple<String> sortedSetRangeWithScore : sortedSetRangeWithScores) {
             log.info("sortedSetRangeWithScore = {}, {}", sortedSetRangeWithScore.getScore(), sortedSetRangeWithScore.getValue());
 
-            Long memberId = Long.parseLong(sortedSetRangeWithScore.getValue());
+            Long memberId = Long.valueOf(sortedSetRangeWithScore.getValue());
             Double distance = sortedSetRangeWithScore.getScore();
 
             memberIds.add(memberId);
