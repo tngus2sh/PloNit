@@ -4,7 +4,7 @@ import { RankInterface, CrewRankInterface } from "interface/rankInterface";
 
 const FirstRankingItem = ({ data }: { data: RankInterface }) => {
   const firstItem = data.rankingList[0];
-
+  console.log("firstItem: ", { firstItem });
   return (
     <div className={style.first_ranker}>
       <img className={style.crown} src="/crown.png" alt="왕관" />
