@@ -76,6 +76,42 @@ export async function getMyCrewping(
   await api.get("/crewping").then(success).catch(fail);
 }
 
+// 개인 랭킹 조회
+export async function getMyRanking(
+  accessToken: string,
+  success: (
+    res: AxiosResponse<any, any>,
+  ) =>
+    | AxiosResponse<any, any>
+    | PromiseLike<AxiosResponse<any, any>>
+    | null
+    | undefined
+    | void,
+  fail: (err: any) => PromiseLike<never> | null | undefined | void,
+) {
+  const api = customApiForm("/plonit-service/v1/members");
+  api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
+  await api.get("/member-ranking").then(success).catch(fail);
+}
+
+// 개인 랭킹 조회
+export async function getMyCrewRanking(
+  accessToken: string,
+  success: (
+    res: AxiosResponse<any, any>,
+  ) =>
+    | AxiosResponse<any, any>
+    | PromiseLike<AxiosResponse<any, any>>
+    | null
+    | undefined
+    | void,
+  fail: (err: any) => PromiseLike<never> | null | undefined | void,
+) {
+  const api = customApiForm("/plonit-service/v1/members");
+  api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
+  await api.get("/crew-ranking").then(success).catch(fail);
+}
+
 // 미션 뱃지 조회
 export async function getMissionBadge(
   accessToken: string,

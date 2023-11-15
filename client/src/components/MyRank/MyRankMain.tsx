@@ -1,7 +1,28 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import style from "styles/css/MyRankPage/MyRankMain.module.css";
+import { MyRankInterface } from "interface/rankInterface";
+import { getMyRanking } from "api/lib/members";
 
 const MyRankMain = () => {
+  const accessToken = useSelector((state: any) => state.user.auth.accessToken);
+  const [isMyRanking, setMyRanking] = useState<MyRankInterface[]>([]);
+
+  useEffect(() => {
+    getMyRanking(
+      accessToken,
+      (res) => {
+        console.log("나의 랭킹 조회 성공");
+        console.log(res.data);
+        setMyRanking(res.data.resultBody);
+      },
+      (err) => {
+        console.log("나의 랭킹 조회 실패", err);
+      },
+    );
+  }, []);
+  console.log(isMyRanking);
+
   return (
     <div className={style.mymain}>
       <div className={style.left}>
