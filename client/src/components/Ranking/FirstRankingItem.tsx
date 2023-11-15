@@ -1,5 +1,6 @@
 import React from "react";
 import style from "styles/css/RankingPage/RankingItem.module.css";
+
 import { RankInterface, RankDetailInterface } from "interface/rankInterface";
 
 const FirstRankingItem = ({ data }: { data: RankDetailInterface }) => {

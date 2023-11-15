@@ -12,6 +12,9 @@ const CrewTotalRanking = () => {
   const [isCrewTotalRank, setCrewTotalRank] = useState<RankInterface>(
     {} as RankInterface,
   );
+  const [isCrewTotalList, setCrewTotalList] = useState<RankDetailInterface[]>(
+    [],
+  );
 
   useEffect(() => {
     getCrewTotalRank(
@@ -20,33 +23,28 @@ const CrewTotalRanking = () => {
         console.log("크루 전체 랭킹 조회 성공");
         console.log(res.data);
         setCrewTotalRank(res.data.resultBody);
+        setCrewTotalList(res.data.resultBody.membersRanks);
       },
       (err) => {
         console.log("크루 전체 랭킹 조회 실패", err);
       },
     );
   }, []);
-  console.log(isCrewTotalRank);
+  console.log("crewrank: ", isCrewTotalRank);
+  console.log("crewlist: ", isCrewTotalRank.membersRanks);
+  console.log("crewvalue: ", isCrewTotalRank.membersRanks[0]);
+  console.log("crewvalue: ", isCrewTotalList);
 
   return (
     <div className={style.ranking}>
-      {/* <div className={style.top}>
-        {isCrewTotalRank.rankingList &&
-          isCrewTotalRank.rankingList.length > 1 && (
-            <SecondRankingItem data={isCrewTotalRank} />
-          )}
-        {isCrewTotalRank.rankingList &&
-          isCrewTotalRank.rankingList.length > 0 && (
-            <FirstRankingItem data={isCrewTotalRank} />
-          )}
-        {isCrewTotalRank.rankingList &&
-          isCrewTotalRank.rankingList.length > 2 && (
-            <SecondRankingItem data={isCrewTotalRank} />
-          )}
+      <div className={style.top}>
+        <SecondRankingItem data={isCrewTotalList[1]} />
+        <FirstRankingItem data={isCrewTotalList[0]} />
+        <SecondRankingItem data={isCrewTotalList[2]} />
       </div>
-      <BasicRankingItem />
-      <BasicRankingItem />
-      <BasicRankingItem /> */}
+      {[3, 4, 5].map((index) => (
+        <BasicRankingItem key={index} data={isCrewTotalList[index]} />
+      ))}
     </div>
   );
 };
