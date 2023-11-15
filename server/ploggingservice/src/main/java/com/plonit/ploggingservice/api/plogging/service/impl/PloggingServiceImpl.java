@@ -112,7 +112,8 @@ public class PloggingServiceImpl implements PloggingService {
             log.info("[CREWPING ACCESSTOKEN] = {}", RequestUtils.getToken());
             log.info("[CREWPING_ID] = {}", dto.getCrewpingId());
 
-            Boolean isCrewpingMaster = circuitBreaker.run(
+            CircuitBreaker circuitBreaker1 = circuitBreakerFactory.create("circuitBreaker");
+            Boolean isCrewpingMaster = circuitBreaker1.run(
                     () -> crewpingFeignClient.isCrewpingMaster(
                                     RequestUtils.getToken(),
                                     dto.getCrewpingId())
