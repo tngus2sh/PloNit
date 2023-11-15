@@ -71,8 +71,10 @@ public class PloggingServiceImpl implements PloggingService {
                             .getResultBody()
                     , throwable -> null
             );
+
+            log.info("[NUM == 1] ={}", isCrewpingMaster);
         } else if (num == 2) {
-            circuitBreaker.run(
+            Long answer = circuitBreaker.run(
                     () -> crewpingFeignClient.updateCrewpingStatus(
                                     RequestUtils.getToken(),
                                     UpdateCrewpingStatusReq.builder()
@@ -81,6 +83,7 @@ public class PloggingServiceImpl implements PloggingService {
                             .getResultBody(),
                     throwable -> null
             );
+            log.info("[NUM == 2] ={}", answer);
         }
     }
 
