@@ -5,6 +5,7 @@ import com.plonit.plonitservice.api.badge.service.BadgeService;
 import com.plonit.plonitservice.api.badge.service.dto.*;
 import com.plonit.plonitservice.common.AwsS3Uploader;
 import com.plonit.plonitservice.common.enums.BadgeCode;
+import com.plonit.plonitservice.common.enums.BadgeStatus;
 import com.plonit.plonitservice.common.exception.CustomException;
 import com.plonit.plonitservice.domain.badge.Badge;
 import com.plonit.plonitservice.domain.badge.BadgeCondition;
@@ -63,7 +64,42 @@ public class BadgeServiceImpl implements BadgeService {
         badgeConditionRepository.save(badgeCondition);
 
         // 뱃지 저장
-        badgeRepository.save(BadgeDto.toEntity(badgeDto, badgeCondition, badgeImage));
+        BadgeCode badgeCode = null;
+        if (badgeDto.getStatus().equals(BadgeStatus.COUNT)) {
+            if (badgeDto.getValue() == 1) {
+                badgeCode = BadgeCode.COUNT_1;
+            } else if (badgeDto.getValue() == 10) {
+                badgeCode = BadgeCode.COUNT_10;
+            } else if (badgeDto.getValue() == 50) {
+                badgeCode = BadgeCode.COUNT_50;
+            } else if (badgeDto.getValue() == 100) {
+                badgeCode = BadgeCode.COUNT_100;
+            }
+        } else if (badgeDto.getStatus().equals(BadgeStatus.DISTANCE)) {
+            if (badgeDto.getValue() == 1) {
+                badgeCode = BadgeCode.DISTANCE_1;
+            } else if (badgeDto.getValue() == 10) {
+                badgeCode = BadgeCode.DISTANCE_10;
+            } else if (badgeDto.getValue() == 20) {
+                badgeCode = BadgeCode.DISTANCE_20;
+            } else if (badgeDto.getValue() == 30) {
+                badgeCode = BadgeCode.DISTANCE_30;
+            } else if (badgeDto.getValue() == 50) {
+                badgeCode = BadgeCode.DISTANCE_50;
+            } else if (badgeDto.getValue() == 100) {
+                badgeCode = BadgeCode.DISTANCE_100;
+            }
+        } else if (badgeDto.getStatus().equals(BadgeStatus.RANKING)) {
+            if (badgeDto.getValue() == 1) {
+                badgeCode = BadgeCode.RANK_1;
+            } else if (badgeDto.getValue() == 2) {
+                badgeCode = BadgeCode.RANK_2;
+            } else if (badgeDto.getValue() == 3) {
+                badgeCode = BadgeCode.RANK_3;
+            }
+        }
+
+        badgeRepository.save(BadgeDto.toEntity(badgeDto, badgeCondition, badgeCode, badgeImage));
     }
 
     @Override
