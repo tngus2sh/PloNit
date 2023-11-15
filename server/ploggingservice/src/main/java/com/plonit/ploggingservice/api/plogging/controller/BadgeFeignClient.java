@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-//@FeignClient(name = "badge-service", url = "https://k9c207.p.ssafy.io/api")
-@FeignClient(name = "badge-service", url = "localhost:8000/api")
+@FeignClient(name = "badge-service", url = "https://k9c207.p.ssafy.io/api")
+//@FeignClient(name = "badge-service", url = "localhost:8000/api")
 public interface BadgeFeignClient {
 
     @PostMapping("/plonit-service/v1/badge/member")
