@@ -12,6 +12,7 @@ const PersonalRanking = () => {
   const [isMemberRank, setMemberRank] = useState<RankInterface>(
     {} as RankInterface,
   );
+  const [isMemberList, setMemberList] = useState<RankDetailInterface[]>([]);
 
   useEffect(() => {
     getMemberRank(
@@ -20,6 +21,7 @@ const PersonalRanking = () => {
         console.log("개인 랭킹 조회 성공");
         console.log(res.data);
         setMemberRank(res.data.resultBody); // API 응답으로 rankData 업데이트
+        setMemberList(res.data.resultBody.membersRanks);
       },
       (err) => {
         console.log("개인 랭킹 조회 실패", err);
@@ -27,30 +29,18 @@ const PersonalRanking = () => {
     );
   }, []);
   console.log(isMemberRank);
-  console.log(isMemberRank.rankingList);
-  console.log(isMemberRank.rankingList[0]);
-  console.log(isMemberRank.rankingList.membersRanks);
-  console.log(isMemberRank.rankingList.membersRanks[0]);
-
+  console.log(isMemberRank.membersRanks);
+  console.log(isMemberRank.membersRanks[0]);
   return (
     <div className={style.ranking}>
-<<<<<<< HEAD
       <div className={style.top}>
-        {isMemberRank.rankingList > 1 && (
-=======
-      {/* <div className={style.top}>
-        {isMemberRank.rankingList && isMemberRank.rankingList.length > 1 && (
->>>>>>> 996fd5a654a039da081b416020d1d42b91da8ff0
-          <SecondRankingItem data={isMemberRank} />
-        )}
-        {isMemberRank.rankingList > 0 && (
-          <FirstRankingItem data={isMemberRank} />
-        )}
-        {isMemberRank.rankingList > 2 && (
-          <SecondRankingItem data={isMemberRank} />
-        )}
+        <SecondRankingItem data={isMemberList[1]} />
+        <FirstRankingItem data={isMemberList[0]} />
+        <SecondRankingItem data={isMemberList[2]} />
       </div>
-      <BasicRankingItem /> */}
+      {[3, 4, 5].map((index) => (
+        <BasicRankingItem key={index} data={isMemberList[index]} />
+      ))}
     </div>
   );
 };
