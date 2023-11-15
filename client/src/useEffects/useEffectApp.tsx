@@ -9,8 +9,6 @@ import { rootState } from "store/store";
 import { setWindowHeight, setWindowWidth } from "store/window-slice";
 import * as P from "store/plogging-slice";
 
-import { registerTimer } from "useTimer";
-
 const intervalTime = 2;
 
 function useEffectApp() {
@@ -77,13 +75,6 @@ function useEffectApp() {
                 console.error(error);
               });
           }
-
-          navigator.serviceWorker
-            .register("timer.js")
-            .then((registration) => navigator.serviceWorker.ready)
-            .then((registration) => {
-              registration.active?.postMessage("start1");
-            });
 
           if (window.Worker) {
             workerRef.current = new Worker(
