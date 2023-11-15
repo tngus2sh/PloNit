@@ -172,6 +172,8 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
   useEffect(() => {
     if (toggleSocket) {
       connectToSocket();
+    } else {
+      stompClient.current?.deactivate();
     }
     return () => {
       if (stompClient.current) {
