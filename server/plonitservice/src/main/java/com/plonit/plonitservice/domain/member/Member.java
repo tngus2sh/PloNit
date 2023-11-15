@@ -43,6 +43,8 @@ public class Member extends TimeBaseEntity {
 
     private Long dongCode;
 
+    private Long gugunCode;
+
     private String region;
 
     private float height;
@@ -61,6 +63,7 @@ public class Member extends TimeBaseEntity {
         this.gender = updateMemberDto.getGender();
         this.birth = updateMemberDto.getBirth();
         this.dongCode = updateMemberDto.getDongCode();
+        this.gugunCode = dong.getGugun().getCode();
 
         sb.append(dong.getGugun().getSido().getName() + " " +
                 dong.getGugun().getName() + " " +

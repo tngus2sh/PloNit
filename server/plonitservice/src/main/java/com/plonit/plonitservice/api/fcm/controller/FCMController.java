@@ -1,6 +1,8 @@
 package com.plonit.plonitservice.api.fcm.controller;
 
 import com.plonit.plonitservice.api.crewping.controller.request.SaveCrewpingReq;
+import com.plonit.plonitservice.api.fcm.controller.request.FCMCrewpingReq;
+import com.plonit.plonitservice.api.fcm.controller.request.FCMHelpReq;
 import com.plonit.plonitservice.api.fcm.controller.request.FCMReq;
 import com.plonit.plonitservice.api.fcm.service.FCMService;
 import com.plonit.plonitservice.common.CustomApiResponse;
@@ -29,6 +31,28 @@ public class FCMController {
         log.info(fcmReq.toString());
 
         String message = fcmService.sendNotification(fcmReq);
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+        return message;
+    }
+
+    @PostMapping("/help") // 주변 요청 도움 알림
+    public String sendFcmHelp(@RequestBody FCMHelpReq fcmHelpReq) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+        log.info(fcmHelpReq.toString());
+
+        String message = fcmService.sendHelp(fcmHelpReq);
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+        return message;
+    }
+
+    @PostMapping("/crewping-end")
+    public String sendFcmCrewEnd(@RequestBody FCMCrewpingReq fcmCrewpingReq) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+        log.info(fcmCrewpingReq.toString());
+
+        String message = fcmService.sendCrewEnd(fcmCrewpingReq);
 
         log.info(logCurrent(getClassName(), getMethodName(), END));
         return message;

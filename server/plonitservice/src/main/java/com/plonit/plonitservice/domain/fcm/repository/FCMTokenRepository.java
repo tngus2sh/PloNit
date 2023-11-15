@@ -11,9 +11,9 @@ public class FCMTokenRepository {
 
     private final StringRedisTemplate tokenRedisTemplate;
 
-    public void saveFcmToken(LogInRes logInRes, String fcmToken) {
+    public void saveFcmToken(Long memberId, String fcmToken) {
         tokenRedisTemplate.opsForValue()
-                .set("FCM:" + logInRes.getId(), fcmToken);
+                .set("FCM:" + memberId, fcmToken);
     }
 
     public String getFcmToken(Long memberId) {
