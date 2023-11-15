@@ -89,7 +89,7 @@ export async function getMyRanking(
     | void,
   fail: (err: any) => PromiseLike<never> | null | undefined | void,
 ) {
-  const api = customApiForm("/plonit-service/v1/members");
+  const api = customApiForm("/plonit-service/v1/rank");
   api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
   await api.get("/member-ranking").then(success).catch(fail);
 }
@@ -107,7 +107,7 @@ export async function getMyCrewRanking(
     | void,
   fail: (err: any) => PromiseLike<never> | null | undefined | void,
 ) {
-  const api = customApiForm("/plonit-service/v1/members");
+  const api = customApiForm("/plonit-service/v1/rank");
   api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
   await api.get("/crew-ranking").then(success).catch(fail);
 }
