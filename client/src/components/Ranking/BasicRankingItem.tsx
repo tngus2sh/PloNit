@@ -1,16 +1,16 @@
 import React from "react";
 import style from "styles/css/RankingPage/RankingItem.module.css";
-import { RankInterface, RankDetailInterface } from "interface/rankInterface";
-const BasicRankingItem = ({ data }: { data: RankDetailInterface }) => {
+
+const BasicRankingItem = () => {
   return (
     <div className={style.basic_item}>
-      <div className={style.rank}>{data.ranking}</div>
+      <div className={style.rank}>4</div>
       <div className={style.user}>
-        <img src={data.crewImage || data.profileImage} alt="몽" />
-        <div className={style.username}>{data.nickname}</div>
+        <img src="/metamong.png" alt="몽" />
+        <div className={style.username}>메타몽</div>
       </div>
       <div className={style.dist}>
-        <span className={style.large}>{data.distance}</span>km
+        <span className={style.large}>23.84</span>km
       </div>
     </div>
   );

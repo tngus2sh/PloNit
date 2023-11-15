@@ -38,23 +38,23 @@ const LoginPage = () => {
   const handleLogin = () => {
     window.location.href = KAKAO_AUTH_URL;
   };
-  // const [deviceToken, setDeviceToken] = useState("");
-  // async function getDeviceToken() {
-  //   try {
-  //     const token = await getToken(messaging, {
-  //       vapidKey: process.env.REACT_APP_VAPID_KEY,
-  //     });
-  //     setDeviceToken(token);
-  //     const data = { fcmToken: token };
-  //     dispatch(userActions.fcmHandler(data));
-  //   } catch (error) {
-  //     console.error("디바이스 토큰 발급 실패:", error);
-  //     const data = { fcmToken: "" };
-  //     dispatch(userActions.fcmHandler(data));
-  //   }
-  // }
-  // getDeviceToken();
-  // console.log(deviceToken);
+  const [deviceToken, setDeviceToken] = useState("");
+  async function getDeviceToken() {
+    try {
+      const token = await getToken(messaging, {
+        vapidKey: process.env.REACT_APP_VAPID_KEY,
+      });
+      setDeviceToken(token);
+      const data = { fcmToken: token };
+      dispatch(userActions.fcmHandler(data));
+    } catch (error) {
+      console.error("디바이스 토큰 발급 실패:", error);
+      const data = { fcmToken: "" };
+      dispatch(userActions.fcmHandler(data));
+    }
+  }
+  getDeviceToken();
+  console.log(deviceToken);
   return (
     <div className={style.login}>
       <StyledSwiper
