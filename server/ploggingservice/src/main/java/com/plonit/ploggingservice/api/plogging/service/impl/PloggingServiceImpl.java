@@ -217,6 +217,7 @@ public class PloggingServiceImpl implements PloggingService {
 
             if (isCrewpingMaster) {
                 CrewpingRecordReq crewpingRecordReq = CrewpingRecordReq.builder()
+                        .crewpingId(dto.getCrewpingId())
                         .startDate(plogging.getStartTime())
                         .endDate(endTime)
                         .place(plogging.getPlace())
