@@ -32,19 +32,30 @@ const MissionBadge = () => {
   //   { src: "/metamong.png", alt: "몽" },
   // ];
 
-  const renderImages = () => {
-    if (isMissionBadge.length === 0) {
-      return <div>뱃지가 존재하지 않습니다</div>;
-    } else {
-      return isMissionBadge.map((badge, index) => (
-        <div className={style.imageContainer} key={index}>
-          <img src={badge.image} alt={badge.name} />
-        </div>
-      ));
-    }
-  };
+  // const renderImages = () => {
 
-  return <div className={style.missionBadge}>{renderImages()}</div>;
+  //     return isMissionBadge.map((badge, index) => (
+  //       <div className={style.imageContainer} key={index}>
+  //         <img src={badge.image} alt={badge.name} />
+  //       </div>
+  //     ));
+  //   }
+  // };
+
+  return (
+    <div className={style.missionBadge}>
+      {isMissionBadge ? (
+        <>
+          {isMissionBadge.map((badge, index) => (
+            <div className={style.imageContainer} key={index}>
+              <img src={badge.image} alt={badge.name} />
+            </div>
+          ))}
+        </>
+      ) : (
+        <div>미션 뱃지가 존재하지 않습니다.</div>
+      )}
+    </div>
+  );
 };
-
 export default MissionBadge;
