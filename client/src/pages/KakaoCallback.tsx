@@ -11,6 +11,7 @@ const KakaoCallback = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const fcmToken = useSelector((state: any) => state.user.alarm.fcmToken);
+  console.log(fcmToken);
   const code = new URL(window.location.href).searchParams.get("code");
   const Ref = useRef(false);
 
