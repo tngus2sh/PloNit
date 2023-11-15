@@ -19,7 +19,7 @@ const PageNotFound404 = () => {
           toast.onmouseover = Swal.stopTimer;
           toast.onmouseleave = Swal.resumeTimer;
         },
-        didClose: () => {
+        willClose: () => {
           navigate("/");
         },
       });
@@ -38,7 +38,7 @@ const PageNotFound404 = () => {
   return (
     <div
       style={{
-        height: "calc(100vh - 56px)",
+        height: `calc(100% - 56px)`,
         width: "100%",
         backgroundSize: "contain",
         backgroundRepeat: "no-repeat",
