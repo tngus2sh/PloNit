@@ -20,7 +20,6 @@ const KakaoCallback = () => {
       if (code) {
         login(
           code,
-          fcmToken,
           (res) => {
             console.log("로그인 api 성공");
             console.log(res.data);

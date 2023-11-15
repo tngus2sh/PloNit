@@ -24,7 +24,6 @@ const CrewpingCreatePage = () => {
   const [isCrewpingEndDate, setCrewpingEndDate] = useState("");
   const [isCrewpingMaxPeople, setCrewpingMaxPeople] = useState<number>(0);
 
-  console.log(isCrewpingStartDate, isCrewpingEndDate);
   const onChangeName = (event: any) => {
     setCrewpingName(event.target.value);
   };
@@ -50,7 +49,6 @@ const CrewpingCreatePage = () => {
     formData.append("place", isCrewpingPlace);
     formData.append("introduce", isCrewpingIntroduce);
 
-    console.log(formData);
     if (!isCrewpingName) {
       // alert("크루핑 이름을 입력하세요");
       NotOkModal({ text: "크루핑 이름을 입력하세요." });

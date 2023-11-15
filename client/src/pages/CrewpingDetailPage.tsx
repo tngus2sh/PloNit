@@ -63,8 +63,6 @@ const CrewpingDetailPage = () => {
           (res) => {
             console.log(res.data);
             console.log("크루핑 참가 요청 성공");
-            // alert("크루핑 참가 완료");
-            // OkModal({ text: "크루핑가 완료되었습니다." });
             fetchCrewpingDetailList();
           },
           (err) => {
@@ -99,7 +97,10 @@ const CrewpingDetailPage = () => {
     <div>
       <BackTopBar text={isCrewpingInfo.name} />
       <CrewpingLeader crewping={isCrewpingInfo} />
-      <CrewpingInfo crewping={isCrewpingInfo} />
+      <CrewpingInfo
+        crewping={isCrewpingInfo}
+        fetchCrewpingDetailList={fetchCrewpingDetailList}
+      />
       <CrewpingIntroduce crewping={isCrewpingInfo} />
       {User.info.nickname !== isCrewpingInfo.masterNickname ? (
         isCrewpingInfo.isJoined ? (
