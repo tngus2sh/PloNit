@@ -7,31 +7,31 @@ import Carousel from "components/Home/Carousel";
 import { registerServiceWorker } from "notification";
 import { messaging } from "settingFCM";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
-async function handleAllowNotification() {
-  const permission = await Notification.requestPermission();
+// async function handleAllowNotification() {
+//   const permission = await Notification.requestPermission();
 
-  registerServiceWorker();
-}
+//   registerServiceWorker();
+// }
 
 const HomePage = () => {
   const navigate = useNavigate();
   const isLogined = useSelector((state: any) => state.user.auth.isLogin);
   const User = useSelector((state: any) => state.user.info);
 
-  const [deviceToken, setDeviceToken] = useState("");
-  async function getDeviceToken() {
-    try {
-      const token = await getToken(messaging, {
-        vapidKey: process.env.REACT_APP_VAPID_KEY,
-      });
-      setDeviceToken(token);
-    } catch (error) {
-      console.error("디바이스 토큰 발급 실패:", error);
-      setDeviceToken("");
-    }
-  }
-  getDeviceToken();
-  console.log(deviceToken);
+  // const [deviceToken, setDeviceToken] = useState("");
+  // async function getDeviceToken() {
+  //   try {
+  //     const token = await getToken(messaging, {
+  //       vapidKey: process.env.REACT_APP_VAPID_KEY,
+  //     });
+  //     setDeviceToken(token);
+  //   } catch (error) {
+  //     console.error("디바이스 토큰 발급 실패:", error);
+  //     setDeviceToken("");
+  //   }
+  // }
+  // getDeviceToken();
+  // console.log(deviceToken);
   // useEffect(() => {
   //   if (!isLogined) {
   //     navigate("/login");
