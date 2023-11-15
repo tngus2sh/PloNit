@@ -78,7 +78,12 @@ function useEffectApp() {
               });
           }
 
-          registerTimer();
+          navigator.serviceWorker
+            .register("timer.js")
+            .then((registration) => navigator.serviceWorker.ready)
+            .then((registration) => {
+              registration.active?.postMessage("start1");
+            });
 
           if (window.Worker) {
             workerRef.current = new Worker(
