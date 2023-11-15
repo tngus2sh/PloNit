@@ -26,7 +26,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: "PloNit",
   storage: storage,
-  whitelist: ["user"],
+  whitelist: ["user", "plogging", "crewping"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
