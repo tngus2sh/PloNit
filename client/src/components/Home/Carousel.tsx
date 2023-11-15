@@ -11,6 +11,7 @@ import CrewPloggingCard from "./CrewPloggingCard";
 import styled from "styled-components";
 import { getMyCrewping } from "api/lib/members";
 import { MyCrewpingInterface } from "interface/authInterface";
+import { dividerClasses } from "@mui/material";
 
 const StyledSwiper = styled(Swiper)`
   .swiper-slide-shadow {
@@ -46,20 +47,29 @@ const Carousel = () => {
   }, []);
 
   return (
-    <SwiperContainer>
-      <StyledSwiper
-        effect={"cards"}
-        grabCursor={true}
-        modules={[EffectCards]}
-        className="mySwiper"
-      >
-        {isMyCrewpingList.map((card, index) => (
-          <SwiperSlide key={card.id} className={style.centerSlide}>
-            <CrewPloggingCard card={card} />
-          </SwiperSlide>
-        ))}
-      </StyledSwiper>
-    </SwiperContainer>
+    <div>
+      {isMyCrewpingList ? (
+        <SwiperContainer>
+          <StyledSwiper
+            effect={"cards"}
+            grabCursor={true}
+            modules={[EffectCards]}
+            className="mySwiper"
+          >
+            {isMyCrewpingList.map((card, index) => (
+              <SwiperSlide key={card.id} className={style.centerSlide}>
+                <CrewPloggingCard card={card} />
+              </SwiperSlide>
+            ))}
+          </StyledSwiper>
+        </SwiperContainer>
+      ) : (
+        <div className={style.non_card}>
+          <div className={style.title}>참여한 크루핑이 없습니다</div>
+          <img src="/no_card.png" alt="큐큐" />
+        </div>
+      )}
+    </div>
   );
 };
 
