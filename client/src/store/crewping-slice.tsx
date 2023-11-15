@@ -64,7 +64,19 @@ const crewpingSlice = createSlice({
     setMembers: (state, action: PayloadAction<Message>) => {
       const newMessage = action.payload;
       if (newMessage.members) {
-        state.members = newMessage.members;
+        const { members } = newMessage;
+        const includeMyInfo = members.some((member) => {
+          return member.nickName === state.senderId;
+        });
+
+        if (includeMyInfo) {
+          state.members = members;
+        } else {
+          state.members = [
+            { nickName: state.senderId, profileImage: state.profileImage },
+            ...members,
+          ];
+        }
       }
     },
   },
