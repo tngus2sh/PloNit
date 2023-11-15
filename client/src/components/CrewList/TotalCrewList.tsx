@@ -78,6 +78,7 @@ const TotalCrewList = () => {
           className={style.inputBox}
           value={isSearchWord}
           onChange={handleSearchInputChange}
+          placeholder="크루를 검색해 보세요 🔎"
         />
       </div>
       {totalCrewList ? (
