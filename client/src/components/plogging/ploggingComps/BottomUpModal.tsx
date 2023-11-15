@@ -62,6 +62,10 @@ const BottomUpModal: React.FC<IBottomUpModal> = ({
     } else {
       enableScroll();
     }
+
+    return () => {
+      enableScroll();
+    };
   }, [show]);
 
   return (

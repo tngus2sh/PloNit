@@ -54,6 +54,10 @@ const CenterModal: React.FC<ICenterModal> = ({ show, setShow, children }) => {
     } else {
       enableScroll();
     }
+
+    return () => {
+      enableScroll();
+    };
   }, [show]);
 
   return (
