@@ -71,7 +71,6 @@ public class FCMService{
         FirebaseMessaging.getInstance().sendAsync(message);
     }
 
-    @Transactional
     public String sendHelp(FCMHelpReq fcmHelpReq) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
         Long memberId = RequestUtils.getMemberId();
