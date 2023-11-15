@@ -1,9 +1,6 @@
 package com.plonit.ploggingservice.api.plogging.service.impl;
 
-import com.plonit.ploggingservice.api.plogging.controller.BadgeFeignClient;
-import com.plonit.ploggingservice.api.plogging.controller.CrewpingFeignClient;
-import com.plonit.ploggingservice.api.plogging.controller.MemberFeignClient;
-import com.plonit.ploggingservice.api.plogging.controller.SidoGugunFeignClient;
+import com.plonit.ploggingservice.api.plogging.controller.*;
 import com.plonit.ploggingservice.api.plogging.controller.request.*;
 import com.plonit.ploggingservice.api.plogging.controller.response.*;
 import com.plonit.ploggingservice.api.plogging.service.PloggingService;
@@ -20,7 +17,7 @@ import com.plonit.ploggingservice.domain.plogging.Plogging;
 import com.plonit.ploggingservice.domain.plogging.PloggingHelp;
 import com.plonit.ploggingservice.domain.plogging.PloggingPicture;
 import com.plonit.ploggingservice.domain.plogging.repository.*;
-import com.plonit.plonitservice.common.util.RequestUtils;
+import com.plonit.ploggingservice.common.util.RequestUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
@@ -49,6 +46,7 @@ public class PloggingServiceImpl implements PloggingService {
     private final CrewpingFeignClient crewpingFeignClient;
     private final MemberFeignClient memberFeignClient;
     private final BadgeFeignClient badgeFeignClient;
+    private final NotiFeignClient notiFeignClient;
     private final CircuitBreakerFactory circuitBreakerFactory;
     private final KakaoPlaceUtils kakaoPlaceUtils;
     private final AwsS3Uploader awsS3Uploader;
@@ -290,7 +288,18 @@ public class PloggingServiceImpl implements PloggingService {
         if (sidoGugunCodeRes == null) {
             throw new CustomException(INVALID_PLACE_REQUEST);
         }
-        
+
+        // 주변 유저에게 도움 알림 보내기
+        Long notiId = circuitBreaker.run(
+                () -> notiFeignClient.sendHelpNoti(
+                                RequestUtils.getToken(),
+                                SendNotiReq.builder()
+                                        .gugunCode(sidoGugunCodeRes.getGugunCode())
+                                        .build())
+                        .getResultBody()
+                , throwable -> null
+        );
+
         PloggingHelp ploggingHelp = HelpPloggingDto.toEntity(dto, sidoGugunCodeRes.getGugunCode(), address.getAddress_name(), imageUrl);
         return ploggingHelpRepository.save(ploggingHelp).getId();
     }

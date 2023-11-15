@@ -1,4 +1,4 @@
-package com.plonit.plonitservice.common.util;
+package com.plonit.ploggingservice.common.util;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
