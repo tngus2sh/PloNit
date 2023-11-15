@@ -192,7 +192,8 @@ const PloggingVolunteerInput = () => {
           value={name}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             const { value } = event.target;
-            if (value.length <= 30) {
+            const regex = /^[ㄱ-ㅎㅏ-ㅣ가-힣]*$/;
+            if (value.length <= 30 && regex.test(value)) {
               setName(value);
             }
           }}
