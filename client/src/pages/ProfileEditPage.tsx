@@ -26,7 +26,7 @@ const ProfileEditPage = () => {
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const User = useSelector((state: any) => state.user.info);
 
-  const [isProfileImage, setProfileImage] = useState("");
+  const [isProfileImage, setProfileImage] = useState<Blob | string>("");
   console.log(isProfileImage);
   const [isNickname, setNickname] = useState(User.nickname);
   const [isAllowNickname, setAllowNickname] = useState(false);
@@ -122,12 +122,13 @@ const ProfileEditPage = () => {
           <div className={style.profile_img}>
             <img
               src={
-                isProfileImage === User.profileImage
-                  ? isProfileImage
-                  : URL.createObjectURL(isProfileImage)
+                isProfileImage instanceof Blob
+                  ? URL.createObjectURL(isProfileImage)
+                  : (isProfileImage as string)
               }
               alt="프로필 이미지"
             />
+
             <label className={style.img_edit_icon} htmlFor="input_file">
               <Icon
                 icon="bi:pencil"
