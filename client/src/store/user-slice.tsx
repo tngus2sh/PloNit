@@ -40,7 +40,7 @@ const userSlice = createSlice({
       state.auth.refreshToken = action.payload.refreshToken;
     },
     logout: (state) => {
-      // localStorage.removeItem("persist:PloNit");
+      localStorage.removeItem("persist:PloNit");
       localStorage.clear();
     },
     saveMemberInfo(state, action) {
