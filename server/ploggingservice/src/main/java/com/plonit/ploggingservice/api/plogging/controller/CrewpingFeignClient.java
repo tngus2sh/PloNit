@@ -5,16 +5,13 @@ import com.plonit.ploggingservice.api.plogging.controller.request.CrewpingRecord
 import com.plonit.ploggingservice.api.plogging.controller.request.UpdateCrewpingStatusReq;
 import com.plonit.ploggingservice.common.CustomApiResponse;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 @FeignClient(name = "crewping-service", url = "https://k9c207.p.ssafy.io/api")
 public interface CrewpingFeignClient {
 
-    @PostMapping("/plonit-service/v1/crewping/master")
-    CustomApiResponse<Boolean> isCrewpingMaster(@RequestBody CheckCrewpingMaster checkCrewpingMaster);
+    @GetMapping("/plonit-service/v1/crewping/master/{crewping-id}")
+    CustomApiResponse<Boolean> isCrewpingMaster(@PathVariable(name = "crewping-id") Long crewpingId);
 
     @PostMapping("/plonit-service/v1/crewping/record")
     CustomApiResponse<Long> saveCrewpingRecord(@RequestBody CrewpingRecordReq crewpingRecordReq);

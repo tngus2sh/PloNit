@@ -118,10 +118,7 @@ public class PloggingServiceImpl implements PloggingService {
         // 크루핑이면서 크루핑장일 때 크루핑 상태 변경 요청
         if (dto.getType().equals(Type.CREWPING)) {
             Boolean isCrewpingMaster = circuitBreaker.run(
-                    () -> crewpingFeignClient.isCrewpingMaster(CheckCrewpingMaster.builder()
-                                    .memberKey(dto.getMemberKey())
-                                    .crewpingId(dto.getCrewpingId())
-                                    .build())
+                    () -> crewpingFeignClient.isCrewpingMaster(dto.getCrewpingId())
                             .getResultBody(),
                     throwable -> null
             );
@@ -183,10 +180,7 @@ public class PloggingServiceImpl implements PloggingService {
             CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
 
             Boolean isCrewpingMaster = circuitBreaker.run(
-                    () -> crewpingFeignClient.isCrewpingMaster(CheckCrewpingMaster.builder()
-                                    .memberKey(dto.getMemberKey())
-                                    .crewpingId(dto.getCrewpingId())
-                                    .build())
+                    () -> crewpingFeignClient.isCrewpingMaster(dto.getCrewpingId())
                             .getResultBody()
                     , throwable -> null
             );
