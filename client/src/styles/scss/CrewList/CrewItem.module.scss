@@ -1,38 +1,59 @@
 @import "../styles";
 
 .crew_Item {
-  margin: 1rem;
-  padding: 0.7rem 1rem;
-  border: 1px solid $darkgray;
-  border-radius: 0.5rem;
+  background-color: #f7f7f9;
+  width: 90%;
+  margin: 1rem 0.7rem;
+  padding: 0.7rem 0.4rem;
+  border-radius: 0.8rem;
   display: flex;
-  img {
-    width: 3.5rem;
-    height: 3.5rem;
-    border-radius: 50%;
+  align-items: center;
+  box-shadow: 0px 0px 7px #dedede;
+
+  .crew_image_container {
+    width: 5rem;
+    img {
+      width: 3.3rem;
+      height: 3.3rem;
+      border-radius: 50%;
+    }
   }
 
-  .crew_content {
-    text-align: left;
-    margin-left: 0.5rem;
-    width: 100%;
-    .crew_title {
-      font-weight: 700;
-      font-size: 1.2rem;
-    }
-    .first {
-      margin-top: 0.3rem;
-      display: flex;
-      font-size: 0.9rem;
-      color: $darkgray;
+  .crew_info_container {
+    flex: auto;
 
-      .place {
-        flex: 4;
-        display: flex;
+    .crew_content {
+      text-align: left;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      .title_container {
+        margin-bottom: 0.4rem;
+        .crew_title {
+          font-weight: 700;
+          font-size: 1.3rem;
+        }
       }
-      .people {
-        flex: 2;
+
+      .people_container {
         display: flex;
+        align-items: center;
+        color: $darkgray;
+        .people {
+          display: flex;
+        }
+      }
+
+      .place_container {
+        display: flex;
+        align-items: center;
+        margin-top: 0.2rem;
+        color: $darkgray;
+        .place {
+          display: flex;
+        }
       }
     }
   }

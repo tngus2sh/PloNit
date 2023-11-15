@@ -20,6 +20,23 @@ const MyCrewList = () => {
         console.log("크루 목록조회 성공");
       },
       (err) => {
+        const response = [
+          {
+            id: 1,
+            name: "광주 싸피 크루",
+            crewImage: "/test.png",
+            region: "광주광역시 광산구",
+            cntPeople: 12,
+          },
+          {
+            id: 2,
+            name: "SSAFY",
+            crewImage: "/test.png",
+            region: "광주광역시 광산구",
+            cntPeople: 4,
+          },
+        ];
+        setMyCrewList(response);
         console.log("크루 목록조회 실패", err);
       },
     );
