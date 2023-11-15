@@ -24,21 +24,19 @@ public class BadgeQueryServiceImpl implements BadgeQueryService {
     private final MemberBadgeQueryRepository memberBadgeQueryRepository;
 
     @Override
-    public FindBadgeRes findMissionBadge(Long memberKey) {
+    public List<FindBadgeRes> findMissionBadge(Long memberKey) {
         List<BadgeStatus> statusList = new ArrayList<>();
         statusList.add(BadgeStatus.COUNT);
         statusList.add(BadgeStatus.DISTANCE);
 
-        return memberBadgeQueryRepository.findBadge(memberKey, statusList)
-                .orElseThrow(() -> new CustomException(INVALID_FIELDS_REQUEST));
+        return memberBadgeQueryRepository.findBadge(memberKey, statusList);
     }
 
     @Override
-    public FindBadgeRes findRankingBadge(Long memberKey) {
+    public List<FindBadgeRes> findRankingBadge(Long memberKey) {
         List<BadgeStatus> statusList = new ArrayList<>();
         statusList.add(BadgeStatus.RANKING);
 
-        return memberBadgeQueryRepository.findBadge(memberKey, statusList)
-                .orElseThrow(() -> new CustomException(INVALID_FIELDS_REQUEST));
+        return memberBadgeQueryRepository.findBadge(memberKey, statusList);
     }
 }

@@ -33,8 +33,8 @@ public class MemberBadgeQueryRepository {
                 .fetchOne());
     }
 
-    public Optional<FindBadgeRes> findBadge(Long memberKey, List<BadgeStatus> status) {
-        return Optional.ofNullable(queryFactory
+    public List<FindBadgeRes> findBadge(Long memberKey, List<BadgeStatus> status) {
+        return queryFactory
                 .select(constructor(FindBadgeRes.class,
                         badge.code,
                         badge.image,
@@ -45,6 +45,6 @@ public class MemberBadgeQueryRepository {
                 .join(badge.badgeCondition, badgeCondition)
                 .where(memberBadge.member.id.eq(memberKey)
                         .and(badgeCondition.status.in(status)))
-                .fetchOne());
+                .fetch();
     }
 }
