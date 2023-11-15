@@ -228,17 +228,9 @@ public class PloggingServiceImpl implements PloggingService {
                         .activeTime(totalTime)
                         .build();
 
-                Long crewpingId = circuitBreaker.run(
-                        () -> crewpingFeignClient.saveCrewpingRecord(
-                                        RequestUtils.getToken(),
-                                        crewpingRecordReq)
-                                .getResultBody(),
-                        throwable -> null // 에러 발생시 null 반환
-                );
-
-                if (crewpingId == null) {
-                    throw new CustomException(INVALID_CREWPINGID_REQUEST);
-                }
+                crewpingFeignClient.saveCrewpingRecord(
+                        RequestUtils.getToken(),
+                        crewpingRecordReq);
             }
 
         }
