@@ -6,7 +6,6 @@ import HomeBanner from "components/Home/HomeBanner";
 import Carousel from "components/Home/Carousel";
 import { registerServiceWorker } from "notification";
 import { messaging } from "settingFCM";
-import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 async function handleAllowNotification() {
   const permission = await Notification.requestPermission();
@@ -18,22 +17,22 @@ const HomePage = () => {
   const navigate = useNavigate();
   const isLogined = useSelector((state: any) => state.user.auth.isLogin);
   const User = useSelector((state: any) => state.user.info);
-  // useEffect(() => {
-  //   if (!isLogined) {
-  //     navigate("/login");
-  //   }
-  // }, []);
+
   const [deviceToken, setDeviceToken] = useState("");
   async function getDeviceToken() {
     const token = await getToken(messaging, {
-      vapidKey:
-        "BI22DGeYupjm6S_19aO8XMQnZD_8o22SfACFvaGUz7pLuxVZ5nlmce4XDXgNoCTsYe18-HER_Y0vyyftyHXvjvE",
+      vapidKey: process.env.REACT_APP_VAPID_KEY,
     });
 
     setDeviceToken(token);
   }
   getDeviceToken();
   console.log(deviceToken);
+  // useEffect(() => {
+  //   if (!isLogined) {
+  //     navigate("/login");
+  //   }
+  // }, []);
   return (
     <div>
       <LogoTopBar />

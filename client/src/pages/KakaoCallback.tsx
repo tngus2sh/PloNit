@@ -11,9 +11,9 @@ import { registerServiceWorker } from "notification";
 import { messaging } from "settingFCM";
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
+
 async function handleAllowNotification() {
   const permission = await Notification.requestPermission();
-
   registerServiceWorker();
 }
 
@@ -26,11 +26,10 @@ const KakaoCallback = () => {
   const [deviceToken, setDeviceToken] = useState("");
   async function getDeviceToken() {
     const token = await getToken(messaging, {
-      vapidKey:
-        "BI22DGeYupjm6S_19aO8XMQnZD_8o22SfACFvaGUz7pLuxVZ5nlmce4XDXgNoCTsYe18-HER_Y0vyyftyHXvjvE",
+      vapidKey: process.env.REACT_APP_VAPID_KEY,
     });
 
-    setDeviceToken(deviceToken);
+    setDeviceToken(token);
   }
   getDeviceToken();
   console.log(deviceToken);
@@ -39,6 +38,7 @@ const KakaoCallback = () => {
       if (code) {
         login(
           code,
+          deviceToken,
           (res) => {
             console.log("로그인 api 성공");
             console.log(res.data);
