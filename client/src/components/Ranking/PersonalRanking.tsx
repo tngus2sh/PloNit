@@ -19,7 +19,7 @@ const PersonalRanking = () => {
       (res) => {
         console.log("개인 랭킹 조회 성공");
         console.log(res.data);
-        setMemberRank(res.data.resultBody);
+        setMemberRank(res.data.resultBody); // API 응답으로 rankData 업데이트
       },
       (err) => {
         console.log("개인 랭킹 조회 실패", err);
@@ -31,9 +31,15 @@ const PersonalRanking = () => {
   return (
     <div className={style.ranking}>
       <div className={style.top}>
-        <SecondRankingItem />
-        <FirstRankingItem />
-        <SecondRankingItem />
+        {isMemberRank.rankingList && isMemberRank.rankingList.length > 1 && (
+          <SecondRankingItem data={isMemberRank} />
+        )}
+        {isMemberRank.rankingList && isMemberRank.rankingList.length > 0 && (
+          <FirstRankingItem data={isMemberRank} />
+        )}
+        {isMemberRank.rankingList && isMemberRank.rankingList.length > 2 && (
+          <SecondRankingItem data={isMemberRank} />
+        )}
       </div>
       <BasicRankingItem />
     </div>
