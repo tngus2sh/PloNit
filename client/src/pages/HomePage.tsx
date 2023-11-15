@@ -20,11 +20,15 @@ const HomePage = () => {
 
   const [deviceToken, setDeviceToken] = useState("");
   async function getDeviceToken() {
-    const token = await getToken(messaging, {
-      vapidKey: process.env.REACT_APP_VAPID_KEY,
-    });
-
-    setDeviceToken(token);
+    try {
+      const token = await getToken(messaging, {
+        vapidKey: process.env.REACT_APP_VAPID_KEY,
+      });
+      setDeviceToken(token);
+    } catch (error) {
+      console.error("디바이스 토큰 발급 실패:", error);
+      setDeviceToken("");
+    }
   }
   getDeviceToken();
   console.log(deviceToken);
