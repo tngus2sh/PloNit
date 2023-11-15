@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AddressModal from "components/CrewpingCreate/AddressModal";
 import style from "styles/css/CrewpingCreatePage.module.css";
 
@@ -30,6 +30,22 @@ const CrewpingAddress = ({ setCrewpingPlace }: any) => {
     setAddressInput(addressData.roadAddress || addressData.jibunAddress || "");
     setAddressModalOpen(false);
   };
+  useEffect(() => {
+    const body = document.body;
+
+    // 모달이 열려 있을 때 스크롤 비활성화
+    if (isAddressModalOpen) {
+      body.style.overflow = "hidden";
+    } else {
+      // 모달이 닫혔을 때 스크롤 활성화
+      body.style.overflow = "auto";
+    }
+
+    // 효과 정리
+    return () => {
+      body.style.overflow = "auto";
+    };
+  }, [isAddressModalOpen]);
 
   return (
     <div className={style.address_area}>

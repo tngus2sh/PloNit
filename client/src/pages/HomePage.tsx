@@ -8,6 +8,7 @@ import { registerServiceWorker } from "notification";
 import { messaging } from "settingFCM";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import { alarm } from "api/lib/auth";
+import style from "styles/css/HomePage/Carousel.module.css";
 
 const HomePage = () => {
   const navigate = useNavigate();

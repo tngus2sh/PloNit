@@ -28,7 +28,10 @@ const MissionBadge = () => {
         <>
           {isMissionBadge.map((badge, index) => (
             <div className={style.imageContainer} key={index}>
-              <img src={badge.image} alt="" />
+              <img
+                src={badge.isMine ? badge.image : "/non_badge.png"}
+                alt="뱃지"
+              />
             </div>
           ))}
         </>

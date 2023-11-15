@@ -1,0 +1,14 @@
+.non_card {
+  width: 20rem;
+  border: 1px solid black;
+  margin: 0 auto;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  .title {
+    margin: 2rem 0;
+    font-size: 2rem;
+  }
+  img {
+    width: 100%;
+  }
+}
