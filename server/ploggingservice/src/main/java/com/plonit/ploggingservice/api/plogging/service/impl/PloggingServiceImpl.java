@@ -6,6 +6,7 @@ import com.plonit.ploggingservice.api.plogging.controller.response.*;
 import com.plonit.ploggingservice.api.plogging.service.PloggingService;
 import com.plonit.ploggingservice.api.plogging.service.dto.*;
 import com.plonit.ploggingservice.common.AwsS3Uploader;
+import com.plonit.ploggingservice.common.CustomApiResponse;
 import com.plonit.ploggingservice.common.enums.Finished;
 import com.plonit.ploggingservice.common.enums.Time;
 import com.plonit.ploggingservice.common.enums.Type;
@@ -64,15 +65,19 @@ public class PloggingServiceImpl implements PloggingService {
         CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
 
         if (num == 1) {
-            Boolean isCrewpingMaster = circuitBreaker.run(
-                    () -> crewpingFeignClient.isCrewpingMaster(
-                                    RequestUtils.getToken(),
-                                    29L)
-                            .getResultBody()
-                    , throwable -> null
-            );
+//            Boolean isCrewpingMaster = circuitBreaker.run(
+//                    () -> crewpingFeignClient.isCrewpingMaster(
+//                                    RequestUtils.getToken(),
+//                                    29L)
+//                            .getResultBody()
+//                    , throwable -> null
+//            );
 
-            log.info("[NUM == 1] ={}", isCrewpingMaster);
+            CustomApiResponse<Boolean> crewpingMaster = crewpingFeignClient.isCrewpingMaster(
+                    RequestUtils.getToken(),
+                    29L);
+
+            log.info("[NUM == 1] ={}", crewpingMaster.getResultBody().toString());
         } else if (num == 2) {
             Long answer = circuitBreaker.run(
                     () -> crewpingFeignClient.updateCrewpingStatus(
@@ -140,28 +145,21 @@ public class PloggingServiceImpl implements PloggingService {
             log.info("[CREWPING ACCESSTOKEN] = {}", RequestUtils.getToken());
             log.info("[CREWPING_ID] = {}", dto.getCrewpingId());
 
-            Boolean isCrewpingMaster = circuitBreaker.run(
-                    () -> crewpingFeignClient.isCrewpingMaster(
-                                    RequestUtils.getToken(),
-                                    dto.getCrewpingId())
-                            .getResultBody(),
-                    throwable -> null
-            );
+            Boolean isCrewpingMaster = crewpingFeignClient.isCrewpingMaster(
+                            RequestUtils.getToken(),
+                            dto.getCrewpingId())
+                    .getResultBody();
 
             if (isCrewpingMaster == null) {
                 throw new CustomException(INVALID_FIELDS_REQUEST);
             }
 
             if (isCrewpingMaster) {
-                circuitBreaker.run(
-                        () -> crewpingFeignClient.updateCrewpingStatus(
-                                        RequestUtils.getToken(),
-                                        UpdateCrewpingStatusReq.builder()
-                                                .crewpingId(dto.getCrewpingId())
-                                                .build())
-                                .getResultBody(),
-                        throwable -> null
-                );
+                crewpingFeignClient.updateCrewpingStatus(
+                                RequestUtils.getToken(),
+                                UpdateCrewpingStatusReq.builder()
+                                        .crewpingId(dto.getCrewpingId())
+                                        .build());
             }
         }
 

@@ -6,7 +6,8 @@ import com.plonit.ploggingservice.common.CustomApiResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name = "plonit-service")
+//@FeignClient(name = "crewping-service", url = "localhost:8000/api")
+@FeignClient(name = "crewping-service", url = "https://k9c207.p.ssafy.io/api")
 public interface CrewpingFeignClient {
 
     @GetMapping("/plonit-service/v1/crewping/master/{crewping-id}")
@@ -15,6 +16,6 @@ public interface CrewpingFeignClient {
     @PostMapping("/plonit-service/v1/crewping/record")
     CustomApiResponse<Long> saveCrewpingRecord(@RequestHeader("accessToken") String token, @RequestBody CrewpingRecordReq crewpingRecordReq);
 
-    @PatchMapping("/plonit-service/v1/crewping/status")
-    CustomApiResponse<Long> updateCrewpingStatus(@RequestHeader("accessToekn") String token, @RequestBody UpdateCrewpingStatusReq updateCrewpingStatusReq);
+    @PutMapping("/plonit-service/v1/crewping/status")
+    CustomApiResponse<Long> updateCrewpingStatus(@RequestHeader("accessToken") String token, @RequestBody UpdateCrewpingStatusReq updateCrewpingStatusReq);
 }

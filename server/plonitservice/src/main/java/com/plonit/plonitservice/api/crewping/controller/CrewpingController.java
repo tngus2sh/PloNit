@@ -160,7 +160,7 @@ public class CrewpingController {
     }
 
     // 크루핑 진행 중 업데이트
-    @PatchMapping("/status")
+    @PutMapping("/status")
     public CustomApiResponse<Long> updateCrewpingStatus(@RequestBody UpdateCrewpingStatusReq request) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
         log.info("UpdateCrewpingStatus={}", request);
