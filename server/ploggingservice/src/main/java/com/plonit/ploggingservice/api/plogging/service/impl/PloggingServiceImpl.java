@@ -206,15 +206,10 @@ public class PloggingServiceImpl implements PloggingService {
         /* 크루핑시에 크루핑 테이블에 내용 저장 */
 
         if (plogging.getType().equals(Type.CREWPING)) {
-            CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
-
-            Boolean isCrewpingMaster = circuitBreaker.run(
-                    () -> crewpingFeignClient.isCrewpingMaster(
-                                    RequestUtils.getToken(),
-                                    dto.getCrewpingId())
-                            .getResultBody()
-                    , throwable -> null
-            );
+            Boolean isCrewpingMaster = crewpingFeignClient.isCrewpingMaster(
+                            RequestUtils.getToken(),
+                            dto.getCrewpingId())
+                    .getResultBody();
 
             if (isCrewpingMaster == null) {
                 throw new CustomException(INVALID_FIELDS_REQUEST);
