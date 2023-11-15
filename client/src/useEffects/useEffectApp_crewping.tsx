@@ -118,7 +118,7 @@ function useEffectApp_Crewping() {
     if (crewpingEnd) {
       dispatch(P.setIsEnd(true));
       navigate("/plogging/complete");
-      stompClient.current?.deactivate();
+      setToggleSocket(false);
       if (interval.current) {
         clearInterval(interval.current);
       }
