@@ -292,8 +292,6 @@ export async function getMyPloggingDetail(
   await api.get(`/${crewId}`).then(success).catch(fail);
 }
 
-// --- 미완성 인 것들 ---
-
 // 봉사 정보 조회
 const searchVolInfo = ({
   accessToken,
