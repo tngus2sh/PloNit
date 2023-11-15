@@ -6,7 +6,7 @@ import com.plonit.ploggingservice.common.CustomApiResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name = "crewping-service", url = "https://k9c207.p.ssafy.io/api")
+@FeignClient(name = "plonit-service", url = "https://k9c207.p.ssafy.io/api")
 public interface CrewpingFeignClient {
 
     @GetMapping("/plonit-service/v1/crewping/master/{crewping-id}")
