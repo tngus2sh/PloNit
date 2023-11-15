@@ -18,6 +18,7 @@ public class FindBadgeRes {
 
     private BadgeStatus status;
 
-    private Long memberBadgeId; // null : 갖고 있지 않음
+    private Long badgeId; // null : 갖고 있지 않음
 
+    private Boolean isMine;
 }

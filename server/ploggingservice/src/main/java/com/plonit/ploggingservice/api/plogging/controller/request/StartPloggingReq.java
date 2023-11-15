@@ -14,7 +14,10 @@ import javax.validation.constraints.Positive;
 @RequiredArgsConstructor
 @Schema(description = "플로깅 시작 request")
 public class StartPloggingReq {
-    
+
+    @Schema(description = "크루핑 id")
+    private Long crewpingId;
+
     @Schema(description = "플로깅 유형 / CREWPING, IND, VOL ")
     @NotNull(message = "유형은 필수 입력값입니다.")
     private Type type;

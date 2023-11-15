@@ -5,6 +5,7 @@ import com.plonit.plonitservice.api.badge.service.BadgeService;
 import com.plonit.plonitservice.api.badge.service.dto.*;
 import com.plonit.plonitservice.common.AwsS3Uploader;
 import com.plonit.plonitservice.common.enums.BadgeCode;
+import com.plonit.plonitservice.common.enums.BadgeStatus;
 import com.plonit.plonitservice.common.exception.CustomException;
 import com.plonit.plonitservice.domain.badge.Badge;
 import com.plonit.plonitservice.domain.badge.BadgeCondition;
@@ -45,31 +46,60 @@ public class BadgeServiceImpl implements BadgeService {
 
     @Override
     @Transactional
-    public void saveBadge(List<BadgeDto> badgeDtos) {
+    public void saveBadge(BadgeDto badgeDto) {
 
-        List<BadgeCondition> badgeConditions = new ArrayList<>();
-        List<Badge> badges = new ArrayList<>();
-        
-        for (BadgeDto badgeDto : badgeDtos) {
-            String badgeImage = null;
-            if (badgeDto.getImage() != null) {
-                try {
-                    badgeImage = awsS3Uploader.uploadFile(badgeDto.getImage(), "badge/badgeImage");
-                } catch (IOException e) {
-                    throw new CustomException(INVALID_FIELDS_REQUEST);
-                }
+        String badgeImage = null;
+        if (badgeDto.getImage() != null) {
+            try {
+                badgeImage = awsS3Uploader.uploadFile(badgeDto.getImage(), "badge/badgeImage");
+            } catch (IOException e) {
+                throw new CustomException(INVALID_FIELDS_REQUEST);
             }
-            // 뱃지 상태 저장
-            BadgeCondition badgeCondition = BadgeDto.toEntity(badgeDto);
-            badgeConditions.add(badgeCondition);
-            
-            // 뱃지 저장
-            badges.add(BadgeDto.toEntity(badgeDto, badgeCondition, badgeImage));
-            
         }
-        
-        badgeConditionRepository.saveAll(badgeConditions);
-        badgeRepository.saveAll(badges);
+
+        log.info("[REQ_IMAGE] = {}", badgeDto.getImage());
+        log.info("[IMAGE] = {}", badgeImage);
+        // 뱃지 상태 저장
+        BadgeCondition badgeCondition = BadgeDto.toEntity(badgeDto);
+        badgeConditionRepository.save(badgeCondition);
+
+        // 뱃지 저장
+        BadgeCode badgeCode = null;
+        if (badgeDto.getStatus().equals(BadgeStatus.COUNT)) {
+            if (badgeDto.getValue() == 1) {
+                badgeCode = BadgeCode.COUNT_1;
+            } else if (badgeDto.getValue() == 10) {
+                badgeCode = BadgeCode.COUNT_10;
+            } else if (badgeDto.getValue() == 50) {
+                badgeCode = BadgeCode.COUNT_50;
+            } else if (badgeDto.getValue() == 100) {
+                badgeCode = BadgeCode.COUNT_100;
+            }
+        } else if (badgeDto.getStatus().equals(BadgeStatus.DISTANCE)) {
+            if (badgeDto.getValue() == 1) {
+                badgeCode = BadgeCode.DISTANCE_1;
+            } else if (badgeDto.getValue() == 10) {
+                badgeCode = BadgeCode.DISTANCE_10;
+            } else if (badgeDto.getValue() == 20) {
+                badgeCode = BadgeCode.DISTANCE_20;
+            } else if (badgeDto.getValue() == 30) {
+                badgeCode = BadgeCode.DISTANCE_30;
+            } else if (badgeDto.getValue() == 50) {
+                badgeCode = BadgeCode.DISTANCE_50;
+            } else if (badgeDto.getValue() == 100) {
+                badgeCode = BadgeCode.DISTANCE_100;
+            }
+        } else if (badgeDto.getStatus().equals(BadgeStatus.RANKING)) {
+            if (badgeDto.getValue() == 1) {
+                badgeCode = BadgeCode.RANK_1;
+            } else if (badgeDto.getValue() == 2) {
+                badgeCode = BadgeCode.RANK_2;
+            } else if (badgeDto.getValue() == 3) {
+                badgeCode = BadgeCode.RANK_3;
+            }
+        }
+
+        badgeRepository.save(BadgeDto.toEntity(badgeDto, badgeCondition, badgeCode, badgeImage));
     }
 
     @Override

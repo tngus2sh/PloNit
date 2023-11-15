@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Tag(name = "Badge API Controller", description = "Badge API Document")
 @RestController
@@ -71,26 +72,26 @@ public class BadgeApiController {
 
     @Operation(summary = "미션 배지 조회", description = "미션 배지를 조회한다.")
     @GetMapping("/mission-badge")
-    public CustomApiResponse<FindBadgeRes> findMissionBadge(
+    public CustomApiResponse<List<FindBadgeRes>> findMissionBadge(
             HttpServletRequest servletRequest
     ) {
         log.info("findMissionBadge");
         Long memberKey = RequestUtils.getMemberKey(servletRequest);
 
-        FindBadgeRes badge = badgeQueryService.findMissionBadge(memberKey);
+        List<FindBadgeRes> missionBadge = badgeQueryService.findMissionBadge(memberKey);
 
-        return CustomApiResponse.ok(badge);
+        return CustomApiResponse.ok(missionBadge);
     }
 
     @Operation(summary = "랭킹 배지 조회", description = "랭킹 배지를 조회한다.")
     @GetMapping("/ranking-badge")
-    public CustomApiResponse<FindBadgeRes> findRankingBadge(
+    public CustomApiResponse<List<FindBadgeRes>> findRankingBadge(
             HttpServletRequest servletRequest
     ) {
         log.info("findRankingBadge");
         Long memberKey = RequestUtils.getMemberKey(servletRequest);
 
-        FindBadgeRes rankingBadge = badgeQueryService.findRankingBadge(memberKey);
+        List<FindBadgeRes> rankingBadge = badgeQueryService.findRankingBadge(memberKey);
         return CustomApiResponse.ok(rankingBadge);
     }
 }

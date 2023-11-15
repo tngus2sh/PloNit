@@ -12,10 +12,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,14 +29,12 @@ public class BadgeNaApiController {
     @Operation(summary = "[관리자용] 배지 설정", description = "배지를 설정합니다.")
     @PostMapping("/setting")
     public CustomApiResponse<Void> saveBadge(
-            @RequestBody List<BadgeReq> reqs
+            @ModelAttribute BadgeReq req
             ) {
+
+        log.info("saveBadge = {}", req.toString());
         // 배지 설정
-        List<BadgeDto> badgeDtos = new ArrayList<>();
-        for (BadgeReq req : reqs) {
-            badgeDtos.add(BadgeDto.of(req));
-        }
-        badgeService.saveBadge(badgeDtos);
+        badgeService.saveBadge(BadgeDto.of(req));
         
         return CustomApiResponse.ok(null);
     }

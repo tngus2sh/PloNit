@@ -37,6 +37,15 @@ public class PloggingApiController {
     
     private final PloggingService ploggingService;
     private final PloggingQueryService ploggingQueryService;
+
+    @GetMapping("/test/{num}")
+    public CustomApiResponse<Void> test(
+            @PathVariable("num") int num
+    ) {
+        ploggingService.test(num);
+
+        return CustomApiResponse.ok(null);
+    }
     
     @Operation(summary = "플로깅 시작하기", description = "플로깅을 시작할 때 초기 플로깅 정보들을 저장합니다.")
     @PostMapping("/start")
