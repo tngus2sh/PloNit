@@ -21,11 +21,11 @@ export interface PloggingLog {
   startTime?: string;
   endTime?: string;
   totalTime?: string;
-  distance?: string;
+  distance?: number;
   calorie?: number;
   images?: any;
   review?: string;
-  coordinates: Coordinate[];
+  coordinates?: Coordinate[];
 }
 
 export interface Location {
