@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { userActions } from "store/user-slice";
 import { BasicTopBar } from "components/common/TopBar";
 import UserInfo from "components/Profile/UserInfo";
 import { Icon } from "@iconify/react";
@@ -12,6 +13,7 @@ import { OkModal } from "components/common/AlertModals";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const User = useSelector((state: any) => state.user);
   console.log(User);
@@ -43,6 +45,7 @@ const ProfilePage = () => {
         console.log(res.data);
         console.log("로그아웃 성공");
         OkModal({ text: "로그아웃을 성공했습니다." });
+        dispatch(userActions.logout());
         navigate("/login");
       },
       (err) => {
