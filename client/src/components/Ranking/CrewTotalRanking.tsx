@@ -31,9 +31,18 @@ const CrewTotalRanking = () => {
   return (
     <div className={style.ranking}>
       <div className={style.top}>
-        <SecondRankingItem />
-        <FirstRankingItem />
-        <SecondRankingItem />
+        {isCrewTotalRank.rankingList &&
+          isCrewTotalRank.rankingList.length > 1 && (
+            <SecondRankingItem data={isCrewTotalRank} />
+          )}
+        {isCrewTotalRank.rankingList &&
+          isCrewTotalRank.rankingList.length > 0 && (
+            <FirstRankingItem data={isCrewTotalRank} />
+          )}
+        {isCrewTotalRank.rankingList &&
+          isCrewTotalRank.rankingList.length > 2 && (
+            <SecondRankingItem data={isCrewTotalRank} />
+          )}
       </div>
       <BasicRankingItem />
       <BasicRankingItem />

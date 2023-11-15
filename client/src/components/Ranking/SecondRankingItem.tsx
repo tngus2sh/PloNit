@@ -2,9 +2,9 @@ import React from "react";
 import style from "styles/css/RankingPage/RankingItem.module.css";
 import { RankInterface } from "interface/rankInterface";
 
-const SecondRankingItem = ({ rankingList }: { crew: RankInterface }) => {
+const SecondRankingItem = ({ data }: { data: RankInterface }) => {
   return (
-    <div className={Rank.ranker}>
+    <div className={style.second_ranker}>
       <div className={style.rank}>2</div>
       <img className={style.user} src="/metamong.png" alt="몽" />
 
