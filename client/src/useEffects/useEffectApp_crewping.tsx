@@ -43,6 +43,9 @@ function useEffectApp_Crewping() {
   const weight = useSelector<rootState, number>((state) => {
     return state.user.info.weight;
   });
+  const membersLen = useSelector<rootState, number>((state) => {
+    return Object.keys(state.crewping.members).length;
+  });
   const workerRef = useRef<Worker | null>(null);
 
   const { setToggleSocket } = useSocket({ stompClient, roomId, senderId });
@@ -91,9 +94,10 @@ function useEffectApp_Crewping() {
           success: (response) => {
             console.log("크루핑 요청!");
             console.log(response);
-            dispatch(P.setCrewpingId(response.data.resultBody));
+            dispatch(P.setPloggingId(response.data.resultBody));
             dispatch(P.setPloggingType("CREWPING"));
             dispatch(P.setBeforeCrewping(false));
+            dispatch(P.setPeople(membersLen));
             if (location.pathname !== "/plogging") {
               navigate("/plogging");
             }

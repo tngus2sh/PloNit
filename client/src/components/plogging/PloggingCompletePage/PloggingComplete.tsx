@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
 import * as camera from "store/camera-slice";
 import * as P from "store/plogging-slice";
+import * as Crewping from "store/crewping-slice";
 
 import { savePlogging } from "api/lib/plogging";
 
@@ -235,6 +236,7 @@ const PloggingComplete = () => {
                     console.log(response);
                     dispatch(camera.clear());
                     dispatch(P.clear());
+                    dispatch(Crewping.clear());
                     navigate("/");
                   },
                   fail: (error) => {
@@ -253,6 +255,7 @@ const PloggingComplete = () => {
                     console.log(response);
                     dispatch(camera.clear());
                     dispatch(P.clear());
+                    dispatch(Crewping.clear());
                     navigate("/");
                   },
                   fail: (error) => {
