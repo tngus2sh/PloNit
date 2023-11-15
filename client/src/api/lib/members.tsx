@@ -75,3 +75,39 @@ export async function getMyCrewping(
   api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
   await api.get("/crewping").then(success).catch(fail);
 }
+
+// 미션 뱃지 조회
+export async function getMissionBadge(
+  accessToken: string,
+  success: (
+    res: AxiosResponse<any, any>,
+  ) =>
+    | AxiosResponse<any, any>
+    | PromiseLike<AxiosResponse<any, any>>
+    | null
+    | undefined
+    | void,
+  fail: (err: any) => PromiseLike<never> | null | undefined | void,
+) {
+  const api = customApiForm("/plonit-service/v1/badge");
+  api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
+  await api.get("/mission-badge").then(success).catch(fail);
+}
+
+// 랭킹 뱃지 조회
+export async function getRankingBadge(
+  accessToken: string,
+  success: (
+    res: AxiosResponse<any, any>,
+  ) =>
+    | AxiosResponse<any, any>
+    | PromiseLike<AxiosResponse<any, any>>
+    | null
+    | undefined
+    | void,
+  fail: (err: any) => PromiseLike<never> | null | undefined | void,
+) {
+  const api = customApiForm("/plonit-service/v1/badge");
+  api.defaults.headers["accessToken"] = `Bearer ${accessToken}`;
+  await api.get("/ranking-badge").then(success).catch(fail);
+}

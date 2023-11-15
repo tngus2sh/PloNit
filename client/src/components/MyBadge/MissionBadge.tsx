@@ -1,21 +1,41 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import style from "styles/css/MyBadgePage/MissionBadge.module.css";
+import { BadgeInterface } from "interface/badgeInterface";
+import { getMissionBadge } from "api/lib/members";
 
 const MissionBadge = () => {
-  const images = [
-    { src: "/metamong.png", alt: "몽" },
-    { src: "/metamong.png", alt: "몽" },
-    { src: "/metamong.png", alt: "몽" },
-    { src: "/metamong.png", alt: "몽" },
-    { src: "/metamong.png", alt: "몽" },
-    { src: "/metamong.png", alt: "몽" },
-    { src: "/metamong.png", alt: "몽" },
-  ];
+  const accessToken = useSelector((state: any) => state.user.auth.accessToken);
+  const [isMissionBadge, setMissionBadge] = useState<BadgeInterface[]>([]);
+
+  useEffect(() => {
+    getMissionBadge(
+      accessToken,
+      (res) => {
+        console.log("미션 뱃지 조회 성공");
+        console.log(res.data);
+        setMissionBadge(res.data.resultBody);
+      },
+      (err) => {
+        console.log("미션 뱃지 조회 실패", err);
+      },
+    );
+  }, []);
+
+  // const images = [
+  //   { src: "/metamong.png", alt: "몽" },
+  //   { src: "/metamong.png", alt: "몽" },
+  //   { src: "/metamong.png", alt: "몽" },
+  //   { src: "/metamong.png", alt: "몽" },
+  //   { src: "/metamong.png", alt: "몽" },
+  //   { src: "/metamong.png", alt: "몽" },
+  //   { src: "/metamong.png", alt: "몽" },
+  // ];
 
   const renderImages = () => {
-    return images.map((image, index) => (
+    return isMissionBadge.map((badge, index) => (
       <div className={style.imageContainer} key={index}>
-        <img src={image.src} alt={image.alt} />
+        <img src={badge.image} alt={badge.name} />
       </div>
     ));
   };
