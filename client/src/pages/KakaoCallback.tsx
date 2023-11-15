@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useRef } from "react";
 import { login } from "api/lib/auth";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,15 @@ import { userActions } from "store/user-slice";
 import { getProfile } from "api/lib/members";
 import { NotOkModal } from "components/common/AlertModals";
 // import { requestPermission } from "firebase-messaging-sw";
+import { registerServiceWorker } from "notification";
+import { messaging } from "settingFCM";
+import { initializeApp } from "firebase/app";
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
+async function handleAllowNotification() {
+  const permission = await Notification.requestPermission();
+
+  registerServiceWorker();
+}
 
 const KakaoCallback = () => {
   const dispatch = useDispatch();
@@ -14,7 +23,17 @@ const KakaoCallback = () => {
 
   const code = new URL(window.location.href).searchParams.get("code");
   const Ref = useRef(false);
+  const [deviceToken, setDeviceToken] = useState("");
+  async function getDeviceToken() {
+    const token = await getToken(messaging, {
+      vapidKey:
+        "BI22DGeYupjm6S_19aO8XMQnZD_8o22SfACFvaGUz7pLuxVZ5nlmce4XDXgNoCTsYe18-HER_Y0vyyftyHXvjvE",
+    });
 
+    setDeviceToken(deviceToken);
+  }
+  getDeviceToken();
+  console.log(deviceToken);
   useEffect(() => {
     if (!Ref.current) {
       if (code) {

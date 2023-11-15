@@ -1,9 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { LogoTopBar } from "components/common/TopBar";
 import HomeBanner from "components/Home/HomeBanner";
 import Carousel from "components/Home/Carousel";
+import { registerServiceWorker } from "notification";
+import { messaging } from "settingFCM";
+import { initializeApp } from "firebase/app";
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
+async function handleAllowNotification() {
+  const permission = await Notification.requestPermission();
+
+  registerServiceWorker();
+}
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -14,6 +23,17 @@ const HomePage = () => {
   //     navigate("/login");
   //   }
   // }, []);
+  const [deviceToken, setDeviceToken] = useState("");
+  async function getDeviceToken() {
+    const token = await getToken(messaging, {
+      vapidKey:
+        "BI22DGeYupjm6S_19aO8XMQnZD_8o22SfACFvaGUz7pLuxVZ5nlmce4XDXgNoCTsYe18-HER_Y0vyyftyHXvjvE",
+    });
+
+    setDeviceToken(token);
+  }
+  getDeviceToken();
+  console.log(deviceToken);
   return (
     <div>
       <LogoTopBar />

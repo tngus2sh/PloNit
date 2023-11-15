@@ -44,6 +44,14 @@ const CrewCommunityInfo = ({
         <div className={style.crew_content}>
           <div className={style.crew_member} onClick={handleGoMemberList}>
             멤버 {crew.cntPeople}
+            <Icon
+              icon="bi:chevron-right"
+              style={{
+                width: "1.2rem",
+                height: "1.2rem",
+              }}
+              onClick={handleGoMemberList}
+            />
           </div>
           <div className={style.invite}>
             초대
