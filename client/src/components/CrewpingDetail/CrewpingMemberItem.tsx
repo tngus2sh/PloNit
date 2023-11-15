@@ -10,9 +10,11 @@ import { QuestionModal, OkModal } from "components/common/AlertModals";
 const CrewpingMemberItem = ({
   member,
   crewping,
+  fetchCrewpingDetailList,
 }: {
   member: MemberInterface;
   crewping: CrewpingInterface;
+  fetchCrewpingDetailList: () => void;
 }) => {
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const User = useSelector((state: any) => state.user);
@@ -28,12 +30,13 @@ const CrewpingMemberItem = ({
             Number(crewpingId),
             member.id,
             (res) => {
-              console.log("크루 강퇴 요청 성공");
+              console.log("크루핑 강퇴 요청 성공");
               console.log(res.data);
-              OkModal({ text: "크루 강퇴가 완료되었습니다." });
+              OkModal({ text: "크루핑 강퇴가 완료되었습니다." });
+              fetchCrewpingDetailList();
             },
             (err) => {
-              console.log("크루 강퇴 요청 실패", err);
+              console.log("크루핑 강퇴 요청 실패", err);
             },
           );
         }

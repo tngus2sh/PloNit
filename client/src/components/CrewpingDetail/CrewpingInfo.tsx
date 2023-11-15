@@ -28,7 +28,13 @@ const formattedDateTime = (datestr: any, onlyTime = false) => {
   return formattedDate;
 };
 
-const CrewpingInfo = ({ crewping }: { crewping: CrewpingInterface }) => {
+const CrewpingInfo = ({
+  crewping,
+  fetchCrewpingDetailList,
+}: {
+  crewping: CrewpingInterface;
+  fetchCrewpingDetailList: () => void;
+}) => {
   const User = useSelector((state: any) => state.user);
   const [isMemberModalOpen, setMemberModalOpen] = useState(false);
   const StartDate = crewping.startDate;
@@ -77,7 +83,12 @@ const CrewpingInfo = ({ crewping }: { crewping: CrewpingInterface }) => {
           )
         ) : null}
       </div>
-      {isMemberModalOpen ? <CrewpingMemberList crewping={crewping} /> : null}
+      {isMemberModalOpen ? (
+        <CrewpingMemberList
+          crewping={crewping}
+          fetchCrewpingDetailList={fetchCrewpingDetailList}
+        />
+      ) : null}
     </div>
   );
 };
