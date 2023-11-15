@@ -49,7 +49,7 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
     }
     if (newMessage.type === "WAIT") {
       dispatch(Crewping.setMembers(newMessage));
-      console.log(`members: ${newMessage.members}`);
+      console.log(`members:`, newMessage.members);
     }
   }
 
