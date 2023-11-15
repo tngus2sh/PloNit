@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from "react";
 import Swal from "sweetalert2";
-
 import { useNavigate } from "react-router-dom";
 
 const PageNotFound404 = () => {
@@ -8,25 +7,33 @@ const PageNotFound404 = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: "top",
-      showConfirmButton: true,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.onmouseover = Swal.stopTimer;
-        toast.onmouseleave = Swal.resumeTimer;
-      },
-      willClose: () => {
-        navigate("/");
-      },
-    });
+    if (!check.current) {
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top",
+        showConfirmButton: true,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseover = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+        willClose: () => {
+          if (!check.current) {
+            navigate("/");
+          }
+        },
+      });
 
-    Toast.fire({
-      icon: "error",
-      title: "존재하지 않는 페이지입니다.",
-    });
+      Toast.fire({
+        icon: "error",
+        title: "존재하지 않는 페이지입니다.",
+      });
+    }
+
+    return () => {
+      check.current = true;
+    };
   }, []);
 
   return (
