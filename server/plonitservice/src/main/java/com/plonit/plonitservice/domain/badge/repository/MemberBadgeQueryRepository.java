@@ -10,12 +10,14 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static com.plonit.plonitservice.domain.badge.QBadge.badge;
 import static com.plonit.plonitservice.domain.badge.QBadgeCondition.badgeCondition;
 import static com.plonit.plonitservice.domain.badge.QMemberBadge.memberBadge;
+import static com.plonit.plonitservice.domain.member.QMember.member;
 import static com.querydsl.core.types.Projections.constructor;
 
 @Repository
@@ -33,18 +35,12 @@ public class MemberBadgeQueryRepository {
                 .fetchOne());
     }
 
-    public List<FindBadgeRes> findBadge(Long memberKey, List<BadgeStatus> status) {
+    public List<Long> findBadgeIdsByMemberId(Long memberKey) {
         return queryFactory
-                .select(constructor(FindBadgeRes.class,
-                        badge.code,
-                        badge.image,
-                        badgeCondition.status,
-                        memberBadge.id))
+                .select(memberBadge.badge.id)
                 .from(memberBadge)
-                .rightJoin(memberBadge.badge, badge)
-                .join(badge.badgeCondition, badgeCondition)
-                .where(memberBadge.member.id.eq(memberKey)
-                        .and(badgeCondition.status.in(status)))
+                .where(memberBadge.member.id.eq(memberKey))
                 .fetch();
     }
+
 }

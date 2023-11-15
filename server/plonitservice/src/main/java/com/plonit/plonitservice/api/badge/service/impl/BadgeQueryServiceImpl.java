@@ -5,6 +5,7 @@ import com.plonit.plonitservice.api.badge.service.BadgeQueryService;
 import com.plonit.plonitservice.common.enums.BadgeStatus;
 import com.plonit.plonitservice.common.exception.CustomException;
 import com.plonit.plonitservice.common.exception.ErrorCode;
+import com.plonit.plonitservice.domain.badge.repository.BadgeQueryRepository;
 import com.plonit.plonitservice.domain.badge.repository.MemberBadgeQueryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ import static com.plonit.plonitservice.common.exception.ErrorCode.INVALID_FIELDS
 @RequiredArgsConstructor
 public class BadgeQueryServiceImpl implements BadgeQueryService {
 
+    private final BadgeQueryRepository badgeQueryRepository;
     private final MemberBadgeQueryRepository memberBadgeQueryRepository;
 
     @Override
@@ -29,7 +31,9 @@ public class BadgeQueryServiceImpl implements BadgeQueryService {
         statusList.add(BadgeStatus.COUNT);
         statusList.add(BadgeStatus.DISTANCE);
 
-        return memberBadgeQueryRepository.findBadge(memberKey, statusList);
+        List<Long> badgeIds = memberBadgeQueryRepository.findBadgeIdsByMemberId(memberKey);
+
+        return badgeQueryRepository.findBadge(badgeIds, statusList, false);
     }
 
     @Override
@@ -37,6 +41,8 @@ public class BadgeQueryServiceImpl implements BadgeQueryService {
         List<BadgeStatus> statusList = new ArrayList<>();
         statusList.add(BadgeStatus.RANKING);
 
-        return memberBadgeQueryRepository.findBadge(memberKey, statusList);
+        List<Long> badgeIds = memberBadgeQueryRepository.findBadgeIdsByMemberId(memberKey);
+
+        return badgeQueryRepository.findBadge(badgeIds, statusList, false);
     }
 }
