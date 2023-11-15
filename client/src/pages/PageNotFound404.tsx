@@ -8,31 +8,25 @@ const PageNotFound404 = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!check.current) {
-      const Toast = Swal.mixin({
-        toast: true,
-        position: "top",
-        showConfirmButton: true,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.onmouseover = Swal.stopTimer;
-          toast.onmouseleave = Swal.resumeTimer;
-        },
-        willClose: () => {
-          navigate("/");
-        },
-      });
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "top",
+      showConfirmButton: true,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseover = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      },
+      willClose: () => {
+        navigate("/");
+      },
+    });
 
-      Toast.fire({
-        icon: "error",
-        title: "존재하지 않는 페이지입니다.",
-      });
-    }
-
-    return () => {
-      check.current = true;
-    };
+    Toast.fire({
+      icon: "error",
+      title: "존재하지 않는 페이지입니다.",
+    });
   }, []);
 
   return (
