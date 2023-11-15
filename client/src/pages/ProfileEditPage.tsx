@@ -26,8 +26,7 @@ const ProfileEditPage = () => {
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const User = useSelector((state: any) => state.user.info);
 
-  const [isProfileImage, setProfileImage] = useState<Blob | string>("");
-  console.log(isProfileImage);
+  const [isProfileImage, setProfileImage] = useState(null);
   const [isNickname, setNickname] = useState(User.nickname);
   const [isAllowNickname, setAllowNickname] = useState(false);
   const [isRegion, setRegion] = useState(User.region);
@@ -35,12 +34,11 @@ const ProfileEditPage = () => {
   const [isOpenRegionModal, setOpenRegionModal] = useState(false);
   const [isWeight, setWeight] = useState(User.weight);
   const [isId_1365, setId_1365] = useState(User.id1365);
-
+  console.log(isProfileImage);
   const handleImageUpload = (event: any) => {
     const file = event.target.files[0];
     if (file) {
       setProfileImage(file);
-      console.log(isProfileImage);
     }
   };
   console.log(isProfileImage);
@@ -72,23 +70,25 @@ const ProfileEditPage = () => {
     setId_1365(event.target.value);
   };
 
+  const profilePhotoURL = isProfileImage
+    ? URL.createObjectURL(isProfileImage)
+    : User.profileImage;
+
   const SendEdit = () => {
     const formData = new FormData();
+    if (isProfileImage) {
+      formData.append("profileImage", isProfileImage);
+    }
     formData.append("dongCode", isRegionCode);
     formData.append("nickname", isNickname);
     formData.append("weight", isWeight);
     formData.append("region", isRegion);
     formData.append("id1365", isId_1365);
-    if (isProfileImage === "") {
-      formData.append("profileImage", User.profileImage);
-    } else {
-      formData.append("profileImage", isProfileImage);
-    }
-    // formData.append("profileImage", isProfileImage);
     formData.append("birth", User.birth);
     formData.append("gender", User.gender);
     formData.append("name", User.name);
 
+    console.log(formData);
     EditProfile(
       accessToken,
       formData,
@@ -120,15 +120,7 @@ const ProfileEditPage = () => {
       <div className={style.profile_edit}>
         <div className={style.img_text}>
           <div className={style.profile_img}>
-            <img
-              src={
-                isProfileImage instanceof Blob
-                  ? URL.createObjectURL(isProfileImage)
-                  : (isProfileImage as string)
-              }
-              alt="프로필 이미지"
-            />
-
+            <img src={profilePhotoURL} alt="프로필 이미지" />
             <label className={style.img_edit_icon} htmlFor="input_file">
               <Icon
                 icon="bi:pencil"
