@@ -9,11 +9,12 @@ import { getMyRanking } from "api/lib/members";
 
 const formattedSeason = (datestr: any) => {
   const date = new Date(datestr);
+  const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();
   const season = day === 1 ? 1 : 2;
 
-  return `${month}-${season} 시즌`;
+  return `${year}년 ${month}월 ${season}시즌`;
 };
 
 const formattedDate = (datestr: any) => {

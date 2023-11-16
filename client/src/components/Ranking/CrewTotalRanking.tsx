@@ -7,6 +7,30 @@ import style from "styles/css/RankingPage/RankingList.module.css";
 import { RankInterface, RankDetailInterface } from "interface/rankInterface";
 import { getCrewTotalRank } from "api/lib/rank";
 
+const formattedSeason = (datestr: any) => {
+  const date = new Date(datestr);
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const season = day === 1 ? 1 : 2;
+
+  return `${year}년 ${month}월 ${season}시즌`;
+};
+
+const formattedDate = (datestr: any) => {
+  const date = new Date(datestr);
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  return `${month}월 ${day}일`;
+};
+const endformattedDate = (datestr: any) => {
+  const dateObj = new Date(datestr);
+  dateObj.setDate(dateObj.getDate() - 1);
+  const month = dateObj.getMonth() + 1;
+  const day = dateObj.getDate();
+  return `${month}월 ${day}일`;
+};
+
 const CrewTotalRanking = () => {
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const [isTotalRank, setTotalRank] = useState<RankInterface>(
@@ -28,11 +52,18 @@ const CrewTotalRanking = () => {
       },
     );
   }, []);
-  console.log(isTotalRank);
-  console.log(isTotalList);
 
   return (
     <div className={style.ranking}>
+      <div className={style.season}>
+        <div className={style.detail}>
+          {isTotalRank.startDate && formattedSeason(isTotalRank.startDate)}
+        </div>
+        <div className={style.date}>
+          {isTotalRank.startDate && formattedDate(isTotalRank.startDate)} -{" "}
+          {isTotalRank.endDate && endformattedDate(isTotalRank.endDate)}
+        </div>
+      </div>
       {
         <div className={style.top}>
           {isTotalList[1] && <SecondRankingItem data={isTotalList[1]} />}

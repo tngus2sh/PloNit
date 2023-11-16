@@ -15,15 +15,16 @@
       .season_title {
         font-size: 1.5rem;
         display: inline;
-        box-shadow: inset 0 -10px 0 #67F895; 
+        box-shadow: inset 0 -10px 0 #67f895;
       }
       .season_date {
         margin-left: 1rem;
         color: $darkgray;
+        font-weight: 500;
       }
     }
   }
-  
+
   .prev_container {
     display: inline-block;
     width: 85%;
