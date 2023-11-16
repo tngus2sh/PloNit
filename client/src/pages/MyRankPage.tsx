@@ -1,11 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { BackTopBar } from "components/common/TopBar";
 import MyRankMain from "components/MyRank/MyRankMain";
 import MyRankItem from "components/MyRank/MyRankItem";
 import style from "styles/css/MyRankPage.module.css";
+import { MyRankInterface } from "interface/rankInterface";
+import { getMyRanking } from "api/lib/members";
 
 const MyRankPage = () => {
-  const [selectBox1Value, setSelectBox1Value] = useState("");
+  const accessToken = useSelector((state: any) => state.user.auth.accessToken);
+  const [isMyRanking, setMyRanking] = useState<MyRankInterface[]>([]);
+
+  useEffect(() => {
+    getMyRanking(
+      accessToken,
+      (res) => {
+        console.log("나의 랭킹 조회 성공");
+        console.log(res.data);
+        setMyRanking(res.data.resultBody);
+      },
+      (err) => {
+        console.log("나의 랭킹 조회 실패", err);
+      },
+    );
+  }, []);
+  console.log(isMyRanking);
   return (
     <div>
       <BackTopBar text="나의 랭킹" />
