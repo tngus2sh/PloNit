@@ -98,8 +98,7 @@ const CrewpingCreatePage = () => {
         console.log(res.data);
         console.log("크루핑 생성 성공");
         OkModal({ text: "크루핑이 생성되었습니다.." });
-        // navigate(`/crew/community/${crewId}`);
-        navigate(`/crew/community/${crewId}`, { replace: true });
+        navigate(`/crew/community/${crewId}`);
       },
       (err) => {
         console.log("크루핑 생성 에러", err);
