@@ -44,6 +44,14 @@ const MyRankPage = () => {
         setMyRanking(res.data.resultBody);
         if (res.data.resultBody[0].isSeason) {
           setNow(res.data.resultBody[0]);
+        } else {
+          setNow({
+            ranking: 0,
+            distance: 0,
+            startDate: res.data.resultBody[0].endDate,
+            endDate: "",
+            isSeason: true,
+          });
         }
       },
       (err) => {
@@ -78,7 +86,7 @@ const MyRankPage = () => {
 
           <div className={style.prev_item_container}>
             {isMyRanking.map((data, index) => {
-              if (isNow) {
+              if (isMyRanking[0].isSeason) {
                 if (index >= 1) {
                   return <MyRankItem key={index} rank={data} />;
                 }
