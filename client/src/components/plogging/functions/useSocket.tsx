@@ -247,6 +247,7 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
       connectToSocket();
     } else {
       stompClient.current?.deactivate();
+      dispatch(P.clear());
       dispatch(Crewping.clear());
     }
     return () => {
