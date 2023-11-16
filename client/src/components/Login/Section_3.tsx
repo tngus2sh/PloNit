@@ -9,7 +9,7 @@ const Section_3 = () => {
         <div>플로깅을 해보는 건 어떨까요?</div>
       </div>
       <div className={style.content}>지금 바로 플로깅에 참여하세요</div>
-      <img src="./login1.gif" alt="플로깅" />
+      <img src="./login3.gif" alt="플로깅" />
     </div>
   );
 };
