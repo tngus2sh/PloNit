@@ -16,6 +16,12 @@ const HomePage = () => {
   const isLogined = useSelector((state: any) => state.user.auth.isLogin);
   const User = useSelector((state: any) => state.user.info);
   const fcmToken = useSelector((state: any) => state.user.alarm.fcmToken);
+
+  useEffect(() => {
+    if (!isLogined) {
+      navigate("/login");
+    }
+  }, []);
   useEffect(() => {
     const data = {
       fcmToken: fcmToken,
