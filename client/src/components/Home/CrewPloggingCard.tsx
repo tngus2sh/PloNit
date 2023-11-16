@@ -47,7 +47,7 @@ const CrewPloggingCard = ({ card }: { card: MyCrewpingInterface }) => {
     if (isPastTime(startDate)) {
       dispatch(P.clear());
       dispatch(Crewping.clear());
-      dispatch(Crewping.setCrewId(crewId));
+      dispatch(P.setCrewId(crewId));
       dispatch(P.setCrewpingId(id));
       dispatch(Crewping.setRoomId(`${id}`));
       dispatch(Crewping.setCharge(isMaster));

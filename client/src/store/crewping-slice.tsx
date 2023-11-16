@@ -2,7 +2,6 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Locations, Message, Member } from "interface/ploggingInterface";
 
 const initialState = {
-  crewId: -1 as number,
   roomId: "" as string,
   senderId: "" as string,
   charge: false as boolean,
@@ -24,9 +23,6 @@ const crewpingSlice = createSlice({
   reducers: {
     clear: () => {
       return initialState;
-    },
-    setCrewId: (state, action: PayloadAction<number>) => {
-      state.crewId = action.payload;
     },
     setRoomId: (state, action: PayloadAction<string>) => {
       state.roomId = action.payload;
@@ -107,7 +103,6 @@ const crewpingSlice = createSlice({
 
 export const {
   clear,
-  setCrewId,
   setRoomId,
   setSenderId,
   setCharge,
