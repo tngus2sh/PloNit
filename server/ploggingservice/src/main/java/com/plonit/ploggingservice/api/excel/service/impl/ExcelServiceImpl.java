@@ -152,10 +152,10 @@ public class ExcelServiceImpl implements ExcelService {
             cell.setCellValue(excelDto.getEndImage());
         }
 
-        for(int i = 0; i < excelHeaderList.size(); i++){
-            sheet.autoSizeColumn(i);
-            sheet.setColumnWidth(i, (sheet.getColumnWidth(i))+1024); // 너비 더 넓게
-        }
+//        for(int i = 0; i < excelHeaderList.size(); i++){
+//            sheet.autoSizeColumn(i);
+//            sheet.setColumnWidth(i, (sheet.getColumnWidth(i))+1024); // 너비 더 넓게
+//        }
 
         saveExcel(workbook);
     }
