@@ -13,7 +13,7 @@ const BasicRankingItem = ({ data }: { data: RankDetailInterface }) => {
       style={{
         backgroundColor:
           data.isMine || data.isMyCrew
-            ? "linear-gradient(270deg, rgba(255,255,255,1) 0%, rgba(128,209,255,1) 100%)"
+            ? "linear-gradient(270deg, rgba(160,206,252,1) 0%, rgba(253,254,255,1) 100%)"
             : "initial",
       }}
     >
