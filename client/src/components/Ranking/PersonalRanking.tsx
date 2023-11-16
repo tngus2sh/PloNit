@@ -23,13 +23,6 @@ const formattedDate = (datestr: any) => {
   const day = date.getDate();
   return `${month}월 ${day}일`;
 };
-// const endformattedDate = (datestr: any) => {
-//   const dateObj = new Date(datestr);
-//   dateObj.setDate(dateObj.getDate() - 1);
-//   const month = dateObj.getMonth() + 1;
-//   const day = dateObj.getDate();
-//   return `${month}월 ${day}일`;
-// };
 
 const PersonalRanking = () => {
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
@@ -42,7 +35,6 @@ const PersonalRanking = () => {
       accessToken,
       (res) => {
         console.log("개인 랭킹 조회 성공");
-        console.log(res.data);
         setMemberRank(res.data.resultBody);
         setMemberList(res.data.resultBody.membersRanks);
       },
@@ -51,8 +43,7 @@ const PersonalRanking = () => {
       },
     );
   }, []);
-  console.log(isMemberRank);
-  console.log(isMemberList);
+
   return (
     <div className={style.ranking_container}>
       <div className={style.ranking_top_container}>
