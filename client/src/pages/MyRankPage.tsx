@@ -23,11 +23,30 @@ const formattedDate = (datestr: any) => {
   const day = date.getDate();
   return `${month}월 ${day}일`;
 };
+const formattedDatePlus = (datestr: any) => {
+  const date = new Date(datestr);
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  return `${month}월 ${day}일`;
+};
 const endformattedDate = (datestr: any) => {
   const date = new Date(datestr);
   const month = date.getMonth() + 1;
   const day = date.getDate();
   return `${month}월 ${day}일`;
+};
+const endformattedDatePlus = (datestr: any) => {
+  const date = new Date(datestr);
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+
+  if (day === 14) {
+    const nextMonthFirstDay = new Date(date.getFullYear(), month, 1);
+    const lastDay = new Date(nextMonthFirstDay.getTime() - 24 * 60 * 60 * 1000);
+    return `${month}월 ${lastDay.getDate()}일`;
+  } else {
+    return `${month + 1}월 14일`;
+  }
 };
 
 const MyRankPage = () => {
@@ -68,13 +87,27 @@ const MyRankPage = () => {
           <div className={style.page_container}>
             <div className={style.myrank_container}>
               <div className={style.season_info_container}>
-                <div className={style.season_title}>
-                  {formattedSeason(isNow.startDate)}
-                </div>
-                <div className={style.season_date}>
-                  ({formattedDate(isNow.startDate)} ~
-                  {endformattedDate(isNow.endDate)})
-                </div>
+                {isNow.endDate === "" ? (
+                  <>
+                    <div className={style.season_title}>
+                      {formattedSeason(isNow.startDate)}
+                    </div>
+                    <div className={style.season_date}>
+                      ({formattedDatePlus(isNow.startDate)} ~
+                      {endformattedDatePlus(isNow.startDate)})
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className={style.season_title}>
+                      {formattedSeason(isNow.startDate)}
+                    </div>
+                    <div className={style.season_date}>
+                      ({formattedDate(isNow.startDate)} ~
+                      {endformattedDate(isNow.endDate)})
+                    </div>
+                  </>
+                )}
               </div>
               <div className={style.current_container}>
                 <MyRankMain rank={isNow} />
