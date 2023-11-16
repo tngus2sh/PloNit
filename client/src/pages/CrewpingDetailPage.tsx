@@ -37,15 +37,15 @@ const CrewpingDetailPage = () => {
       accessToken,
       Number(crewpingId),
       (res) => {
-        console.log("크루핑 상세 조회 성공");
-        console.log(res.data);
+        // console.log("크루핑 상세 조회 성공");
+        // console.log(res.data);
         setCrewpingInfo(res.data.resultBody);
         const data = {
           isMyCrew: User.crewinfo.isMyCrew,
           isCrewMaster: User.crewinfo.isCrewMaster,
           isCrewpingMaster: res.data.resultBody.masterNickname,
         };
-        console.log(data);
+        // console.log(data);
         dispatch(userActions.myCrewHandler(data));
       },
       (err) => {
@@ -61,8 +61,8 @@ const CrewpingDetailPage = () => {
           accessToken,
           Number(crewpingId),
           (res) => {
-            console.log(res.data);
-            console.log("크루핑 참가 요청 성공");
+            // console.log(res.data);
+            // console.log("크루핑 참가 요청 성공");
             OkModal({ text: "크루핑 참가가 완료되었습니다." });
             fetchCrewpingDetailList();
           },
@@ -81,8 +81,8 @@ const CrewpingDetailPage = () => {
           accessToken,
           Number(crewpingId),
           (res) => {
-            console.log(res.data);
-            console.log("크루핑 참가 취소 성공");
+            // console.log(res.data);
+            // console.log("크루핑 참가 취소 성공");
             // alert("크루핑 취소 완료");
             OkModal({ text: "크루핑 취소가 완료되었습니다." });
             fetchCrewpingDetailList();

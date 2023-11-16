@@ -46,8 +46,8 @@ const CrewCommunityPage = () => {
       accessToken,
       Number(crewId),
       (res) => {
-        console.log("크루 가입 요청 성공");
-        console.log(res.data.resultBody);
+        // console.log("크루 가입 요청 성공");
+        // console.log(res.data.resultBody);
         // alert("크루 가입 요청을 보냈습니다.");
         OkModal({ text: "크루 가입 요청을 보냈습니다." });
         fetchCrewDetail();
@@ -67,15 +67,15 @@ const CrewCommunityPage = () => {
       accessToken,
       Number(crewId),
       (res) => {
-        console.log("크루 상세 조회 성공");
-        console.log(res.data);
+        // console.log("크루 상세 조회 성공");
+        // console.log(res.data);
         setCrewDetail(res.data.resultBody);
         const data = {
           isMyCrew: res.data.resultBody.isMyCrew,
           isCrewMaster: res.data.resultBody.isCrewMaster,
           isCrewpingMaster: User.crewinfo.isCrewpingMaster,
         };
-        console.log(data);
+        // console.log(data);
         dispatch(userActions.myCrewHandler(data));
       },
       (err) => {

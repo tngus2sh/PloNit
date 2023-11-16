@@ -31,15 +31,15 @@ const MyPloggingDetailPage = () => {
   const month = isPloggingDetail?.startTime?.slice(5, 7);
   const day = isPloggingDetail?.startTime?.slice(8, 10);
 
-  console.log(isPloggingDetail);
+  // console.log(isPloggingDetail);
 
   useEffect(() => {
     searchPloggingInfo({
       accessToken: accessToken,
       plogging_id: Number(ploggingId),
       success: (res) => {
-        console.log("플로깅 상세 조회 성공");
-        console.log(res.data);
+        // console.log("플로깅 상세 조회 성공");
+        // console.log(res.data);
         setPloggingDetail(res.data.resultBody);
       },
       fail: (error) => {

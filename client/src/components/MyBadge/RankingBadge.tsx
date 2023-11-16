@@ -12,8 +12,8 @@ const RankingBadge = () => {
     getRankingBadge(
       accessToken,
       (res) => {
-        console.log("랭킹 뱃지 조회 성공");
-        console.log(res.data);
+        // console.log("랭킹 뱃지 조회 성공");
+        // console.log(res.data);
         setRankBadge(res.data.resultBody);
       },
       (err) => {

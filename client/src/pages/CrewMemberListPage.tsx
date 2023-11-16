@@ -18,9 +18,9 @@ const CrewMemberListPage = () => {
         accessToken,
         Number(crewId),
         (res) => {
-          console.log(res.data);
+          // console.log(res.data);
           setMemberList(res.data.resultBody);
-          console.log("크루장 목록조회 성공");
+          // console.log("크루장 목록조회 성공");
         },
         (err) => {
           console.log("크루장 목록조회 실패", err);
@@ -31,9 +31,9 @@ const CrewMemberListPage = () => {
         accessToken,
         Number(crewId),
         (res) => {
-          console.log(res.data);
+          // console.log(res.data);
           setMemberList(res.data.resultBody);
-          console.log("크루원 목록조회 성공");
+          // console.log("크루원 목록조회 성공");
         },
         (err) => {
           console.log("크루원 목록조회 실패", err);

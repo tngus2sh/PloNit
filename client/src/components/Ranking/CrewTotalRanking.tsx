@@ -42,8 +42,8 @@ const CrewTotalRanking = () => {
     getCrewTotalRank(
       accessToken,
       (res) => {
-        console.log("크루 전체 랭킹 조회 성공");
-        console.log(res.data);
+        // console.log("크루 전체 랭킹 조회 성공");
+        // console.log(res.data);
         setTotalRank(res.data.resultBody);
         setTotalList(res.data.resultBody.crewsRanks);
       },

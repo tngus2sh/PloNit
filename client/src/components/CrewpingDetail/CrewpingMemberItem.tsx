@@ -18,7 +18,7 @@ const CrewpingMemberItem = ({
 }) => {
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const User = useSelector((state: any) => state.user);
-  console.log(member);
+  // console.log(member);
   const { crewpingId } = useParams();
 
   const CrewpingKickOut = () => {
@@ -30,8 +30,8 @@ const CrewpingMemberItem = ({
             Number(crewpingId),
             member.id,
             (res) => {
-              console.log("크루핑 강퇴 요청 성공");
-              console.log(res.data);
+              // console.log("크루핑 강퇴 요청 성공");
+              // console.log(res.data);
               OkModal({ text: "크루핑 강퇴가 완료되었습니다." });
               fetchCrewpingDetailList();
             },

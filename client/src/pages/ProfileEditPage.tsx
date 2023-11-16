@@ -34,22 +34,22 @@ const ProfileEditPage = () => {
   const [isOpenRegionModal, setOpenRegionModal] = useState(false);
   const [isWeight, setWeight] = useState(User.weight);
   const [isId_1365, setId_1365] = useState(User.id1365);
-  console.log(isProfileImage);
+  // console.log(isProfileImage);
   const handleImageUpload = (event: any) => {
     const file = event.target.files[0];
     if (file) {
       setProfileImage(file);
     }
   };
-  console.log(isProfileImage);
+  // console.log(isProfileImage);
   const onChangeNickname = (event: any) => {
     const newNickname = event.target.value;
     setNickname(newNickname);
     nicknameCheck(
       newNickname,
       (res) => {
-        console.log("닉네임 중복 확인 (수정)");
-        console.log(res.data);
+        // console.log("닉네임 중복 확인 (수정)");
+        // console.log(res.data);
         setAllowNickname(res.data.resultBody.avl);
       },
       (err) => {
@@ -88,7 +88,7 @@ const ProfileEditPage = () => {
     formData.append("gender", User.gender);
     formData.append("name", User.name);
 
-    console.log(formData);
+    // console.log(formData);
     EditProfile(
       accessToken,
       formData,
@@ -96,14 +96,14 @@ const ProfileEditPage = () => {
         getProfile(
           accessToken,
           (res) => {
-            console.log("내 정보 조회 성공");
+            // console.log("내 정보 조회 성공");
             dispatch(userActions.saveMemberInfo(res.data.resultBody));
           },
           (err) => {
             console.log("내 정보 조회 실패", err);
           },
         );
-        console.log("회원 정보 수정 성공");
+        // console.log("회원 정보 수정 성공");
         OkModal({ text: "회원 정보 수정을 성공했습니다." });
         navigate("/profile");
       },

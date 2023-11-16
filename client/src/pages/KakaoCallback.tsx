@@ -11,7 +11,7 @@ const KakaoCallback = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const fcmToken = useSelector((state: any) => state.user.alarm.fcmToken);
-  console.log(fcmToken);
+  // console.log(fcmToken);
   const code = new URL(window.location.href).searchParams.get("code");
   const Ref = useRef(false);
 
@@ -21,20 +21,20 @@ const KakaoCallback = () => {
         login(
           code,
           (res) => {
-            console.log("로그인 api 성공");
-            console.log(res.data);
+            // console.log("로그인 api 성공");
+            // console.log(res.data);
             const data = {
               accessToken: res.headers.accesstoken,
               refreshToken: res.headers.refreshtoken,
             };
-            console.log(data);
+            // console.log(data);
             dispatch(userActions.loginHandler(data));
             if (res.data.resultBody.registeredMember) {
               getProfile(
                 data.accessToken,
                 (res) => {
-                  console.log("내 정보 조회 성공");
-                  console.log(res.data.resultBody);
+                  // console.log("내 정보 조회 성공");
+                  // console.log(res.data.resultBody);
                   dispatch(userActions.saveMemberInfo(res.data.resultBody));
                 },
                 (err) => {

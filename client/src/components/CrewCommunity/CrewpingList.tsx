@@ -18,8 +18,8 @@ const CrewpingList = () => {
       accessToken,
       Number(crewId),
       (res) => {
-        console.log("크루핑 조회 성공");
-        console.log(res.data);
+        // console.log("크루핑 조회 성공");
+        // console.log(res.data);
         setCrewpingList(res.data.resultBody);
       },
       (err) => {

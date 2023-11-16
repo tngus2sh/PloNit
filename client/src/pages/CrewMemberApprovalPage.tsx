@@ -18,7 +18,7 @@ const CrewMemberApprovalPage = () => {
       accessToken,
       Number(crewId),
       (res) => {
-        console.log("크루원 대기 목록 조회 성공");
+        // console.log("크루원 대기 목록 조회 성공");
         setApprovalMemberList(res.data.resultBody);
       },
       (err) => {

@@ -41,8 +41,8 @@ const CrewAverageRanking = () => {
     getCrewAVGRank(
       accessToken,
       (res) => {
-        console.log("크루 전체 랭킹 조회 성공");
-        console.log(res.data);
+        // console.log("크루 전체 랭킹 조회 성공");
+        // console.log(res.data);
         setAvgRank(res.data.resultBody);
         setAvgList(res.data.resultBody.crewsAvgRanks);
       },

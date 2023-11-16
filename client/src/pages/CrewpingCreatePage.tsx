@@ -95,8 +95,8 @@ const CrewpingCreatePage = () => {
       accessToken,
       formData,
       (res) => {
-        console.log(res.data);
-        console.log("크루핑 생성 성공");
+        // console.log(res.data);
+        // console.log("크루핑 생성 성공");
         OkModal({ text: "크루핑이 생성되었습니다.." });
         navigate(`/crew/community/${crewId}`);
       },

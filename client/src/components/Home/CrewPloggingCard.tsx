@@ -53,7 +53,7 @@ function isPastTime(targetTime: string): boolean {
 }
 
 const CrewPloggingCard = ({ card }: { card: MyCrewpingInterface }) => {
-  console.log(card);
+  // console.log(card);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id, crewId, isMaster, startDate } = card;

@@ -19,19 +19,19 @@ const CommentModal = ({
   const onChangeComment = (event: any) => {
     setComment(event.target.value);
   };
-  console.log(isComment);
+  // console.log(isComment);
   const SendComment = () => {
     const data = {
       feedId: feed.id,
       content: isComment,
     };
-    console.log(data);
+    // console.log(data);
     getCommentCreate(
       accessToken,
       data,
       (res) => {
-        console.log(res.data);
-        console.log("댓글 생성 성공");
+        // console.log(res.data);
+        // console.log("댓글 생성 성공");
         fetchFeedList();
         setComment("");
       },

@@ -24,7 +24,7 @@ const ApprovalMemberItem = ({
       accessToken,
       data,
       (res) => {
-        console.log("크루 가입 승인 성공");
+        // console.log("크루 가입 승인 성공");
         fetchMemberList();
       },
       (err) => {
