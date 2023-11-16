@@ -38,6 +38,9 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
   const profileImage = useSelector<rootState, string>((state) => {
     return state.crewping.profileImage;
   });
+  const nickName = useSelector<rootState, string>((state) => {
+    return state.user.info.nickname;
+  });
   const [toggleSocket, setToggleSocket] = useState<boolean>(false);
 
   function onMessageReceived(message: IMessage) {
@@ -75,8 +78,7 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
       return;
     }
     if (newMessage.type === "EXIT") {
-      console.log("exitRequest:", exitRequest);
-      if (exitRequest) {
+      if (newMessage.nickName === nickName) {
         console.log("Yes");
         stompClient.current?.deactivate();
         dispatch(Crewping.clear());
