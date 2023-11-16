@@ -27,6 +27,7 @@ export interface MyRankInterface {
   distance: number;
   startDate: string;
   endDate: string;
+  isSeason: boolean;
 }
 
 export interface MyCrewRankInterface {
