@@ -173,7 +173,7 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
       console.log("[SEND]", newMessage);
 
       stompClient.current?.publish({
-        destination: `app/chat/message`,
+        destination: `/app/chat/message`,
         body: JSON.stringify(newMessage),
       });
     } else {
