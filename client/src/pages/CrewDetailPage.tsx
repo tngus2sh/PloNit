@@ -42,7 +42,6 @@ const CrewDetailPage = () => {
   const CrewQuit = () => {
     QuestionModal({ text: "크루를 탈퇴하시겠습니까" }).then((res) => {
       if (res.isConfirmed) {
-        // alert("크루를 탈퇴하시겠습니까");
         getCrewQuit(
           accessToken,
           Number(crewId),
