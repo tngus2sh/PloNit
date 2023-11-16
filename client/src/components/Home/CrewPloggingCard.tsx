@@ -14,6 +14,28 @@ import { rootState } from "store/store";
 import * as P from "store/plogging-slice";
 import * as Crewping from "store/crewping-slice";
 
+const formattedDateTime = (datestr: any, onlyTime = false) => {
+  const days = ["일", "월", "화", "수", "목", "금", "토"];
+  const date = new Date(datestr);
+
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const dayName = days[date.getDay()];
+  const hour = date.getHours();
+
+  const minute = date.getMinutes();
+
+  const time = `${hour}:${minute < 10 ? "0" : ""}${minute}`;
+
+  if (onlyTime) {
+    return time;
+  }
+
+  const formattedDate = `${month}월 ${day}일(${dayName}) ${time}`;
+
+  return formattedDate;
+};
+
 function isPastTime(targetTime: string): boolean {
   // 주어진 문자열을 Date 객체로 변환
   const targetDate = new Date(targetTime);
@@ -72,7 +94,14 @@ const CrewPloggingCard = ({ card }: { card: MyCrewpingInterface }) => {
         <div className={style.crewping_leader}>{card.crewName}</div>
         <div className={style.crewping_name}>{card.crewpingName}</div>
         <div className={style.crewping_dday}>D - {DDAY}</div>
-        <div className={style.crewping_date}>{card.startDate}</div>
+        <div className={style.crewping_date}>
+          {card.startDate && card.endDate
+            ? `${formattedDateTime(card.startDate)} ~ ${formattedDateTime(
+                card.endDate,
+                card.startDate.slice(0, 10) === card.endDate.slice(0, 10),
+              )}`
+            : "날짜 정보 없음"}
+        </div>
         <div className={style.crewping_place}>{card.place}</div>
         <div className={style.crewping_member}>
           크루핑 멤버 {card.cntPeople}
