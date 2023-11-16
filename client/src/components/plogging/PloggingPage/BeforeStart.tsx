@@ -42,9 +42,9 @@ const BtnDiv: React.FC<IBtnDiv> = ({ height, onClick }) => {
 
 const PopUp: React.FC<IPopUp> = ({ nickname, onClick1, onClick2 }) => {
   const styles = {
-    backgroundColor: "rgba(255, 255, 255, 0.5)",
+    backgroundColor: "#2cd261",
     fontWeight: "bolder",
-    boxShadow: "0px 0px 10px 0px #5e5c5c80",
+    // boxShadow: "0px 0px 10px 0px #1e7d2f",
     borderRadius: "0.8rem",
   };
 
@@ -71,18 +71,8 @@ const PopUp: React.FC<IPopUp> = ({ nickname, onClick1, onClick2 }) => {
   return (
     <div>
       <TextComponent />
-      <CommonButton
-        text="자유 플로깅"
-        styles={styles}
-        onClick={onClick1}
-        textColor="#000000"
-      />
-      <CommonButton
-        text="봉사 플로깅"
-        styles={styles}
-        onClick={onClick2}
-        textColor="#000000"
-      />
+      <CommonButton text="자유 플로깅" styles={styles} onClick={onClick1} />
+      <CommonButton text="봉사 플로깅" styles={styles} onClick={onClick2} />
     </div>
   );
 };
