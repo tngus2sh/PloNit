@@ -48,7 +48,7 @@ const HomePage = () => {
           textAlign: "left",
           marginLeft: "1.5rem",
           marginTop: "1.5rem",
-          marginBottom: "2rem",
+          marginBottom: "1.7rem",
         }}
       >
         <div style={{ fontSize: "1.1rem" }}>
