@@ -21,7 +21,7 @@ const CrewAverageRanking = () => {
         console.log("크루 전체 랭킹 조회 성공");
         console.log(res.data);
         setAvgRank(res.data.resultBody);
-        setAvgList(res.data.resultBody.membersRanks);
+        setAvgList(res.data.resultBody.crewsAvgRanks);
       },
       (err) => {
         console.log("크루 전체 랭킹 조회 실패", err);

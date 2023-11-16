@@ -21,7 +21,7 @@ const CrewTotalRanking = () => {
         console.log("크루 전체 랭킹 조회 성공");
         console.log(res.data);
         setTotalRank(res.data.resultBody);
-        setTotalList(res.data.resultBody.membersRanks);
+        setTotalList(res.data.resultBody.crewsRanks);
       },
       (err) => {
         console.log("크루 전체 랭킹 조회 실패", err);
