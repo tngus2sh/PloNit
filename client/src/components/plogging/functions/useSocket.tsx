@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { rootState } from "store/store";
 import * as Crewping from "store/crewping-slice";
+import * as P from "store/plogging-slice";
 
 interface IuseSocket {
   stompClient: React.MutableRefObject<Client | null>;
@@ -74,12 +75,16 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
       return;
     }
     if (newMessage.type === "EXIT") {
+      console.log("EXIT ----");
       if (exitRequest) {
+        console.log("Yes");
         stompClient.current?.deactivate();
         dispatch(Crewping.clear());
+        dispatch(P.clear());
         navigate("/");
         console.log(`members:`, newMessage.members);
       } else {
+        console.log("No");
         dispatch(Crewping.setMembers(newMessage));
         console.log(`members:`, newMessage.members);
         const Toast = Swal.mixin({
