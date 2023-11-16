@@ -69,7 +69,7 @@ const PloggingComplete = () => {
     return state.plogging.ploggingId;
   });
   const crewId = useSelector<rootState, number>((state) => {
-    return state.crewping.crewId;
+    return state.plogging.crewId;
   });
   const crewpingId = useSelector<rootState, number>((state) => {
     return state.plogging.crewpingId;
