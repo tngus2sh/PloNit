@@ -22,8 +22,8 @@ const CrewNoticePage = () => {
       accessToken,
       Number(crewId),
       (res) => {
-        console.log("크루 상세 조회 성공");
-        console.log(res.data.resultBody);
+        // console.log("크루 상세 조회 성공");
+        // console.log(res.data.resultBody);
         setNotice(res.data.resultBody.notice);
       },
       (err) => {
@@ -41,8 +41,8 @@ const CrewNoticePage = () => {
       accessToken,
       data,
       (res) => {
-        console.log("공지사항 변경 성공");
-        console.log(res.data.resultBody);
+        // console.log("공지사항 변경 성공");
+        // console.log(res.data.resultBody);
         OkModal({ text: "공지사항이 변경되었습니다." });
         navigate(`/crew/community/${crewId}`);
       },

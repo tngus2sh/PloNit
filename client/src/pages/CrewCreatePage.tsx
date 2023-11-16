@@ -55,13 +55,13 @@ const CrewCreatePage = () => {
     if (isCrewImage) {
       formData.append("crewImage", isCrewImage);
     }
-    console.log(formData);
+    // console.log(formData);
     getCrewCreate(
       accessToken,
       formData,
       (res) => {
-        console.log(res.data);
-        console.log("크루 생성 성공");
+        // console.log(res.data);
+        // console.log("크루 생성 성공");
         OkModal({ text: "크루가 생성되었습니다" });
         navigate("/crew/list");
       },

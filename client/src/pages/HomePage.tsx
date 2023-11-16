@@ -23,8 +23,8 @@ const HomePage = () => {
       accessToken,
       data,
       (res) => {
-        console.log("FCM 토큰 전달 성공");
-        console.log(res.data);
+        // console.log("FCM 토큰 전달 성공");
+        // console.log(res.data);
       },
       (err) => {
         console.log("FCM 토큰 전달 실패", err);

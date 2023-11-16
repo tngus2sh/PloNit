@@ -26,8 +26,8 @@ const CommentItem = ({
             accessToken,
             comment.commentId,
             (res) => {
-              console.log(res.data);
-              console.log("댓글 삭제 성공");
+              // console.log(res.data);
+              // console.log("댓글 삭제 성공");
               OkModal({ text: "댓글이 삭제되었습니다." });
               fetchFeedList();
             },

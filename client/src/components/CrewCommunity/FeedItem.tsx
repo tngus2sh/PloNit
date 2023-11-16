@@ -65,8 +65,8 @@ const FeedItem = ({
       accessToken,
       feed.id,
       (res) => {
-        console.log(res.data);
-        console.log("좋아요 성공");
+        // console.log(res.data);
+        // console.log("좋아요 성공");
         setLiked(!isLiked);
         fetchFeedList();
       },
@@ -88,8 +88,8 @@ const FeedItem = ({
           accessToken,
           feed.id,
           (res) => {
-            console.log(res.data);
-            console.log("피드 삭제 성공");
+            // console.log(res.data);
+            // console.log("피드 삭제 성공");
             fetchFeedList();
           },
           (err) => {

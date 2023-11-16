@@ -34,7 +34,7 @@ const PersonalRanking = () => {
     getMemberRank(
       accessToken,
       (res) => {
-        console.log("개인 랭킹 조회 성공");
+        // console.log("개인 랭킹 조회 성공");
         setMemberRank(res.data.resultBody);
         setMemberList(res.data.resultBody.membersRanks);
       },

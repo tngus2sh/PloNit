@@ -29,8 +29,8 @@ const CrewpingMemberList = ({
         accessToken,
         Number(crewpingId),
         (res) => {
-          console.log("크루핑멤버 마스터 상세 조회 성공");
-          console.log(res.data);
+          // console.log("크루핑멤버 마스터 상세 조회 성공");
+          // console.log(res.data);
           setCrewpingMemberList(res.data.resultBody);
         },
         (err) => {
@@ -42,8 +42,8 @@ const CrewpingMemberList = ({
         accessToken,
         Number(crewpingId),
         (res) => {
-          console.log("크루핑멤버 상세 조회 성공");
-          console.log(res.data);
+          // console.log("크루핑멤버 상세 조회 성공");
+          // console.log(res.data);
           setCrewpingMemberList(res.data.resultBody);
         },
         (err) => {

@@ -44,7 +44,7 @@ const AddInfoPage = () => {
     nicknameCheck(
       newNickname,
       (res) => {
-        console.log("닉네임 중복 확인");
+        // console.log("닉네임 중복 확인");
         setnickname(res.data.resultBody.avl);
       },
       (err) => {
@@ -95,7 +95,7 @@ const AddInfoPage = () => {
       NotOkModal({ text: "활동 지역을 입력하세요" });
       return;
     }
-    console.log(data);
+    // console.log(data);
 
     addInfo(
       accessToken,
@@ -104,14 +104,14 @@ const AddInfoPage = () => {
         getProfile(
           accessToken,
           (res) => {
-            console.log("내 정보 조회 성공");
+            // console.log("내 정보 조회 성공");
             dispatch(userActions.saveMemberInfo(res.data.resultBody));
           },
           (err) => {
             console.log("내 정보 조회 실패", err);
           },
         );
-        console.log("추가정보 입력 성공");
+        // console.log("추가정보 입력 성공");
         navigate("/");
       },
       (err) => {

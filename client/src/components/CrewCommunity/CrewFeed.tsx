@@ -15,8 +15,8 @@ const CrewFeed = () => {
       accessToken,
       Number(crewId),
       (res) => {
-        console.log("피드 조회 성공");
-        console.log(res.data);
+        // console.log("피드 조회 성공");
+        // console.log(res.data);
         setFeedList(res.data.resultBody);
       },
       (err) => {

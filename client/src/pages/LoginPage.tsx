@@ -54,7 +54,7 @@ const LoginPage = () => {
     }
   }
   getDeviceToken();
-  console.log(deviceToken);
+  // console.log(deviceToken);
   return (
     <div className={style.login}>
       <StyledSwiper

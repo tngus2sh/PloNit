@@ -20,7 +20,7 @@ const ProfilePage = () => {
   const dispatch = useDispatch();
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const User = useSelector((state: any) => state.user);
-  console.log(User);
+  // console.log(User);
   const [isMyData, setMyData] = useState<UserInterface>({} as UserInterface);
 
   // const goMyAlarm = () => {
@@ -46,8 +46,8 @@ const ProfilePage = () => {
     logout(
       accessToken,
       (res) => {
-        console.log(res.data);
-        console.log("로그아웃 성공");
+        // console.log(res.data);
+        // console.log("로그아웃 성공");
         OkModal({ text: "로그아웃을 성공했습니다." });
         dispatch(userActions.clear());
         dispatch(P.clear());
@@ -64,8 +64,8 @@ const ProfilePage = () => {
     getProfile(
       accessToken,
       (res) => {
-        console.log("내 정보 조회 성공");
-        console.log(res.data.resultBody);
+        // console.log("내 정보 조회 성공");
+        // console.log(res.data.resultBody);
         setMyData(res.data.resultBody);
       },
       (err) => {

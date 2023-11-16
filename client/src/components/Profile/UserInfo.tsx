@@ -5,7 +5,7 @@ import { UserInterface } from "interface/authInterface";
 
 const UserInfo = ({ user }: { user: UserInterface }) => {
   const navigate = useNavigate();
-  console.log(user);
+  // console.log(user);
 
   const goProfileEdit = () => {
     navigate("/profile/edit");

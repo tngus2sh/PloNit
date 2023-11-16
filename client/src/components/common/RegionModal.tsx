@@ -36,8 +36,8 @@ const RegionModal = ({
     getSido(
       accessToken,
       (res) => {
-        console.log("시도 API 연결 성공");
-        console.log(res.data.resultBody);
+        // console.log("시도 API 연결 성공");
+        // console.log(res.data.resultBody);
         setsidoData(res.data.resultBody);
       },
       (err) => {
@@ -45,7 +45,7 @@ const RegionModal = ({
       },
     );
   }, []);
-  console.log(sidoData);
+  // console.log(sidoData);
 
   const SelectedSido = (item: any) => {
     setSelectedSidoCode(item.sidoCode);
@@ -61,8 +61,8 @@ const RegionModal = ({
       accessToken,
       item.sidoCode,
       (res) => {
-        console.log("구군 API 연결 성공");
-        console.log(res.data.resultBody);
+        // console.log("구군 API 연결 성공");
+        // console.log(res.data.resultBody);
         setgugunData(res.data.resultBody);
       },
       (err) => {
@@ -81,8 +81,8 @@ const RegionModal = ({
       accessToken,
       item.gugunCode,
       (res) => {
-        console.log("동 API 연결 성공");
-        console.log(res.data.resultBody);
+        // console.log("동 API 연결 성공");
+        // console.log(res.data.resultBody);
         setdongData(res.data.resultBody);
       },
       (err) => {

@@ -85,8 +85,8 @@ const MyPloggingPage = () => {
       accessToken: accessToken,
       month: isNowMonth,
       success: (res) => {
-        console.log("플로깅 월별기록 조회 성공");
-        console.log(res.data.resultBody);
+        // console.log("플로깅 월별기록 조회 성공");
+        // console.log(res.data.resultBody);
         setMonthList(res.data.resultBody);
       },
       fail: (error) => {
@@ -102,8 +102,8 @@ const MyPloggingPage = () => {
       end_day: formattedDate(dateRange[1]),
       type: isType,
       success: (res) => {
-        console.log("플로깅 일별기록 조회 성공");
-        console.log(res.data);
+        // console.log("플로깅 일별기록 조회 성공");
+        // console.log(res.data);
         setPloggingList(res.data.resultBody);
       },
       fail: (error) => {

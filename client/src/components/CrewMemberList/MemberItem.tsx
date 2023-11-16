@@ -26,13 +26,13 @@ const MemberItem = ({
             Number(crewId),
             member.crewMemberId,
             (res) => {
-              console.log("크루 강퇴 요청 성공");
-              console.log(res.data);
+              // console.log("크루 강퇴 요청 성공");
+              // console.log(res.data);
               OkModal({ text: "크루 강퇴가 완료되었습니다." });
               fetchMemberList();
             },
             (err) => {
-              console.log("크루 강퇴 요청 실패", err);
+              // console.log("크루 강퇴 요청 실패", err);
             },
           );
         }

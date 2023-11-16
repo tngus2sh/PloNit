@@ -12,8 +12,8 @@ const MissionBadge = () => {
     getMissionBadge(
       accessToken,
       (res) => {
-        console.log("미션 뱃지 조회 성공");
-        console.log(res.data);
+        // console.log("미션 뱃지 조회 성공");
+        // console.log(res.data);
         setMissionBadge(res.data.resultBody);
       },
       (err) => {

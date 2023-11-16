@@ -29,8 +29,8 @@ const CrewDetailPage = () => {
       accessToken,
       Number(crewId),
       (res) => {
-        console.log("크루 상세 조회 성공");
-        console.log(res.data);
+        // console.log("크루 상세 조회 성공");
+        // console.log(res.data);
         setCrewDetail(res.data.resultBody);
       },
       (err) => {
@@ -46,8 +46,8 @@ const CrewDetailPage = () => {
           accessToken,
           Number(crewId),
           (res) => {
-            console.log("크루 탈퇴 요청 성공");
-            console.log(res.data);
+            // console.log("크루 탈퇴 요청 성공");
+            // console.log(res.data);
             // OkModal({ text: "크루 탈퇴가 완료되었습니다." });
             navigate(`/crew/community/${crewId}`);
           },

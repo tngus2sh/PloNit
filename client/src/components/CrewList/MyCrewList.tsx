@@ -15,9 +15,9 @@ const MyCrewList = () => {
     getMyCrewList(
       accessToken,
       (res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setMyCrewList(res.data.resultBody);
-        console.log("크루 목록조회 성공");
+        // console.log("크루 목록조회 성공");
       },
       (err) => {
         const response = [

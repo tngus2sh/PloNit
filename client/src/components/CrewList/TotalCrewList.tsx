@@ -17,9 +17,9 @@ const TotalCrewList = () => {
       getCrewList(
         accessToken,
         (res) => {
-          console.log(res.data);
+          // console.log(res.data);
           setTotalCrewList(res.data.resultBody);
-          console.log("크루 목록조회 성공");
+          // console.log("크루 목록조회 성공");
         },
         (err) => {
           console.log("크루 목록조회 실패", err);
@@ -31,9 +31,9 @@ const TotalCrewList = () => {
         Number(isSelectedType),
         event.target.value,
         (res) => {
-          console.log(res.data);
+          // console.log(res.data);
           setTotalCrewList(res.data.resultBody);
-          console.log("크루 검색 성공");
+          // console.log("크루 검색 성공");
         },
         (err) => {
           console.log("크루 검색 실패", err);
@@ -46,9 +46,9 @@ const TotalCrewList = () => {
     getCrewList(
       accessToken,
       (res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setTotalCrewList(res.data.resultBody);
-        console.log("크루 목록조회 성공");
+        // console.log("크루 목록조회 성공");
       },
       (err) => {
         console.log("크루 목록조회 실패", err);

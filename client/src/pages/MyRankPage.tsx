@@ -53,13 +53,13 @@ const MyRankPage = () => {
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const [isMyRanking, setMyRanking] = useState<MyRankInterface[]>([]);
   const [isNow, setNow] = useState<MyRankInterface>({} as MyRankInterface);
-  console.log(isMyRanking[0]);
+  // console.log(isMyRanking[0]);
   useEffect(() => {
     getMyRanking(
       accessToken,
       (res) => {
-        console.log("나의 랭킹 조회 성공");
-        console.log(res.data);
+        // console.log("나의 랭킹 조회 성공");
+        // console.log(res.data);
         setMyRanking(res.data.resultBody);
         if (res.data.resultBody[0].isSeason) {
           setNow(res.data.resultBody[0]);
@@ -78,7 +78,7 @@ const MyRankPage = () => {
       },
     );
   }, []);
-  console.log(isMyRanking);
+  // console.log(isMyRanking);
   return (
     <div>
       {isNow.startDate ? (

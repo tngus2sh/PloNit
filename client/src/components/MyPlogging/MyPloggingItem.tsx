@@ -55,7 +55,7 @@ const formatMinutes = (minutes: any) => {
 const MyPloggingItem = ({ plogging }: { plogging: PloggingLog }) => {
   const navigate = useNavigate();
   const User = useSelector((state: any) => state.user);
-  console.log(plogging);
+  // console.log(plogging);
 
   const goPloggingDetailHandler = () => {
     navigate(`/profile/plogging/detail/${plogging.id}`);
