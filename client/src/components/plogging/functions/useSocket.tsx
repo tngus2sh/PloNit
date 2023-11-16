@@ -80,9 +80,7 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
     if (newMessage.type === "EXIT") {
       if (newMessage.nickName === nickName) {
         console.log("Yes");
-        stompClient.current?.deactivate();
-        dispatch(Crewping.clear());
-        dispatch(P.clear());
+        setToggleSocket(false);
         navigate("/");
         console.log(`members:`, newMessage.members);
       } else {
@@ -249,10 +247,12 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
       connectToSocket();
     } else {
       stompClient.current?.deactivate();
+      dispatch(Crewping.clear());
     }
     return () => {
       if (stompClient.current) {
         stompClient.current.deactivate();
+        dispatch(Crewping.clear());
       }
     };
   }, [toggleSocket]);
