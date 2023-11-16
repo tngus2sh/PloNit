@@ -59,7 +59,7 @@ function useEffectApp_Crewping() {
       function getLocation() {
         interval.current = setInterval(() => {
           dispatch(Crewping.setGetLocation(true));
-        }, 30000);
+        }, 5000);
       }
 
       if (window.Worker) {

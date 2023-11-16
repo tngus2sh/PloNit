@@ -38,6 +38,7 @@ const MyPloggingList = ({
         </div>
         <div>
           <select
+            className={style.type_select}
             value={isSelectedType}
             onChange={(e) => setSelectedType(e.target.value)}
           >
