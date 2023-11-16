@@ -170,18 +170,18 @@ const CrewCommunityPage = () => {
         </>
       )}
       {isCrewDetail.isMyCrew ? (
-        <div className={style.plus} onClick={toggleButton}>
-          <Icon
-            icon="bi:plus-lg"
-            style={{
-              width: "2rem",
-              height: "2rem",
-              color: "white",
-              marginTop: "0.25rem",
-              padding: "0.6rem",
-            }}
-          />
-        </div>
+        <Icon
+          className={style.plus}
+          onClick={toggleButton}
+          icon="bi:plus-lg"
+          style={{
+            width: "2rem",
+            height: "2rem",
+            color: "white",
+            marginTop: "0.25rem",
+            padding: "0.6rem",
+          }}
+        />
       ) : (
         <>
           <div className={style.register_btn}>
