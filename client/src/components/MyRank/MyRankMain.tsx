@@ -17,7 +17,9 @@ const MyRankMain = ({ rank }: { rank: MyRankInterface }) => {
     <div className={style.ranking_info_container}>
       <div className={style.rank_container}>
         <div className={style.rank_title}>순위</div>
-        <div className={style.rank_data}>{rank ? rank.ranking : "-"}위</div>
+        <div className={style.rank_data}>
+          {rank.ranking === 0 ? "-" : rank.ranking}위
+        </div>
       </div>
 
       <div className={style.profile_container}>

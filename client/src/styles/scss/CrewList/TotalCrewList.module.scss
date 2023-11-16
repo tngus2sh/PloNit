@@ -1,7 +1,7 @@
 @import "../styles";
 
 .search {
-  margin: 1rem;
+  margin: 1rem 0.7rem;
   display: flex;
   .select {
     width: 4.5rem;
@@ -23,9 +23,9 @@
   /* 마우스, 터치로 버튼에 포커스 시 */
   .select:focus:not(:focus-visible) {
     outline: none;
-    box-shadow: 1px 1px 3px rgba(1, 1, 0, .7);
+    box-shadow: 1px 1px 3px rgba(1, 1, 0, 0.7);
   }
-  // select::-ms-expand { 
+  // select::-ms-expand {
   //   display: none;
   // }
   // .select {
@@ -51,6 +51,6 @@
   /* 마우스, 터치로 버튼에 포커스 시 */
   .inputBox:focus:not(:focus-visible) {
     outline: none;
-    box-shadow: 1px 1px 3px rgba(1, 1, 0, .7);
+    box-shadow: 1px 1px 3px rgba(1, 1, 0, 0.7);
   }
 }
