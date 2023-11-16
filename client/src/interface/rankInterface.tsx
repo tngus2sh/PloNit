@@ -23,10 +23,11 @@ export interface RankDetailInterface {
 // }
 
 export interface MyRankInterface {
-  rank: number;
+  ranking: number;
   distance: number;
-  StartDate: string;
-  EndDate: string;
+  startDate: string;
+  endDate: string;
+  isSeason: boolean;
 }
 
 export interface MyCrewRankInterface {

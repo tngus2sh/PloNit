@@ -23,6 +23,7 @@ const CrewpingDate = ({ setCrewpingStartDate, setCrewpingEndDate }: any) => {
   const onChangeStartDate = (date: any) => {
     setSelectedStartDate(date);
     setCrewpingStartDate(formattedDate(date));
+    setSelectedEndDate(date);
   };
   const onChangeEndDate = (date: any) => {
     setSelectedEndDate(date);
@@ -102,6 +103,7 @@ const CrewpingDate = ({ setCrewpingStartDate, setCrewpingEndDate }: any) => {
         locale={ko}
         showPopperArrow={false}
         fixedHeight
+        disabled={!selectedStartDate}
         renderCustomHeader={({
           date,
           decreaseMonth,

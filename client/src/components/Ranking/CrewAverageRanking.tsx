@@ -31,20 +31,23 @@ const CrewAverageRanking = () => {
   console.log(isAvgRank);
   console.log(isAvgList);
   return (
-    <div className={style.ranking}>
-      {
-        <div className={style.top}>
+    <div className={style.ranking_container}>
+      <div className={style.ranking_top_container}>
+        <div className={style.member_container}>
           {isAvgList[1] && <SecondRankingItem data={isAvgList[1]} />}
           {isAvgList[0] && <FirstRankingItem data={isAvgList[0]} />}
           {isAvgList[2] && <SecondRankingItem data={isAvgList[2]} />}
         </div>
-      }
-      {isAvgList.map((data, index) => {
-        if (index >= 3) {
-          return <BasicRankingItem key={index} data={data} />;
-        }
-        return null;
-      })}
+      </div>
+      <div className={style.ranking_bottom_container}>
+        {isAvgList.map((data, index) => {
+          if (index >= 3) {
+            return <BasicRankingItem key={index} data={data} />;
+          }
+          return null;
+        })}
+      </div>
+
       <div style={{ height: "4rem" }}></div>
     </div>
   );

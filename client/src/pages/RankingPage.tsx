@@ -8,8 +8,8 @@ import CrewAverageRanking from "components/Ranking/CrewAverageRanking";
 const RankingPage = () => {
   const tabProps = {
     개인: <PersonalRanking />,
-    크루전체: <CrewTotalRanking />,
-    크루평균: <CrewAverageRanking />,
+    "크루 전체": <CrewTotalRanking />,
+    "크루 평균": <CrewAverageRanking />,
   };
 
   return (
