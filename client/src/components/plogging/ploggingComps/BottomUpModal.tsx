@@ -88,7 +88,7 @@ const BottomUpModal: React.FC<IBottomUpModal> = ({
           boxSizing: "border-box",
           zIndex: 3000,
           width: `${Math.min(width, 500) - fontSize}px`,
-          backgroundColor: "#eef3fc",
+          backgroundColor: "#FFFFFF",
           borderRadius: "0.5rem",
           bottom: `0.5em`,
           padding: `1rem 1.25rem`,
