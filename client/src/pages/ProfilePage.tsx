@@ -19,9 +19,9 @@ const ProfilePage = () => {
   console.log(User);
   const [isMyData, setMyData] = useState<UserInterface>({} as UserInterface);
 
-  const goMyAlarm = () => {
-    navigate("/notification");
-  };
+  // const goMyAlarm = () => {
+  //   navigate("/notification");
+  // };
 
   const goMyCrew = () => {
     navigate("/profile/crew");
