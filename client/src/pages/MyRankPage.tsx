@@ -7,6 +7,29 @@ import style from "styles/css/MyRankPage.module.css";
 import { MyRankInterface } from "interface/rankInterface";
 import { getMyRanking } from "api/lib/members";
 
+const formattedSeason = (datestr: any) => {
+  const date = new Date(datestr);
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const season = day === 1 ? 1 : 2;
+
+  return `${month}-${season} 시즌`;
+};
+
+const formattedDate = (datestr: any) => {
+  const date = new Date(datestr);
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  return `${month}월 ${day}일`;
+};
+const endformattedDate = (datestr: any) => {
+  const dateObj = new Date(datestr);
+  dateObj.setDate(dateObj.getDate() - 1);
+  const month = dateObj.getMonth() + 1;
+  const day = dateObj.getDate();
+  return `${month}월 ${day}일`;
+};
+
 const MyRankPage = () => {
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const [isMyRanking, setMyRanking] = useState<MyRankInterface[]>([]);
@@ -32,11 +55,16 @@ const MyRankPage = () => {
       <div className={style.page_container}>
         <div className={style.myrank_container}>
           <div className={style.season_info_container}>
-            <div className={style.season_title}>10-2 시즌</div>
-            <div className={style.season_date}>(10월 16일 ~ 10월 31일)</div>
+            <div className={style.season_title}>
+              {formattedSeason(isMyRanking[0].startDate)}
+            </div>
+            <div className={style.season_date}>
+              ({formattedDate(isMyRanking[0].startDate)} ~
+              {endformattedDate(isMyRanking[0].endDate)})
+            </div>
           </div>
           <div className={style.current_container}>
-            <MyRankMain />
+            <MyRankMain rank={isMyRanking[0]} />
           </div>
         </div>
 
@@ -46,8 +74,14 @@ const MyRankPage = () => {
           </div>
 
           <div className={style.prev_item_container}>
-            <MyRankItem />
-            <MyRankItem />
+            {isMyRanking.map((data, index) => {
+              if (index >= 1) {
+                return <MyRankItem key={index} rank={data} />;
+              }
+              return null;
+            })}
+            {/* <MyRankItem />
+            <MyRankItem /> */}
           </div>
         </div>
       </div>
