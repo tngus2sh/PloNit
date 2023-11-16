@@ -48,35 +48,130 @@ const PersonalRanking = () => {
       },
       (err) => {
         console.log("개인 랭킹 조회 실패", err);
+        const response = {
+          startDate: "2023-11-15T15:00:00.000418",
+          endDate: "2023-12-01T00:00:00",
+          membersRanks: [
+            {
+              nickName: "내가 소수현임 ㄹㅇ",
+              profileImage:
+                "https://plonitbucket.s3.ap-northeast-2.amazonaws.com/plonit/plonit_profile.png",
+              ranking: 1,
+              distance: 100.23,
+              isMine: false,
+            },
+            {
+              nickName: "히힣",
+              profileImage:
+                "https://plonitbucket.s3.ap-northeast-2.amazonaws.com/member/profileImage/d41fcfd4-89ff-424a-a273-6749d07f94b4%EB%A9%94%EC%9D%B8%EC%84%A4%EB%AA%85_1.gif",
+              ranking: 2,
+              distance: 43.12,
+              isMine: false,
+            },
+            {
+              nickName: "prime",
+              profileImage:
+                "https://plonitbucket.s3.ap-northeast-2.amazonaws.com/member/profileImage/b079c44f-eee3-480a-8489-983bfdeae3a2R1280x0.jpeg",
+              ranking: 3,
+              distance: 34.21,
+              isMine: false,
+            },
+            {
+              nickName: "초코파이썬",
+              profileImage:
+                "https://plonitbucket.s3.ap-northeast-2.amazonaws.com/plonit/plonit_profile.png",
+              ranking: 4,
+              distance: 33.3,
+              isMine: false,
+            },
+            {
+              nickName: "관리자",
+              profileImage:
+                "https://plonitbucket.s3.ap-northeast-2.amazonaws.com/plonit/plonit_profile.png",
+              ranking: 5,
+              distance: 23.12,
+              isMine: false,
+            },
+            {
+              nickName: "예지",
+              profileImage:
+                "https://plonitbucket.s3.ap-northeast-2.amazonaws.com/plonit/plonit_profile.png",
+              ranking: 6,
+              distance: 10,
+              isMine: false,
+            },
+            {
+              nickName: "밍밍",
+              profileImage:
+                "https://plonitbucket.s3.ap-northeast-2.amazonaws.com/plonit/plonit_profile.png",
+              ranking: 7,
+              distance: 9.2,
+              isMine: false,
+            },
+            {
+              nickName: "ssafy",
+              profileImage:
+                "https://plonitbucket.s3.ap-northeast-2.amazonaws.com/member/profileImage/7816e4d4-20dd-4617-9b1d-fb5edc9e56afdog1.jpg",
+              ranking: 8,
+              distance: 2.2,
+              isMine: false,
+            },
+            {
+              nickName: "저기요비키세요",
+              profileImage:
+                "https://plonitbucket.s3.ap-northeast-2.amazonaws.com/plonit/plonit_profile.png",
+              ranking: 9,
+              distance: 1,
+              isMine: true,
+            },
+            {
+              nickName: "glonj",
+              profileImage:
+                "https://plonitbucket.s3.ap-northeast-2.amazonaws.com/plonit/plonit_profile.png",
+              ranking: 10,
+              distance: 0.4,
+              isMine: false,
+            },
+          ],
+        };
+        setMemberRank(response);
+        setMemberList(response.membersRanks);
       },
     );
   }, []);
   console.log(isMemberRank);
   console.log(isMemberList);
   return (
-    <div className={style.ranking}>
-      <div className={style.season}>
-        <div className={style.detail}>
-          {isMemberRank.startDate && formattedSeason(isMemberRank.startDate)}
+    <div className={style.ranking_container}>
+      <div className={style.ranking_top_container}>
+        <div className={style.season_container}>
+          <div className={style.season_info}>
+            {isMemberRank.startDate && formattedSeason(isMemberRank.startDate)}
+          </div>
+          <div className={style.season_detail}>
+            {`(`}
+            {isMemberRank.startDate &&
+              formattedDate(isMemberRank.startDate)} ~{" "}
+            {isMemberRank.endDate && endformattedDate(isMemberRank.endDate)}
+            {`)`}
+          </div>
         </div>
-        <div className={style.date}>
-          {isMemberRank.startDate && formattedDate(isMemberRank.startDate)} -{" "}
-          {isMemberRank.endDate && endformattedDate(isMemberRank.endDate)}
-        </div>
-      </div>
-      {
-        <div className={style.top}>
+        <div className={style.member_container}>
           {isMemberList[1] && <SecondRankingItem data={isMemberList[1]} />}
           {isMemberList[0] && <FirstRankingItem data={isMemberList[0]} />}
           {isMemberList[2] && <SecondRankingItem data={isMemberList[2]} />}
         </div>
-      }
-      {isMemberList.map((data, index) => {
-        if (index >= 3) {
-          return <BasicRankingItem key={index} data={data} />;
-        }
-        return null;
-      })}
+      </div>
+
+      <div className={style.ranking_bottom_container}>
+        {isMemberList.map((data, index) => {
+          if (index >= 3) {
+            return <BasicRankingItem key={index} data={data} />;
+          }
+          return null;
+        })}
+      </div>
+
       <div style={{ height: "4rem" }}></div>
     </div>
   );
