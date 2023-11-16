@@ -174,10 +174,11 @@ const CrewCommunityPage = () => {
           <Icon
             icon="bi:plus-lg"
             style={{
-              width: "2.5rem",
-              height: "2.5rem",
+              width: "2rem",
+              height: "2rem",
               color: "white",
               marginTop: "0.25rem",
+              padding: "0.6rem",
             }}
           />
         </div>
