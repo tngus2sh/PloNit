@@ -54,13 +54,13 @@ const MyRankPage = () => {
       <div className={style.page_container}>
         <div className={style.myrank_container}>
           <div className={style.season_info_container}>
-            {/* <div className={style.season_title}>
+            <div className={style.season_title}>
               {isMyRanking && formattedSeason(isMyRanking[0].startDate)}
             </div>
             <div className={style.season_date}>
               ({isMyRanking && formattedDate(isMyRanking[0].startDate)} ~
               {isMyRanking && endformattedDate(isMyRanking[0].endDate)})
-            </div> */}
+            </div>
           </div>
           <div className={style.current_container}>
             <MyRankMain rank={isMyRanking[0]} />
@@ -73,12 +73,13 @@ const MyRankPage = () => {
           </div>
 
           <div className={style.prev_item_container}>
-            {isMyRanking.map((data, index) => {
-              if (index >= 1) {
-                return <MyRankItem key={index} rank={data} />;
-              }
-              return null;
-            })}
+            {isMyRanking &&
+              isMyRanking.map((data, index) => {
+                if (index >= 1) {
+                  return <MyRankItem key={index} rank={data} />;
+                }
+                return null;
+              })}
           </div>
         </div>
       </div>
