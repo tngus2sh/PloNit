@@ -19,8 +19,8 @@ const formattedSeason = (datestr: any) => {
 
 const formattedDate = (datestr: any) => {
   const date = new Date(datestr);
-  const month = "0" + (date.getMonth() + 1);
-  const day = "0" + date.getDate();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
   return `${month}월 ${day}일`;
 };
 const endformattedDate = (datestr: any) => {
