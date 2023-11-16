@@ -8,8 +8,10 @@ import com.plonit.plonitservice.api.member.controller.response.FindMemberInfoRes
 import com.plonit.plonitservice.api.member.controller.response.FindMemberRes;
 import com.plonit.plonitservice.api.member.service.MemberService;
 import com.plonit.plonitservice.api.member.service.dto.UpdateMemberDto;
+import com.plonit.plonitservice.api.member.service.dto.UpdateVolunteerInfoDto;
 import com.plonit.plonitservice.common.AwsS3Uploader;
 import com.plonit.plonitservice.common.exception.CustomException;
+import com.plonit.plonitservice.common.exception.ErrorCode;
 import com.plonit.plonitservice.common.util.RequestUtils;
 import com.plonit.plonitservice.domain.badge.repository.MemberBadgeQueryRepository;
 import com.plonit.plonitservice.domain.crew.repository.CrewMemberQueryRepository;
@@ -39,6 +41,7 @@ import static com.plonit.plonitservice.common.util.LogCurrent.START;
 @Slf4j
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class MemberServiceImpl implements MemberService {
 
     private final MemberQueryRepository memberQueryRepository;
@@ -110,5 +113,13 @@ public class MemberServiceImpl implements MemberService {
                 .forEach(item -> item.setFloggingCount(crewPloggingCount.getOrDefault(item.getId(), 0L)));
 
         return crewInfoList;
+    }
+
+    @Override
+    public void updateVolunteerInfo(UpdateVolunteerInfoDto dto) {
+        Member member = memberRepository.findById(dto.getMemberId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_BAD_REQUEST));
+
+        member.updateVolunteerInfo(dto);
     }
 }

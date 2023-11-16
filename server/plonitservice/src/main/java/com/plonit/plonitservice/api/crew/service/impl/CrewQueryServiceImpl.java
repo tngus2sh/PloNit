@@ -15,6 +15,8 @@ import com.plonit.plonitservice.domain.crew.repository.CrewQueryRepository;
 import com.plonit.plonitservice.domain.crew.repository.CrewRepository;
 import com.plonit.plonitservice.domain.member.repository.MemberQueryRepository;
 import com.plonit.plonitservice.domain.member.repository.MemberRepository;
+import com.plonit.plonitservice.domain.rank.RankingPeriod;
+import com.plonit.plonitservice.domain.rank.repository.RankingPeriodQueryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -41,6 +43,7 @@ public class CrewQueryServiceImpl implements CrewQueryService {
     private final CrewMemberRepository crewMemberRepository;
     private final CrewMemberQueryRepository crewMemberQueryRepository;
     private final MemberQueryRepository memberQueryRepository;
+    private final RankingPeriodQueryRepository rankingPeriodQueryRepository;
     private final MemberRepository memberRepository;
     private final AwsS3Uploader awsS3Uploader;
     private final RedisUtils redisUtils;
@@ -68,8 +71,14 @@ public class CrewQueryServiceImpl implements CrewQueryService {
                 .orElseThrow(() -> new CustomException(CREW_NOT_FOUND));
 
         // 랭킹 정보 가져오기
+        RankingPeriod rankingPeriod = rankingPeriodQueryRepository.findRecentId()
+                .orElseThrow(() -> new CustomException(RANKING_PERIOD_NOT_FOUND));
+
+        findCrewRes.setStartDate(rankingPeriod.getStartDate());
+        findCrewRes.setEndDate(rankingPeriod.getEndDate());
+
         int index = 0;
-        Set<ZSetOperations.TypedTuple<String>> rankCrewSorts = redisUtils.getSortedSetRangeWithScores(Rank.CREW.name(), 0, -1);
+        Set<ZSetOperations.TypedTuple<String>> rankCrewSorts = redisUtils.getSortedSetRangeWithScores(Rank.CREW.getDescription(), 0, -1);
         for (ZSetOperations.TypedTuple<String> rankCrewSort : rankCrewSorts) {
             ++index;
             String value = rankCrewSort.getValue();
@@ -80,7 +89,7 @@ public class CrewQueryServiceImpl implements CrewQueryService {
         }
 
         index = 0;
-        Set<ZSetOperations.TypedTuple<String>> rankCrewAvgSorts = redisUtils.getSortedSetRangeWithScores(Rank.CREW_AVG.name(), 0, -1);
+        Set<ZSetOperations.TypedTuple<String>> rankCrewAvgSorts = redisUtils.getSortedSetRangeWithScores(Rank.CREW_AVG.getDescription(), 0, -1);
         for (ZSetOperations.TypedTuple<String> rankCrewAvgSort : rankCrewAvgSorts) {
             ++index;
             String value = rankCrewAvgSort.getValue();
