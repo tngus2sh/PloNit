@@ -51,24 +51,15 @@ const MyRankPage = () => {
   return (
     <div>
       <BackTopBar text="나의 랭킹" />
-      <div className={style.page_container}>
+      {/* <div className={style.page_container}>
         <div className={style.myrank_container}>
           <div className={style.season_info_container}>
             <div className={style.season_title}>
-              {isMyRanking &&
-                isMyRanking[0] &&
-                formattedSeason(isMyRanking[0].startDate)}
+              {formattedSeason(isMyRanking[0].startDate)}
             </div>
             <div className={style.season_date}>
-              (
-              {isMyRanking &&
-                isMyRanking[0] &&
-                formattedDate(isMyRanking[0].startDate)}{" "}
-              ~
-              {isMyRanking &&
-                isMyRanking[0] &&
-                endformattedDate(isMyRanking[0].endDate)}
-              )
+              ({formattedDate(isMyRanking[0].startDate)} ~
+              {endformattedDate(isMyRanking[0].endDate)})
             </div>
           </div>
           <div className={style.current_container}>
@@ -82,16 +73,15 @@ const MyRankPage = () => {
           </div>
 
           <div className={style.prev_item_container}>
-            {isMyRanking &&
-              isMyRanking.map((data, index) => {
-                if (index >= 1) {
-                  return <MyRankItem key={index} rank={data} />;
-                }
-                return null;
-              })}
+            {isMyRanking.map((data, index) => {
+              if (index >= 1) {
+                return <MyRankItem key={index} rank={data} />;
+              }
+              return null;
+            })}
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
