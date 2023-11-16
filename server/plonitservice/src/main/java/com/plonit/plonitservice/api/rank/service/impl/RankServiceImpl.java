@@ -6,6 +6,8 @@ import com.plonit.plonitservice.api.member.controller.response.MemberRankRes;
 import com.plonit.plonitservice.api.rank.controller.response.*;
 import com.plonit.plonitservice.api.rank.service.RankService;
 import com.plonit.plonitservice.common.enums.Rank;
+import com.plonit.plonitservice.common.exception.CustomException;
+import com.plonit.plonitservice.common.exception.ErrorCode;
 import com.plonit.plonitservice.common.util.RedisUtils;
 import com.plonit.plonitservice.domain.crew.repository.CrewMemberRepository;
 import com.plonit.plonitservice.domain.crew.repository.CrewQueryRepository;
@@ -22,6 +24,8 @@ import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+
+import static com.plonit.plonitservice.common.exception.ErrorCode.RANKING_PERIOD_NOT_FOUND;
 
 
 @Service
@@ -251,7 +255,29 @@ public class RankServiceImpl implements RankService {
      */
     @Override
     public List<FindMyRankingRes> findMyRanking(Long memberKey) {
-        return memberRankingQueryRepository.findMyRanking(memberKey);
+        List<FindMyRankingRes> myRanking = memberRankingQueryRepository.findMyRanking(memberKey);
+
+        /* 현재 랭킹 넣기 */
+        int ranking = 0;
+
+        RankingPeriod rankingPeriod = rankingPeriodQueryRepository.findRecentId()
+                .orElseThrow(() -> new CustomException(RANKING_PERIOD_NOT_FOUND));
+
+        Set<ZSetOperations.TypedTuple<String>> memberRankings = redisUtils.getSortedSetRangeWithScores(Rank.MEMBER.getDescription(), 0, -1);
+        for (ZSetOperations.TypedTuple<String> memberRanking : memberRankings) {
+            ++ranking;
+            if (memberRanking.getValue().equals(String.valueOf(memberKey))) {
+                myRanking.add(FindMyRankingRes.builder()
+                        .distance(memberRanking.getScore())
+                        .ranking(ranking)
+                        .startDate(rankingPeriod.getStartDate())
+                        .endDate(rankingPeriod.getEndDate())
+                        .isSeason(true)
+                        .build());
+            }
+        }
+
+        return myRanking;
     }
 
     @Override
