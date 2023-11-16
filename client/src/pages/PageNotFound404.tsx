@@ -1,10 +1,16 @@
 import React, { useEffect, useRef } from "react";
 import Swal from "sweetalert2";
+
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { rootState } from "store/store";
 
 const PageNotFound404 = () => {
-  const check = useRef<boolean>(false);
   const navigate = useNavigate();
+  const isLogin = useSelector<rootState, boolean>((state) => {
+    return state.user.auth.isLogin;
+  });
+  const check = useRef<boolean>(false);
 
   useEffect(() => {
     if (!check.current) {
@@ -27,7 +33,11 @@ const PageNotFound404 = () => {
 
       Toast.fire({
         icon: "error",
-        title: "존재하지 않는 페이지입니다.",
+        title: `${
+          isLogin
+            ? "존재하지 않는 페이지입니다."
+            : "접근 권한이 없는 페이지입니다."
+        }`,
       });
     }
 

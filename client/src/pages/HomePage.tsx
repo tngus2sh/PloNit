@@ -11,17 +11,10 @@ import { alarm } from "api/lib/auth";
 import style from "styles/css/HomePage/Carousel.module.css";
 
 const HomePage = () => {
-  const navigate = useNavigate();
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
-  const isLogined = useSelector((state: any) => state.user.auth.isLogin);
   const User = useSelector((state: any) => state.user.info);
   const fcmToken = useSelector((state: any) => state.user.alarm.fcmToken);
 
-  useEffect(() => {
-    if (!isLogined) {
-      navigate("/login");
-    }
-  }, []);
   useEffect(() => {
     const data = {
       fcmToken: fcmToken,
