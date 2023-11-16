@@ -9,10 +9,9 @@ function roundToTwoDecimalPlaces(num: any) {
 const BasicRankingItem = ({ data }: { data: RankDetailInterface }) => {
   return (
     <div
-      className={style.rank_member_container}
-      style={{
-        backgroundColor: data.isMine || data.isMyCrew ? "initial" : "f9f9f9",
-      }}
+      className={`${style.rank_member_container} ${
+        data.isMine || data.isMyCrew ? style.member_mine : style.member_notMine
+      }`}
     >
       <div className={style.rank_container}>
         <div>{data.ranking}</div>
