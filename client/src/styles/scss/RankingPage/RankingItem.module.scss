@@ -5,8 +5,12 @@
   padding: 0.5rem 0rem;
   margin-bottom: 1rem;
   border-radius: 0.8rem;
-  background-color: background: linear-gradient(90deg, rgba(206,230,254,1) 0%, rgba(253,254,255,1) 100%);;
-  box-shadow: 0px 0px 10px #dedede;
+  background: linear-gradient(
+    90deg,
+    rgba(206, 230, 254, 1) 0%,
+    rgba(253, 254, 255, 1) 100%
+  );
+  box-shadow: 0px 0px 10px #161010;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -45,8 +49,6 @@
     margin-right: 0.5rem;
   }
 }
-
-
 
 .basic_item {
   border: 1px solid black;
