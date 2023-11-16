@@ -45,7 +45,8 @@ const ProfilePage = () => {
         console.log(res.data);
         console.log("로그아웃 성공");
         OkModal({ text: "로그아웃을 성공했습니다." });
-        dispatch(userActions.logout());
+        // dispatch(userActions.logout());
+        localStorage.clear();
         navigate("/login");
       },
       (err) => {
