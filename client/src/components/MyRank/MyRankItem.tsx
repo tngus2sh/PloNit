@@ -3,9 +3,9 @@ import style from "styles/css/MyRankPage/MyRankItem.module.css";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import { MyRankInterface } from "interface/rankInterface";
 
-// function roundToTwoDecimalPlaces(num: any) {
-//   return parseFloat(num.toFixed(2));
-// }
+function roundToTwoDecimalPlaces(num: any) {
+  return parseFloat(num.toFixed(2));
+}
 
 const formattedSeason = (datestr: any) => {
   const date = new Date(datestr);
@@ -34,7 +34,7 @@ const MyRankItem = ({ rank }: { rank: MyRankInterface }) => {
         </div>
         <div className={style.distance_container}>
           <div className={style.distance}>
-            <span>{rank.distance}km</span>
+            <span>{roundToTwoDecimalPlaces(rank.distance)}km</span>
           </div>
         </div>
       </div>

@@ -9,6 +9,7 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
+  margin-bottom: 1.2rem;
 
   .rank_title_container {
     width: 25%;
@@ -17,7 +18,7 @@
       font-size: 1.8rem;
     }
   }
-  
+
   .rank_info_container {
     flex-grow: 1;
     padding-right: 1.3rem;

@@ -133,8 +133,8 @@ const AddInfoPage = () => {
         type="text"
         value={isSignupName}
         onChange={onChangeName}
-        placeholder="20자 이내로 입력해주세요"
-        maxLength={20}
+        placeholder="10자 이내로 입력해주세요"
+        maxLength={10}
       />
       <Input
         id="nickname"
@@ -142,8 +142,8 @@ const AddInfoPage = () => {
         type="text"
         value={isSignupNickname}
         onChange={onChangeNickname}
-        placeholder="20자 이내로 입력해주세요"
-        maxLength={20}
+        placeholder="10자 이내로 입력해주세요"
+        maxLength={10}
       />
       {isSignupNickname ? (
         isnickname ? (
