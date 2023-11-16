@@ -21,6 +21,9 @@ const CrewPloggingCard = ({ card }: { card: MyCrewpingInterface }) => {
   const nickName = useSelector<rootState, string>((state) => {
     return state.user.info.nickname;
   });
+  const weight = useSelector<rootState, number>((state) => {
+    return state.user.info.weight;
+  });
 
   return (
     <div className={style.plogging_card}>
@@ -65,6 +68,9 @@ const CrewPloggingCard = ({ card }: { card: MyCrewpingInterface }) => {
           dispatch(Crewping.setCharge(isMaster));
           dispatch(Crewping.setSenderId(nickName));
           dispatch(P.setBeforeCrewping(true));
+          if (weight > 0) {
+            dispatch(P.setKg(weight));
+          }
           navigate("/plogging");
         }}
       />
