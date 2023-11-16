@@ -33,7 +33,7 @@ const endformattedDate = (datestr: any) => {
 const MyRankPage = () => {
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const [isMyRanking, setMyRanking] = useState<MyRankInterface[]>([]);
-
+  console.log(isMyRanking[0]);
   useEffect(() => {
     getMyRanking(
       accessToken,
@@ -54,13 +54,13 @@ const MyRankPage = () => {
       <div className={style.page_container}>
         <div className={style.myrank_container}>
           <div className={style.season_info_container}>
-            <div className={style.season_title}>
+            {/* <div className={style.season_title}>
               {isMyRanking && formattedSeason(isMyRanking[0].startDate)}
             </div>
             <div className={style.season_date}>
               ({isMyRanking && formattedDate(isMyRanking[0].startDate)} ~
               {isMyRanking && endformattedDate(isMyRanking[0].endDate)})
-            </div>
+            </div> */}
           </div>
           <div className={style.current_container}>
             <MyRankMain rank={isMyRanking[0]} />
