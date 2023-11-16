@@ -21,7 +21,12 @@ const MyRankItem = ({ rank }: { rank: MyRankInterface }) => {
   return (
     <div className={style.rank_item_container}>
       <div className={style.rank_title_container}>
-        <span className={style.rank}>{rank.ranking}</span>위
+        {rank.ranking === 0 ? (
+          <span className={style.rank}>{"-"}</span>
+        ) : (
+          <span className={style.rank}>{rank.ranking}</span>
+        )}
+        위
       </div>
 
       <div className={style.rank_info_container}>
