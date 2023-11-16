@@ -26,7 +26,7 @@ const CrewCommunityPage = () => {
   );
 
   const goBackHandler = () => {
-    navigate(-1);
+    navigate(`/crew/list`);
   };
   const goFeedHandler = () => {
     document.body.style.overflow = "scroll";
