@@ -4,6 +4,8 @@ import com.plonit.plonitservice.domain.crew.Crew;
 import com.plonit.plonitservice.domain.crew.CrewMember;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @Setter
@@ -21,8 +23,8 @@ public class FindCrewRes {
     private Boolean isCrewMaster;
     private Boolean isMyCrew;
     private Boolean isWaiting;
-    private String startDate;
-    private String endDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
     private int totalRanking;
     private int avgRanking;
     private Double totalDistance;
