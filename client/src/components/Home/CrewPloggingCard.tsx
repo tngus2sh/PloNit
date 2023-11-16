@@ -99,19 +99,7 @@ const CrewPloggingCard = ({ card }: { card: MyCrewpingInterface }) => {
         styles={{
           backgroundColor: "#2cd261",
         }}
-        onClick={() => {
-          dispatch(P.clear());
-          dispatch(Crewping.clear());
-          dispatch(P.setCrewpingId(id));
-          dispatch(Crewping.setRoomId(`${id}`));
-          dispatch(Crewping.setCharge(isMaster));
-          dispatch(Crewping.setSenderId(nickName));
-          dispatch(P.setBeforeCrewping(true));
-          if (weight > 0) {
-            dispatch(P.setKg(weight));
-          }
-          navigate("/plogging");
-        }}
+        onClick={onClick}
       />
     </div>
   );
