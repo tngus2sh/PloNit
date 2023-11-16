@@ -11,10 +11,7 @@ const BasicRankingItem = ({ data }: { data: RankDetailInterface }) => {
     <div
       className={style.rank_member_container}
       style={{
-        backgroundColor:
-          data.isMine || data.isMyCrew
-            ? "linear-gradient(270deg, rgba(160,206,252,1) 0%, rgba(253,254,255,1) 100%)"
-            : "initial",
+        backgroundColor: data.isMine || data.isMyCrew ? "initial" : "#f9f9f9",
       }}
     >
       <div className={style.rank_container}>
