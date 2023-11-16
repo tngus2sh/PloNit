@@ -3,9 +3,9 @@ import { useSelector, useDispatch } from "react-redux";
 import style from "styles/css/MyRankPage/MyRankMain.module.css";
 import { MyRankInterface } from "interface/rankInterface";
 
-function roundToTwoDecimalPlaces(num: any) {
-  return parseFloat(num.toFixed(2));
-}
+// function roundToTwoDecimalPlaces(num: any) {
+//   return parseFloat(num.toFixed(2));
+// }
 
 const MyRankMain = ({ rank }: { rank: MyRankInterface }) => {
   const profile = useSelector((state: any) => state.user.info.profileImage);
@@ -25,9 +25,7 @@ const MyRankMain = ({ rank }: { rank: MyRankInterface }) => {
       <div className={style.distance_container}>
         <div className={style.distance_title}>누적 거리</div>
         <div>
-          <span className={style.distance_data}>
-            {roundToTwoDecimalPlaces(rank.distance)}
-          </span>
+          <span className={style.distance_data}>{rank.distance}</span>
           km
         </div>
       </div>
