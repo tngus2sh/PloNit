@@ -1,18 +1,35 @@
-.ranking {
-  margin: 1rem;
-  .season {
-    text-align: left;
-    .date {
-      font-size: 1rem;
+@import "../styles";
+
+.ranking_container {
+  width: 100%;
+  .ranking_top_container {
+    display: inline-block;
+    width: 90%;
+    margin-top: 1.6rem;
+    margin-bottom: 2.3rem;
+    .season_container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      .season_info {
+        font-size: 1.5rem;
+        display: inline;
+        font-weight: bold;
+        box-shadow: inset 0 -10px 0 #67F895; 
+      }
+      .season_detail {
+        margin-left: 0.7rem;
+        color: $darkgray;
+      }
     }
-    .detail {
-      font-size: 1.5rem;
+    .member_container {
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-end;
     }
   }
-  .top {
-    display: flex;
-    justify-content: space-around;
-    align-items: flex-end;
-    margin-bottom: 1rem;
+  .ranking_bottom_container {
+    display: inline-block;
+    width: 90%;
   }
 }
