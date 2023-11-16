@@ -69,7 +69,7 @@ const CrewpingAddress = ({ setCrewpingPlace }: any) => {
           className={style.address_btn}
           onClick={() => setAddressModalOpen(true)}
         >
-          주소검색
+          주소 검색
         </button>
       </div>
       <input
