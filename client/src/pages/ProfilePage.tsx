@@ -11,6 +11,10 @@ import { logout } from "api/lib/auth";
 import { getProfile } from "api/lib/members";
 import { OkModal } from "components/common/AlertModals";
 
+import * as camera from "store/camera-slice";
+import * as P from "store/plogging-slice";
+import * as Crewping from "store/crewping-slice";
+
 const ProfilePage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -45,8 +49,10 @@ const ProfilePage = () => {
         console.log(res.data);
         console.log("로그아웃 성공");
         OkModal({ text: "로그아웃을 성공했습니다." });
-        // dispatch(userActions.logout());
-        localStorage.clear();
+        dispatch(userActions.clear());
+        dispatch(P.clear());
+        dispatch(Crewping.clear());
+        dispatch(camera.clear());
         navigate("/login");
       },
       (err) => {
