@@ -118,19 +118,22 @@ const MyRankPage = () => {
               <div className={style.prev_info_container}>
                 <div className={style.prev_title}>지난 랭킹</div>
               </div>
-
-              <div className={style.prev_item_container}>
-                {isMyRanking.map((data, index) => {
-                  if (isMyRanking[0].isSeason) {
+              {isMyRanking[0].isSeason ? (
+                <div className={style.prev_item_container}>
+                  {isMyRanking.map((data, index) => {
                     if (index >= 1) {
                       return <MyRankItem key={index} rank={data} />;
                     }
                     return null;
-                  } else {
-                    <MyRankItem key={index} rank={data} />;
-                  }
-                })}
-              </div>
+                  })}
+                </div>
+              ) : (
+                <div className={style.prev_item_container}>
+                  {isMyRanking.map((data, index) => (
+                    <MyRankItem key={index} rank={data} />
+                  ))}
+                </div>
+              )}
             </div>
 
             <div style={{ height: "4rem" }}></div>
