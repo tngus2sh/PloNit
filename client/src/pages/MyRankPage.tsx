@@ -84,6 +84,8 @@ const MyRankPage = () => {
             })}
           </div>
         </div>
+
+        <div style={{ height: "4rem" }}></div>
       </div>
     </div>
   );
