@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-//@FeignClient(name = "member-service", contextId = "feignClientForExcel", url = "https://k9c207.p.ssafy.io/api")
-@FeignClient(name = "member-service", contextId = "feignClientForExcel", url = "http://localhost:8000/api")
+@FeignClient(name = "member-service", contextId = "feignClientForExcel", url = "https://k9c207.p.ssafy.io/api")
+//@FeignClient(name = "member-service", contextId = "feignClientForExcel", url = "http://localhost:8000/api")
 public interface MemberFeignClient {
 
     @PostMapping("/plonit-service/na/members/volunteer-info")
