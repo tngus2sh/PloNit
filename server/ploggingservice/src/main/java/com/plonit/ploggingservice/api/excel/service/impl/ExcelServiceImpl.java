@@ -60,9 +60,13 @@ public class ExcelServiceImpl implements ExcelService {
             return;
         }
 
+        System.out.println("플로깅 조회 결과: " + ploggings);
+
         List<Long> memberIdList = ploggings.stream().map(ploggingEntity -> {
             return ploggingEntity.getMemberId();
         }).collect(Collectors.toList());
+
+        System.out.println("유저 ID 조회 결과: " + memberIdList);
 
         CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
 
@@ -72,6 +76,8 @@ public class ExcelServiceImpl implements ExcelService {
         );
 
         List<ExcelDto> excelDtoList = new ArrayList<>();
+
+        System.out.println("봉사 정보 조회 결과: " + volunteerInfos);
 
         if(volunteerInfos != null) {
             for(int i = 0; i < ploggings.size(); i++) {
