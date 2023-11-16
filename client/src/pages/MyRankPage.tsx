@@ -9,25 +9,28 @@ const MyRankPage = () => {
   return (
     <div>
       <BackTopBar text="나의 랭킹" />
-      <div className={style.myrank}>
-        <div className={style.season_date}>10월 16일 ~ 10월 31일</div>
-        <div className={style.season}>(10-2 시즌)</div>
-        <MyRankMain />
-        <div className={style.ranking_list}>
-          <div className={style.title}>지난 랭킹</div>
-          <div>
-            <select
-              value={selectBox1Value}
-              onChange={(e) => setSelectBox1Value(e.target.value)}
-            >
-              <option value="">선택</option>
-              <option value="graph">그래프</option>
-              <option value="list">목록</option>
-            </select>
+
+      <div className={style.page_container}>
+        <div className={style.myrank_container}>
+          <div className={style.season_info_container}>
+            <div className={style.season_title}>10-2 시즌</div>
+            <div className={style.season_date}>(10월 16일 ~ 10월 31일)</div>
+          </div>
+          <div className={style.current_container}>
+            <MyRankMain />
           </div>
         </div>
-        <MyRankItem />
-        <MyRankItem />
+
+        <div className={style.prev_container}>
+          <div className={style.prev_info_container}>
+            <div className={style.prev_title}>지난 랭킹</div>
+          </div>
+
+          <div className={style.prev_item_container}>
+            <MyRankItem />
+            <MyRankItem />
+          </div>
+        </div>
       </div>
     </div>
   );

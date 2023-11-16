@@ -24,21 +24,22 @@ const MyRankMain = () => {
   console.log(isMyRanking);
 
   return (
-    <div className={style.mymain}>
-      <div className={style.left}>
-        <div className={style.title}>순위</div>
-        <div>
-          <span className={style.large}>27</span>위
-        </div>
+    <div className={style.ranking_info_container}>
+      <div className={style.rank_container}>
+        <div className={style.rank_title}>순위</div>
+        <div className={style.rank_data}>27위</div>
       </div>
-      <div className={style.middle}>
-        <img src="/metamong.png" alt="몽" />
+
+      <div className={style.profile_container}>
+        {/* <img src="/metamong.png" alt="몽" /> */}
+        <img src="/test.png" />
         <div>메타몽</div>
       </div>
-      <div className={style.right}>
-        <div className={style.title}>누적 거리</div>
+
+      <div className={style.distance_container}>
+        <div className={style.distance_title}>누적 거리</div>
         <div>
-          <span className={style.large}>10.27</span>km
+          <span className={style.distance_data}>10.27</span>km
         </div>
       </div>
     </div>
