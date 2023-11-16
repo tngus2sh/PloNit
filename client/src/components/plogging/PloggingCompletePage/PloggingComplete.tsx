@@ -82,7 +82,10 @@ const PloggingComplete = () => {
   });
   const [context, setContext] = useState<string>("");
 
-  const time = new Date();
+  const now = new Date();
+  const utc = now.getTime() + now.getTimezoneOffset() * 60 * 1000;
+  const koreaTimeDiff = 9 * 60 * 60 * 1000;
+  const time = new Date(utc + koreaTimeDiff);
   const year = time.getFullYear();
   const month = time.getMonth() + 1;
   const date = time.getDate();
