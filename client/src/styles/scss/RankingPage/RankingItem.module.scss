@@ -100,6 +100,9 @@
 .first_ranker {
   position: relative;
   flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   .crown {
     width: 5rem;
     position: absolute;
@@ -134,6 +137,9 @@
 // SecondRankingItem.tsx
 .second_ranker {
   flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   .rank {
     font-weight: 600;
     font-size: 1.2rem;
