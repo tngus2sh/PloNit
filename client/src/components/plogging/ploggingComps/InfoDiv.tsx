@@ -154,8 +154,11 @@ const InfoDiv: React.FC<IInfoDiv> = ({
                 ? `봉사 인증을 위해선 3장 이상의 사진이 필요합니다.`
                 : `플로깅을 종료하시겠습니까?`}
             </div>
+            <br />
             {imagesLen < 2 && <div>현재 촬영된 이미지 수: {imagesLen}</div>}
-            <div>종료 시 사진 촬영을 진행합니다.</div>
+            <div style={{ fontWeight: "bolder" }}>
+              종료 시 사진 촬영을 진행합니다.
+            </div>
           </div>,
         ),
         showCancelButton: true,
