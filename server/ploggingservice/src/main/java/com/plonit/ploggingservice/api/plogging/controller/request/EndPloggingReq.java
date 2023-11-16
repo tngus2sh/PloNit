@@ -18,6 +18,9 @@ public class EndPloggingReq {
     @NotNull(message = "플로깅 id는 필수 입력값입니다.")
     private Long ploggingId;
 
+    @Schema(description = "크루 id")
+    private Long crewId;
+
     @Schema(description = "크루핑 id : 크루핑 생성시에 반환된 id")
     private Long crewpingId;
     

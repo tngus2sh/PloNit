@@ -19,6 +19,8 @@ public class EndPloggingDto {
     
     private Long ploggingId;
 
+    private Long crewId;
+
     private Long crewpingId;
     
     private Double distance;
@@ -55,6 +57,7 @@ public class EndPloggingDto {
         return EndPloggingDto.builder()
                 .memberKey(memberKey)
                 .ploggingId(request.getPloggingId())
+                .crewId(request.getCrewId())
                 .crewpingId(request.getCrewpingId())
                 .coordinates(coordinates)
                 .distance(request.getDistance())
