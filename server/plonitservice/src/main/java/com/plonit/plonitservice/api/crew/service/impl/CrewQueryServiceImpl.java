@@ -69,7 +69,7 @@ public class CrewQueryServiceImpl implements CrewQueryService {
 
         // 랭킹 정보 가져오기
         int index = 0;
-        Set<ZSetOperations.TypedTuple<String>> rankCrewSorts = redisUtils.getSortedSetRangeWithScores(Rank.CREW.name(), 0, -1);
+        Set<ZSetOperations.TypedTuple<String>> rankCrewSorts = redisUtils.getSortedSetRangeWithScores(Rank.CREW.getDescription(), 0, -1);
         for (ZSetOperations.TypedTuple<String> rankCrewSort : rankCrewSorts) {
             ++index;
             String value = rankCrewSort.getValue();
@@ -80,7 +80,7 @@ public class CrewQueryServiceImpl implements CrewQueryService {
         }
 
         index = 0;
-        Set<ZSetOperations.TypedTuple<String>> rankCrewAvgSorts = redisUtils.getSortedSetRangeWithScores(Rank.CREW_AVG.name(), 0, -1);
+        Set<ZSetOperations.TypedTuple<String>> rankCrewAvgSorts = redisUtils.getSortedSetRangeWithScores(Rank.CREW_AVG.getDescription(), 0, -1);
         for (ZSetOperations.TypedTuple<String> rankCrewAvgSort : rankCrewAvgSorts) {
             ++index;
             String value = rankCrewAvgSort.getValue();
