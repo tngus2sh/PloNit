@@ -23,13 +23,13 @@ const formattedDate = (datestr: any) => {
   const day = date.getDate();
   return `${month}월 ${day}일`;
 };
-const endformattedDate = (datestr: any) => {
-  const dateObj = new Date(datestr);
-  dateObj.setDate(dateObj.getDate() - 1);
-  const month = dateObj.getMonth() + 1;
-  const day = dateObj.getDate();
-  return `${month}월 ${day}일`;
-};
+// const endformattedDate = (datestr: any) => {
+//   const dateObj = new Date(datestr);
+//   dateObj.setDate(dateObj.getDate() - 1);
+//   const month = dateObj.getMonth() + 1;
+//   const day = dateObj.getDate();
+//   return `${month}월 ${day}일`;
+// };
 
 const CrewTotalRanking = () => {
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
@@ -64,7 +64,7 @@ const CrewTotalRanking = () => {
             {`(`}
             {isTotalRank.startDate &&
               formattedDate(isTotalRank.startDate)} ~{" "}
-            {isTotalRank.endDate && endformattedDate(isTotalRank.endDate)}
+            {isTotalRank.endDate && formattedDate(isTotalRank.endDate)}
             {`)`}
           </div>
         </div>

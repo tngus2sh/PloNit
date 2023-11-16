@@ -5,15 +5,18 @@ export interface CrewInterface {
   crewImage: string;
   region: string;
   introduce?: string;
-  rankinginfo?: string;
   totalRanking?: number;
+  totalDistance?: number;
   avgRanking?: number;
+  avgDistance?: number;
   crewMasterProfileImage?: string;
   crewMasterNickname?: string;
   notice?: string;
   isCrewMaster?: boolean;
   isMyCrew?: boolean;
   isWaiting?: boolean;
+  startDate?: string;
+  endDate?: string;
 }
 
 export interface FeedInterface {

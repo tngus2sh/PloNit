@@ -22,13 +22,13 @@ const formattedDate = (datestr: any) => {
   const day = date.getDate();
   return `${month}월 ${day}일`;
 };
-const endformattedDate = (datestr: any) => {
-  const dateObj = new Date(datestr);
-  dateObj.setDate(dateObj.getDate() - 1);
-  const month = dateObj.getMonth() + 1;
-  const day = dateObj.getDate();
-  return `${month}월 ${day}일`;
-};
+// const endformattedDate = (datestr: any) => {
+//   const dateObj = new Date(datestr);
+//   dateObj.setDate(dateObj.getDate() - 1);
+//   const month = dateObj.getMonth() + 1;
+//   const day = dateObj.getDate();
+//   return `${month}월 ${day}일`;
+// };
 
 const CrewAverageRanking = () => {
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
@@ -62,7 +62,7 @@ const CrewAverageRanking = () => {
           <div className={style.season_detail}>
             {`(`}
             {isAvgRank.startDate && formattedDate(isAvgRank.startDate)} ~{" "}
-            {isAvgRank.endDate && endformattedDate(isAvgRank.endDate)}
+            {isAvgRank.endDate && formattedDate(isAvgRank.endDate)}
             {`)`}
           </div>
         </div>

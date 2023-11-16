@@ -128,9 +128,9 @@ const CrewCommunityPage = () => {
                 <Icon
                   icon="bi:pencil"
                   style={{
-                    width: "2rem",
-                    height: "2rem",
-                    marginTop: "0.5rem",
+                    width: "3rem",
+                    height: "3rem",
+                    padding: "0.7rem",
                   }}
                 />
               </div>
@@ -144,9 +144,9 @@ const CrewCommunityPage = () => {
                 <Icon
                   icon="bi:pencil"
                   style={{
-                    width: "2rem",
-                    height: "2rem",
-                    marginTop: "0.5rem",
+                    width: "3rem",
+                    height: "3rem",
+                    padding: "0.7rem",
                   }}
                 />
               </div>
@@ -156,11 +156,12 @@ const CrewCommunityPage = () => {
                 <div className={style.title}>공지사항</div>
                 <div className={style.open_button} onClick={goNoticeHandler}>
                   <Icon
+                    className={style.pencil}
                     icon="bi:pencil"
                     style={{
-                      width: "2rem",
-                      height: "2rem",
-                      marginTop: "0.5rem",
+                      width: "3rem",
+                      height: "3rem",
+                      padding: "0.7rem",
                     }}
                   />
                 </div>

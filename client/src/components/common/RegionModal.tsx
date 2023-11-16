@@ -151,7 +151,7 @@ const RegionModal = ({
           </div>
         </div>
       </div>
-      <div className={style.result}>{isResult}</div>
+      <div className={style.result}>활동지역: {isResult}</div>
       <div className={style.confirm_btn} onClick={onClose}>
         확인
       </div>
