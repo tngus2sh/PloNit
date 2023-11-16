@@ -55,11 +55,20 @@ const MyRankPage = () => {
         <div className={style.myrank_container}>
           <div className={style.season_info_container}>
             <div className={style.season_title}>
-              {isMyRanking && formattedSeason(isMyRanking[0].startDate)}
+              {isMyRanking &&
+                isMyRanking[0] &&
+                formattedSeason(isMyRanking[0].startDate)}
             </div>
             <div className={style.season_date}>
-              ({isMyRanking && formattedDate(isMyRanking[0].startDate)} ~
-              {isMyRanking && endformattedDate(isMyRanking[0].endDate)})
+              (
+              {isMyRanking &&
+                isMyRanking[0] &&
+                formattedDate(isMyRanking[0].startDate)}{" "}
+              ~
+              {isMyRanking &&
+                isMyRanking[0] &&
+                endformattedDate(isMyRanking[0].endDate)}
+              )
             </div>
           </div>
           <div className={style.current_container}>
