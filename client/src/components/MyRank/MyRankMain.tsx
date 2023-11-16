@@ -4,7 +4,10 @@ import style from "styles/css/MyRankPage/MyRankMain.module.css";
 import { MyRankInterface } from "interface/rankInterface";
 
 function roundToTwoDecimalPlaces(num: any) {
-  return parseFloat(num.toFixed(2));
+  if (num !== undefined) {
+    return parseFloat(num.toFixed(2));
+  }
+  return num;
 }
 
 const MyRankMain = ({ rank }: { rank: MyRankInterface }) => {
