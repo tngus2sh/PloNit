@@ -52,6 +52,9 @@ const userSlice = createSlice({
     fcmHandler(state, action) {
       return { ...state, alarm: action.payload };
     },
+    clear: () => {
+      return initialState;
+    },
   },
 });
 

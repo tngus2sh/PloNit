@@ -138,23 +138,23 @@ const FeedItem = ({
           isLiked ? (
             <Icon
               icon="bi:heart-fill"
-              style={{ width: "1.8rem", height: "1.8rem", color: "red" }}
+              style={{ width: "1.6rem", height: "1.6rem", color: "red" }}
               onClick={toggleLike}
             />
           ) : (
             <Icon
               icon="bi:heart"
-              style={{ width: "1.8rem", height: "1.8rem" }}
+              style={{ width: "1.6rem", height: "1.6rem" }}
               onClick={toggleLike}
             />
           )
         ) : (
-          <Icon icon="bi:heart" style={{ width: "1.8rem", height: "1.8rem" }} />
+          <Icon icon="bi:heart" style={{ width: "1.6rem", height: "1.6rem" }} />
         )}
         <Icon
           icon="bi:chat-left"
           onClick={toggleCommentModal}
-          style={{ width: "2rem", height: "1.8rem", marginLeft: "1rem" }}
+          style={{ width: "1.8rem", height: "1.6rem", marginLeft: "0.8rem" }}
         />
       </div>
       <div className={style.like_count}>좋아요 {feed.likeCount}개</div>
