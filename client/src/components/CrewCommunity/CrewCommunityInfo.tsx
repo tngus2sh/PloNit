@@ -37,6 +37,7 @@ const CrewCommunityInfo = ({
             style={{
               width: "1.5rem",
               height: "1.5rem",
+              marginLeft: "0.2rem",
             }}
             onClick={handleGoCommunityDetail}
           />
@@ -49,14 +50,15 @@ const CrewCommunityInfo = ({
               style={{
                 width: "1.2rem",
                 height: "1.2rem",
+                marginLeft: "0.2rem",
               }}
               onClick={handleGoMemberList}
             />
           </div>
-          <div className={style.invite}>
+          {/* <div className={style.invite}>
             초대
             <Icon icon="bi:paperclip" />
-          </div>
+          </div> */}
           {master && (
             <div className={style.allow} onClick={handleGoApprovalList}>
               가입 대기
