@@ -10,6 +10,7 @@ const savePlogging = ({
   accessToken,
   ploggingId,
   crewpingId,
+  crewId,
   distance,
   calorie,
   review,
@@ -20,6 +21,7 @@ const savePlogging = ({
 }: {
   accessToken: string;
   ploggingId?: number;
+  crewId?: number;
   crewpingId?: number;
   distance: number;
   calorie: number;
@@ -36,6 +38,7 @@ const savePlogging = ({
       ``,
       JSON.stringify({
         ploggingId: ploggingId ?? null,
+        crewId: crewId ?? null,
         crewpingId: crewpingId ?? null,
         distance: distance,
         calorie: calorie,

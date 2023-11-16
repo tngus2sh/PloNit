@@ -2,6 +2,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Locations, Message, Member } from "interface/ploggingInterface";
 
 const initialState = {
+  crewId: -1 as number,
   roomId: "" as string,
   senderId: "" as string,
   charge: false as boolean,
@@ -23,6 +24,9 @@ const crewpingSlice = createSlice({
   reducers: {
     clear: () => {
       return initialState;
+    },
+    setCrewId: (state, action: PayloadAction<number>) => {
+      state.crewId = action.payload;
     },
     setRoomId: (state, action: PayloadAction<string>) => {
       state.roomId = action.payload;
@@ -68,19 +72,34 @@ const crewpingSlice = createSlice({
     setMembers: (state, action: PayloadAction<Message>) => {
       const newMessage = action.payload;
       if (newMessage.members) {
-        const { members } = newMessage;
+        const { nickName, profileImage, members } = newMessage;
         const includeMyInfo = members.some((member) => {
           return member.nickName === state.senderId;
         });
 
-        if (includeMyInfo) {
-          state.members = members;
-        } else {
-          state.members = [
+        let data: Member[] = members;
+        if (!includeMyInfo) {
+          data = [
+            ...data,
             { nickName: state.senderId, profileImage: state.profileImage },
-            ...members,
           ];
         }
+        if (
+          !data.some((item) => {
+            return item.nickName === nickName;
+          })
+        ) {
+          if (profileImage)
+            data = [
+              ...data,
+              {
+                nickName: nickName,
+                profileImage: profileImage,
+              },
+            ];
+        }
+
+        state.members = data;
       }
     },
   },
@@ -88,6 +107,7 @@ const crewpingSlice = createSlice({
 
 export const {
   clear,
+  setCrewId,
   setRoomId,
   setSenderId,
   setCharge,

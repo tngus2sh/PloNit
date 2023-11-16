@@ -157,18 +157,17 @@ const ImageCropper: React.FC<PropsType> = ({ onCrop, aespectRatio }) => {
             >
               <div style={{ width: "50%" }}>
                 <CommonButton
+                  text="완료"
+                  styles={{ backgroundColor: "#2CD261" }}
+                  onClick={getCropData}
+                />
+                <CommonButton
                   text="취소"
                   styles={{ backgroundColor: "#FF2953" }}
                   onClick={rejectCrop}
                 />
               </div>
-              <div style={{ width: "50%" }}>
-                <CommonButton
-                  text="완료"
-                  styles={{ backgroundColor: "#2CD261" }}
-                  onClick={getCropData}
-                />
-              </div>
+              <div style={{ width: "50%" }}></div>
             </div>
           </div>
         </div>

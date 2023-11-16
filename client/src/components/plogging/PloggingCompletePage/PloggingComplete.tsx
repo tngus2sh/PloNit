@@ -68,6 +68,9 @@ const PloggingComplete = () => {
   const ploggingId = useSelector<rootState, number>((state) => {
     return state.plogging.ploggingId;
   });
+  const crewId = useSelector<rootState, number>((state) => {
+    return state.crewping.crewId;
+  });
   const crewpingId = useSelector<rootState, number>((state) => {
     return state.plogging.crewpingId;
   });
@@ -229,6 +232,7 @@ const PloggingComplete = () => {
                 savePlogging({
                   accessToken: accessToken,
                   ploggingId: ploggingId,
+                  crewId: crewId,
                   crewpingId: crewpingId,
                   distance: distance,
                   calorie: calorie,
