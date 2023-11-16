@@ -227,7 +227,7 @@ const PloggingVolunteerInput = () => {
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             const { value } = event.target;
             if (value.length <= 30) {
-              setId_1365(value);
+              setId_1365(value.trim());
             }
           }}
         />
