@@ -575,7 +575,6 @@ const DefaultMap: React.FC<IDefaultMap> = ({
                   ploggingHelpId: help.ploggingHelpId ?? 0,
                   isActive: false,
                   success: (response) => {
-                    console.log(response);
                     getGPS()
                       .then((response) => {
                         const { latitude, longitude } = response.coords;

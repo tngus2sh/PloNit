@@ -79,7 +79,3 @@ self.addEventListener("message", (event) => {
 });
 
 // Any other custom service worker logic can go here.
-const broadcast1 = new BroadcastChannel("timer1");
-broadcast1.onmessage = (event) => {
-  console.log(event);
-};

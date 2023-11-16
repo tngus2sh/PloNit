@@ -145,8 +145,6 @@ const PloggingVolunteerInput = () => {
             email: email,
             birth,
             success: (response) => {
-              console.log("봉사 저장 성공!");
-              console.log(response);
               dispatch(P.setIsEnd(true));
             },
             fail: (error) => {

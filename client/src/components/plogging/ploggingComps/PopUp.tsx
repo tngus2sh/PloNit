@@ -190,7 +190,6 @@ const PopUp: React.FC<IPopUP> = ({
                       image: compressedImage,
                       context: payloadContext,
                       success: (response) => {
-                        console.log(response);
                         dispatch(P.handleIsLoading(-1));
                         dispatch(P.setHelpChanged(true));
                       },
@@ -212,7 +211,6 @@ const PopUp: React.FC<IPopUP> = ({
                   longitude: longitude,
                   context: payloadContext,
                   success: (response) => {
-                    console.log(response);
                     dispatch(P.setHelpChanged(true));
                   },
                   fail: (error) => {

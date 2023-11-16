@@ -240,7 +240,6 @@ const PloggingComplete = () => {
                   people: people,
                   coordinates: coordinates,
                   success: (response) => {
-                    console.log(response);
                     dispatch(camera.clear());
                     dispatch(P.clear());
                     dispatch(Crewping.clear());
@@ -259,7 +258,6 @@ const PloggingComplete = () => {
                   review: context,
                   coordinates: coordinates,
                   success: (response) => {
-                    console.log(response);
                     dispatch(camera.clear());
                     dispatch(P.clear());
                     dispatch(Crewping.clear());
