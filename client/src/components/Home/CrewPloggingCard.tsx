@@ -79,14 +79,14 @@ const CrewPloggingCard = ({ card }: { card: MyCrewpingInterface }) => {
       dispatch(P.setKg(weight));
     }
     navigate("/plogging");
-    // }
-    // else {
-    //   Swal.fire({
-    //     icon: "error",
-    //     text: "아직 크루핑을 시작할 수 없습니다.",
-    //   });
-    // }
   };
+  // else {
+  //   Swal.fire({
+  //     icon: "error",
+  //     text: "아직 크루핑을 시작할 수 없습니다.",
+  //   });
+  // }
+  // };
 
   return (
     <div className={style.plogging_card}>
