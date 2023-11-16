@@ -131,7 +131,7 @@ function useEffectApp() {
   }, [second]);
 
   useEffect(() => {
-    if (nowType === "VOL" && minute >= 30 && !volTakePicture) {
+    if (nowType === "VOL" && minute >= 1 && !volTakePicture) {
       Swal.fire({
         icon: "info",
         title: "중간 사진 촬영",
