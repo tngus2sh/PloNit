@@ -1,6 +1,7 @@
 package com.plonit.plonitservice.domain.member;
 
 import com.plonit.plonitservice.api.member.service.dto.UpdateMemberDto;
+import com.plonit.plonitservice.api.member.service.dto.UpdateVolunteerInfoDto;
 import com.plonit.plonitservice.domain.TimeBaseEntity;
 import com.plonit.plonitservice.domain.region.Dong;
 import lombok.*;
@@ -18,6 +19,7 @@ import javax.persistence.*;
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "members")
+@ToString
 public class Member extends TimeBaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -73,5 +75,11 @@ public class Member extends TimeBaseEntity {
         if(updateMemberDto.getId1365() != null) this.id1365 = updateMemberDto.getId1365();
         if(updateMemberDto.getHeight() != null) this.height = Float.parseFloat(updateMemberDto.getHeight());
         if(updateMemberDto.getWeight() != null) this.weight = Float.parseFloat(updateMemberDto.getWeight());
+    }
+
+    public void updateVolunteerInfo(UpdateVolunteerInfoDto dto) {
+        this.id1365 = dto.getId1365();
+//        this.email = dto.getEmail();
+        this.birth = dto.getBirth();
     }
 }
