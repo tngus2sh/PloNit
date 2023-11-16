@@ -17,6 +17,7 @@ const formattedSeason = (date: any) => {
 };
 
 const formattedDate = (date: any) => {
+  const dateObj = new Date(date);
   const month = ("0" + (date.getMonth() + 1)).slice(-2);
   const day = ("0" + date.getDate()).slice(-2);
   return `${month}월 ${day}일`;
@@ -55,11 +56,11 @@ const PersonalRanking = () => {
     <div className={style.ranking}>
       <div className={style.season}>
         <div className={style.detail}>
-          {formattedSeason(isMemberRank.startDate)}
+          {isMemberRank.startDate && formattedSeason(isMemberRank.startDate)}
         </div>
         <div className={style.date}>
-          {formattedDate(isMemberRank.startDate)} -{" "}
-          {endformattedDate(isMemberRank.endDate)}
+          {isMemberRank.startDate && formattedDate(isMemberRank.startDate)} -{" "}
+          {isMemberRank.endDate && endformattedDate(isMemberRank.endDate)}
         </div>
       </div>
       {
