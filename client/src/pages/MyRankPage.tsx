@@ -23,11 +23,30 @@ const formattedDate = (datestr: any) => {
   const day = date.getDate();
   return `${month}월 ${day}일`;
 };
+const formattedDatePlus = (datestr: any) => {
+  const date = new Date(datestr);
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  return `${month}월 ${day + 1}일`;
+};
 const endformattedDate = (datestr: any) => {
   const date = new Date(datestr);
   const month = date.getMonth() + 1;
   const day = date.getDate();
   return `${month}월 ${day}일`;
+};
+const endformattedDatePlus = (datestr: any) => {
+  const date = new Date(datestr);
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+
+  if (day === 14) {
+    const nextMonthFirstDay = new Date(date.getFullYear(), month, 1);
+    const lastDay = new Date(nextMonthFirstDay.getTime() - 24 * 60 * 60 * 1000);
+    return `${month}월 ${lastDay.getDate()}일`;
+  } else {
+    return `${month + 1}월 14일`;
+  }
 };
 
 const MyRankPage = () => {
@@ -44,6 +63,14 @@ const MyRankPage = () => {
         setMyRanking(res.data.resultBody);
         if (res.data.resultBody[0].isSeason) {
           setNow(res.data.resultBody[0]);
+        } else {
+          setNow({
+            ranking: 0,
+            distance: 0,
+            startDate: res.data.resultBody[0].endDate,
+            endDate: "",
+            isSeason: true,
+          });
         }
       },
       (err) => {
@@ -54,44 +81,67 @@ const MyRankPage = () => {
   console.log(isMyRanking);
   return (
     <div>
-      <BackTopBar text="나의 랭킹" />
-      <div className={style.page_container}>
-        <div className={style.myrank_container}>
-          <div className={style.season_info_container}>
-            <div className={style.season_title}>
-              {formattedSeason(isNow.startDate)}
+      {isNow.startDate ? (
+        <>
+          <BackTopBar text="나의 랭킹" />
+          <div className={style.page_container}>
+            <div className={style.myrank_container}>
+              <div className={style.season_info_container}>
+                {isNow.endDate === "" ? (
+                  <>
+                    <div className={style.season_title}>
+                      {formattedSeason(isNow.startDate)}
+                    </div>
+                    <div className={style.season_date}>
+                      ({formattedDatePlus(isNow.startDate)} ~
+                      {endformattedDatePlus(isNow.startDate)})
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className={style.season_title}>
+                      {formattedSeason(isNow.startDate)}
+                    </div>
+                    <div className={style.season_date}>
+                      ({formattedDate(isNow.startDate)} ~
+                      {endformattedDate(isNow.endDate)})
+                    </div>
+                  </>
+                )}
+              </div>
+              <div className={style.current_container}>
+                <MyRankMain rank={isNow} />
+              </div>
             </div>
-            <div className={style.season_date}>
-              ({formattedDate(isNow.startDate)} ~
-              {endformattedDate(isNow.endDate)})
+
+            <div className={style.prev_container}>
+              <div className={style.prev_info_container}>
+                <div className={style.prev_title}>지난 랭킹</div>
+              </div>
+              {isMyRanking[0].isSeason ? (
+                <div className={style.prev_item_container}>
+                  {isMyRanking.map((data, index) => {
+                    if (index >= 1) {
+                      return <MyRankItem key={index} rank={data} />;
+                    }
+                    return null;
+                  })}
+                </div>
+              ) : (
+                <div className={style.prev_item_container}>
+                  {isMyRanking.map((data, index) => (
+                    <MyRankItem key={index} rank={data} />
+                  ))}
+                </div>
+              )}
             </div>
-          </div>
-          <div className={style.current_container}>
-            <MyRankMain rank={isNow} />
-          </div>
-        </div>
 
-        <div className={style.prev_container}>
-          <div className={style.prev_info_container}>
-            <div className={style.prev_title}>지난 랭킹</div>
+            <div style={{ height: "4rem" }}></div>
           </div>
-
-          <div className={style.prev_item_container}>
-            {isMyRanking.map((data, index) => {
-              if (isNow) {
-                if (index >= 1) {
-                  return <MyRankItem key={index} rank={data} />;
-                }
-                return null;
-              } else {
-                <MyRankItem key={index} rank={data} />;
-              }
-            })}
-          </div>
-        </div>
-
-        <div style={{ height: "4rem" }}></div>
-      </div>
+        </>
+      ) : (
+        <div>Loading...</div>
+      )}
     </div>
   );
 };
