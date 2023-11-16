@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import style from "styles/css/CrewCommunityPage/CrewpingItem.module.css";
 import { Icon } from "@iconify/react";
 import { CrewpingInterface } from "interface/crewInterface";
+import CalendarMonthRoundedIcon from "@mui/icons-material/CalendarMonthRounded";
+import FaceRoundedIcon from "@mui/icons-material/FaceRounded";
+import FmdGoodRoundedIcon from "@mui/icons-material/FmdGoodRounded";
 
 const formattedDateTime = (datestr: any) => {
   const days = ["일", "월", "화", "수", "목", "금", "토"];
@@ -27,8 +30,40 @@ const CrewpingItem = ({ crewping }: { crewping: CrewpingInterface }) => {
   };
 
   return (
-    <div className={style.crewping_Item} onClick={goCrewpingDetailHandler}>
-      <div className={style.crewping_img}>
+    <div className={style.crewping_container} onClick={goCrewpingDetailHandler}>
+      <div className={style.crewping_item_container}>
+        <div className={style.crewping_image_container}>
+          {crewping.crewpingImage && (
+            <img src={crewping.crewpingImage} alt={crewping.name} />
+          )}
+        </div>
+        <div className={style.crewping_info_container}>
+          <div className={style.crewping_info_flex_container}>
+            <div className={style.crewping_title_container}>
+              <div>{crewping.name}</div>
+            </div>
+            <div className={style.crewping_desc_container}>
+              <div className={style.crewping_date_container}>
+                <CalendarMonthRoundedIcon sx={{ fontSize: "1.3rem" }} />
+                &nbsp;{formattedDateTime(crewping.startDate)}
+              </div>
+              <div className={style.crewping_people_container}>
+                <FaceRoundedIcon sx={{ fontSize: "1.3rem" }} />
+                &nbsp;
+                <span>
+                  {crewping.cntPeople}/{crewping.maxPeople} 명
+                </span>
+              </div>
+            </div>
+            <div className={style.crewping_place_container}>
+              <FmdGoodRoundedIcon sx={{ fontSize: "1.3rem" }} />
+              &nbsp;{crewping.place}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* <div className={style.crewping_img}>
         {crewping.crewpingImage && (
           <img src={crewping.crewpingImage} alt={crewping.name} />
         )}
@@ -75,7 +110,7 @@ const CrewpingItem = ({ crewping }: { crewping: CrewpingInterface }) => {
           />
           <div>{crewping.place}</div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
