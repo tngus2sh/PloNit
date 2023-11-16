@@ -6,14 +6,7 @@ const CrewpingImg = ({ setCrewpingImage, isCrewpingImage }: any) => {
   const handleImageUpload = (event: any) => {
     const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader();
-
-      reader.onload = (event: any) => {
-        const dataURL = event.target.result;
-        setCrewpingImage(file);
-      };
-
-      reader.readAsDataURL(file);
+      setCrewpingImage(file);
     }
   };
 
