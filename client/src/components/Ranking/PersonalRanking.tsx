@@ -26,8 +26,8 @@ const formattedDate = (datestr: any) => {
 const endformattedDate = (datestr: any) => {
   const dateObj = new Date(datestr);
   dateObj.setDate(dateObj.getDate() - 1);
-  const month = ("0" + (dateObj.getMonth() + 1)).slice(-2);
-  const day = ("0" + dateObj.getDate()).slice(-2);
+  const month = dateObj.getMonth() + 1;
+  const day = dateObj.getDate();
   return `${month}월 ${day}일`;
 };
 
