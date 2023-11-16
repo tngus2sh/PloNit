@@ -55,7 +55,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final static String KAKAO_AUTH_URI = "https://kauth.kakao.com";
     private final static String KAKAO_API_URI = "https://kapi.kakao.com";
-    private final static String DEFAULT_PROFILE_URL = "https://plonitbucket.s3.ap-northeast-2.amazonaws.com/plonit/plonit_%ED%94%84%EB%A1%9C%ED%95%84.png";
+    private final static String DEFAULT_PROFILE_URL = "https://plonitbucket.s3.ap-northeast-2.amazonaws.com/plonit/plonit_profile.png";
 
     public AuthServiceImpl(RedisTemplate redisTemplate, Environment env, MemberQueryRepository memberQueryRepository, MemberRepository memberRepository, JwtTokenProvider jwtTokenProvider) {
         this.redisTemplate = redisTemplate;
