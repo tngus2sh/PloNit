@@ -7,23 +7,24 @@ import style from "styles/css/RankingPage/RankingList.module.css";
 import { RankInterface, RankDetailInterface } from "interface/rankInterface";
 import { getMemberRank } from "api/lib/rank";
 
-const formattedSeason = (date: any) => {
+const formattedSeason = (datestr: any) => {
+  const date = new Date(datestr);
   const year = date.getFullYear();
-  const month = (date.getMonth() + 1).slice(-2);
-  const day = date.getDate().slice(-2);
-  const season = day === "1" ? 1 : 2;
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const season = day === 1 ? 1 : 2;
 
   return `${year}년 ${month}월 ${season}시즌`;
 };
 
-const formattedDate = (date: any) => {
-  const dateObj = new Date(date);
-  const month = ("0" + (date.getMonth() + 1)).slice(-2);
-  const day = ("0" + date.getDate()).slice(-2);
+const formattedDate = (datestr: any) => {
+  const date = new Date(datestr);
+  const month = "0" + (date.getMonth() + 1);
+  const day = "0" + date.getDate();
   return `${month}월 ${day}일`;
 };
-const endformattedDate = (date: any) => {
-  const dateObj = new Date(date);
+const endformattedDate = (datestr: any) => {
+  const dateObj = new Date(datestr);
   dateObj.setDate(dateObj.getDate() - 1);
   const month = ("0" + (dateObj.getMonth() + 1)).slice(-2);
   const day = ("0" + dateObj.getDate()).slice(-2);
