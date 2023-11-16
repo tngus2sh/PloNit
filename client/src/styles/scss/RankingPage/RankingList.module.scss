@@ -1,5 +1,14 @@
 .ranking {
   margin: 1rem;
+  .season {
+    text-align: left;
+    .date {
+      font-size: 1rem;
+    }
+    .detail {
+      font-size: 1.5rem;
+    }
+  }
   .top {
     display: flex;
     justify-content: space-around;

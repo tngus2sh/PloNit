@@ -7,20 +7,43 @@ import style from "styles/css/RankingPage/RankingList.module.css";
 import { RankInterface, RankDetailInterface } from "interface/rankInterface";
 import { getMemberRank } from "api/lib/rank";
 
+const formattedSeason = (datestr: any) => {
+  const date = new Date(datestr);
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const season = day === 1 ? 1 : 2;
+
+  return `${year}년 ${month}월 ${season}시즌`;
+};
+
+const formattedDate = (datestr: any) => {
+  const date = new Date(datestr);
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  return `${month}월 ${day}일`;
+};
+const endformattedDate = (datestr: any) => {
+  const dateObj = new Date(datestr);
+  dateObj.setDate(dateObj.getDate() - 1);
+  const month = dateObj.getMonth() + 1;
+  const day = dateObj.getDate();
+  return `${month}월 ${day}일`;
+};
+
 const PersonalRanking = () => {
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const [isMemberRank, setMemberRank] = useState<RankInterface>(
     {} as RankInterface,
   );
   const [isMemberList, setMemberList] = useState<RankDetailInterface[]>([]);
-
   useEffect(() => {
     getMemberRank(
       accessToken,
       (res) => {
         console.log("개인 랭킹 조회 성공");
         console.log(res.data);
-        setMemberRank(res.data.resultBody); // API 응답으로 rankData 업데이트
+        setMemberRank(res.data.resultBody);
         setMemberList(res.data.resultBody.membersRanks);
       },
       (err) => {
@@ -32,6 +55,15 @@ const PersonalRanking = () => {
   console.log(isMemberList);
   return (
     <div className={style.ranking}>
+      <div className={style.season}>
+        <div className={style.detail}>
+          {isMemberRank.startDate && formattedSeason(isMemberRank.startDate)}
+        </div>
+        <div className={style.date}>
+          {isMemberRank.startDate && formattedDate(isMemberRank.startDate)} -{" "}
+          {isMemberRank.endDate && endformattedDate(isMemberRank.endDate)}
+        </div>
+      </div>
       {
         <div className={style.top}>
           {isMemberList[1] && <SecondRankingItem data={isMemberList[1]} />}

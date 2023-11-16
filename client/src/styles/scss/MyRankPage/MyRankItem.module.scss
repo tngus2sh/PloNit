@@ -1,5 +1,41 @@
 @import "../styles";
 
+.rank_item_container {
+  width: 100%;
+  padding: 0.9rem 0;
+  border-radius: 0.8rem;
+  background-color: #f7f7f9;
+  box-shadow: 0px 0px 7px #dedede;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  .rank_title_container {
+    width: 25%;
+    padding-left: 1.3rem;
+    .rank {
+      font-size: 1.8rem;
+    }
+  }
+  
+  .rank_info_container {
+    flex-grow: 1;
+    padding-right: 1.3rem;
+    text-align: right;
+    .date_container {
+      margin-bottom: 0.2rem;
+      display: flex;
+      justify-content: right;
+      align-items: center;
+      color: $darkgray;
+      font-size: 0.9rem;
+    }
+    .distance {
+      font-size: 1.5rem;
+    }
+  }
+}
+
 .rank_item {
   border: 1px solid black;
   border-radius: 0.5rem;

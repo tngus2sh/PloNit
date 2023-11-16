@@ -9,7 +9,7 @@ const Section_1 = () => {
         <div>줍다(Plocka Upp)와 조깅(Jogging)의 합성어로, </div>
         <div>조깅하며 쓰레기를 줍다는 뜻을 가지고 있어요</div>
       </div>
-      <img src="./login3.gif" alt="플로깅" />
+      <img src="./login1.gif" alt="플로깅" />
     </div>
   );
 };
