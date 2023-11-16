@@ -24,13 +24,14 @@ const CrewPloggingCard = ({ card }: { card: MyCrewpingInterface }) => {
   const weight = useSelector<rootState, number>((state) => {
     return state.user.info.weight;
   });
+  const DDAY = card.dday === 0 ? "day" : card.dday;
 
   return (
     <div className={style.plogging_card}>
       <div className={style.plogging_text}>
         <div className={style.crewping_leader}>{card.crewName}</div>
         <div className={style.crewping_name}>{card.crewpingName}</div>
-        <div className={style.crewping_dday}>D - {card.dday}</div>
+        <div className={style.crewping_dday}>D - {DDAY}</div>
         <div className={style.crewping_date}>{card.startDate}</div>
         <div className={style.crewping_place}>{card.place}</div>
         <div className={style.crewping_member}>
