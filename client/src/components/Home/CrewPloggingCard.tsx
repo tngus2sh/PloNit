@@ -44,25 +44,26 @@ const CrewPloggingCard = ({ card }: { card: MyCrewpingInterface }) => {
   const DDAY = card.dday === 0 ? "day" : card.dday;
 
   const onClick = () => {
-    if (isPastTime(startDate)) {
-      dispatch(P.clear());
-      dispatch(Crewping.clear());
-      dispatch(P.setCrewId(crewId));
-      dispatch(P.setCrewpingId(id));
-      dispatch(Crewping.setRoomId(`${id}`));
-      dispatch(Crewping.setCharge(isMaster));
-      dispatch(Crewping.setSenderId(nickName));
-      dispatch(P.setBeforeCrewping(true));
-      if (weight > 0) {
-        dispatch(P.setKg(weight));
-      }
-      navigate("/plogging");
-    } else {
-      Swal.fire({
-        icon: "error",
-        text: "아직 크루핑을 시작할 수 없습니다.",
-      });
+    // if (isPastTime(startDate)) {
+    dispatch(P.clear());
+    dispatch(Crewping.clear());
+    dispatch(P.setCrewId(crewId));
+    dispatch(P.setCrewpingId(id));
+    dispatch(Crewping.setRoomId(`${id}`));
+    dispatch(Crewping.setCharge(isMaster));
+    dispatch(Crewping.setSenderId(nickName));
+    dispatch(P.setBeforeCrewping(true));
+    if (weight > 0) {
+      dispatch(P.setKg(weight));
     }
+    navigate("/plogging");
+    // }
+    // else {
+    //   Swal.fire({
+    //     icon: "error",
+    //     text: "아직 크루핑을 시작할 수 없습니다.",
+    //   });
+    // }
   };
 
   return (
