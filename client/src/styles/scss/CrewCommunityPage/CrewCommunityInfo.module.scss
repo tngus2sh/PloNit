@@ -11,17 +11,23 @@
     padding: 0.8rem;
     .crew_title {
       display: flex;
+      align-items: center;
       font-size: 1.2rem;
       margin-bottom: 0.2rem;
     }
     .crew_content {
       display: flex;
+      align-items: center;
+      .crew_member {
+        display: flex;
+        align-items: center;
+      }
       .invite {
         margin-left: 0.5rem;
         color: $green;
       }
       .allow {
-        margin-left: 0.5rem;
+        margin-left: 0.7rem;
         color: $red;
       }
     }
