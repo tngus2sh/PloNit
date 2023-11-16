@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 
 import CrewCommunityPage from "pages/CrewCommunityPage";
@@ -22,15 +22,29 @@ import NotificationPage from "pages/NotificationPage";
 import PageNotFound404 from "pages/PageNotFound404";
 import PloggingCompletePage from "pages/PloggingCompletePage";
 import PloggingPage from "pages/PloggingPage";
+import PloggingImagePage from "pages/PloggingImagePage";
 import ProfileEditPage from "pages/ProfileEditPage";
 import ProfilePage from "pages/ProfilePage";
 import RankingPage from "pages/RankingPage";
 import FeedCreatePage from "pages/FeedCreatePage";
 import CrewNoticePage from "pages/CrewNoticePage";
 
-import PloggingImagePage from "pages/PloggingImagePage";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { rootState } from "store/store";
 
 const RouteComponent = () => {
+  const navigate = useNavigate();
+  const isLogin = useSelector<rootState, boolean>((state) => {
+    return state.user.auth.isLogin;
+  });
+
+  useEffect(() => {
+    if (!isLogin) {
+      navigate("/login");
+    }
+  }, []);
+
   return (
     <Routes>
       <Route path="/" element={<HomePage />}></Route>
