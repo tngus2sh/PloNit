@@ -27,7 +27,7 @@ const formattedDatePlus = (datestr: any) => {
   const date = new Date(datestr);
   const month = date.getMonth() + 1;
   const day = date.getDate();
-  return `${month}월 ${day}일`;
+  return `${month}월 ${day + 1}일`;
 };
 const endformattedDate = (datestr: any) => {
   const date = new Date(datestr);
