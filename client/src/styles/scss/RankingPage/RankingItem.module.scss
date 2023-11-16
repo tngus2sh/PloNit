@@ -1,12 +1,12 @@
 // BasicRankingItem.tsx
-.rank_member_container .member_mine {
+.rank_member_container.member_mine {
   background: linear-gradient(
     90deg,
     rgba(206, 230, 254, 1) 0%,
     rgba(253, 254, 255, 1) 100%
   );
 }
-.rank_member_container .member_notMine {
+.rank_member_container.member_notMine {
   background-color: #f9f9f9;
 }
 .rank_member_container {
@@ -119,6 +119,9 @@
   .nickname {
     font-size: 1.3rem;
     font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .dist {
@@ -144,6 +147,9 @@
   .nickname {
     font-size: 1.2rem;
     font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .dist {

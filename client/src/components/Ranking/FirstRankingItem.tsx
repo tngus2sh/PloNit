@@ -5,12 +5,6 @@ import { RankDetailInterface } from "interface/rankInterface";
 function roundToTwoDecimalPlaces(num: any) {
   return parseFloat(num.toFixed(2));
 }
-function truncateString(str: string | undefined) {
-  if (str && str.length > 6) {
-    return <span className={style.truncated}>{str}</span>;
-  }
-  return str;
-}
 const FirstRankingItem = ({ data }: { data: RankDetailInterface }) => {
   return (
     <div className={style.first_ranker}>
@@ -21,7 +15,7 @@ const FirstRankingItem = ({ data }: { data: RankDetailInterface }) => {
         alt="몽"
       />
 
-      <div className={style.nickname}>{truncateString(data.nickName)}</div>
+      <div className={style.nickname}>{data.nickName}</div>
       <div className={style.dist}>
         <span className={style.large}>
           {roundToTwoDecimalPlaces(data.distance)}
