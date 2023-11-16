@@ -16,6 +16,7 @@ export interface UserInterface {
 }
 export interface MyCrewpingInterface {
   id: number;
+  crewId: number;
   crewName: string;
   crewpingName: string;
   crewpingImage: string;

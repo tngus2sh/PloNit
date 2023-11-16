@@ -34,7 +34,7 @@ const CrewPloggingCard = ({ card }: { card: MyCrewpingInterface }) => {
   console.log(card);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { id, isMaster, startDate } = card;
+  const { id, crewId, isMaster, startDate } = card;
   const nickName = useSelector<rootState, string>((state) => {
     return state.user.info.nickname;
   });
@@ -47,6 +47,7 @@ const CrewPloggingCard = ({ card }: { card: MyCrewpingInterface }) => {
     if (isPastTime(startDate)) {
       dispatch(P.clear());
       dispatch(Crewping.clear());
+      dispatch(Crewping.setCrewId(crewId));
       dispatch(P.setCrewpingId(id));
       dispatch(Crewping.setRoomId(`${id}`));
       dispatch(Crewping.setCharge(isMaster));
