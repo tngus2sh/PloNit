@@ -10,6 +10,7 @@ const initialState = {
   crewpingStart: false as boolean,
   endRequest: false as boolean,
   crewpingEnd: false as boolean,
+  exitRequest: false as boolean,
   getLocation: false as boolean,
   locations: {} as Locations,
   profileImage: "" as string,
@@ -46,6 +47,9 @@ const crewpingSlice = createSlice({
     },
     setCrewpingEnd: (state, action: PayloadAction<boolean>) => {
       state.crewpingEnd = action.payload;
+    },
+    setExitRequest: (state) => {
+      state.exitRequest = true;
     },
     setGetLocation: (state, action: PayloadAction<boolean>) => {
       state.getLocation = action.payload;
@@ -92,6 +96,7 @@ export const {
   setCrewpingStart,
   setEndRequest,
   setCrewpingEnd,
+  setExitRequest,
   setGetLocation,
   setLocations,
   setProfileImage,

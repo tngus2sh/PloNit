@@ -43,7 +43,7 @@ export interface Member {
 }
 
 export interface Message {
-  type: "START" | "END" | "LOCATION" | "WAIT";
+  type: "START" | "END" | "LOCATION" | "WAIT" | "EXIT";
   nickName: string;
   senderId: string;
   roomId: string;
