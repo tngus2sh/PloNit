@@ -49,6 +49,27 @@ public class CrewpingWebSocketController {
             request.setMembers(members);
             request.setMessage(request.getNickName() + "님이 입장하셨습니다.");
         }
+        /* 상태값이 EXIT일 때, 해당 사용자 정보 삭제 */
+        else if (CrewpingMessageReq.MessageType.EXIT.equals(request.getType())) {
+            /* 레디스에서 해당하는 사용자 없애기 */
+            redisUtils.deleteRedisKey(request.getRoomId(), request.getNickName());
+
+            /* 다시 사용자 목록 불러오기 */
+            Map<String, String> crewpingMembers = redisUtils.getRedisHash(request.getRoomId());
+
+            List<Members> members = new ArrayList<>();
+            for (String name : crewpingMembers.keySet()) {
+                String nickName = name;
+                String image = crewpingMembers.get(name);
+                members.add(Members.builder()
+                        .nickName(nickName)
+                        .profileImage(image)
+                        .build());
+            }
+
+            request.setMembers(members);
+            request.setMessage(request.getNickName() + "님이 퇴장하셨습니다.");
+        }
 
         // topic-1대다, queue-1대1
         sendingOperations.convertAndSend("/topic/chat/room/" + roomId, request);

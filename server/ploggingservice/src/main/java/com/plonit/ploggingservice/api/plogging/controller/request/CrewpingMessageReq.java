@@ -14,7 +14,7 @@ import java.util.List;
 public class CrewpingMessageReq {
 
     public enum MessageType {
-        START, END, LOCATION, WAIT
+        START, END, LOCATION, WAIT, EXIT
     }
 
     private MessageType type;
