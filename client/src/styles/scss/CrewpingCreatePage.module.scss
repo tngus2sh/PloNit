@@ -84,6 +84,8 @@
       color: white;
       width: 6rem;
       margin-left: 0.5rem;
+      font-size: 1.2rem;
+      font-family: "omyu_pretty";
       @media (min-width: 400px) {
         font-size: 1.2rem;
       }
@@ -113,6 +115,7 @@
   }
   .people_content {
     display: flex;
+    align-items: center;
     input::-webkit-inner-spin-button {
       appearance: none;
       -moz-appearance: none;
@@ -130,12 +133,12 @@
     .slash {
       font-size: 2.8rem;
       margin-left: 0.5rem;
-      margin-top: -0.5rem;
+      height: 100%;
     }
     .limit {
       font-size: 2.8rem;
       width: 45%;
-      margin-top: -0.5rem;
+      height: 100%;
     }
   }
 }
