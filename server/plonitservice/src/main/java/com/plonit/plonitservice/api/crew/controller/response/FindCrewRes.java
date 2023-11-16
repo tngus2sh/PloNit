@@ -2,13 +2,11 @@ package com.plonit.plonitservice.api.crew.controller.response;
 
 import com.plonit.plonitservice.domain.crew.Crew;
 import com.plonit.plonitservice.domain.crew.CrewMember;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
+@Setter
 public class FindCrewRes {
     private long id;
     private String name;
@@ -23,11 +21,12 @@ public class FindCrewRes {
     private Boolean isCrewMaster;
     private Boolean isMyCrew;
     private Boolean isWaiting;
-
-    // todo : ranking 추가
-    private String rankingInfo;
+    private String startDate;
+    private String endDate;
     private int totalRanking;
     private int avgRanking;
+    private Double totalDistance;
+    private Double avgDistance;
 
     public FindCrewRes (Long id, String name, Long cntPeople, String crewImage,
                        String region, String introduce, String notice,

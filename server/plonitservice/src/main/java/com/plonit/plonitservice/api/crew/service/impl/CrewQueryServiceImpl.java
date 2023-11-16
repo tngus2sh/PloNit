@@ -3,7 +3,9 @@ package com.plonit.plonitservice.api.crew.service.impl;
 import com.plonit.plonitservice.api.crew.controller.response.*;
 import com.plonit.plonitservice.api.crew.service.CrewQueryService;
 import com.plonit.plonitservice.common.AwsS3Uploader;
+import com.plonit.plonitservice.common.enums.Rank;
 import com.plonit.plonitservice.common.exception.CustomException;
+import com.plonit.plonitservice.common.util.RedisUtils;
 import com.plonit.plonitservice.common.util.RequestUtils;
 import com.plonit.plonitservice.domain.crew.Crew;
 import com.plonit.plonitservice.domain.crew.CrewMember;
@@ -15,11 +17,13 @@ import com.plonit.plonitservice.domain.member.repository.MemberQueryRepository;
 import com.plonit.plonitservice.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.plonit.plonitservice.common.exception.ErrorCode.*;
@@ -39,6 +43,7 @@ public class CrewQueryServiceImpl implements CrewQueryService {
     private final MemberQueryRepository memberQueryRepository;
     private final MemberRepository memberRepository;
     private final AwsS3Uploader awsS3Uploader;
+    private final RedisUtils redisUtils;
 
     @Override // 크루 목록 조회
     public List<FindCrewsRes> findCrews() {
@@ -61,6 +66,31 @@ public class CrewQueryServiceImpl implements CrewQueryService {
 
         FindCrewRes findCrewRes = crewQueryRepository.findCrewWithCrewMember(crewId, memberId)
                 .orElseThrow(() -> new CustomException(CREW_NOT_FOUND));
+
+        // 랭킹 정보 가져오기
+        int index = 0;
+        Set<ZSetOperations.TypedTuple<String>> rankCrewSorts = redisUtils.getSortedSetRangeWithScores(Rank.CREW.name(), 0, -1);
+        for (ZSetOperations.TypedTuple<String> rankCrewSort : rankCrewSorts) {
+            ++index;
+            String value = rankCrewSort.getValue();
+            if (value.equals(String.valueOf(crewId))) {
+                findCrewRes.setTotalRanking(index);
+                findCrewRes.setTotalDistance(rankCrewSort.getScore());
+            }
+        }
+
+        index = 0;
+        Set<ZSetOperations.TypedTuple<String>> rankCrewAvgSorts = redisUtils.getSortedSetRangeWithScores(Rank.CREW_AVG.name(), 0, -1);
+        for (ZSetOperations.TypedTuple<String> rankCrewAvgSort : rankCrewAvgSorts) {
+            ++index;
+            String value = rankCrewAvgSort.getValue();
+            if (value.equals(String.valueOf(crewId))) {
+                findCrewRes.setAvgRanking(index);
+                findCrewRes.setAvgDistance(rankCrewAvgSort.getScore());
+            }
+        }
+
+
 
         log.info(logCurrent(getClassName(), getMethodName(), END));
         return findCrewRes;
