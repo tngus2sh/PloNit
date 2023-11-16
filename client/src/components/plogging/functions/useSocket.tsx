@@ -75,7 +75,7 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
       return;
     }
     if (newMessage.type === "EXIT") {
-      console.log("EXIT ----");
+      console.log("exitRequest:", exitRequest);
       if (exitRequest) {
         console.log("Yes");
         stompClient.current?.deactivate();
