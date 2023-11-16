@@ -42,7 +42,6 @@ public class ExcelServiceImpl implements ExcelService {
     private final MailService mailService;
     private final PloggingQueryRepository ploggingQueryRepository;
     private final MemberFeignClient memberFeignClient;
-    private final CircuitBreakerFactory circuitBreakerFactory;
 
 
     @Override
@@ -68,12 +67,7 @@ public class ExcelServiceImpl implements ExcelService {
 
         System.out.println("유저 ID 조회 결과: " + memberIdList);
 
-        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
-
-        List<VolunteerMemberInfoRes> volunteerInfos = circuitBreaker.run(
-                () -> memberFeignClient.findVolunteerMemberInfo(memberIdList).getResultBody(),
-                throwable -> null
-        );
+        List<VolunteerMemberInfoRes> volunteerInfos = memberFeignClient.findVolunteerMemberInfo(memberIdList).getResultBody();
 
         List<ExcelDto> excelDtoList = new ArrayList<>();
 
