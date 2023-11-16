@@ -33,6 +33,7 @@ const endformattedDate = (datestr: any) => {
 const MyRankPage = () => {
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
   const [isMyRanking, setMyRanking] = useState<MyRankInterface[]>([]);
+  const [isNow, setNow] = useState<MyRankInterface>({} as MyRankInterface);
   console.log(isMyRanking[0]);
   useEffect(() => {
     getMyRanking(
@@ -41,6 +42,7 @@ const MyRankPage = () => {
         console.log("나의 랭킹 조회 성공");
         console.log(res.data);
         setMyRanking(res.data.resultBody);
+        setNow(res.data.resultBody[0]);
       },
       (err) => {
         console.log("나의 랭킹 조회 실패", err);
@@ -51,19 +53,19 @@ const MyRankPage = () => {
   return (
     <div>
       <BackTopBar text="나의 랭킹" />
-      {/* <div className={style.page_container}>
+      <div className={style.page_container}>
         <div className={style.myrank_container}>
           <div className={style.season_info_container}>
             <div className={style.season_title}>
-              {formattedSeason(isMyRanking[0].startDate)}
+              {formattedSeason(isNow.startDate)}
             </div>
             <div className={style.season_date}>
-              ({formattedDate(isMyRanking[0].startDate)} ~
-              {endformattedDate(isMyRanking[0].endDate)})
+              ({formattedDate(isNow.startDate)} ~
+              {endformattedDate(isNow.endDate)})
             </div>
           </div>
           <div className={style.current_container}>
-            <MyRankMain rank={isMyRanking[0]} />
+            <MyRankMain rank={isNow} />
           </div>
         </div>
 
@@ -81,7 +83,7 @@ const MyRankPage = () => {
             })}
           </div>
         </div>
-      </div> */}
+      </div>
     </div>
   );
 };
