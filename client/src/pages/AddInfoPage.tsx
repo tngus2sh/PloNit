@@ -122,7 +122,7 @@ const AddInfoPage = () => {
 
   return (
     <div className={style.add_info}>
-      <img src="/plonit_logo.png" alt="로고" />
+      <img src="/plonit_logo2.png" alt="로고" />
       <div className={style.guide}>
         <div>서비스 사용을 위해</div>
         <div>추가 정보를 등록해 주세요!</div>

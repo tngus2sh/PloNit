@@ -9,24 +9,29 @@
   display: flex;
   justify-content: space-around;
   box-shadow: 0px 0px 7px #dedede;
-  .rank_container, .distance_container, .profile_container {
+  .rank_container,
+  .distance_container,
+  .profile_container {
     width: 33%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    .rank_title, .distance_title {
+    .rank_title,
+    .distance_title {
       color: #323232;
     }
-    .rank_data, .distance_data {
+    .rank_data,
+    .distance_data {
       font-size: 1.3rem;
     }
   }
   .profile_container {
     img {
-      width: 2.2rem;
-      height: 2.2rem;
+      width: 4rem;
+      height: 4rem;
       margin-bottom: 0.2rem;
+      border-radius: 50%;
     }
   }
 }
