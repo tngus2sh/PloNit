@@ -55,14 +55,10 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
     }
     if (newMessage.type === "LOCATION") {
       dispatch(Crewping.setLocations(newMessage));
-      console.log(
-        `latitude: ${newMessage.latitude} | longitude: ${newMessage.longitude}`,
-      );
       return;
     }
     if (newMessage.type === "WAIT") {
       dispatch(Crewping.setMembers(newMessage));
-      console.log(`members:`, newMessage.members);
       const Toast = Swal.mixin({
         toast: true,
         position: "top",
@@ -79,14 +75,10 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
     }
     if (newMessage.type === "EXIT") {
       if (newMessage.nickName === nickName) {
-        console.log("Yes");
         setToggleSocket(false);
         navigate("/");
-        console.log(`members:`, newMessage.members);
       } else {
-        console.log("No");
         dispatch(Crewping.setMembers(newMessage));
-        console.log(`members:`, newMessage.members);
         const Toast = Swal.mixin({
           toast: true,
           position: "top",
@@ -123,7 +115,6 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
   }
 
   function sendStartRequest() {
-    console.log(`[roomId]: ${roomId} - sendStartRequest`);
     if (stompClient.current?.connected) {
       const newMessage: Message = {
         type: "START",
@@ -131,7 +122,6 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
         senderId: senderId,
         roomId: roomId,
       };
-      console.log("[SEND]", newMessage);
 
       stompClient.current?.publish({
         destination: `/app/chat/message`,
@@ -145,7 +135,6 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
   }
 
   function sendEndRequest() {
-    console.log(`[roomId]: ${roomId} - sendEndRequest`);
     if (stompClient.current?.connected) {
       const newMessage: Message = {
         type: "END",
@@ -153,7 +142,6 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
         senderId: senderId,
         roomId: roomId,
       };
-      console.log("[SEND]", newMessage);
 
       stompClient.current?.publish({
         destination: `/app/chat/message`,
@@ -167,7 +155,6 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
   }
 
   function sendExitRequest() {
-    console.log(`[roomId]: ${roomId} - sendExitRequest`);
     if (stompClient.current?.connected) {
       const newMessage: Message = {
         type: "EXIT",
@@ -175,7 +162,6 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
         senderId: senderId,
         roomId: roomId,
       };
-      console.log("[SEND]", newMessage);
 
       stompClient.current?.publish({
         destination: `/app/chat/message`,
@@ -189,7 +175,6 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
   }
 
   async function sendLocation() {
-    console.log(`[roomId]: ${roomId} - sendLocation`);
     if (stompClient.current?.connected) {
       getGPS()
         .then((response) => {
@@ -202,7 +187,6 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
             latitude: latitude,
             longitude: longitude,
           };
-          console.log("[SEND]", newMessage);
 
           stompClient.current?.publish({
             destination: `/app/chat/message`,
@@ -220,7 +204,6 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
   }
 
   function sendWait() {
-    console.log(`[roomId]: ${roomId} - sendWait`);
     if (stompClient.current?.connected) {
       const newMessage: Message = {
         type: "WAIT",
@@ -229,7 +212,6 @@ function useSocket({ stompClient, roomId, senderId }: IuseSocket) {
         roomId: roomId,
         profileImage: profileImage,
       };
-      console.log("[SEND]", newMessage);
 
       stompClient.current?.publish({
         destination: `/app/chat/message`,

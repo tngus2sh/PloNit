@@ -49,7 +49,6 @@ const PloggingImagePage = () => {
         return;
       }
 
-      console.log("이미지 비동기 저장 로직 실행!");
       dispatch(P.handleIsLoading(1));
       if (isEnd || beforeEnd) {
         navigate("/plogging/complete");
@@ -60,24 +59,19 @@ const PloggingImagePage = () => {
       const blob = await fetch(uploadImage).then((response) => response.blob());
       if (blob) {
         const jpgFile = new File([blob], "image.jpg", { type: "image/jpeg" });
-        console.log("before compress", jpgFile.size / (1024 * 1024));
         const compressedImage = await compressImage(jpgFile);
 
         if (compressedImage) {
-          console.log("after compress", compressedImage.size / (1024 * 1024));
-
           savePloggingImage({
             accessToken: accessToken,
             plogging_id: ploggingId,
             image: compressedImage,
             success: (response) => {
-              console.log("성공");
-              console.log(response);
               dispatch(P.addImage(response.data.resultBody));
               dispatch(P.handleIsLoading(-1));
             },
             fail: (error) => {
-              console.log(error);
+              console.error(error);
             },
           });
         }

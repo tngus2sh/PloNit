@@ -111,8 +111,6 @@ const BeforeStart = () => {
           latitude: latitude,
           longitude: longitude,
           success: (response) => {
-            console.log("개인 플로깅 선택");
-            console.log(response);
             dispatch(P.setPloggingId(response.data.resultBody));
           },
           fail: (error) => {
@@ -123,8 +121,6 @@ const BeforeStart = () => {
       .catch((error) => {
         console.error(error);
       });
-    // dispatch(P.clear());
-    // dispatch(P.setPloggingType("IND"));
   }
   async function onClick2() {
     dispatch(P.clear());
@@ -141,8 +137,6 @@ const BeforeStart = () => {
         latitude: latitude,
         longitude: longitude,
         success: (response) => {
-          console.log("봉사 플로깅 선택");
-          console.log(response);
           dispatch(P.setPloggingId(response.data.resultBody));
         },
         fail: (error) => {
@@ -150,8 +144,6 @@ const BeforeStart = () => {
         },
       });
     });
-    // dispatch(P.clear());
-    // dispatch(P.setPloggingType("VOL"));
   }
 
   return (

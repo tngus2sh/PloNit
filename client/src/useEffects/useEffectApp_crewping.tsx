@@ -96,8 +96,6 @@ function useEffectApp_Crewping() {
           latitude: latitude,
           longitude: longitude,
           success: (response) => {
-            console.log("크루핑 요청!");
-            console.log(response);
             dispatch(P.setPloggingId(response.data.resultBody));
             dispatch(P.setPloggingType("CREWPING"));
             dispatch(P.setBeforeCrewping(false));
