@@ -16,6 +16,7 @@ import static lombok.AccessLevel.PROTECTED;
 public class FindCrewpingInfoRes {
 
     private Long id;
+    private Long crewId;
     private String crewName;
     private String crewpingName;
     private String crewpingImage;
