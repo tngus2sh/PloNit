@@ -53,6 +53,7 @@ const FeedItem = ({
   fetchFeedList: () => void;
 }) => {
   const accessToken = useSelector((state: any) => state.user.auth.accessToken);
+  const MyCrew = useSelector((state: any) => state.user.crewinfo.isMyCrew);
   const [isCommentModalOpen, setCommentModalOpen] = useState(false);
   const feed_create_date = feed.createdDate
     ? new Date(feed.createdDate)
@@ -133,18 +134,22 @@ const FeedItem = ({
       </StyledSwiper>
 
       <div className={style.icon_area}>
-        {isLiked ? (
-          <Icon
-            icon="bi:heart-fill"
-            style={{ width: "1.8rem", height: "1.8rem", color: "red" }}
-            onClick={toggleLike}
-          />
+        {MyCrew ? (
+          isLiked ? (
+            <Icon
+              icon="bi:heart-fill"
+              style={{ width: "1.8rem", height: "1.8rem", color: "red" }}
+              onClick={toggleLike}
+            />
+          ) : (
+            <Icon
+              icon="bi:heart"
+              style={{ width: "1.8rem", height: "1.8rem" }}
+              onClick={toggleLike}
+            />
+          )
         ) : (
-          <Icon
-            icon="bi:heart"
-            style={{ width: "1.8rem", height: "1.8rem" }}
-            onClick={toggleLike}
-          />
+          <Icon icon="bi:heart" style={{ width: "1.8rem", height: "1.8rem" }} />
         )}
         <Icon
           icon="bi:chat-left"

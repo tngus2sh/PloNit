@@ -120,6 +120,8 @@ const CrewpingCreatePage = () => {
         type="text"
         value={isCrewpingName}
         onChange={onChangeName}
+        placeholder="20자 이내로 입력하세요"
+        maxLength={20}
       />
       <CrewpingDate
         setCrewpingStartDate={setCrewpingStartDate}
