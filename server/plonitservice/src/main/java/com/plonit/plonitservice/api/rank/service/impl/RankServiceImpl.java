@@ -277,6 +277,11 @@ public class RankServiceImpl implements RankService {
             }
         }
 
+        myRanking.sort((o1, o2) -> {
+            return o2.getEndDate().compareTo(o1.getEndDate());
+        });
+
+
         return myRanking;
     }
 

@@ -33,7 +33,7 @@ public class MemberRankingQueryRepository {
                 .join(memberRanking.rankingPeriod, rankingPeriod)
                 .join(memberRanking.member, member)
                 .where(memberRanking.member.id.eq(memberKey))
-                .orderBy(rankingPeriod.endDate.desc())
+                .orderBy(rankingPeriod.endDate.asc())
                 .fetch();
     }
 }
