@@ -6,7 +6,7 @@ import { Icon } from "@iconify/react";
 export const LogoTopBar = () => {
   return (
     <div className={style.logoTopbar}>
-      <img src="/plonit_logo.png" alt="logo" />
+      <img src="/plonit_logo2.png" alt="logo" />
     </div>
   );
 };
