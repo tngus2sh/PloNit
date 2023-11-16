@@ -9,6 +9,7 @@ import com.plonit.plonitservice.api.member.controller.response.FindMemberRes;
 import com.plonit.plonitservice.api.member.service.MemberQueryService;
 import com.plonit.plonitservice.api.member.service.MemberService;
 import com.plonit.plonitservice.api.member.service.dto.UpdateMemberDto;
+import com.plonit.plonitservice.api.member.service.dto.UpdateVolunteerInfoDto;
 import com.plonit.plonitservice.common.CustomApiResponse;
 import com.plonit.plonitservice.common.exception.CustomException;
 import com.plonit.plonitservice.common.util.RequestUtils;
@@ -94,6 +95,11 @@ public class MemberController {
     @Operation(summary = "봉사 정보 저장", description = "사용자는 봉사 정보를 저장할 수 있다.")
     @PutMapping("/volunteer")
     public CustomApiResponse<Void> updateVolunteerInfo(@RequestBody UpdateVolunteerInfoReq updateVolunteerInfoReq) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+        log.info("UpdateVolunteerInfo={}", updateVolunteerInfoReq);
+
+        memberService.updateVolunteerInfo(UpdateVolunteerInfoDto.of(updateVolunteerInfoReq));
+
         return CustomApiResponse.ok(null);
     }
 }
