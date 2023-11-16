@@ -51,16 +51,15 @@ const MyRankPage = () => {
   return (
     <div>
       <BackTopBar text="나의 랭킹" />
-
       <div className={style.page_container}>
         <div className={style.myrank_container}>
           <div className={style.season_info_container}>
             <div className={style.season_title}>
-              {formattedSeason(isMyRanking[0].startDate)}
+              {isMyRanking && formattedSeason(isMyRanking[0].startDate)}
             </div>
             <div className={style.season_date}>
-              ({formattedDate(isMyRanking[0].startDate)} ~
-              {endformattedDate(isMyRanking[0].endDate)})
+              ({isMyRanking && formattedDate(isMyRanking[0].startDate)} ~
+              {isMyRanking && endformattedDate(isMyRanking[0].endDate)})
             </div>
           </div>
           <div className={style.current_container}>
@@ -80,8 +79,6 @@ const MyRankPage = () => {
               }
               return null;
             })}
-            {/* <MyRankItem />
-            <MyRankItem /> */}
           </div>
         </div>
       </div>
