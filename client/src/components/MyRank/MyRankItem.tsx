@@ -3,13 +3,18 @@ import style from "styles/css/MyRankPage/MyRankItem.module.css";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import { MyRankInterface } from "interface/rankInterface";
 
+function roundToTwoDecimalPlaces(num: any) {
+  return parseFloat(num.toFixed(2));
+}
+
 const formattedSeason = (datestr: any) => {
   const date = new Date(datestr);
+  const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();
   const season = day === 1 ? 1 : 2;
 
-  return `${month}-${season} 시즌`;
+  return `${year}년 ${month}월 ${season}시즌`;
 };
 
 const MyRankItem = ({ rank }: { rank: MyRankInterface }) => {
@@ -29,17 +34,10 @@ const MyRankItem = ({ rank }: { rank: MyRankInterface }) => {
         </div>
         <div className={style.distance_container}>
           <div className={style.distance}>
-            <span>{rank.distance}km</span>
+            <span>{roundToTwoDecimalPlaces(rank.distance)}km</span>
           </div>
         </div>
       </div>
-
-      {/* <div className={style.rank_detail}>
-        <div className={style.season}>10월 1일~10월 15일(10-1시즌)</div>
-        <div className={style.dist}>
-          <span className={style.large}>8.54</span>km
-        </div>
-      </div> */}
     </div>
   );
 };

@@ -1,7 +1,11 @@
 import React from "react";
 import style from "styles/css/RankingPage/RankingItem.module.css";
 import { RankInterface, RankDetailInterface } from "interface/rankInterface";
-// { rankingList }: { crew: RankInterface }
+
+function roundToTwoDecimalPlaces(num: any) {
+  return parseFloat(num.toFixed(2));
+}
+
 const SecondRankingItem = ({ data }: { data: RankDetailInterface }) => {
   return (
     <div className={style.second_ranker}>
@@ -13,7 +17,10 @@ const SecondRankingItem = ({ data }: { data: RankDetailInterface }) => {
       />
       <div className={style.nickname}>{data.nickName}</div>
       <div className={style.dist}>
-        <span className={style.large}>{data.distance}</span>km
+        <span className={style.large}>
+          {roundToTwoDecimalPlaces(data.distance)}
+        </span>
+        km
       </div>
     </div>
   );
