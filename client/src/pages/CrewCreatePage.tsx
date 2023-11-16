@@ -107,6 +107,8 @@ const CrewCreatePage = () => {
         type="text"
         value={isCrewName}
         onChange={onChangeName}
+        placeholder="10자 이내로 입력하세요"
+        maxLength={10}
       />
       <div className={style.region}>
         <div className={style.title}>활동 지역</div>
