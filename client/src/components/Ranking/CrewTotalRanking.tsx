@@ -54,29 +54,35 @@ const CrewTotalRanking = () => {
   }, []);
 
   return (
-    <div className={style.ranking}>
-      <div className={style.season}>
-        <div className={style.detail}>
-          {isTotalRank.startDate && formattedSeason(isTotalRank.startDate)}
+    <div className={style.ranking_container}>
+      <div className={style.ranking_top_container}>
+        <div className={style.season_container}>
+          <div className={style.season_info}>
+            {isTotalRank.startDate && formattedSeason(isTotalRank.startDate)}
+          </div>
+          <div className={style.season_detail}>
+            {`(`}
+            {isTotalRank.startDate &&
+              formattedDate(isTotalRank.startDate)} ~{" "}
+            {isTotalRank.endDate && endformattedDate(isTotalRank.endDate)}
+            {`)`}
+          </div>
         </div>
-        <div className={style.date}>
-          {isTotalRank.startDate && formattedDate(isTotalRank.startDate)} -{" "}
-          {isTotalRank.endDate && endformattedDate(isTotalRank.endDate)}
-        </div>
-      </div>
-      {
-        <div className={style.top}>
+        <div className={style.member_container}>
           {isTotalList[1] && <SecondRankingItem data={isTotalList[1]} />}
           {isTotalList[0] && <FirstRankingItem data={isTotalList[0]} />}
           {isTotalList[2] && <SecondRankingItem data={isTotalList[2]} />}
         </div>
-      }
-      {isTotalList.map((data, index) => {
-        if (index >= 3) {
-          return <BasicRankingItem key={index} data={data} />;
-        }
-        return null;
-      })}
+      </div>
+      <div className={style.ranking_bottom_container}>
+        {isTotalList.map((data, index) => {
+          if (index >= 3) {
+            return <BasicRankingItem key={index} data={data} />;
+          }
+          return null;
+        })}
+      </div>
+
       <div style={{ height: "4rem" }}></div>
     </div>
   );

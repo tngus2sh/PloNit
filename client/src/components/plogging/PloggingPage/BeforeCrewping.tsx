@@ -37,7 +37,7 @@ const BtnDiv: React.FC<IBtnDiv> = ({ height, onClick }) => {
   );
 };
 
-const Waiting = () => {
+const Waiting = ({ setShow }: { setShow: (value: boolean) => void }) => {
   const dispatch = useDispatch();
   const windowHeight = useSelector<rootState, number>((state) => {
     return state.window.height;
@@ -80,6 +80,7 @@ const Waiting = () => {
             backgroundColor: "#2cd261",
           }}
           onClick={() => {
+            setShow(false);
             dispatch(Crewping.setStartRequest(true));
           }}
         />
@@ -89,6 +90,14 @@ const Waiting = () => {
           <div style={{ display: "flex", justifyContent: "center" }}>
             <div className={style["dot-flashing"]}></div>
           </div>
+          <CommonButton
+            text="크루핑 중지"
+            styles={{ backgroundColor: "#999999" }}
+            onClick={() => {
+              setShow(false);
+              dispatch(Crewping.setExitRequest());
+            }}
+          />
         </div>
       )}
     </div>
@@ -115,7 +124,7 @@ const BeforeCrewping = () => {
         <BtnDiv height={btnDivHeight} onClick={onClick} />
       </DefaultMap>
       <CenterModal setShow={setShow} show={show}>
-        <Waiting />
+        <Waiting setShow={setShow} />
       </CenterModal>
     </>
   );
