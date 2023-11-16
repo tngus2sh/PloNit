@@ -24,10 +24,9 @@ const formattedDate = (datestr: any) => {
   return `${month}월 ${day}일`;
 };
 const endformattedDate = (datestr: any) => {
-  const dateObj = new Date(datestr);
-  dateObj.setDate(dateObj.getDate() - 1);
-  const month = dateObj.getMonth() + 1;
-  const day = dateObj.getDate();
+  const date = new Date(datestr);
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
   return `${month}월 ${day}일`;
 };
 
@@ -43,7 +42,9 @@ const MyRankPage = () => {
         console.log("나의 랭킹 조회 성공");
         console.log(res.data);
         setMyRanking(res.data.resultBody);
-        setNow(res.data.resultBody[0]);
+        if (res.data.resultBody[0].isSeason) {
+          setNow(res.data.resultBody[0]);
+        }
       },
       (err) => {
         console.log("나의 랭킹 조회 실패", err);
@@ -77,10 +78,14 @@ const MyRankPage = () => {
 
           <div className={style.prev_item_container}>
             {isMyRanking.map((data, index) => {
-              if (index >= 1) {
-                return <MyRankItem key={index} rank={data} />;
+              if (isNow) {
+                if (index >= 1) {
+                  return <MyRankItem key={index} rank={data} />;
+                }
+                return null;
+              } else {
+                <MyRankItem key={index} rank={data} />;
               }
-              return null;
             })}
           </div>
         </div>
