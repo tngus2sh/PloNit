@@ -3,6 +3,7 @@ package com.plonit.plonitservice.domain.crewping.repository;
 import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingsRes;
 import com.plonit.plonitservice.api.member.controller.response.FindCrewpingInfoRes;
 import com.plonit.plonitservice.common.enums.Status;
+import com.plonit.plonitservice.domain.crew.Crew;
 import com.plonit.plonitservice.domain.crewping.Crewping;
 import com.querydsl.core.types.ConstantImpl;
 import com.querydsl.core.types.Projections;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.plonit.plonitservice.domain.crew.QCrew.crew;
 import static com.plonit.plonitservice.domain.crewping.QCrewping.crewping;
 import static com.plonit.plonitservice.domain.crewping.QCrewpingMember.crewpingMember;
 import static com.plonit.plonitservice.domain.member.QMember.member;
@@ -64,6 +66,16 @@ public class CrewpingQueryRepository {
                 .orderBy(crewping.startDate.asc())
                 .fetch();
 
+        // 조회된 crewping 기반으로 crew 조회
+        Map<Long, Long> crewMap = queryFactory
+                .selectFrom(crew)
+                .join(crewping)
+                .on(crewping.crew.eq(crew))
+                .where(crew.id.in(crewpings.stream().map(crewping -> {
+                    return crewping.getCrew().getId();
+                }).collect(Collectors.toList())))
+                .transform(groupBy(crewping.id).as(crew.id));
+
         // 조회된 Crewping 기반으로 Member 프로필 리스트 생성
         Map<Long, List<String>> memberProfilesMap = queryFactory
                 .selectFrom(member)
@@ -83,11 +95,13 @@ public class CrewpingQueryRepository {
 
         return crewpings.stream().map(crewpingEntity -> {
             List<String> memberProfiles = memberProfilesMap.getOrDefault(crewpingEntity.getId(), Collections.emptyList());
+            Long crewId = crewMap.getOrDefault(crewpingEntity.getId(), -1l);
             Boolean isMaster = isMasterMap.getOrDefault(crewpingEntity.getId(), false);
             Long dDay = DAYS.between(LocalDate.now(), crewpingEntity.getStartDate());
 
             return FindCrewpingInfoRes.builder()
                     .id(crewpingEntity.getId())
+                    .crewId(crewId)
                     .crewName(crewpingEntity.getCrewName())
                     .crewpingName(crewpingEntity.getName())
                     .crewpingImage(crewpingEntity.getCrewpingImage())
