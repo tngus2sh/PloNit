@@ -6,8 +6,8 @@ function roundToTwoDecimalPlaces(num: any) {
   return parseFloat(num.toFixed(2));
 }
 function truncateString(str: string | undefined) {
-  if (str && str.length > 7) {
-    return str.substring(0, 7) + "...";
+  if (str && str.length > 6) {
+    return <span className={style.truncated}>{str}</span>;
   }
   return str;
 }
