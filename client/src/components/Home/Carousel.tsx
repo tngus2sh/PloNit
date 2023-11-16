@@ -48,7 +48,7 @@ const Carousel = () => {
 
   return (
     <div>
-      {isMyCrewpingList ? (
+      {isMyCrewpingList.length > 0 ? (
         <SwiperContainer>
           <StyledSwiper
             effect={"cards"}
