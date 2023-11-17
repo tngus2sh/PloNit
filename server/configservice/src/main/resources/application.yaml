@@ -4,12 +4,76 @@ server:
 spring:
   application:
     name: config-service
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: '{cipher}AQCVPovqr4TjUipf1KSZfq6769wyxQHh1p0Lyrmuwgg5cMrpfcvYkfeHwGBN6S6OxuM+HERhJUWOW35iXodDwe8Ht+x5XIW/otHj9/z5UQVdzjBcIhsIKtAyxTdt/vu8xxEkQ8Kpgu0bTbhKbfnYmZBh0EkOE4I/Sx+t9BXE2Ser3pELRS4J3/y7xzUyXyC/coK+gIP0AZjjaj9S9tPNsnZGfKnuOCh7IBQ21PzmgH9q9+3dhtsr7MuMDfSe62HI/loF+nPq1DM6SySqqO1vtq4FUGk1pVFB9G0c45VrOZVopERJDiyFsBblXhCmCPUB1DgQeL1uuEzimWrFlH1nDRJr/2kuigeQVAlG4MB88iEii6tylgQXT3Y3NobEWBrq/sU='
+    password: '{cipher}AQCVPovqr4TjUipf1KSZfq6769wyxQHh1p0Lyrmuwgg5cMrpfcvYkfeHwGBN6S6OxuM+HERhJUWOW35iXodDwe8Ht+x5XIW/otHj9/z5UQVdzjBcIhsIKtAyxTdt/vu8xxEkQ8Kpgu0bTbhKbfnYmZBh0EkOE4I/Sx+t9BXE2Ser3pELRS4J3/y7xzUyXyC/coK+gIP0AZjjaj9S9tPNsnZGfKnuOCh7IBQ21PzmgH9q9+3dhtsr7MuMDfSe62HI/loF+nPq1DM6SySqqO1vtq4FUGk1pVFB9G0c45VrOZVopERJDiyFsBblXhCmCPUB1DgQeL1uuEzimWrFlH1nDRJr/2kuigeQVAlG4MB88iEii6tylgQXT3Y3NobEWBrq/sU='
   cloud:
     config:
       server:
+        encrypt:
+          enabled: false
         git:
-          uri: https://github.com/Plonit07/plonit-config
+          uri: '{cipher}AQCV900l4GBunsOUpUsD9QjHWo1TtuqGJNoZmPk412nnhykmqdP1f56LEJJzmha7MSZQBRQ209vxoJTQCOVkaCoHwTxztfFlaBXgd2lY9Wb29X1AuGY749gmVn0YVm4hYIns5HWrGUmzTiXdRgOIlbOAn6eVUQOp4ZA4wFfn/8GncEpcOncvEI697avdwaR3qP7K1Xr0R4cHgo8Co93nrd8H6o40/KTYPhXk2IaqUXGZXNRHjGaqS2aN1lAKRHt8Q3ii/Xjw5+Hwv6HT+jOVrg/fdZ1ybQLpV13QW/6CuQc0l0UXkl7v6tA0PyJVrcUWm5VJp+V1FOaZUw4G8ilkxpillgFXwzopUqKb4zmB2H/AfCvXLYeprbEhmokDQcUTMroffMC4E4nOPFF7z1iBM9Dry5PItkYhkA6by63mfQNG3w=='
+          ignore-local-ssh-settings: true
           default-label: main
+          private-key: |
+            -----BEGIN RSA PRIVATE KEY-----
+            Proc-Type: 4,ENCRYPTED
+            DEK-Info: AES-128-CBC,D6EC41E7A604041CD489D4EE3137BD02
+
+            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
+            -----END RSA PRIVATE KEY-----
+          passphrase: '{cipher}AQCURyjgafTPRpbBDIXrj4ytoVL/3ye2Dy5AuU2LohqHoJ8tUXv3/oNis2VNc1KlWply3ftmHPReql+A9KitElwPPX9/f9lR3oiTbt37yHB2yUXdBLAFPNn8vH7M/q5df/bjLjo90ekULTMSeP39L4Ei+P0CtDFMkHWqN1y5J5pgs92gUF9F6MolIdJHaaysT1acatvXfY/OH3criSis/K501RvP+OEhlOi3D7S0GFhn1TEmZcR2dHz7+I6xN/kkT3fxTcp+OOFIcxih/OcWArzCGIJGkAllVJI2H13a01zlbxTnaCgfgAuvnNcevJqsk9z5p3vO11TaVizNrnN98/F4jsFAoh5spfnTEvvrKx08xeGnGZNAHvhFwBa8ywAt43s='
 
 management:
   endpoint:
