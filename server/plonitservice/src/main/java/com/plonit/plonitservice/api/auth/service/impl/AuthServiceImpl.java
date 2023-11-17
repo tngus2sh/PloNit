@@ -5,6 +5,7 @@ import com.plonit.plonitservice.api.auth.service.AuthService;
 import com.plonit.plonitservice.api.auth.service.dto.KakaoToken;
 import com.plonit.plonitservice.common.exception.CustomException;
 import com.plonit.plonitservice.common.security.JwtTokenProvider;
+import com.plonit.plonitservice.common.util.RequestUtils;
 import com.plonit.plonitservice.domain.member.Member;
 import com.plonit.plonitservice.domain.member.repository.MemberQueryRepository;
 import com.plonit.plonitservice.domain.member.repository.MemberRepository;
@@ -54,7 +55,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final static String KAKAO_AUTH_URI = "https://kauth.kakao.com";
     private final static String KAKAO_API_URI = "https://kapi.kakao.com";
-    private final static String DEFAULT_PROFILE_URL = "https://plonitbucket.s3.ap-northeast-2.amazonaws.com/plonit/plonit_%ED%94%84%EB%A1%9C%ED%95%84.png";
+    private final static String DEFAULT_PROFILE_URL = "https://plonitbucket.s3.ap-northeast-2.amazonaws.com/plonit/plonit_profile.png";
 
     public AuthServiceImpl(RedisTemplate redisTemplate, Environment env, MemberQueryRepository memberQueryRepository, MemberRepository memberRepository, JwtTokenProvider jwtTokenProvider) {
         this.redisTemplate = redisTemplate;
@@ -210,7 +211,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Transactional
-    public boolean kakaoLogout(HttpServletRequest request) {
+    public Long kakaoLogout(HttpServletRequest request) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
 
         // 1. user find
@@ -258,7 +259,7 @@ public class AuthServiceImpl implements AuthService {
             redisTemplate.delete("KAKAO_AT:" + id);
             redisTemplate.delete("KAKAO_RT:" + id);
             log.info(logCurrent(getClassName(), getMethodName(), END));
-            return true;
+            return id;
         } else
             throw new CustomException(UNKNOWN_ERROR);
     }

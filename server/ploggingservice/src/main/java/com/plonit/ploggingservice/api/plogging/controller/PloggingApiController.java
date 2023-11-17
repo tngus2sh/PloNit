@@ -1,19 +1,10 @@
 package com.plonit.ploggingservice.api.plogging.controller;
 
-import com.plonit.ploggingservice.api.plogging.controller.request.EndPloggingReq;
-import com.plonit.ploggingservice.api.plogging.controller.request.HelpPloggingReq;
-import com.plonit.ploggingservice.api.plogging.controller.request.ImagePloggingReq;
-import com.plonit.ploggingservice.api.plogging.controller.request.StartPloggingReq;
-import com.plonit.ploggingservice.api.plogging.controller.response.PloggingHelpRes;
-import com.plonit.ploggingservice.api.plogging.controller.response.PloggingLogRes;
-import com.plonit.ploggingservice.api.plogging.controller.response.PloggingPeriodRes;
-import com.plonit.ploggingservice.api.plogging.controller.response.UsersRes;
+import com.plonit.ploggingservice.api.plogging.controller.request.*;
+import com.plonit.ploggingservice.api.plogging.controller.response.*;
 import com.plonit.ploggingservice.api.plogging.service.PloggingQueryService;
 import com.plonit.ploggingservice.api.plogging.service.PloggingService;
-import com.plonit.ploggingservice.api.plogging.service.dto.EndPloggingDto;
-import com.plonit.ploggingservice.api.plogging.service.dto.HelpPloggingDto;
-import com.plonit.ploggingservice.api.plogging.service.dto.ImagePloggingDto;
-import com.plonit.ploggingservice.api.plogging.service.dto.StartPloggingDto;
+import com.plonit.ploggingservice.api.plogging.service.dto.*;
 import com.plonit.ploggingservice.common.CustomApiResponse;
 import com.plonit.ploggingservice.common.exception.CustomException;
 import com.plonit.ploggingservice.common.util.RequestUtils;
@@ -27,7 +18,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static com.plonit.ploggingservice.common.exception.ErrorCode.INVALID_FIELDS_REQUEST;
 import static com.plonit.ploggingservice.common.util.LogCurrent.*;
@@ -43,6 +37,15 @@ public class PloggingApiController {
     
     private final PloggingService ploggingService;
     private final PloggingQueryService ploggingQueryService;
+
+    @GetMapping("/test/{num}")
+    public CustomApiResponse<Void> test(
+            @PathVariable("num") int num
+    ) {
+        ploggingService.test(num);
+
+        return CustomApiResponse.ok(null);
+    }
     
     @Operation(summary = "플로깅 시작하기", description = "플로깅을 시작할 때 초기 플로깅 정보들을 저장합니다.")
     @PostMapping("/start")
@@ -101,15 +104,32 @@ public class PloggingApiController {
     public CustomApiResponse<List<PloggingPeriodRes>> findPloggingLogbyDay(
             @PathVariable(value = "start-day") String startDay,
             @PathVariable(value = "end-day") String endDay,
+            @RequestParam(name = "type", required = false, defaultValue = "ALL") String type,
             HttpServletRequest servletRequest
     ) {
         // 플로깅 기록 일별 조회 
         Long memberKey = RequestUtils.getMemberKey(servletRequest);
         log.info("memberKey : " + memberKey);
 
-        List<PloggingPeriodRes> ploggingLogByDay = ploggingQueryService.findPloggingLogByDay(startDay, endDay, memberKey);
+        List<PloggingPeriodRes> ploggingLogByDay = ploggingQueryService.findPloggingLogByDay(startDay, endDay, memberKey, type);
 
         return CustomApiResponse.ok(ploggingLogByDay);
+    }
+
+    @Operation(summary = "플로깅 기록 월별 조회", description = "해당 월에 존재하는 플로깅 정보를 조회한다.")
+    @GetMapping("/period")
+    public CustomApiResponse<List<PloggingMonthRes>> findPloggingLogByMonth(
+            @RequestParam(name = "month", required = false, defaultValue = "0") int month,
+            HttpServletRequest servletRequest
+    ) {
+        // 플로깅 기록 월별 조회
+        log.info("findPloggingLogByMonth = {}", month);
+
+        Long memberKey = RequestUtils.getMemberKey(servletRequest);
+
+        List<PloggingMonthRes> ploggingLogByMonth = ploggingQueryService.findPloggingLogByMonth(month, memberKey);
+
+        return CustomApiResponse.ok(ploggingLogByMonth);
     }
     
     @Operation(summary = "플로깅 기록 상세 조회", description = "플로깅 id에 해당하는 플로깅에 대한 상세 정보를 불러온다.")
@@ -167,6 +187,22 @@ public class PloggingApiController {
 
         return CustomApiResponse.ok(ploggingHelp);
     }
+
+    @Operation(summary = "도움 요청 완료", description = "도움 완료 했을 때 요청 상태 변경")
+    @PatchMapping("/help")
+    public CustomApiResponse<Long> updatePloggingHelpActive(
+            @RequestBody UpdatePloggingHelpStatusReq updatePloggingHelpStatusReq,
+            HttpServletRequest servletRequest
+    ) {
+        // 플로깅 도움 요청 완료
+        log.info("updatePloggingHelpActive = {}", updatePloggingHelpStatusReq.toString());
+
+        Long memberKey = RequestUtils.getMemberKey(servletRequest);
+
+        Long ploggingHelpId = ploggingService.updatePloggingHelpStatus(UpdatePloggingHelpStatusDto.of(updatePloggingHelpStatusReq, memberKey));
+
+        return CustomApiResponse.ok(ploggingHelpId);
+    }
     
     @Operation(summary = "플로깅 중간에 이미지 전송", description = "플로깅 중간에 이미지를 전송하고자 할때 이미지 정보를 넣는다.")
     @PostMapping("/image")
@@ -193,14 +229,17 @@ public class PloggingApiController {
     
     @Operation(summary = "플로깅 주변의 유저 조회", description = "위도, 경도에 맞는 '구'를 가져와 해당 구에 있는 유저를 조회한다.")
     @GetMapping("/users/{latitude}/{longitude}")
-    public CustomApiResponse<UsersRes> findPloggingUsers(
+    public CustomApiResponse<List<UsersRes>> findPloggingUsers(
             @PathVariable(value = "latitude") Double latitude,
-            @PathVariable(value = "longitude") Double longitude
+            @PathVariable(value = "longitude") Double longitude,
+            HttpServletRequest servletRequest
     ) {
-        // TODO: 2023-10-27 주변에 있는 유저 조회 
-        
-        
-        return null;
+        //  주변에 있는 유저 조회
+        Long memberKey = RequestUtils.getMemberKey(servletRequest);
+
+        List<UsersRes> ploggingUsers = ploggingQueryService.findPloggingUsers(latitude, longitude);
+
+        return CustomApiResponse.ok(ploggingUsers);
     }
 
     @Operation(summary = "유저별 플로깅 참여 횟수 조회", description = "유저 아이디를 가지고 플로깅에 참여한 횟수를 조회한다.")
@@ -212,6 +251,31 @@ public class PloggingApiController {
         Integer response = ploggingQueryService.countMemberPlogging();
 
         return CustomApiResponse.ok(response, "크루핑 참여 횟수 조회에 성공했습니다.");
+    }
+
+    @Operation(summary = "크루별 플로깅 참여 횟수 조회", description = "크루별로 크루 플로깅에 참여한 횟수를 조회한다.")
+    @GetMapping("/countCrew")
+    public CustomApiResponse<HashMap<Long, Long>> countCrewPlogging() {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        HashMap<Long, Long> response = ploggingQueryService.countCrewPlogging();
+
+        return CustomApiResponse.ok(response, "크루핑 참여 횟수 조회에 성공했습니다.");
+    }
+
+    @Operation(summary = "봉사 블로깅 정보 저장", description = "봉사 플로깅 종료 후 봉사 데이터 정보 저장")
+    @PostMapping("/volunteer")
+    public CustomApiResponse<Long> saveVolunteerData(
+            @RequestBody VolunteerPloggingReq volunteerPloggingReq,
+            HttpServletRequest servletRequest
+            ) {
+        log.info("saveVolunteerData = {}", volunteerPloggingReq.toString());
+
+        Long memberKey = RequestUtils.getMemberKey(servletRequest);
+
+        Long volunteerId = ploggingService.saveVolunteerData(VolunteerPloggingDto.of(volunteerPloggingReq, memberKey));
+
+        return CustomApiResponse.ok(volunteerId);
     }
 
 }

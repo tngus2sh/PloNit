@@ -1,44 +1,36 @@
 package com.plonit.ploggingservice.api.plogging.service.impl;
 
-import com.plonit.ploggingservice.api.plogging.controller.CrewpingFeignClient;
-import com.plonit.ploggingservice.api.plogging.controller.SidoGugunFeignClient;
-import com.plonit.ploggingservice.api.plogging.controller.request.CrewpingRecordReq;
+import com.plonit.ploggingservice.api.plogging.controller.*;
+import com.plonit.ploggingservice.api.plogging.controller.request.*;
 import com.plonit.ploggingservice.api.plogging.controller.response.*;
 import com.plonit.ploggingservice.api.plogging.service.PloggingService;
-import com.plonit.ploggingservice.api.plogging.service.dto.EndPloggingDto;
-import com.plonit.ploggingservice.api.plogging.service.dto.HelpPloggingDto;
-import com.plonit.ploggingservice.api.plogging.service.dto.ImagePloggingDto;
-import com.plonit.ploggingservice.api.plogging.service.dto.StartPloggingDto;
+import com.plonit.ploggingservice.api.plogging.service.dto.*;
 import com.plonit.ploggingservice.common.AwsS3Uploader;
+import com.plonit.ploggingservice.common.CustomApiResponse;
 import com.plonit.ploggingservice.common.enums.Finished;
 import com.plonit.ploggingservice.common.enums.Time;
 import com.plonit.ploggingservice.common.enums.Type;
 import com.plonit.ploggingservice.common.exception.CustomException;
 import com.plonit.ploggingservice.common.util.KakaoPlaceUtils;
 import com.plonit.ploggingservice.common.util.RedisUtils;
-import com.plonit.ploggingservice.common.util.WebClientUtil;
 import com.plonit.ploggingservice.domain.plogging.LatLong;
 import com.plonit.ploggingservice.domain.plogging.Plogging;
 import com.plonit.ploggingservice.domain.plogging.PloggingHelp;
 import com.plonit.ploggingservice.domain.plogging.PloggingPicture;
 import com.plonit.ploggingservice.domain.plogging.repository.*;
+import com.plonit.ploggingservice.common.util.RequestUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.reactive.function.client.WebClient;
 
-import javax.ws.rs.core.HttpHeaders;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +45,9 @@ public class PloggingServiceImpl implements PloggingService {
     
     private final SidoGugunFeignClient sidoGugunFeignClient;
     private final CrewpingFeignClient crewpingFeignClient;
+    private final MemberFeignClient memberFeignClient;
+    private final BadgeFeignClient badgeFeignClient;
+    private final NotiFeignClient notiFeignClient;
     private final CircuitBreakerFactory circuitBreakerFactory;
     private final KakaoPlaceUtils kakaoPlaceUtils;
     private final AwsS3Uploader awsS3Uploader;
@@ -61,8 +56,41 @@ public class PloggingServiceImpl implements PloggingService {
     private final LatLongRepository latLongRepository;
     private final PloggingHelpRepository ploggingHelpRepository;
     private final PloggingPictureRepository ploggingPictureRepository;
+    private final VolunteerRepository volunteerRepository;
+    private final PloggingQueryRepository ploggingQueryRepository;
 
 
+    @Override
+    public void test(int num) {
+        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
+
+        if (num == 1) {
+//            Boolean isCrewpingMaster = circuitBreaker.run(
+//                    () -> crewpingFeignClient.isCrewpingMaster(
+//                                    RequestUtils.getToken(),
+//                                    29L)
+//                            .getResultBody()
+//                    , throwable -> null
+//            );
+
+            CustomApiResponse<Boolean> crewpingMaster = crewpingFeignClient.isCrewpingMaster(
+                    RequestUtils.getToken(),
+                    29L);
+
+            log.info("[NUM == 1] ={}", crewpingMaster.getResultBody().toString());
+        } else if (num == 2) {
+            Long answer = circuitBreaker.run(
+                    () -> crewpingFeignClient.updateCrewpingStatus(
+                                    RequestUtils.getToken(),
+                                    UpdateCrewpingStatusReq.builder()
+                                            .crewpingId(29L)
+                                            .build())
+                            .getResultBody(),
+                    throwable -> null
+            );
+            log.info("[NUM == 2] ={}", answer);
+        }
+    }
 
     /**
      * 플로깅 시작시 기록 저장
@@ -80,15 +108,62 @@ public class PloggingServiceImpl implements PloggingService {
         }
         String place = address.getAddress_name();
 
+        // 구군 코드 얻어오기
+        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
+
+        SidoGugunCodeRes sidoGugunCodeRes = circuitBreaker.run(
+                () -> sidoGugunFeignClient.findSidoGugunCode(address.getRegion_1depth_name(), address.getRegion_2depth_name())
+                        .getResultBody(), // 통신하는 서비스
+                throwable -> null // 에러 발생시 null 반환
+        );
+
+        if (sidoGugunCodeRes == null) {
+            throw new CustomException(INVALID_PLACE_REQUEST);
+        }
+
         // 시작 시간 구하기
         LocalDateTime startTime = LocalDateTime.now(ZoneId.of(Time.SEOUL.getText()));
         
         // 오늘 날짜 구하기
         LocalDate today = startTime.toLocalDate();
 
-        Plogging plogging = StartPloggingDto.toEntity(dto.getMemberKey(), dto.getType(), place, startTime, Finished.ACTIVE, today);
+        Plogging plogging = StartPloggingDto.toEntity(dto.getMemberKey(), dto.getType(), place, sidoGugunCodeRes.getGugunCode(), startTime, Finished.ACTIVE, today);
 
-        return ploggingRepository.save(plogging).getId();
+        Plogging savePlogging = ploggingRepository.save(plogging);
+
+        // 처음 위치 저장
+        LatLong latlong = LatLong.builder()
+                .plogging(savePlogging)
+                .latitude(dto.getLatitude())
+                .longitude(dto.getLongitude())
+                .build();
+
+        latLongRepository.save(latlong);
+
+        // 크루핑이면서 크루핑장일 때 크루핑 상태 변경 요청
+        if (dto.getType().equals(Type.CREWPING)) {
+            log.info("[CREWPING ACCESSTOKEN] = {}", RequestUtils.getToken());
+            log.info("[CREWPING_ID] = {}", dto.getCrewpingId());
+
+            Boolean isCrewpingMaster = crewpingFeignClient.isCrewpingMaster(
+                            RequestUtils.getToken(),
+                            dto.getCrewpingId())
+                    .getResultBody();
+
+            if (isCrewpingMaster == null) {
+                throw new CustomException(INVALID_FIELDS_REQUEST);
+            }
+
+            if (isCrewpingMaster) {
+                crewpingFeignClient.updateCrewpingStatus(
+                                RequestUtils.getToken(),
+                                UpdateCrewpingStatusReq.builder()
+                                        .crewpingId(dto.getCrewpingId())
+                                        .build());
+            }
+        }
+
+        return savePlogging.getId();
     }
 
 
@@ -129,24 +204,31 @@ public class PloggingServiceImpl implements PloggingService {
         latLongRepository.saveAll(latLongs);
 
         /* 크루핑시에 크루핑 테이블에 내용 저장 */
+
         if (plogging.getType().equals(Type.CREWPING)) {
-            CrewpingRecordReq crewpingRecordReq = CrewpingRecordReq.builder()
-                    .startDate(plogging.getStartTime())
-                    .endDate(endTime)
-                    .place(plogging.getPlace())
-                    .activeTime(totalTime)
-                    .build();
-            CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
-    
-            Long crewpingId = circuitBreaker.run(
-                    () -> crewpingFeignClient.saveCrewpingRecord(crewpingRecordReq)
-                            .getResultBody(),
-                    throwable -> null // 에러 발생시 null 반환
-            );
-    
-            if (crewpingId == null) {
-                throw new CustomException(INVALID_CREWPINGID_REQUEST);
+            Boolean isCrewpingMaster = crewpingFeignClient.isCrewpingMaster(
+                            RequestUtils.getToken(),
+                            dto.getCrewpingId())
+                    .getResultBody();
+
+            if (isCrewpingMaster == null) {
+                throw new CustomException(INVALID_FIELDS_REQUEST);
             }
+
+            if (isCrewpingMaster) {
+                CrewpingRecordReq crewpingRecordReq = CrewpingRecordReq.builder()
+                        .crewpingId(dto.getCrewpingId())
+                        .startDate(plogging.getStartTime())
+                        .endDate(endTime)
+                        .place(plogging.getPlace())
+                        .activeTime(totalTime)
+                        .build();
+
+                crewpingFeignClient.saveCrewpingRecord(
+                        RequestUtils.getToken(),
+                        crewpingRecordReq);
+            }
+
         }
 
         /* 랭킹*/
@@ -178,6 +260,16 @@ public class PloggingServiceImpl implements PloggingService {
                 redisUtils.updateRedisSortedSet(CREW_AVG_RANK.name(), String.valueOf(dto.getCrewpingId()), crewAvgRankValue + avgDistance);
             }
         }
+
+        /* 개인 배지 부여 */
+        // 지금까지 플로깅 횟수와 거리 구하기
+        FindCountDistanceRes countDistance = ploggingQueryRepository.findCountDistance(dto.getMemberKey());
+        badgeFeignClient.grantMemberBadge(
+                RequestUtils.getToken(),
+                GrantMemberBadgeReq.builder()
+                        .ploggingCount(countDistance.getCount())
+                        .distance(countDistance.getDistance())
+                        .build());
 
         return plogging.getId();
     }
@@ -217,7 +309,18 @@ public class PloggingServiceImpl implements PloggingService {
         if (sidoGugunCodeRes == null) {
             throw new CustomException(INVALID_PLACE_REQUEST);
         }
-        
+
+        // 주변 유저에게 도움 알림 보내기
+        Long notiId = circuitBreaker.run(
+                () -> notiFeignClient.sendHelpNoti(
+                                RequestUtils.getToken(),
+                                SendNotiReq.builder()
+                                        .gugunCode(sidoGugunCodeRes.getGugunCode())
+                                        .build())
+                        .getResultBody()
+                , throwable -> null
+        );
+
         PloggingHelp ploggingHelp = HelpPloggingDto.toEntity(dto, sidoGugunCodeRes.getGugunCode(), address.getAddress_name(), imageUrl);
         return ploggingHelpRepository.save(ploggingHelp).getId();
     }
@@ -247,5 +350,51 @@ public class PloggingServiceImpl implements PloggingService {
         return imageUrl;
     }
 
+    /**
+     * 봉사 플로깅 정보 저장
+     * @param dto 봉사 플로깅 정보
+     * @return 봉사 플로깅 식별키
+     */
+    @Override
+    public Long saveVolunteerData(VolunteerPloggingDto dto) {
 
+        /* 플로깅 id로 플로깅 정보 가져오기 */
+        Plogging plogging = ploggingRepository.findById(dto.getPloggingId())
+                .orElseThrow(() -> new CustomException(PLOGGING_BAD_REQUEST));
+
+        /* memberKey로 사용자 정보 변경 요청 */
+        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
+
+        UpdateVolunteerInfoReq volunteerInfo = UpdateVolunteerInfoReq.builder()
+                .memberKey(dto.getMemberKey())
+                .name(dto.getName())
+                .phoneNumber(dto.getPhoneNumber())
+                .id1365(dto.getId1365())
+                .email(dto.getEmail())
+                .birth(dto.getBirth())
+                .build();
+
+        memberFeignClient.updateVolunteerInfo(
+                        RequestUtils.getToken(),
+                        volunteerInfo);
+
+
+        /* 정보 저장 */
+        volunteerRepository.save(VolunteerPloggingDto.toEntity(plogging));
+
+        return null;
+    }
+
+    @Transactional
+    @Override
+    public Long updatePloggingHelpStatus(UpdatePloggingHelpStatusDto dto) {
+
+        // ploggingHelpId로 해당 도움 가져오기
+        PloggingHelp ploggingHelp = ploggingHelpRepository.findByIdAndIsActive(dto.getPloggingHelpId(), true)
+                .orElseThrow(() -> new CustomException(PLOGGING_HELP_BAD_REQUEST));
+
+        ploggingHelp.updateIsActive(dto.getIsActive());
+
+        return ploggingHelp.getId();
+    }
 }

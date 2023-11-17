@@ -43,6 +43,8 @@ public enum ErrorCode {
     COMMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "존재하지 않는 댓글입니다."),
     RANKING_PERIOD_NOT_FOUND(HttpStatus.NOT_FOUND, "랭킹 기간이 존재하지 않습니다."),
     REGION_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 지역을 찾을 수 없습니다."),
+    BADGE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 배지입니다."),
+    GUGUN_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 지역(구군)입니다."),
 
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     USER_ALREADY_EXIST(HttpStatus.CONFLICT, "이미 가입되어 있는 유저입니다."),
@@ -55,7 +57,8 @@ public enum ErrorCode {
     S3_CONNECTED_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "S3 profile 업데이트에 실패하였습니다."),
     KAKAO_TOKEN_CONNECTED_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "카카오 토큰 발급에 실패하였습니다."),
     KAKAO_INFO_CONNECTED_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "카카오 정보 발급에 실패하였습니다."),
-    KAKAO_LOGOUT_CONNECTED_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "카카오 로그아웃에 실패하였습니다.");
+    KAKAO_LOGOUT_CONNECTED_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "카카오 로그아웃에 실패하였습니다."),
+    FEED_LIKE_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "피드 좋아요 중 문제가 발생했습니다.");
 
     private final HttpStatus httpStatus;
     private final String description;

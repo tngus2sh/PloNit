@@ -1,6 +1,7 @@
 package com.plonit.ploggingservice.domain.plogging;
 
 import com.plonit.ploggingservice.common.enums.Finished;
+import com.plonit.ploggingservice.common.enums.VolunteerStatus;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -22,21 +23,13 @@ public class Volunteer extends TimeBaseEntity{
     private Plogging plogging;
     
     @Column
-    private Long sidoKey;
-    
-    @Column
-    private Long gugunKey;
-    
-    @Column
     @Enumerated(EnumType.STRING)
-    private Finished finished;
+    private VolunteerStatus status;
 
     @Builder
-    public Volunteer(Long id, Plogging plogging, Long sidoKey, Long gugunKey, Finished finished) {
+    public Volunteer(Long id, Plogging plogging, VolunteerStatus status) {
         this.id = id;
         this.plogging = plogging;
-        this.sidoKey = sidoKey;
-        this.gugunKey = gugunKey;
-        this.finished = finished;
+        this.status = status;
     }
 }

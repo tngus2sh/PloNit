@@ -1,17 +1,22 @@
 package com.plonit.plonitservice.api.badge.service.dto;
 
 import com.plonit.plonitservice.api.badge.controller.request.BadgeReq;
+import com.plonit.plonitservice.common.enums.BadgeCode;
 import com.plonit.plonitservice.common.enums.BadgeStatus;
 import com.plonit.plonitservice.domain.badge.Badge;
 import com.plonit.plonitservice.domain.badge.BadgeCondition;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class BadgeDto {
     private String name;
@@ -49,9 +54,10 @@ public class BadgeDto {
                 .build();        
     }
 
-    public static Badge toEntity(BadgeDto badgeDto, BadgeCondition badgeCondition, String badgeImageUrl) {
+    public static Badge toEntity(BadgeDto badgeDto, BadgeCondition badgeCondition, BadgeCode badgeCode, String badgeImageUrl) {
         return Badge.builder()
                 .badgeCondition(badgeCondition)
+                .code(badgeCode)
                 .name(badgeDto.getName())
                 .image(badgeImageUrl)
                 .type(badgeDto.getType())

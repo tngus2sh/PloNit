@@ -16,4 +16,6 @@ public class PloggingHelpRes {
     private String image;
     
     private String context;
+
+    private Long ploggingHelpId;
 }

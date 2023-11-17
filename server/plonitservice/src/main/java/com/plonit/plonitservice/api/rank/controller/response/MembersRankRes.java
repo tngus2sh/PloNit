@@ -6,22 +6,26 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.LinkedList;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
-@Schema(name = "크루 전체 랭킹 정보")
+@Schema(name = "회원 랭킹 정보")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CrewTotalResponse {
-    private String rankingPeriod;
-    private List<CrewsRanks> crewsRanks = new LinkedList<>();
+public class MembersRankRes {
+
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
+    
+    private List<MembersRank> membersRanks = new ArrayList<>();
 
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class CrewsRanks {
+    public static class MembersRank { 
         private String nickName;
 
         private String profileImage;
@@ -29,8 +33,7 @@ public class CrewTotalResponse {
         private Integer ranking;
 
         private Double distance;
-
+ 
         private Boolean isMine;
     }
-    
 }

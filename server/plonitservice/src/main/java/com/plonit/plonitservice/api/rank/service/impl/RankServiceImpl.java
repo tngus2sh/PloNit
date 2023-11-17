@@ -1,20 +1,23 @@
 package com.plonit.plonitservice.api.rank.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.plonit.plonitservice.api.crew.controller.response.CrewRankRes;
+import com.plonit.plonitservice.api.member.controller.response.FindCrewInfoRes;
 import com.plonit.plonitservice.api.member.controller.response.MemberRankRes;
-import com.plonit.plonitservice.api.member.service.MemberService;
-import com.plonit.plonitservice.api.rank.controller.response.CrewAvgResponse;
-import com.plonit.plonitservice.api.rank.controller.response.CrewTotalResponse;
-import com.plonit.plonitservice.api.rank.controller.response.MembersRankResponse;
+import com.plonit.plonitservice.api.rank.controller.response.*;
 import com.plonit.plonitservice.api.rank.service.RankService;
+import com.plonit.plonitservice.common.enums.Rank;
 import com.plonit.plonitservice.common.exception.CustomException;
 import com.plonit.plonitservice.common.exception.ErrorCode;
 import com.plonit.plonitservice.common.util.RedisUtils;
 import com.plonit.plonitservice.domain.crew.repository.CrewMemberRepository;
 import com.plonit.plonitservice.domain.crew.repository.CrewQueryRepository;
+import com.plonit.plonitservice.domain.crew.repository.CrewRepository;
 import com.plonit.plonitservice.domain.member.repository.MemberQueryRepository;
-import com.plonit.plonitservice.domain.member.repository.MemberRepository;
+import com.plonit.plonitservice.domain.rank.RankingPeriod;
+import com.plonit.plonitservice.domain.rank.repository.CrewRankingQueryRepository;
+import com.plonit.plonitservice.domain.rank.repository.MemberRankingQueryRepository;
+import com.plonit.plonitservice.domain.rank.repository.RankingPeriodQueryRepository;
+import com.plonit.plonitservice.domain.rank.repository.RankingPeriodRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -22,7 +25,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-import static com.plonit.plonitservice.common.exception.ErrorCode.INVALID_FIELDS_REQUEST;
 import static com.plonit.plonitservice.common.exception.ErrorCode.RANKING_PERIOD_NOT_FOUND;
 
 
@@ -34,6 +36,10 @@ public class RankServiceImpl implements RankService {
     private final MemberQueryRepository memberQueryRepository;
     private final CrewQueryRepository crewQueryRepository;
     private final CrewMemberRepository crewMemberRepository;
+    private final RankingPeriodQueryRepository rankingPeriodQueryRepository;
+    private final RankingPeriodRepository rankingPeriodRepository;
+    private final MemberRankingQueryRepository memberRankingQueryRepository;
+    private final CrewRankingQueryRepository crewRankingQueryRepository;
     private final RedisUtils redisUtils;
 
     /**
@@ -42,18 +48,20 @@ public class RankServiceImpl implements RankService {
      * @return 전체 회원 랭킹
      */
     @Override
-    public MembersRankResponse findAllMembersRank(Long memberKey) {
+    public MembersRankRes findAllMembersRank(Long memberKey) {
 
-        MembersRankResponse membersRankResponse = new MembersRankResponse();
+        MembersRankRes membersRankRes = new MembersRankRes();
+
         
         // 현재 랭킹 기간 조회
-        String rankingPeriod = nowRankingPeriod();
-        membersRankResponse.setRankingPeriod(rankingPeriod);
+        RankingPeriod rankingPeriod = nowRankingPeriod();
+        membersRankRes.setStartDate(rankingPeriod.getStartDate());
+        membersRankRes.setEndDate(rankingPeriod.getEndDate());
 
         // Redis에서 랭킹 조회
-        Set<ZSetOperations.TypedTuple<String>> sortedSetRangeWithScores = redisUtils.getSortedSetRangeWithScores("MEMBER-RANK", 0, 9);
+        Set<ZSetOperations.TypedTuple<String>> sortedSetRangeWithScores = redisUtils.getSortedSetRangeWithScores(Rank.MEMBER.getDescription(), 0, 9);
 
-        List<MembersRankResponse.MembersRank> membersRanks = membersRankResponse.getMembersRanks();
+        List<MembersRankRes.MembersRank> membersRanks = membersRankRes.getMembersRanks();
         
         List<Long> memberIds = new LinkedList<>();
         Map<Long, Object[]> distanceRankings = new HashMap<>();
@@ -61,7 +69,9 @@ public class RankServiceImpl implements RankService {
         // 멤버 식별키와 누적거리 및 랭킹 저장
         Integer index = 0;
         for (ZSetOperations.TypedTuple<String> sortedSetRangeWithScore : sortedSetRangeWithScores) {
-            Long memberId = Long.parseLong(sortedSetRangeWithScore.getValue());
+            log.info("sortedSetRangeWithScore = {}, {}", sortedSetRangeWithScore.getScore(), sortedSetRangeWithScore.getValue());
+
+            Long memberId = Long.valueOf(sortedSetRangeWithScore.getValue());
             Double distance = sortedSetRangeWithScore.getScore();
 
             memberIds.add(memberId);
@@ -85,7 +95,7 @@ public class RankServiceImpl implements RankService {
             Double distance = (Double) distanceRanking[0];
             Integer ranking = (Integer) distanceRanking[1];
 
-            membersRanks.add(MembersRankResponse.MembersRank.builder()
+            membersRanks.add(MembersRankRes.MembersRank.builder()
                     .nickName(memberRankRes.getNickName())
                     .profileImage(memberRankRes.getProfileImage())
                     .ranking(ranking)
@@ -93,32 +103,34 @@ public class RankServiceImpl implements RankService {
                     .isMine(isMine)
                     .build());
         }
+
+        membersRanks.sort((o1, o2) -> {
+            return o1.getRanking() - o2.getRanking();
+        });
         
-        membersRankResponse.setMembersRanks(membersRanks);
+        membersRankRes.setMembersRanks(membersRanks);
         
-        return membersRankResponse;
+        return membersRankRes;
     }
 
     @Override
-    public CrewTotalResponse findAllCrewRank(Long memberKey) {
+    public CrewTotalRes findAllCrewRank(Long memberKey) {
         
         // memberKey로 crewId 가져오기
-        Optional<Long> crewMemberByMemberId = crewMemberRepository.findCrewMemberByMemberId(memberKey);
-        Long crewId = -1L;
-        if (crewMemberByMemberId.isPresent()) {
-            crewId = crewMemberByMemberId.get();
-        }
+        List<Long> crewIdByMemberKey = crewMemberRepository.findCrewMemberByMemberId(memberKey);
 
-        CrewTotalResponse crewTotalResponse = new CrewTotalResponse();
-        
+        CrewTotalRes crewTotalRes = new CrewTotalRes();
+
         // 현재 랭킹 기간 조회
-        String rankingPeriod = nowRankingPeriod();
-        crewTotalResponse.setRankingPeriod(rankingPeriod);
+        RankingPeriod rankingPeriod = nowRankingPeriod();
+        crewTotalRes.setStartDate(rankingPeriod.getStartDate());
+        crewTotalRes.setEndDate(rankingPeriod.getEndDate());
+
         
         // Redis에서 랭킹 조회
-        Set<ZSetOperations.TypedTuple<String>> sortedSetRangeWithScores = redisUtils.getSortedSetRangeWithScores("CREW-RANK", 0, 9);
+        Set<ZSetOperations.TypedTuple<String>> sortedSetRangeWithScores = redisUtils.getSortedSetRangeWithScores(Rank.CREW.getDescription(), 0, 9);
 
-        List<CrewTotalResponse.CrewsRanks> crewsRanks = crewTotalResponse.getCrewsRanks();
+        List<CrewTotalRes.CrewsRanks> crewsRanks = crewTotalRes.getCrewsRanks();
         
         List<Long> crewIds = new LinkedList<>();
         Map<Long, Object[]> disanceRankings = new HashMap<>();
@@ -141,7 +153,7 @@ public class RankServiceImpl implements RankService {
 
             // 내 크루인지 확인
             boolean isMine = false;
-            if (crewKey.equals(crewId)) {
+            if (crewIdByMemberKey.contains(crewKey)) {
                 isMine = true;
             }
             
@@ -150,7 +162,7 @@ public class RankServiceImpl implements RankService {
             Double distance = (Double) distanceRanking[0];
             Integer ranking = (Integer) distanceRanking[1];
 
-            crewsRanks.add(CrewTotalResponse.CrewsRanks.builder()
+            crewsRanks.add(CrewTotalRes.CrewsRanks.builder()
                     .nickName(crewRankRes.getName())
                     .profileImage(crewRankRes.getCrewImage())
                     .ranking(ranking)
@@ -158,32 +170,34 @@ public class RankServiceImpl implements RankService {
                     .isMine(isMine)
                     .build());
         }
+
+        crewsRanks.sort((o1, o2) -> {
+            return o1.getRanking() - o2.getRanking();
+        });
         
-        crewTotalResponse.setCrewsRanks(crewsRanks);
+        crewTotalRes.setCrewsRanks(crewsRanks);
         
-        return crewTotalResponse;
+        return crewTotalRes;
     }
 
     @Override
-    public CrewAvgResponse findAllCrewRankByAVG(Long memberKey) {
+    public CrewAvgRes findAllCrewRankByAVG(Long memberKey) {
 
         // memberKey로 crewId 가져오기
-        Optional<Long> crewMemberByMemberId = crewMemberRepository.findCrewMemberByMemberId(memberKey);
-        Long crewId = -1L;
-        if (crewMemberByMemberId.isPresent()) {
-            crewId = crewMemberByMemberId.get();
-        }
+        List<Long> crewIdByMemberKey = crewMemberRepository.findCrewMemberByMemberId(memberKey);
         
-        CrewAvgResponse crewAvgResponse = new CrewAvgResponse();
-        
+        CrewAvgRes crewAvgRes = new CrewAvgRes();
+
         // 현재 랭킹 기간 조회
-        String rankingPeriod = nowRankingPeriod();
-        crewAvgResponse.setRankingPeriod(rankingPeriod);
+        RankingPeriod rankingPeriod = nowRankingPeriod();
+        crewAvgRes.setStartDate(rankingPeriod.getStartDate());
+        crewAvgRes.setEndDate(rankingPeriod.getEndDate());
+
 
         // Redis에서 랭킹 조회
-        Set<ZSetOperations.TypedTuple<String>> sortedSetRangeWithScores = redisUtils.getSortedSetRangeWithScores("CREW-AVG-RANK", 0, 9);
+        Set<ZSetOperations.TypedTuple<String>> sortedSetRangeWithScores = redisUtils.getSortedSetRangeWithScores(Rank.CREW_AVG.getDescription(), 0, 9);
 
-        List<CrewAvgResponse.CrewsAvgRanks> crewsAvgRanks = crewAvgResponse.getCrewsAvgRanks();
+        List<CrewAvgRes.CrewsAvgRanks> crewsAvgRanks = crewAvgRes.getCrewsAvgRanks();
 
         List<Long> crewIds = new LinkedList<>();
         Map<Long, Object[]> disanceRankings = new HashMap<>();
@@ -206,7 +220,7 @@ public class RankServiceImpl implements RankService {
 
             // 내 크루인지 확인
             boolean isMine = false;
-            if (crewKey.equals(crewId)) {
+            if (crewIdByMemberKey.contains(crewKey)) {
                 isMine = true;
             }
 
@@ -215,7 +229,7 @@ public class RankServiceImpl implements RankService {
             Double distance = (Double) distanceRanking[0];
             Integer ranking = (Integer) distanceRanking[1];
 
-            crewsAvgRanks.add(CrewAvgResponse.CrewsAvgRanks.builder()
+            crewsAvgRanks.add(CrewAvgRes.CrewsAvgRanks.builder()
                     .nickName(crewRankRes.getName())
                     .profileImage(crewRankRes.getCrewImage())
                     .ranking(ranking)
@@ -223,23 +237,76 @@ public class RankServiceImpl implements RankService {
                     .isMine(isMine)
                     .build());
         }
-        
-        crewAvgResponse.setCrewsAvgRanks(crewsAvgRanks);
 
-        return crewAvgResponse;
+        crewsAvgRanks.sort((o1, o2) -> {
+            return o1.getRanking() - o2.getRanking();
+        });
+        
+        crewAvgRes.setCrewsAvgRanks(crewsAvgRanks);
+
+        return crewAvgRes;
+    }
+
+
+    /**
+     * 내 랭킹 조회
+     * @param memberKey 회원 식별키
+     * @return 랭킹
+     */
+    @Override
+    public List<FindMyRankingRes> findMyRanking(Long memberKey) {
+        List<FindMyRankingRes> myRanking = memberRankingQueryRepository.findMyRanking(memberKey);
+
+        /* 현재 랭킹 넣기 */
+        int ranking = 0;
+
+        RankingPeriod rankingPeriod = rankingPeriodQueryRepository.findRecentId()
+                .orElseThrow(() -> new CustomException(RANKING_PERIOD_NOT_FOUND));
+
+        Set<ZSetOperations.TypedTuple<String>> memberRankings = redisUtils.getSortedSetRangeWithScores(Rank.MEMBER.getDescription(), 0, -1);
+        for (ZSetOperations.TypedTuple<String> memberRanking : memberRankings) {
+            ++ranking;
+            if (memberRanking.getValue().equals(String.valueOf(memberKey))) {
+                myRanking.add(FindMyRankingRes.builder()
+                        .distance(memberRanking.getScore())
+                        .ranking(ranking)
+                        .startDate(rankingPeriod.getStartDate())
+                        .endDate(rankingPeriod.getEndDate())
+                        .isSeason(true)
+                        .build());
+            }
+        }
+
+        myRanking.sort((o1, o2) -> {
+            return o2.getEndDate().compareTo(o1.getEndDate());
+        });
+
+
+        return myRanking;
+    }
+
+    @Override
+    public List<FindMyCrewRankingRes> findMyCrewRanking(Long memberKey) {
+        // 멤버 키로 크루 아이디들 불러오기
+        List<FindCrewInfoRes> crewsByMemberId = crewQueryRepository.findCrewsByMemberId(memberKey);
+
+        List<Long> crewIds = new ArrayList<>();
+        for (FindCrewInfoRes findCrewInfoRes : crewsByMemberId) {
+            crewIds.add(findCrewInfoRes.getId());
+        }
+
+        return crewRankingQueryRepository.findMyCrewRanking(crewIds);
     }
 
     /**
      * 현재 랭킹 기간 조회
      * @return 현재 랭킹 기간
      */
-    private String nowRankingPeriod() {
-        String rankingPeriod = null;
-        try {
-            rankingPeriod = redisUtils.getRedisValue("RANKING-PERIOD", String.class);
-        } catch (JsonProcessingException e) {
-            throw new CustomException(RANKING_PERIOD_NOT_FOUND);
+    private RankingPeriod nowRankingPeriod() {
+        Optional<RankingPeriod> rankingPeriodOptional = rankingPeriodQueryRepository.findRecentId();
+        if (rankingPeriodOptional.isPresent()) {
+            return rankingPeriodOptional.get();
         }
-        return rankingPeriod;
+        return null;
     }
 }

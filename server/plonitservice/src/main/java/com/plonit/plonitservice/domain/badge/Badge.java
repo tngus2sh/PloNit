@@ -1,6 +1,7 @@
 package com.plonit.plonitservice.domain.badge;
 
 
+import com.plonit.plonitservice.common.enums.BadgeCode;
 import lombok.*;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@ToString
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,6 +24,10 @@ public class Badge {
     @JoinColumn(name = "badge_condition_id")
     @OneToOne
     private BadgeCondition badgeCondition;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private BadgeCode code;
 
     @Column
     private String name;

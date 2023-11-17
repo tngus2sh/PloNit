@@ -18,6 +18,7 @@ public class RedisUtils {
     private final RedisTemplate<String, String> redisTemplate;
     private final StringRedisTemplate stringRedisTemplate;
 
+
     public void setRedisValue(String key, Object o, Long ttl) {
         GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer();
 
@@ -34,14 +35,29 @@ public class RedisUtils {
         byte[] serialize = serializer.serialize(o);
 
         String serializeObject = Base64.getEncoder().encodeToString(serialize);
+        System.out.println("직렬화된 결과: " + serializeObject);
 
         redisTemplate.opsForValue().set(key, serializeObject);
     }
 
-    public void setRedisHash(String key, String memberKey, String question, Long ttl) {
+    public void setRedisValue(String key, String value) {
+        redisTemplate.opsForValue().set(key, value);
+    }
+
+    public void setRedisHash(String key, String subKey, String value, Long ttl) {
         HashOperations<String, String, String> hashOperations = stringRedisTemplate.opsForHash();
-        hashOperations.put(key, memberKey, question);
+        hashOperations.put(key, subKey, value);
         stringRedisTemplate.expire(key, ttl, TimeUnit.SECONDS);
+    }
+
+    public void setRedisHash(String key, String subKey, String value) {
+        HashOperations<String, String, String> hashOperations = stringRedisTemplate.opsForHash();
+        hashOperations.put(key, subKey, value);
+    }
+
+    public void setRedisSet(String key, String value) {
+        SetOperations<String, String> setOperations = stringRedisTemplate.opsForSet();
+        setOperations.add(key, value);
     }
 
     /**
@@ -53,7 +69,7 @@ public class RedisUtils {
     public void setRedisSortedSet(String key, String memberKey, double score) {
         redisTemplate.opsForZSet().add(key, memberKey, score);
     }
-    
+
 
     public <T> T getRedisValue(String key, Class<T> classType) throws JsonProcessingException {
         String redisValue = redisTemplate.opsForValue().get(key);
@@ -69,13 +85,38 @@ public class RedisUtils {
         return serializer.deserialize(decode, classType);
     }
 
-    public Map<String, String> getRedisHash(String key) { // redis DB 정보 가져오기
+    public String getRedisValue(String key) {
+        String redisValue = redisTemplate.opsForValue().get(key);
+
+        if(redisValue == null) {
+            return null;
+        }
+
+        return redisValue;
+    }
+
+    public Map<String, String> getRedisHash(String key) {
         HashOperations<String, String, String> hashOperations = stringRedisTemplate.opsForHash();
         return hashOperations.entries(key);
     }
 
+    public String getRedisHash(String key, String subKey) {
+        HashOperations<String, String, String> hashOperations = stringRedisTemplate.opsForHash();
+        return hashOperations.entries(key).get(subKey);
+    }
+
+    public Set<String> getRedisSet(String key) {
+        SetOperations<String, String> setOperations = stringRedisTemplate.opsForSet();
+        return setOperations.members(key);
+    }
+
+    public Boolean isRedisSetValue(String key, String value) {
+        SetOperations<String, String> setOperations = stringRedisTemplate.opsForSet();
+        return setOperations.isMember(key, value);
+    }
+
     public Set<ZSetOperations.TypedTuple<String>> getSortedSetRangeWithScores(String key, long start, long end) {
-        Set<ZSetOperations.TypedTuple<String>> membersWithScores = redisTemplate.opsForZSet().rangeWithScores(key, start, end);
+        Set<ZSetOperations.TypedTuple<String>> membersWithScores = redisTemplate.opsForZSet().reverseRangeWithScores(key, start, end);
 
         // Sorted Set에서 멤버와 Score를 가져와서 DefaultTypedTuple로 반환합니다.
         return membersWithScores;
@@ -90,8 +131,17 @@ public class RedisUtils {
         return redisTemplate.opsForZSet().size(key);
     }
 
-    public void deleteRedisKey(String key, String loginId) {
+    public void deleteRedisHashKey(String key, String loginId) {
         HashOperations<String, String, String> hashOperations = stringRedisTemplate.opsForHash();
         hashOperations.delete(key, loginId);
+    }
+
+    public void deleteRedisKey(String key) {
+        redisTemplate.delete(key);
+    }
+
+    public void deleteRedisSet(String key, String value) {
+        SetOperations<String, String> setOperations = stringRedisTemplate.opsForSet();
+        setOperations.remove(key, value);
     }
 }

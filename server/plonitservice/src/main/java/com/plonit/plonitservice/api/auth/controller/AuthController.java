@@ -1,10 +1,8 @@
 package com.plonit.plonitservice.api.auth.controller;
 
-import com.plonit.plonitservice.api.auth.controller.response.CheckNicknameRes;
-import com.plonit.plonitservice.api.auth.controller.response.LogInRes;
-import com.plonit.plonitservice.api.auth.controller.response.LogInUrlRes;
-import com.plonit.plonitservice.api.auth.controller.response.ReissueReq;
+import com.plonit.plonitservice.api.auth.controller.response.*;
 import com.plonit.plonitservice.api.auth.service.AuthService;
+import com.plonit.plonitservice.api.fcm.service.FCMService;
 import com.plonit.plonitservice.common.CustomApiResponse;
 import com.plonit.plonitservice.common.exception.CustomException;
 import com.plonit.plonitservice.domain.member.repository.MemberQueryRepository;
@@ -34,7 +32,7 @@ public class AuthController {
     private final AuthService authService;
     private final MemberQueryRepository memberQueryRepository;
     private final MemberRepository memberRepository;
-
+    private final FCMService fcmService;
     @Operation(summary = "Test", description = "test설정")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK")
@@ -56,9 +54,11 @@ public class AuthController {
 
     @Operation(summary = "카카오 로그인", description = "카카오 로그인 후 토큰을 발급해줍니다.")
     @GetMapping("/kakao/login/{code}") // kakao 로그인 및 token 발급
-    public CustomApiResponse<Object> kakaoToken(@PathVariable("code") String code, HttpServletResponse response) throws Exception {
+    public CustomApiResponse<Object> kakaoToken(@PathVariable("code") String code, HttpServletResponse response){
         log.info(logCurrent(getClassName(), getMethodName(), START));
+
         LogInRes logInRes = authService.getKakaoToken(response, code);
+
         log.info(logCurrent(getClassName(), getMethodName(), END));
         return CustomApiResponse.ok(logInRes);
     }
@@ -67,7 +67,9 @@ public class AuthController {
     @GetMapping("/check-nickname/{nickname}") // 닉네임 중복 체크
     public CustomApiResponse<Object> checkNickname(@PathVariable("nickname") String nickname) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
+
         CheckNicknameRes checkNicknameRes = authService.checkNickname(nickname);
+
         log.info(logCurrent(getClassName(), getMethodName(), END));
         return CustomApiResponse.ok(checkNicknameRes);
     }
@@ -94,7 +96,22 @@ public class AuthController {
     @PostMapping("/kakao/logout") // 로그아웃
     public CustomApiResponse<Object> kakaoLogout(HttpServletRequest request) {
         log.info(logCurrent(getClassName(), getMethodName(), START));
-        authService.kakaoLogout(request);
+
+        Long memberId = authService.kakaoLogout(request);
+        fcmService.deleteToken(memberId);
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
         return CustomApiResponse.ok("", "로그아웃을 성공하셨습니다.");
+    }
+
+    @Operation(summary = "FCM 토큰", description = "FCM 토큰을 입력합니다.")
+    @PostMapping("/fcm")
+    public CustomApiResponse<Object> updateFCM(@RequestBody FCMRes fcmRes) {
+        log.info(logCurrent(getClassName(), getMethodName(), START));
+
+        fcmService.saveToken(fcmRes);
+
+        log.info(logCurrent(getClassName(), getMethodName(), END));
+        return CustomApiResponse.ok("", "FCM 토큰 업데이트에 성공하셨습니다.");
     }
 }

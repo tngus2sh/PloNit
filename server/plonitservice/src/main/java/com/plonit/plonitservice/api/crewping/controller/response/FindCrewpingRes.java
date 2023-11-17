@@ -25,8 +25,9 @@ public class FindCrewpingRes {
     private int cntPeople;
     private int maxPeople;
     private String introduce;
+    private Boolean isJoined;
 
-    public static FindCrewpingRes of(Crewping crewping, CrewpingMember master) {
+    public static FindCrewpingRes of(Crewping crewping, CrewpingMember master, boolean isJoined) {
         return FindCrewpingRes.builder()
                 .crewpingId(crewping.getId())
                 .name(crewping.getName())
@@ -40,6 +41,7 @@ public class FindCrewpingRes {
                 .cntPeople(crewping.getCntPeople())
                 .maxPeople(crewping.getMaxPeople())
                 .introduce(crewping.getIntroduce())
+                .isJoined(isJoined)
                 .build();
     }
 

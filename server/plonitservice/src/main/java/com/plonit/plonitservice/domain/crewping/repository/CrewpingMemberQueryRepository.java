@@ -1,5 +1,6 @@
 package com.plonit.plonitservice.domain.crewping.repository;
 
+import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingMembersByMasterRes;
 import com.plonit.plonitservice.api.crewping.controller.response.FindCrewpingMembersRes;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -25,9 +26,9 @@ public class CrewpingMemberQueryRepository {
                 .fetchOne() != null;
     }
 
-    public List<FindCrewpingMembersRes> findCrewpingMembers(Long crewpingId) {
+    public List<FindCrewpingMembersByMasterRes> findCrewpingMembersByMaster(Long crewpingId) {
         return queryFactory
-                .select(Projections.constructor(FindCrewpingMembersRes.class,
+                .select(Projections.constructor(FindCrewpingMembersByMasterRes.class,
                         crewpingMember.member.id,
                         crewpingMember.member.profileImage,
                         crewpingMember.member.nickname
@@ -35,6 +36,26 @@ public class CrewpingMemberQueryRepository {
                 .from(crewpingMember)
                 .join(crewpingMember).on(crewpingMember.member.eq(member)).fetchJoin()
                 .where(crewpingMember.crewping.id.eq(crewpingId))
+                .fetch();
+    }
+
+    public List<FindCrewpingMembersRes> findCrewpingMembers(Long crewpingId) {
+        return queryFactory
+                .select(Projections.constructor(FindCrewpingMembersRes.class,
+                        crewpingMember.member.profileImage,
+                        crewpingMember.member.nickname
+                ))
+                .from(crewpingMember)
+                .join(crewpingMember).on(crewpingMember.member.eq(member)).fetchJoin()
+                .where(crewpingMember.crewping.id.eq(crewpingId))
+                .fetch();
+    }
+
+    public List<Long> findByCrewpingId(Long crewpingId) {
+        return queryFactory.select(crewpingMember.member.id)
+                .from(crewpingMember)
+                .where(crewpingMember.crewping.id.eq(crewpingId)
+                        .and(crewpingMember.isCrewpingMaster.isFalse()))
                 .fetch();
     }
 }

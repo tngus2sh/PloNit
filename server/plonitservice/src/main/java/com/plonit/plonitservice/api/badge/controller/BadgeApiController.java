@@ -1,23 +1,23 @@
 package com.plonit.plonitservice.api.badge.controller;
 
-import com.plonit.plonitservice.api.badge.controller.request.BadgeReq;
-import com.plonit.plonitservice.api.badge.controller.request.CrewBadgeReq;
-import com.plonit.plonitservice.api.badge.controller.request.MembersBadgeReq;
+import com.plonit.plonitservice.api.badge.controller.request.GrantCrewRankReq;
+import com.plonit.plonitservice.api.badge.controller.request.GrantMemberBadgeReq;
+import com.plonit.plonitservice.api.badge.controller.request.GrantMemberRankReq;
+import com.plonit.plonitservice.api.badge.controller.response.FindBadgeRes;
+import com.plonit.plonitservice.api.badge.service.BadgeQueryService;
 import com.plonit.plonitservice.api.badge.service.BadgeService;
-import com.plonit.plonitservice.api.badge.service.dto.BadgeDto;
-import com.plonit.plonitservice.api.badge.service.dto.CrewBadgeDto;
-import com.plonit.plonitservice.api.badge.service.dto.MembersBadgeDto;
+import com.plonit.plonitservice.api.badge.service.dto.GrantCrewRankDto;
+import com.plonit.plonitservice.api.badge.service.dto.GrantMemberBadgeDto;
+import com.plonit.plonitservice.api.badge.service.dto.GrantMemberRankDto;
 import com.plonit.plonitservice.common.CustomApiResponse;
+import com.plonit.plonitservice.common.util.RequestUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Tag(name = "Badge API Controller", description = "Badge API Document")
@@ -26,53 +26,73 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/plonit-service/v1/badge")
 public class BadgeApiController {
-    
+
     private final BadgeService badgeService;
-    
-    @Operation(summary = "[관리자용] 배지 설정", description = "배지를 설정합니다.")
-    @PostMapping("/setting")
-    public CustomApiResponse<Void> saveBadge(
-            @RequestBody List<BadgeReq> reqs
-            ) {
-        // 배지 설정
-        List<BadgeDto> badgeDtos = new ArrayList<>();
-        for (BadgeReq req : reqs) {
-            badgeDtos.add(BadgeDto.of(req));
-        }
-        badgeService.saveBadge(badgeDtos);
-        
+    private final BadgeQueryService badgeQueryService;
+
+
+    @Operation(summary = "[관리자용] 개인 배지 부여 여부 확인", description = "개인 배지를 부여할 수 있는지 확인한 후 부여한다.")
+    @PostMapping("/member")
+    public CustomApiResponse<Void> grantMemberBadge(
+            @RequestBody GrantMemberBadgeReq grantMemberBadgeReq,
+            HttpServletRequest servletRequest
+    ) {
+        log.info("grantMemberBadge = {}", grantMemberBadgeReq);
+        Long memberKey = RequestUtils.getMemberKey(servletRequest);
+
+        badgeService.grantBadgeByIndividual(GrantMemberBadgeDto.of(grantMemberBadgeReq, memberKey));
+
         return CustomApiResponse.ok(null);
     }
 
-    @Operation(summary = "[관리자용] 개인 배지 부여", description = "개인 배지를 부여합니다.")
-    @PostMapping("/member-grant")
-    public CustomApiResponse<Void> saveBadgeByIndividual(
-            @RequestBody List<MembersBadgeReq> reqs
+    @Operation(summary = "[관리자용] 개인 랭킹 배지 부여", description = "시즌 종료 후 랭킹 배지 부여")
+    @PostMapping("/member-rank")
+    public CustomApiResponse<Void> grantMemberRank(
+            @RequestBody GrantMemberRankReq grantMemberRankReq,
+            HttpServletRequest servletRequest
     ) {
-        // 개인 배지 부여
-        List<MembersBadgeDto> membersBadgeDtos = new ArrayList<>();
-        for (MembersBadgeReq req : reqs) {
-            membersBadgeDtos.add(MembersBadgeDto.of(req));
-        }
-        badgeService.saveBadgeByIndividual(membersBadgeDtos);
-        
+        Long memberKey = RequestUtils.getMemberKey(servletRequest);
+
+        badgeService.grantRankBadge(GrantMemberRankDto.of(grantMemberRankReq, memberKey));
+
         return CustomApiResponse.ok(null);
     }
-    
-    
-    @Operation(summary = "[관리자용] 크루 배지 부여", description = "크루 배지를 부여합니다.")
-    @PostMapping("/crew-grant")
-    public CustomApiResponse<Void> saveBadgeByCrew(
-            @RequestBody List<CrewBadgeReq> reqs
+
+    @Operation(summary = "[관리자용] 크루 랭킹 배지 부여", description = "시즌 종료 후 랭킹 배지 부여")
+    @PostMapping("/crew-rank")
+    public CustomApiResponse<Void> grantCrewRank(
+            @RequestBody GrantCrewRankReq grantCrewRankReq,
+            HttpServletRequest servletRequest
     ) {
-        // 크루 배지 부여
-        List<CrewBadgeDto> crewBadgeDtos = new ArrayList<>();
-        for (CrewBadgeReq req : reqs) {
-            crewBadgeDtos.add(CrewBadgeDto.of(req));
-        }
-        badgeService.saveBadgeByCrew(crewBadgeDtos);
-        
+        Long memberKey = RequestUtils.getMemberKey(servletRequest);
+
+        badgeService.grantCrewRankBadge(GrantCrewRankDto.of(grantCrewRankReq));
+
         return CustomApiResponse.ok(null);
-    } 
-    
+    }
+
+    @Operation(summary = "미션 배지 조회", description = "미션 배지를 조회한다.")
+    @GetMapping("/mission-badge")
+    public CustomApiResponse<List<FindBadgeRes>> findMissionBadge(
+            HttpServletRequest servletRequest
+    ) {
+        log.info("findMissionBadge");
+        Long memberKey = RequestUtils.getMemberKey(servletRequest);
+
+        List<FindBadgeRes> missionBadge = badgeQueryService.findMissionBadge(memberKey);
+
+        return CustomApiResponse.ok(missionBadge);
+    }
+
+    @Operation(summary = "랭킹 배지 조회", description = "랭킹 배지를 조회한다.")
+    @GetMapping("/ranking-badge")
+    public CustomApiResponse<List<FindBadgeRes>> findRankingBadge(
+            HttpServletRequest servletRequest
+    ) {
+        log.info("findRankingBadge");
+        Long memberKey = RequestUtils.getMemberKey(servletRequest);
+
+        List<FindBadgeRes> rankingBadge = badgeQueryService.findRankingBadge(memberKey);
+        return CustomApiResponse.ok(rankingBadge);
+    }
 }

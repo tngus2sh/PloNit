@@ -5,6 +5,8 @@ import com.plonit.plonitservice.api.crew.service.dto.ApproveCrewDto;
 import com.plonit.plonitservice.api.crew.service.dto.SaveCrewDto;
 import com.plonit.plonitservice.api.crew.service.dto.SaveCrewNoticeDto;
 import com.plonit.plonitservice.api.crew.service.dto.UpdateCrewNoticeDto;
+import com.plonit.plonitservice.api.fcm.controller.request.FCMReq;
+import com.plonit.plonitservice.api.fcm.service.FCMService;
 import com.plonit.plonitservice.common.AwsS3Uploader;
 import com.plonit.plonitservice.common.exception.CustomException;
 import com.plonit.plonitservice.common.util.RequestUtils;
@@ -43,6 +45,7 @@ public class CrewServiceImpl implements CrewService {
     private final MemberRepository memberRepository;
     private final AwsS3Uploader awsS3Uploader;
     private final RegionQueryRepository regionQueryRepository;
+    private final FCMService fcmService;
 
     @Override
     @Transactional // 크루 생성
@@ -112,11 +115,25 @@ public class CrewServiceImpl implements CrewService {
             throw new CustomException(CREW_ALREADY_JOIN);
 
         // 승인 -> change , 거절 -> delete
-        if (approveCrewDto.getStatus()) crewMember.changeIsCrewMember();
-        else crewMemberRepository.delete(crewMember);
+        if (approveCrewDto.getStatus()) {
+            crewMember.changeIsCrewMember();
 
-        // todo : 크루 승인, 거절 알림
+            // fcm 알림
+            fcmService.sendNotification(FCMReq.builder()
+                    .targetMemberId(approveCrewDto.getCrewMemberId())
+                    .title("CREW_APRV")
+                    .body(crewMember.getCrew().getName() + " 크루에 승인이 완료되었습니다.")
+                    .build());
+        } else {
+            crewMemberRepository.delete(crewMember);
 
+            // fcm 알림
+            fcmService.sendNotification(FCMReq.builder()
+                    .targetMemberId(approveCrewDto.getCrewMemberId())
+                    .title("CREW_APRV")
+                    .body(crewMember.getCrew().getName() + " 크루에 승인이 거절되었습니다.")
+                    .build());
+        }
         log.info(logCurrent(getClassName(), getMethodName(), END));
     }
 
@@ -194,7 +211,12 @@ public class CrewServiceImpl implements CrewService {
 
         crewMemberRepository.delete(crewMember);
 
-        // todo : 강퇴 알림
+        // fcm 알림
+        fcmService.sendNotification(FCMReq.builder()
+                .targetMemberId(crewMemberId)
+                .title("CREW_DROP")
+                .body(crewMember.getCrew().getName() + " 크루에서 강퇴되었습니다.")
+                .build());
 
         log.info(logCurrent(getClassName(), getMethodName(), END));
     }

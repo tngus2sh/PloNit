@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static com.plonit.plonitservice.common.enums.Status.ACTIVE;
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
 
@@ -69,6 +70,7 @@ public class SaveCrewpingDto {
                 .place(place)
                 .introduce(introduce)
                 .activeTime(0l)
+                .status(ACTIVE)
                 .build();
     }
 }

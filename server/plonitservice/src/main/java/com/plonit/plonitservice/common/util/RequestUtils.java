@@ -31,6 +31,19 @@ public class RequestUtils {
         return memberId;
     }
 
+    public static String getFCMToken() {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder
+                .getRequestAttributes();
+
+        String headerValue = attributes.getRequest().getHeader("fcmToken");
+
+        if (headerValue == null || headerValue.isEmpty()) {
+            return null;
+        }
+
+        return headerValue;
+    }
+
     public static String getToken() {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder
                 .getRequestAttributes();

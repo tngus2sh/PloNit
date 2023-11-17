@@ -17,6 +17,7 @@ public enum ErrorCode {
     INVALID_PLACE_REQUEST(HttpStatus.BAD_REQUEST, "해당하는 위치가 존재하지 않습니다."),
     PLOGGING_BAD_REQUEST(HttpStatus.BAD_REQUEST, "해당하는 플로깅이 존재하지 않습니다."),
     INVALID_CREWPINGID_REQUEST(HttpStatus.BAD_REQUEST, "해당하는 크루핑이 존재하지 않습니다."),
+    PLOGGING_HELP_BAD_REQUEST(HttpStatus.BAD_REQUEST, "해당하는 도움이 존재하지 않습니다."),
 
     /* 401 UNAUTHORIZED */
 
@@ -28,7 +29,9 @@ public enum ErrorCode {
 
 
     /* 500 INTERNAL_SERVER_ERROR : 서버 내부 로직 에러 */
-    KAKAO_ADDRESS_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "카카오 서버 오류입니다.");
+    KAKAO_ADDRESS_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "카카오 서버 오류입니다."),
+    INVALID_MAKING_EXCEL(HttpStatus.BAD_REQUEST, "엑셀 파일을 생성하는 중 문제가 발생했습니다."),
+    INVALID_SEND_EMAIL(HttpStatus.BAD_REQUEST, "메일을 전송하는 중 문제가 발생했습니다.");
 
     private final HttpStatus httpStatus;
     private final String description;
