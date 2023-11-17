@@ -1,0 +1,166 @@
+// BasicRankingItem.tsx
+.rank_member_container.member_mine {
+  background: linear-gradient(
+    90deg,
+    rgba(206, 230, 254, 1) 0%,
+    rgba(253, 254, 255, 1) 100%
+  );
+}
+.rank_member_container.member_notMine {
+  background-color: #f9f9f9;
+}
+.rank_member_container {
+  width: 100%;
+  padding: 0.5rem 0rem;
+  margin-bottom: 1rem;
+  border-radius: 0.8rem;
+  box-shadow: 0px 0px 10px #dedede;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+
+  .rank_container {
+    width: 13%;
+    display: flex;
+    justify-content: left;
+    padding-left: 1.2rem;
+    font-size: 1.4rem;
+    font-weight: bold;
+  }
+
+  .profile_container {
+    width: 64%;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+  .distance_container {
+    flex-grow: 1;
+    display: flex;
+    justify-content: right;
+    padding-right: 1.2rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+  }
+
+  img {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+  }
+}
+
+.basic_item {
+  border: 1px solid black;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  padding: 0.7rem 1rem;
+  margin: 0.5rem 0;
+
+  .rank {
+    margin-right: 1rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  .user {
+    display: flex;
+    align-items: center;
+
+    img {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+
+    .username {
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+  }
+
+  .dist {
+    flex-grow: 1;
+    text-align: right;
+    font-weight: bold;
+    .large {
+      font-size: 1.3rem;
+    }
+  }
+}
+
+// FirstRankingItem.tsx
+.first_ranker {
+  position: relative;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  .crown {
+    width: 5rem;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+  }
+
+  .user {
+    width: 6rem;
+    height: 6rem;
+    border-radius: 50%;
+    margin-top: 2.5rem;
+  }
+
+  .nickname {
+    font-size: 1.3rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .dist {
+    .large {
+      font-size: 0.9rem;
+    }
+  }
+}
+
+// SecondRankingItem.tsx
+.second_ranker {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  .rank {
+    font-weight: 600;
+    font-size: 1.2rem;
+  }
+  .user {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+  }
+
+  .nickname {
+    font-size: 1.2rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .dist {
+    .large {
+      font-size: 0.9rem;
+    }
+  }
+}

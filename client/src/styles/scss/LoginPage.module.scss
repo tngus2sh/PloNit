@@ -1,0 +1,73 @@
+.login {
+  position: relative;
+  height: max(100%, 100vh);
+  z-index: 200;
+  background-color: #fff;
+  .login_btn {
+    position: absolute;
+    bottom: 3rem;
+  }
+  .myswiper {
+    height: calc(100% - 10rem);
+  }
+}
+
+// Section_1.tsx
+.section1 {
+  text-align: left;
+  padding: 1rem;
+  .title {
+    margin: 4rem 1rem 1rem;
+    font-size: 2rem;
+    font-weight: 600;
+  }
+  .content {
+    margin: 1rem;
+    font-size: 1.3rem;
+  }
+  img {
+    width: calc(100% - 2rem);
+    margin-bottom: 1rem;
+    padding: 1rem;
+  }
+}
+
+// Section_2.tsx
+.section2 {
+  text-align: left;
+  padding: 1rem;
+  .title {
+    margin: 4rem 1rem 1rem;
+    font-size: 2rem;
+    font-weight: 600;
+  }
+  .content {
+    margin: 1rem;
+    font-size: 1.3rem;
+  }
+  img {
+    width: calc(100% - 2rem);
+    margin: 0.5rem 0 1rem;
+    padding: 1rem;
+  }
+}
+
+// Section_3.tsx
+.section3 {
+  text-align: left;
+  padding: 1rem;
+  .title {
+    margin: 4rem 1rem 1rem;
+    font-size: 2rem;
+    font-weight: 600;
+  }
+  .content {
+    margin: 1rem;
+    font-size: 1.3rem;
+  }
+  img {
+    width: calc(100% - 2rem);
+    margin: 0.5rem 0 1rem;
+    padding: 1rem;
+  }
+}

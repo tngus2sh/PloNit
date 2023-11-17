@@ -1,0 +1,38 @@
+@import "./styles";
+
+.page_container {
+  width: 100%;
+  .myrank_container {
+    display: inline-block;
+    width: 85%;
+    margin-bottom: 1.9rem;
+    text-align: left;
+    font-weight: bold;
+    .season_info_container {
+      display: flex;
+      align-items: center;
+      margin-top: 1.6rem;
+      .season_title {
+        font-size: 1.5rem;
+        display: inline;
+        box-shadow: inset 0 -10px 0 #67f895;
+      }
+      .season_date {
+        margin-left: 1rem;
+        color: $darkgray;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .prev_container {
+    display: inline-block;
+    width: 85%;
+    text-align: left;
+    font-weight: bold;
+    .prev_title {
+      font-size: 1.5rem;
+      margin-bottom: 0.8rem;
+    }
+  }
+}

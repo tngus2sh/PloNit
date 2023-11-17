@@ -1,0 +1,53 @@
+@import "../styles";
+
+.comment_modal {
+  overflow: scroll;
+  .modal_bottom {
+    border-top: 1px solid $gray;
+    background-color: white;
+    width: calc(100% - 2rem);
+    display: flex;
+    padding: 0.4rem 1rem;
+    position: absolute;
+    bottom: 0;
+    img {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+    input {
+      font-size: 0.9rem;
+      border: none;
+      width: calc(100% - 5rem);
+    }
+    input:focus {
+      outline: none;
+    }
+    .upload_icon {
+      position: absolute;
+      right: 1rem;
+      top: calc((100% - 1.5rem) / 2);
+    }
+  }
+}
+//CommentItem.tsx
+.comment_item {
+  display: flex;
+  margin: 0.7rem 1rem;
+  justify-content: space-between;
+  .right {
+    display: flex;
+    .comment_img img {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+    .comment_text {
+      .nickname {
+        color: $darkgray;
+      }
+    }
+  }
+}

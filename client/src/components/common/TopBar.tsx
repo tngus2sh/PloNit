@@ -1,25 +1,31 @@
 import React from "react";
-import style from "styles/css/TopBar.module.css";
+import style from "styles/css/Common/TopBar.module.css";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 
 export const LogoTopBar = () => {
   return (
     <div className={style.logoTopbar}>
-      <img src="/plonit_logo.png" alt="logo" />
+      <img src="/plonit_logo2.png" alt="logo" />
     </div>
   );
 };
 
-export const BasicTopbar = ({ text }: { text: string }) => {
+export const BasicTopBar = ({
+  text,
+  styles,
+}: {
+  text: string;
+  styles?: { [key: string]: string };
+}) => {
   return (
-    <div className={style.basicTopbar}>
+    <div className={style.basicTopbar} style={{ ...styles }}>
       <div className={style.title_name}>{text}</div>
     </div>
   );
 };
 
-export const BackTopbar = ({ text }: { text: string }) => {
+export const BackTopBar = ({ text }: { text: string }) => {
   const navigate = useNavigate();
 
   const goBackHandler = () => {

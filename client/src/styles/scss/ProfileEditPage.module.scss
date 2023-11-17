@@ -1,0 +1,100 @@
+@import "styles";
+
+.profile_edit {
+  .img_text {
+    display: flex;
+    margin: 2rem 1rem 1rem;
+    .profile_img {
+      position: relative;
+      margin-right: 1rem;
+      img {
+        border-radius: 50%;
+        width: 7rem;
+        height: 7rem;
+      }
+      .img_edit_icon {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background-color: $darkgray;
+        border-radius: 50%;
+        padding: 0.5rem 0.5rem 0.4rem;
+      }
+    }
+    .non_edit {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      .top_section {
+        display: flex;
+        margin-bottom: 0.1rem;
+        .name {
+          margin-right: 0.5rem;
+          font-size: 1.5rem;
+          font-weight: 600;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+        .gender_woman {
+          background-color: $red;
+          color: white;
+          border-radius: 50%;
+          padding: 0.3rem 0.4rem;
+        }
+        .gender_man {
+          background-color: $blue;
+          color: white;
+          border-radius: 50%;
+          padding: 0.3rem 0.4rem;
+        }
+      }
+      .birth {
+        text-align: left;
+        font-size: 1.2rem;
+        color: $darkgray;
+        margin-left: 0.2rem;
+      }
+    }
+  }
+  .nickname_true {
+    text-align: left;
+    margin-left: 1.2rem;
+    margin-top: -1rem;
+    font-size: 0.8rem;
+    color: blue;
+  }
+  .nickname_false {
+    text-align: left;
+    margin-left: 1.2rem;
+    margin-top: -1rem;
+    font-size: 0.8rem;
+    color: red;
+  }
+  .region {
+    text-align: left;
+    margin: 1rem;
+    .title {
+      font-size: 1.2rem;
+      display: flex;
+      margin-bottom: 0.5rem;
+      margin-left: 0.2rem;
+    }
+    .input_area {
+      border-radius: 0.5rem;
+      border: 1px solid $darkgray;
+      padding: 0.5rem 1rem;
+      font-size: 1.2em;
+      background-color: transparent;
+      height: 2rem;
+    }
+    .modalbackground {
+      background-color: rgba(0, 0, 0, 0.5);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: max(100vh, 100%);
+    }
+  }
+}
