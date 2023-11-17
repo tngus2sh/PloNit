@@ -42,7 +42,6 @@ public class ExcelServiceImpl implements ExcelService {
     private final MailService mailService;
     private final PloggingQueryRepository ploggingQueryRepository;
     private final MemberFeignClient memberFeignClient;
-    private final CircuitBreakerFactory circuitBreakerFactory;
 
 
     @Override
@@ -60,18 +59,19 @@ public class ExcelServiceImpl implements ExcelService {
             return;
         }
 
+        System.out.println("플로깅 조회 결과: " + ploggings);
+
         List<Long> memberIdList = ploggings.stream().map(ploggingEntity -> {
             return ploggingEntity.getMemberId();
         }).collect(Collectors.toList());
 
-        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
+        System.out.println("유저 ID 조회 결과: " + memberIdList);
 
-        List<VolunteerMemberInfoRes> volunteerInfos = circuitBreaker.run(
-                () -> memberFeignClient.findVolunteerMemberInfo(memberIdList).getResultBody(),
-                throwable -> null
-        );
+        List<VolunteerMemberInfoRes> volunteerInfos = memberFeignClient.findVolunteerMemberInfo(memberIdList).getResultBody();
 
         List<ExcelDto> excelDtoList = new ArrayList<>();
+
+        System.out.println("봉사 정보 조회 결과: " + volunteerInfos);
 
         if(volunteerInfos != null) {
             for(int i = 0; i < ploggings.size(); i++) {
@@ -152,10 +152,10 @@ public class ExcelServiceImpl implements ExcelService {
             cell.setCellValue(excelDto.getEndImage());
         }
 
-        for(int i = 0; i < excelHeaderList.size(); i++){
-            sheet.autoSizeColumn(i);
-            sheet.setColumnWidth(i, (sheet.getColumnWidth(i))+1024); // 너비 더 넓게
-        }
+//        for(int i = 0; i < excelHeaderList.size(); i++){
+//            sheet.autoSizeColumn(i);
+//            sheet.setColumnWidth(i, (sheet.getColumnWidth(i))+1024); // 너비 더 넓게
+//        }
 
         saveExcel(workbook);
     }

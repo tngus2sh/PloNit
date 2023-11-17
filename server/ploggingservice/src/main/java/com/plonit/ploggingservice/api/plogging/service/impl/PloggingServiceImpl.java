@@ -243,33 +243,33 @@ public class PloggingServiceImpl implements PloggingService {
         // 크루핑이라면 크루 플로깅 랭킹에 넣기
         if (plogging.getType().equals(Type.CREWPING)) {
             // 크루 누적 랭킹
-            Double crewRankValue = redisUtils.getValueInSortedSet(CREW_RANK.name(), String.valueOf(dto.getCrewpingId()));
+            Double crewRankValue = redisUtils.getValueInSortedSet(CREW_RANK.name(), String.valueOf(dto.getCrewId()));
             if (crewRankValue == null) {
-                redisUtils.setRedisSortedSet(CREW_RANK.name(), String.valueOf(dto.getMemberKey()), dto.getDistance());
+                redisUtils.setRedisSortedSet(CREW_RANK.name(), String.valueOf(dto.getCrewId()), dto.getDistance());
             } else {
-                redisUtils.updateRedisSortedSet(CREW_RANK.name(), String.valueOf(dto.getMemberKey()), crewRankValue + dto.getDistance());
+                redisUtils.updateRedisSortedSet(CREW_RANK.name(), String.valueOf(dto.getCrewId()), crewRankValue + dto.getDistance());
             }
 
 
             // 크루 평균 랭킹
-            Double crewAvgRankValue = redisUtils.getValueInSortedSet(CREW_AVG_RANK.name(), String.valueOf(dto.getCrewpingId()));
+            Double crewAvgRankValue = redisUtils.getValueInSortedSet(CREW_AVG_RANK.name(), String.valueOf(dto.getCrewId()));
             Double avgDistance = (dto.getDistance() / dto.getPeople());
             if (crewAvgRankValue == null) {
-                redisUtils.setRedisSortedSet(CREW_AVG_RANK.name(), String.valueOf(dto.getCrewpingId()), avgDistance);
+                redisUtils.setRedisSortedSet(CREW_AVG_RANK.name(), String.valueOf(dto.getCrewId()), avgDistance);
             } else {
-                redisUtils.updateRedisSortedSet(CREW_AVG_RANK.name(), String.valueOf(dto.getCrewpingId()), crewAvgRankValue + avgDistance);
+                redisUtils.updateRedisSortedSet(CREW_AVG_RANK.name(), String.valueOf(dto.getCrewId()), crewAvgRankValue + avgDistance);
             }
         }
 
         /* 개인 배지 부여 */
         // 지금까지 플로깅 횟수와 거리 구하기
         FindCountDistanceRes countDistance = ploggingQueryRepository.findCountDistance(dto.getMemberKey());
-        badgeFeignClient.grantMemberBadge(
-                RequestUtils.getToken(),
-                GrantMemberBadgeReq.builder()
-                        .ploggingCount(countDistance.getCount())
-                        .distance(countDistance.getDistance())
-                        .build());
+//        badgeFeignClient.grantMemberBadge(
+//                RequestUtils.getToken(),
+//                GrantMemberBadgeReq.builder()
+//                        .ploggingCount(countDistance.getCount())
+//                        .distance(countDistance.getDistance())
+//                        .build());
 
         return plogging.getId();
     }
