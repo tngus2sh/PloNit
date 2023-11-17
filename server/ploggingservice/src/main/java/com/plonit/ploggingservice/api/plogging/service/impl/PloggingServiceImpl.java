@@ -264,12 +264,12 @@ public class PloggingServiceImpl implements PloggingService {
         /* 개인 배지 부여 */
         // 지금까지 플로깅 횟수와 거리 구하기
         FindCountDistanceRes countDistance = ploggingQueryRepository.findCountDistance(dto.getMemberKey());
-        badgeFeignClient.grantMemberBadge(
-                RequestUtils.getToken(),
-                GrantMemberBadgeReq.builder()
-                        .ploggingCount(countDistance.getCount())
-                        .distance(countDistance.getDistance())
-                        .build());
+//        badgeFeignClient.grantMemberBadge(
+//                RequestUtils.getToken(),
+//                GrantMemberBadgeReq.builder()
+//                        .ploggingCount(countDistance.getCount())
+//                        .distance(countDistance.getDistance())
+//                        .build());
 
         return plogging.getId();
     }
