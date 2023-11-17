@@ -1,0 +1,29 @@
+@import "../styles";
+
+.notice_compo {
+  text-align: left;
+  padding: 0.8rem;
+  .notice_title {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  .notice_content {
+    border: 1px solid $gray;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    .notice_upper {
+      display: flex;
+      margin-bottom: 0.5rem;
+      align-items: center;
+      img {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+      }
+      .nickname {
+        margin-left: 0.5rem;
+        font-size: 1.1rem;
+      }
+    }
+  }
+}

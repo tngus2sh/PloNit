@@ -1,0 +1,36 @@
+.myplogging_list {
+  margin: 0.5rem 1rem;
+  text-align: left;
+  .top_section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1rem 0;
+    .date {
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+    .type_select {
+      width: 4.3rem;
+      height: 2.2rem;
+      border: 0px;
+      border-radius: 0.6rem;
+      background-color: #f4f4f4;
+      font-size: 1.2rem;
+      font-family: "omyu_pretty";
+      text-align: center;
+      option {
+        font-size: 0.9rem;
+        text-indent: 1rem;
+      }
+    }
+    .type_select:focus-visible {
+      outline: 3px solid #e0e0e0;
+    }
+    /* 마우스, 터치로 버튼에 포커스 시 */
+    .type_select:focus:not(:focus-visible) {
+      outline: none;
+      box-shadow: 1px 1px 3px rgba(1, 1, 0, 0.7);
+    }
+  }
+}

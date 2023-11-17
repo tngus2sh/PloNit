@@ -1,5 +1,5 @@
-#encrypt:
-#  key-store:
-#    location: file:/apiEncryptionKey.jks
-#    password:
-#    alias: apiEncryptionKey
+encrypt:
+  key-store:
+    location: classpath:keystore/apiEncryptionKey.jks
+    password: plonitC207
+    alias: apiEncryptionKey

@@ -1,0 +1,30 @@
+@import "../styles";
+
+.notification_item {
+  padding: 0.5rem 1rem;
+  display: flex;
+  .alarm_icon {
+    flex: 1;
+    text-align: left;
+    img {
+      border-radius: 50%;
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+  .alarm_section {
+    flex: 10;
+    text-align: left;
+
+    .alarm_top {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      .alarm_date {
+        font-size: 0.9rem;
+        color: $darkgray;
+      }
+    }
+  }
+}

@@ -1,0 +1,176 @@
+@import "../styles";
+
+@font-face {
+  font-family: "SUITE-Regular";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/SUITE-Regular.woff2")
+    format("woff2");
+  font-weight: 400;
+  font-style: normal;
+}
+
+.myplogging_item {
+  display: flex;
+  align-items: center;
+  margin: 0.5rem 0;
+  margin-bottom: 1rem;
+  padding: 0.7rem 0.4rem;
+  border-radius: 0.8rem;
+  background-color: #f9f9f9;
+  box-shadow: 0px 0px 6px #dedede;
+
+  .left_area {
+    width: 3.7rem;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+    }
+    .week_container {
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      font-family: "SUITE-Regular";
+      color: #333333;
+      font-weight: 600;
+
+      .day_container {
+        font-size: 1.6rem;
+      }
+    }
+  }
+
+  .v_line {
+    border-left: 1.5px solid #555555;
+    height: 2.9rem;
+  }
+
+  .right_area {
+    flex-grow: 1;
+
+    .info_container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.7rem;
+
+      .type_container {
+        .type {
+          color: white;
+          border-radius: 2rem;
+          width: 2.6rem;
+          height: 1.4rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 0.9rem;
+        }
+        .type_IND {
+          background-color: $green;
+        }
+        .type_VOL {
+          background-color: $red;
+        }
+        .type_CREWPING {
+          background-color: $blue;
+        }
+      }
+
+      .date_container,
+      .place_container {
+        margin-left: 0.7rem;
+        display: flex;
+        align-items: center;
+        color: $darkgray;
+        font-size: 0.9rem;
+      }
+    }
+
+    // .place_container {
+    //   margin-top: 0.5rem;
+    //   display: flex;
+    //   align-items: center;
+    //   color: $darkgray;
+    //   font-size: 0.9rem;
+    // }
+
+    .plogging_container {
+      display: flex;
+
+      .distance_container,
+      .time_container {
+        width: 50%;
+        .largeNumber {
+          font-size: 1.5rem;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+  .right_area {
+    .first_area {
+      display: flex;
+      .divide_IND {
+        background-color: $green;
+        color: white;
+        border-radius: 2rem;
+        padding: 0.1rem 0.4rem;
+        margin-right: 0.5rem;
+        width: 3rem;
+        height: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .divide_VOL {
+        background-color: $red;
+        color: white;
+        border-radius: 2rem;
+        padding: 0.1rem 0.4rem;
+        margin-right: 0.5rem;
+        width: 2.5rem;
+        height: 1.7rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .divide_CREWPING {
+        background-color: $blue;
+        color: white;
+        border-radius: 2rem;
+        padding: 0.1rem 0.4rem;
+        margin-right: 0.5rem;
+        width: 2.5rem;
+        height: 1.7rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .date_place {
+        color: $darkgray;
+        font-size: 0.9rem;
+      }
+    }
+    .second_area {
+      display: flex;
+      width: 100%;
+      text-align: left;
+      .largeNumber {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+      .dist {
+        flex: 1;
+      }
+      .time {
+        flex: 1;
+      }
+    }
+  }
+}

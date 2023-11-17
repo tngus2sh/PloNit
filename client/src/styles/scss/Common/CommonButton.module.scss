@@ -1,0 +1,13 @@
+.common_btn {
+  border-radius: 0.5rem;
+  margin: 1rem;
+  height: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  .content {
+    color: white;
+    font-size: 1.2rem;
+  }
+}
