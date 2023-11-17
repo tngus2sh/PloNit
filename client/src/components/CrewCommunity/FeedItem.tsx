@@ -9,7 +9,7 @@ import { Pagination } from "swiper/modules";
 import styled from "styled-components";
 import { getFeedDelete, getLikeFeed } from "api/lib/feed";
 import Sheet from "react-modal-sheet";
-import { QuestionModal } from "components/common/AlertModals";
+import { QuestionModal, OkModal } from "components/common/AlertModals";
 
 import "swiper/css";
 import "swiper/css/pagination";
@@ -90,6 +90,7 @@ const FeedItem = ({
           (res) => {
             // console.log(res.data);
             // console.log("피드 삭제 성공");
+            OkModal({ text: "피드가 삭제되었습니다." });
             fetchFeedList();
           },
           (err) => {
