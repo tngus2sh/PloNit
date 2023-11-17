@@ -58,7 +58,7 @@
 
 ## ERD 다이어그램
 
-<img src="./readme_asset/ERD.png" alt="ERD" width="800">
+<img src="./readme_asset/ERD.PNG" alt="ERD" width="800">
 
 ## 문서 링크
 
