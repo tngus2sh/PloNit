@@ -40,14 +40,14 @@
         - 플로깅 도중 사진을 찍을 수 있고, 크롭 기능을 이용해 영역을 지정해 저장할 수 있다.
         - 플로깅 시 주변에 도움을 요청할 수 있다.
 
-        <img src="./readme_asset/IndividualPlogging.gif" alt="IndividualPlogging" width="800">
+        <img src="./readme_asset/IndividualPlogging.gif" alt="IndividualPlogging" width="200">
         
     2. 봉사
         - 1365 아이디, 생년월일 등의 봉사 정보를 추가로 입력할 수 있다.
         - 플로깅 시작 사진, 플로깅 중간 사진, 플로깅 종료 사진을 촬영해 봉사 인증을 할 수 있다.
         - 매주 월요일 오전 9시, 저번 주의 봉사 플로깅 정보를 엑셀 파일로 생성해 봉사 담당자 메일로 전송한다. (자동화)
         
-        <img src="./readme_asset/VolPlogging.gif" alt="VolPlogging" width="800">
+        <img src="./readme_asset/VolPlogging.gif" alt="VolPlogging" width="200">
         
     3. 크루
         - 크루 내에서 크루 플로깅(크루핑)을 생성 및 참가할 수 있다.
@@ -56,13 +56,13 @@
         - 크루핑원은 크루핑 종료는 스스로 결정할 수 있다.
         - 크루핑 시 다른 유저와 함께 플로깅이 가능하고 함께하는 크루핑원의 실시간 위치를 확인할 수 있다.
         
-        <img src="./readme_asset/Crew.gif" alt="Crew" width="800">
+        <img src="./readme_asset/Crew.gif" alt="Crew" width="200">
         
     4. 플로깅 기록
         - 달력에서 날짜를 선택해 참여한 플로깅 기록을 조회할 수 있다.
         - 플로깅 기록을 선택해 참여 날짜, 장소, 소요 시간, 소모 칼로리,  트래킹 경로, 사진 등을 조회할 수 있다.
         
-        <img src="./readme_asset/PloggingHistory.gif" alt="PloggingHistory" width="800">
+        <img src="./readme_asset/PloggingHistory.gif" alt="PloggingHistory" width="200">
         
 2. 크루
     1. 커뮤니티
@@ -84,9 +84,9 @@
             - 사용자는 원하는 크루에 가입요청을 보낼 수 있다.
             - 크루원은 가입한 크루에서 탈퇴할 수 있다.
 
-        <img src="./readme_asset/CrewFeed.gif" alt="CrewFeed" width="800">
+        <img src="./readme_asset/CrewFeed.gif" alt="CrewFeed" width="200">
 
-        <img src="./readme_asset/Crewping.gif" alt="Crewping" width="800">
+        <img src="./readme_asset/Crewping.gif" alt="Crewping" width="200">
 
 1. 랭킹 & 뱃지 ( 랭킹 사진 + 뱃지 사진)
     1. 개인랭킹
@@ -102,9 +102,9 @@
     4. 크루뱃지
         - 해당 시즌 1,2,3위는 랭킹 뱃지를 획득할 수 있다.
 
-        <img src="./readme_asset/badge.jpg" alt="badge" width="800">
+        <img src="./readme_asset/badge.jpg" alt="badge" width="200">
 
-        <img src="./readme_asset/ranking.jpg" alt="ranking" width="800">
+        <img src="./readme_asset/ranking.jpg" alt="ranking" width="200">
 
 ## 기술 스택
 
