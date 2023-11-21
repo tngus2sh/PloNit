@@ -40,7 +40,7 @@
         - 플로깅 도중 사진을 찍을 수 있고, 크롭 기능을 이용해 영역을 지정해 저장할 수 있다.
         - 플로깅 시 주변에 도움을 요청할 수 있다.
 
-        <img src="./readme_asset/IndividualPlogging.gif" alt="IndividualPlogging" width="800">
+        <img src="./readme_asset/IndividualPlogging.gif" alt="IndividualPlogging" width="200">
         
     2. 봉사
         - 1365 아이디, 생년월일 등의 봉사 정보를 추가로 입력할 수 있다.
