@@ -156,7 +156,3 @@ ex)[INIT](띄어쓰기) 초기화
 - MERGE: 충돌 시 머지, develop 브랜치에 풀리퀘 등
 - CHORE: 위에 해당되지 않는 나머지 (기타 등등)
 ```
-
-## 팀원 소개
-
-<img src="./readme_asset/team.png" alt="팀원소개" width="800">
