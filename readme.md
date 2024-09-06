@@ -108,6 +108,8 @@
 
 ## 시스템 아키텍처
 
+<img src="./readme_asset/PloNit.drawio.png" alt="Architecture" width="800">
+
 <img src="./readme_asset/Architecture.png" alt="Architecture" width="800">
 
 ## ERD 다이어그램
